@@ -26,10 +26,16 @@ const HomeScreen = () => {
         iterationCount={1}
         className='flex-row justify-between w-60 mt-10'
       >
-        <TouchableOpacity className='bg-white rounded-md h-12 w-20 justify-center items-center'>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Login')}
+          className='bg-white rounded-md h-12 w-20 justify-center items-center'
+        >
           <Text className='text-black'>Sign In</Text>
         </TouchableOpacity>
-        <TouchableOpacity className='bg-white rounded-md h-12 w-20 justify-center items-center'>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('SignUp')}
+          className='bg-white rounded-md h-12 w-20 justify-center items-center'
+        >
           <Text className='text-black'>Sign Up</Text>
         </TouchableOpacity>
       </Animatable.View>
