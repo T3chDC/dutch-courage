@@ -13,7 +13,7 @@ const HomeScreen = () => {
   }, [navigation])
 
   return (
-    <SafeAreaView>
+    <SafeAreaView className='bg-black'>
       <View className='bg-black h-[100vh]'>
         <Text className='text-white'>HomeScreen</Text>
       </View>
