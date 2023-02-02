@@ -15,9 +15,11 @@ const SignUpScreen = () => {
 
   return (
     <SafeAreaView className='bg-black flex-1 justify-start items-center'>
+      {/* Page Heading */}
       <View className='mt-8'>
         <Text className='text-[#22A6B3] font-semibold text-3xl'>Sign Up</Text>
       </View>
+      {/* UserName Field */}
       <View className='mt-5'>
         <TextInput
           placeholder='Username'
@@ -27,6 +29,7 @@ const SignUpScreen = () => {
           onChangeText={(text) => setUserName(text)}
         />
       </View>
+      {/* Email Field */}
       <View>
         <TextInput
           placeholder='Email'
@@ -36,6 +39,7 @@ const SignUpScreen = () => {
           onChangeText={(text) => setEmail(text)}
         />
       </View>
+      {/* Password Field */}
       <View className='flex-row bg-[#F6F6F6] border border-[#E8E8E8] rounded-md h-12 w-80 px-4 mt-4'>
         <TextInput
           placeholder='Password'
@@ -52,7 +56,8 @@ const SignUpScreen = () => {
           <Text className='text-[#22A6B3] text-base font-medium '>Show</Text>
         </TouchableOpacity>
       </View>
-      <View className='flex-row space-x-0 mt-2 items-center justify-center pr-6'>
+      {/* Terms and Conditions */}
+      <View className='flex-row space-x-0 mt-2 items-center justify-center'>
         <CheckBox
           checked={agreedChecked}
           iconType='material-community'
@@ -62,12 +67,73 @@ const SignUpScreen = () => {
           containerStyle={{
             backgroundColor: 'transparent',
             borderWidth: 0,
-            marginRight: 0,
+            marginRight: 2,
+            marginLeft: 0,
+            padding: 0,
           }}
         />
         <Text className='text-[#666666] text-sm font-normal ml-2'>
-          I accept the terms and conditions
+          I accept the terms and conditions.
         </Text>
+      </View>
+      {/* Sign Up Button */}
+      <View className='mt-2'>
+        <TouchableOpacity
+          className='bg-[#22A6B3] rounded-full h-12 w-80 flex-row justify-center items-center'
+          // onPress={() => navigation.navigate('Home')}
+        >
+          <Text className='text-white text-base font-semibold'>Sign Up</Text>
+        </TouchableOpacity>
+      </View>
+      {/* Or */}
+      <View className='mt-6'>
+        <View className='mt-8 flex-row space-x-2 justify-center items-center'>
+          <View className='h-0.5 w-20 bg-[#A1A5AC]' />
+          <Text className='text-[#A1A5AC] text-base font-medium'>Or</Text>
+          <View className='h-0.5 w-20 bg-[#A1A5AC]' />
+        </View>
+      </View>
+      {/* Google Sign Up */}
+      <View className='mt-8'>
+        <TouchableOpacity
+          className='bg-[#F6F6F6] rounded-md h-12 w-80 flex-row justify-center items-center'
+          // onPress={() => navigation.navigate('Home')}
+        >
+          <Image
+            source={require('../assets/projectImages/google.png')}
+            className='h-6 w-6'
+          />
+          <Text className='text-[#666666] text-base font-medium ml-4'>
+            Sign Up with Google
+          </Text>
+        </TouchableOpacity>
+      </View>
+      {/* Facebook SignUp */}
+      <View className='mt-4'>
+        <TouchableOpacity
+          className='bg-[#F6F6F6] rounded-md h-12 w-80 flex-row justify-center items-center'
+          // onPress={() => navigation.navigate('Home')}
+        >
+          <Image
+            source={require('../assets/projectImages/facebook.png')}
+            className='h-8 w-8'
+          />
+          <Text className='text-[#666666] text-base font-medium ml-4'>
+            Sign Up with Facebook
+          </Text>
+        </TouchableOpacity>
+      </View>
+      {/* Already have an account? */}
+      <View className='mt-16 flex-row space-x-2 justify-center items-center'>
+        <Text className='text-[#666666] text-sm font-normal'>
+          Already have an account?
+        </Text>
+        <TouchableOpacity
+          className='flex-row justify-center items-center'
+          onPress={() => navigation.navigate('Login')}
+        >
+          <Text className='text-[#22A6B3] text-base font-medium '>Log In</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   )
