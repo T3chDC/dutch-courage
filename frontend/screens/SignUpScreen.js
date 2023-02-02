@@ -1,7 +1,8 @@
 import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { CheckBox } from '@rneui/themed'
 import React, { useEffect, useState } from 'react'
 import { useRoute, useNavigation } from '@react-navigation/native'
-import { SafeAreaView } from 'react-native-safe-area-context'
 
 const SignUpScreen = () => {
   const navigation = useNavigation()
@@ -10,6 +11,7 @@ const SignUpScreen = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+  const [agreedChecked, setAgreedChecked] = useState(false)
 
   return (
     <SafeAreaView className='bg-black flex-1 justify-start items-center'>
@@ -49,6 +51,23 @@ const SignUpScreen = () => {
         >
           <Text className='text-[#22A6B3] text-base font-medium '>Show</Text>
         </TouchableOpacity>
+      </View>
+      <View className='flex-row space-x-0 mt-2 items-center justify-center pr-6'>
+        <CheckBox
+          checked={agreedChecked}
+          iconType='material-community'
+          checkedIcon='checkbox-outline'
+          uncheckedIcon={'checkbox-blank-outline'}
+          onPress={() => setAgreedChecked(!agreedChecked)}
+          containerStyle={{
+            backgroundColor: 'transparent',
+            borderWidth: 0,
+            marginRight: 0,
+          }}
+        />
+        <Text className='text-[#666666] text-sm font-normal ml-2'>
+          I accept the terms and conditions
+        </Text>
       </View>
     </SafeAreaView>
   )
