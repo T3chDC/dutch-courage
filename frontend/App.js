@@ -15,7 +15,13 @@ export default function App() {
           {/*Screens*/}
           <Stack.Screen name='Home' component={HomeScreen} />
           <Stack.Screen name='Login' component={LoginScreen} />
-          <Stack.Screen name='SignUp' component={SignUpScreen} />
+          <Stack.Screen
+            name='SignUp'
+            component={SignUpScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
       <StatusBar style='light' />
