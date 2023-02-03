@@ -19,7 +19,7 @@ const HomeScreen = () => {
         source={require('../assets/projectImages/TempLogo1.png')}
         animation='slideInDown'
         iterationCount={1}
-        className='h-80 w-80'
+        className='h-auto w-auto rounded-lg'
       />
       <Animatable.View
         animation='slideInUp'

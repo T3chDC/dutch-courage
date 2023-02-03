@@ -53,7 +53,9 @@ const SignUpScreen = () => {
           className='flex-row justify-center items-center'
           onPress={() => setShowPassword(!showPassword)}
         >
-          <Text className='text-[#22A6B3] text-base font-medium '>Show</Text>
+          <Text className='text-[#22A6B3] text-base font-medium '>
+            {showPassword ? 'Hide' : 'Show'}
+          </Text>
         </TouchableOpacity>
       </View>
       {/* Terms and Conditions */}
