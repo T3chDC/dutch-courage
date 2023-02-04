@@ -10,6 +10,8 @@ const PasswordResetCodeScreen = () => {
   const [otp, setOtp] = useState(Array(6).fill(''))
   const [otpString, setOtpString] = useState('')
 
+  console.log(otpString)
+
   return (
     <SafeAreaView className='bg-black flex-1 justify-start items-center'>
       {/* Page Heading */}
@@ -52,6 +54,7 @@ const PasswordResetCodeScreen = () => {
                   refs.current[index - 1].focus()
                 }
               }
+              setOtpString(otp.join(''))
             }}
             onKeyPress={(e) => {
               if (e.nativeEvent.key === 'Backspace') {
