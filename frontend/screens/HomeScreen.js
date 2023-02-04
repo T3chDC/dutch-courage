@@ -24,7 +24,7 @@ const HomeScreen = () => {
       <Animatable.View
         animation='slideInUp'
         iterationCount={1}
-        className='flex-row justify-between w-60 mt-10'
+        className='flex-row justify-between w-80 mt-10'
       >
         <TouchableOpacity
           onPress={() => navigation.navigate('Login')}
@@ -37,6 +37,18 @@ const HomeScreen = () => {
           className='bg-white rounded-md h-12 w-20 justify-center items-center'
         >
           <Text className='text-black'>Sign Up</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('PasswordResetCode')}
+          className='bg-white rounded-md h-12 w-20 justify-center items-center'
+        >
+          <Text className='text-black'>Reset Password Code</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('PasswordReset')}
+          className='bg-white rounded-md h-12 w-20 justify-center items-center'
+        >
+          <Text className='text-black'>Reset Password</Text>
         </TouchableOpacity>
       </Animatable.View>
     </SafeAreaView>
