@@ -6,7 +6,8 @@ import { useRoute, useNavigation } from '@react-navigation/native'
 const PasswordResetCodeScreen = () => {
   const navigation = useNavigation()
 
-  const [code, setCode] = useState('')
+  const [otp, setOtp] = useState(Array(6).fill(''))
+  const [otpString, setOtpString] = useState('')
 
   return (
     <SafeAreaView className='bg-black flex-1 justify-start items-center'>
@@ -17,14 +18,29 @@ const PasswordResetCodeScreen = () => {
         </Text>
       </View>
       {/* Code Field */}
-      <View className='mt-5'>
-        <TextInput
-          placeholder=''
-          keyboardType='default'
-          className='bg-[#F6F6F6] border border-[#E8E8E8] rounded-md h-12 w-80 px-4 mt-4'
-          value={code}
-          onChangeText={(text) => setCode(text)}
-        />
+      <View className='flex-row bg-[#F6F6F6] border border-[#E8E8E8] rounded-md h-12 w-80 px-4 mt-5 justify-center'>
+        {/* OTP Input Fields */}
+        {otp.map((data, index) => (
+          <TextInput
+            key={index}
+            style={{
+              width: 20,
+              height: 40,
+              fontSize: 20,
+              marginHorizontal: 5,
+              borderBottomWidth: 2,
+              borderColor: '#BDBDBD',
+              textAlign: 'center',
+            }}
+            keyboardType='number-pad'
+            returnKeyType='done'
+            maxLength={1}
+            onChangeText={(text) => {
+              setOtp([...otp.map((d, idx) => (idx === index ? text : d))])
+            }}
+            value={data}
+          />
+        ))}
       </View>
       {/* Send Recovery code Button */}
       <View className='mt-8'>
@@ -32,9 +48,7 @@ const PasswordResetCodeScreen = () => {
           className='bg-[#22A6B3] rounded-full h-12 flex-row justify-center items-center px-4'
           onPress={() => navigation.navigate('PasswordReset')}
         >
-          <Text className='text-white text-base font-semibold'>
-            Submit
-          </Text>
+          <Text className='text-white text-base font-semibold'>Submit</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
