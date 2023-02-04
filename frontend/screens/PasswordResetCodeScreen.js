@@ -10,8 +10,6 @@ const PasswordResetCodeScreen = () => {
   const [otp, setOtp] = useState(Array(6).fill(''))
   const [otpString, setOtpString] = useState('')
 
-  console.log(otpString)
-
   return (
     <SafeAreaView className='bg-black flex-1 justify-start items-center'>
       {/* Page Heading */}
