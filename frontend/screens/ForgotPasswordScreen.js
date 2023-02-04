@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useRoute, useNavigation } from '@react-navigation/native'
@@ -23,7 +23,7 @@ const ForgotPasswordScreen = () => {
           keyboardType='email-address'
           className='bg-[#F6F6F6] border border-[#E8E8E8] rounded-md h-12 w-80 px-4 mt-4'
           value={recoveryEmail}
-          onChangeText={(text) => setEmail(text)}
+          onChangeText={(text) => setRecoveryEmail(text)}
         />
       </View>
       {/* Send Recovery code Button */}
