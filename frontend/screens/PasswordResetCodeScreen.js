@@ -1,10 +1,11 @@
 import { View, Text, TouchableOpacity, TextInput } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useRoute, useNavigation } from '@react-navigation/native'
 
 const PasswordResetCodeScreen = () => {
   const navigation = useNavigation()
+  const refs = useRef([])
 
   const [otp, setOtp] = useState(Array(6).fill(''))
   const [otpString, setOtpString] = useState('')
@@ -31,14 +32,35 @@ const PasswordResetCodeScreen = () => {
               borderBottomWidth: 2,
               borderColor: '#BDBDBD',
               textAlign: 'center',
+              marginRight: 10,
             }}
             keyboardType='number-pad'
-            returnKeyType='done'
             maxLength={1}
-            onChangeText={(text) => {
-              setOtp([...otp.map((d, idx) => (idx === index ? text : d))])
-            }}
             value={data}
+            onChangeText={(text) => {
+              if (isNaN(text)) {
+                return
+              }
+              otp[index] = text
+              setOtp([...otp])
+              if (text !== '') {
+                if (index !== otp.length - 1) {
+                  refs.current[index + 1].focus()
+                }
+              } else {
+                if (index !== 0) {
+                  refs.current[index - 1].focus()
+                }
+              }
+            }}
+            onKeyPress={(e) => {
+              if (e.nativeEvent.key === 'Backspace') {
+                if (index !== 0) {
+                  refs.current[index - 1].focus()
+                }
+              }
+            }}
+            ref={(ref) => (refs.current[index] = ref)}
           />
         ))}
       </View>
