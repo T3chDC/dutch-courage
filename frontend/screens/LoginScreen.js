@@ -57,7 +57,7 @@ const LoginScreen = () => {
       {/* Forgot Password */}
       <View className='mt-4'>
         <TouchableOpacity
-          className='rounded-md w-80 flex-row justify-center items-center'
+          className='rounded-md flex-row justify-center items-center'
           // onPress={() => navigation.navigate('Home')}
         >
           <Text className='text-[#22A6B3] text-base font-semibold'>
@@ -101,6 +101,18 @@ const LoginScreen = () => {
           <Text className='text-[#666666] text-base font-medium ml-4'>
             Log In with Facebook
           </Text>
+        </TouchableOpacity>
+      </View>
+      {/* Don't have an account? */}
+      <View className='mt-16 flex-row space-x-2 justify-center items-center'>
+        <Text className='text-[#666666] text-sm font-normal'>
+          Don't have an account?
+        </Text>
+        <TouchableOpacity
+          className='flex-row justify-center items-center'
+          onPress={() => navigation.navigate('SignUp')}
+        >
+          <Text className='text-[#22A6B3] text-base font-medium '>Sign Up</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
