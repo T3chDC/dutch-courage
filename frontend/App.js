@@ -8,6 +8,7 @@ import SignUpScreen from './screens/SignUpScreen'
 import ForgotPasswordScreen from './screens/ForgotPasswordScreen'
 import PasswordResetCodeScreen from './screens/PasswordResetCodeScreen'
 import PasswordResetScreen from './screens/PasswordResetScreen'
+import OwnProfileScreen from './screens/OwnProfileScreen'
 
 const Stack = createNativeStackNavigator()
 
@@ -57,6 +58,14 @@ export default function App() {
           <Stack.Screen
             name='PasswordReset'
             component={PasswordResetScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          {/* Own Profile Screen */}
+          <Stack.Screen
+            name='OwnProfile'
+            component={OwnProfileScreen}
             options={{
               headerShown: false,
             }}
