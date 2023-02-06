@@ -5,8 +5,8 @@ import {
   TouchableOpacity,
   Modal,
   TextInput,
-  Picker,
 } from 'react-native'
+import { Picker } from '@react-native-picker/picker'
 import * as ImagePicker from 'expo-image-picker'
 import { PlusIcon } from 'react-native-heroicons/solid'
 import React, { useEffect, useState } from 'react'
@@ -126,6 +126,67 @@ const OwnProfileScreen = () => {
           </View>
         </Modal>
       </View>
+
+      {editMode ? (
+        <>
+          {/* mantra */}
+          <View className='mt-5'>
+            <TextInput
+              placeholder='Mantra'
+              keyboardType='email-address'
+              className='bg-[#F6F6F6] border border-[#E8E8E8] rounded-md h-12 w-80 px-4 mt-4'
+              value={mantra}
+              onChangeText={(text) => setMantra(text)}
+            />
+          </View>
+
+          {/* birth year */}
+          <View className='mt-2 bg-white h-12 w-28 rounded-md'>
+            <Picker
+              selectedValue={birthYear}
+              onValueChange={(itemValue, itemIndex) => setBirthYear(itemValue)}
+            >
+              <Picker.Item label='YYYY' value='' color='#898A8D' />
+              {[...Array(101).keys()]
+                .map((i) => 1950 + i)
+                .map((year) => (
+                  <Picker.Item key={year} label={`${year}`} value={`${year}`} />
+                ))}
+            </Picker>
+          </View>
+
+          {/* Gender */}
+          <View className='mt-2 bg-white h-12 w-40 rounded-md'>
+            <Picker
+              selectedValue={gender}
+              onValueChange={(itemValue, itemIndex) => setGender(itemValue)}
+            >
+              <Picker.Item label='Gender' value='' color='#898A8D' />
+              <Picker.Item label='Male' value='male' />
+              <Picker.Item label='Female' value='female' />
+              <Picker.Item label='Others' value='others' />
+            </Picker>
+          </View>
+
+          {/* Location */}
+          <View>
+            <TouchableOpacity className='bg-[#F6F6F6] border border-[#E8E8E8] flex rounded-full h-12 w-40 px-4 mt-4 flex-row justify-center items-center'>
+              <Text className='text-[#898A8D] text-base font-medium'>
+                Location
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Top Interests */}
+          <View>
+            <TouchableOpacity className='bg-[#F6F6F6] border border-[#E8E8E8] flex rounded-full h-12 w-80 px-4 mt-4 flex-row justify-center items-center'>
+              <Text className='text-[#898A8D] text-base font-medium'>
+                3 Top Interests
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </>
+      ) : null}
 
       {/* edit profile button */}
       {!editMode ? (
