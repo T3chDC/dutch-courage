@@ -32,7 +32,7 @@ const OwnProfileScreen = () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [4, 4],
       quality: 1,
     })
 
@@ -40,6 +40,7 @@ const OwnProfileScreen = () => {
 
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri)
+      setIsImageChooseModalVisible(false)
     }
   }
 
@@ -48,7 +49,7 @@ const OwnProfileScreen = () => {
     let result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [4, 4],
       quality: 1,
     })
 
@@ -56,6 +57,7 @@ const OwnProfileScreen = () => {
 
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri)
+      setIsImageChooseModalVisible(false)
     }
   }
 
@@ -71,14 +73,12 @@ const OwnProfileScreen = () => {
         source={require('../assets/projectImages/profileBackgroundCutOff.png')}
         className='w-[100vw]'
       />
-      {/* Profile information container */}
-      <View className='absolute w-[100vw] h-[100vh] opacity-50 flex-1 justify-start items-center'></View>
       {/* profile image and image picker */}
       <View className='mt-[-230] w-64 h-64 rounded-full bg-[#FCFCFE] flex-row justify-center items-center'>
         <TouchableOpacity onPress={() => openModal()}>
-          {imageUrl ? (
+          {imageUrl || selectedImage ? (
             <Image
-              source={require('../assets/projectImages/avatarPlaceholder.png')}
+              source={{ uri: selectedImage || imageUrl }}
               className='w-64 h-64 rounded-full'
             />
           ) : (
@@ -95,8 +95,8 @@ const OwnProfileScreen = () => {
             setIsImageChooseModalVisible(false)
           }}
         >
-          <View className='flex-1 justify-center items-center'>
-            <View className='bg-white w-[300px] h-[200px] rounded-2xl flex-col justify-center items-center'>
+          <View className='absolute bottom-0 flex-1 justify-center items-center'>
+            <View className='w-[100vw] h-[200] rounded-2xl flex-col justify-between items-center py-5 bg-gray-800'>
               <TouchableOpacity
                 className='bg-[#22A6B3] rounded-full w-40 h-12 flex-row justify-center items-center'
                 onPress={() => takeImage()}
@@ -116,7 +116,7 @@ const OwnProfileScreen = () => {
 
               <TouchableOpacity
                 className='bg-[#22A6B3] rounded-full w-40 h-12 flex-row justify-center items-center'
-                onPress={() => navigation.goBack()}
+                onPress={() => setIsImageChooseModalVisible(false)}
               >
                 <Text className='text-white text-base font-semibold'>
                   Cancel
