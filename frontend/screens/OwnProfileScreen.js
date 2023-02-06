@@ -30,11 +30,14 @@ const OwnProfileScreen = () => {
       />
       {/* Profile information container */}
       <View className='absolute w-[100vw] h-[100vh] opacity-50 flex-1 justify-start items-center'></View>
-      {/* profile image */}
-      <Image
+      {/* profile image and image picker */}
+      <View className='mt-[-230] w-64 h-64 rounded-full bg-[#FCFCFE] flex-row justify-center items-center'>
+        {/* <Image
         source={require('../assets/projectImages/avatarPlaceholder.png')}
         className='mt-[-230] w-64 h-64 rounded-full'
-      />
+      /> */}
+      </View>
+
       {/* edit profile button */}
       {!editMode ? (
         <View className='mt-4'>
