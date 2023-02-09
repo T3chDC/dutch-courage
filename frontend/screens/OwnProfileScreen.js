@@ -158,7 +158,7 @@ const OwnProfileScreen = () => {
           </View>
 
           {/* Gender */}
-          <View className="mt-2 bg-white h-12 w-40 rounded-full pl-12 flex justify-center">
+          <View className="mt-2 bg-white h-12 w-40 rounded-full pl-10 flex justify-center">
             <Picker
               selectedValue={gender}
               onValueChange={(itemValue, itemIndex) => setGender(itemValue)}
