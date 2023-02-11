@@ -10,7 +10,7 @@ import {
   createOne,
   updateOne,
   deleteOne,
-} from './handlerFactory.js' //import generic handler
+} from '../common/handlerFactory.js' //import generic handler
 
 // @desc    Get all users
 // @route   GET /api/v1/users

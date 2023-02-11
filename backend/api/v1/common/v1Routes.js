@@ -1,6 +1,10 @@
+// This file contains the routes for the version 1.0 of the API
 import express from 'express'
+import userRouter from '../user/userRoutes.js' //import user routes
 
 const router = express.Router()
+
+router.use('/users', userRouter)
 
 router.route('/').get((req, res) => {
   res.status(200).json({

@@ -56,6 +56,10 @@ export const signupLocal = catchAsync(async (req, res, next) => {
 export const signinLocal = catchAsync(async (req, res, next) => {
   const { email, password } = req.body
 
+  if (!email || !password) {
+    return next(new AppError('Please provide email and password!', 400))
+  }
+
   const authedUser = await User.findOne({
     email,
   })
