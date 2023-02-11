@@ -57,15 +57,14 @@ const userSchema = new mongoose.Schema(
         },
         'There needs to be a password for the user',
       ],
-      minLength: 6,
     },
     passwordChangedAt: Date,
     passwordResetOTP: String,
     passwordResetExpires: Date,
-    newUser: {
-      type: Boolean,
-      default: true,
-    },
+    // newUser: {
+    //   type: Boolean,
+    //   default: true,
+    // },
     image: {
       type: String,
       default: '',
@@ -120,6 +119,33 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   }
 )
+
+//method to check if password matches
+userSchema.methods.matchPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password)
+}
+
+//hashing password before document is created
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) {
+    next()
+  }
+  const salt = await bcrypt.genSalt(process.env.SALT_ROUNDS * 1)
+  this.password = await bcrypt.hash(this.password, salt)
+  this.passwordChangedAt = Date.now() - 1000
+  next()
+})
+
+//hashing password before document is updated
+userSchema.pre('findOneAndUpdate', async function (next) {
+  if (!this._update.password) {
+    next()
+  }
+  const salt = await bcrypt.genSalt(process.env.SALT_ROUNDS * 1)
+  this._update.password = await bcrypt.hash(this._update.password, salt)
+  this._update.passwordChangedAt = Date.now() - 1000
+  next()
+})
 
 const User = mongoose.model('User', userSchema) //create a model
 
