@@ -3,6 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { CheckBox } from '@rneui/themed'
 import React, { useEffect, useState } from 'react'
 import { useRoute, useNavigation } from '@react-navigation/native'
+import Toast from 'react-native-toast-message'
 
 const SignUpScreen = () => {
   const navigation = useNavigation()
@@ -12,6 +13,45 @@ const SignUpScreen = () => {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [agreedChecked, setAgreedChecked] = useState(false)
+
+  //function to handle signup and check validity of fields
+  const handleSignUp = () => {
+    if (userName === '') {
+      Toast.show({
+        type: 'error',
+        text1: 'Username cannot be empty',
+        text2: 'Please enter a valid username',
+        visibilityTime: 2000,
+      })
+    } else if (email === '') {
+      Toast.show({
+        type: 'error',
+        text1: 'Email cannot be empty',
+        text2: 'Please enter a valid email',
+        visibilityTime: 2000,
+      })
+    } else if (password === '') {
+      Toast.show({
+        type: 'error',
+        text1: 'Password cannot be empty',
+        text2: 'Please enter a valid password',
+        visibilityTime: 2000,
+      })
+    } else if (!agreedChecked) {
+      Toast.show({
+        type: 'error',
+        text1: 'Please agree to the terms and conditions',
+        visibilityTime: 2000,
+      })
+    } else {
+      Toast.show({
+        type: 'success',
+        text1: 'Account created successfully',
+        visibilityTime: 2000,
+      })
+      navigation.navigate('OwnProfile')
+    }
+  }
 
   return (
     <SafeAreaView className='bg-black flex-1 justify-start items-center'>
@@ -82,7 +122,7 @@ const SignUpScreen = () => {
       <View className='mt-2'>
         <TouchableOpacity
           className='bg-[#22A6B3] rounded-full h-12 w-80 flex-row justify-center items-center'
-          // onPress={() => navigation.navigate('Home')}
+          onPress={() => handleSignUp()}
         >
           <Text className='text-white text-base font-semibold'>Sign Up</Text>
         </TouchableOpacity>
@@ -97,10 +137,7 @@ const SignUpScreen = () => {
       </View>
       {/* Google Sign Up */}
       <View className='mt-8'>
-        <TouchableOpacity
-          className='bg-[#F6F6F6] rounded-md h-12 w-80 flex-row justify-center items-center'
-          // onPress={() => navigation.navigate('Home')}
-        >
+        <TouchableOpacity className='bg-[#F6F6F6] rounded-md h-12 w-80 flex-row justify-center items-center'>
           <Image
             source={require('../assets/projectImages/google.png')}
             className='h-6 w-6'
