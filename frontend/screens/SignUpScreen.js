@@ -9,6 +9,7 @@ import validator from 'validator'
 const SignUpScreen = () => {
   const navigation = useNavigation()
 
+  //local state variables
   const [userName, setUserName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
