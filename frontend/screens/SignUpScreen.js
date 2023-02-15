@@ -4,6 +4,7 @@ import { CheckBox } from '@rneui/themed'
 import React, { useEffect, useState } from 'react'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import Toast from 'react-native-toast-message'
+import validator from 'validator'
 
 const SignUpScreen = () => {
   const navigation = useNavigation()
@@ -16,6 +17,8 @@ const SignUpScreen = () => {
 
   //regex patterns for username validation
   const userNamePattern = /^[a-zA-Z0-9_]{6,32}$/
+  //regex patterns for password validation
+  const passwordPattern = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[a-zA-Z0-9]).{8,}$/
 
   //function to handle signup and check validity of fields
   const handleSignUp = () => {
@@ -41,6 +44,13 @@ const SignUpScreen = () => {
         text2: 'Please enter a valid email',
         visibilityTime: 2000,
       })
+    } else if (!validator.isEmail(email)) {
+      Toast.show({
+        type: 'error',
+        text1: 'Invalid email',
+        text2: 'Please enter a valid email address',
+        visibilityTime: 10000,
+      })
     } else if (password === '') {
       Toast.show({
         type: 'error',
@@ -48,10 +58,18 @@ const SignUpScreen = () => {
         text2: 'Please enter a valid password',
         visibilityTime: 2000,
       })
+    } else if (!passwordPattern.test(password)) {
+      Toast.show({
+        type: 'error',
+        text1: 'Invalid password',
+        text2:
+          'Password must be 8 characters long and must contain at least one uppercase letter and one special character',
+        visibilityTime: 10000,
+      })
     } else if (!agreedChecked) {
       Toast.show({
         type: 'error',
-        text1: 'Please agree to the terms and conditions',
+        text1: 'Please agree to the terms and conditions to continue',
         visibilityTime: 2000,
       })
     } else {
