@@ -14,7 +14,12 @@ const ToastConfig = {
     by modifying the existing `SuccessToast` component
   */
   success: (props) => (
-    <SuccessToast {...props} style={{ borderLeftColor: 'green' }} />
+    <SuccessToast
+      {...props}
+      style={{ borderLeftColor: 'green' }}
+      text1NumberOfLines={2}
+      text2NumberOfLines={2}
+    />
   ),
 
   /*
@@ -22,14 +27,28 @@ const ToastConfig = {
     by modifying the existing `ErrorToast` component
   */
   error: (props) => (
-    <ErrorToast {...props} style={{ borderLeftColor: 'red' }} />
+    <ErrorToast
+      {...props}
+      style={{ borderLeftColor: 'red' }}
+      text1NumberOfLines={2}
+      text1Style={{ fontSize: 14 }}
+      text2NumberOfLines={2}
+      text2Style={{ fontSize: 12, color: 'red' }}
+    />
   ),
 
   /*
     Overwrite 'info' type,
     by modifying the existing `InfoToast` component
     */
-  info: (props) => <InfoToast {...props} style={{ borderLeftColor: 'blue' }} />,
+  info: (props) => (
+    <InfoToast
+      {...props}
+      style={{ borderLeftColor: 'blue' }}
+      text1NumberOfLines={2}
+      text2NumberOfLines={2}
+    />
+  ),
 }
 
 // Export the config

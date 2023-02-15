@@ -32,7 +32,6 @@ const SignUpScreen = () => {
         text1: 'Invalid username',
         text2:
           'Username must be 6-32 characters long and can only contain letters, numbers and underscores',
-        autoHide: false,
         visibilityTime: 10000,
       })
     } else if (email === '') {
