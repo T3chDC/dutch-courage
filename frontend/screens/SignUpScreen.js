@@ -14,6 +14,9 @@ const SignUpScreen = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [agreedChecked, setAgreedChecked] = useState(false)
 
+  //regex patterns for username validation
+  const userNamePattern = /^[a-zA-Z0-9_]{6,32}$/
+
   //function to handle signup and check validity of fields
   const handleSignUp = () => {
     if (userName === '') {
@@ -22,6 +25,15 @@ const SignUpScreen = () => {
         text1: 'Username cannot be empty',
         text2: 'Please enter a valid username',
         visibilityTime: 2000,
+      })
+    } else if (!userNamePattern.test(userName)) {
+      Toast.show({
+        type: 'error',
+        text1: 'Invalid username',
+        text2:
+          'Username must be 6-32 characters long and can only contain letters, numbers and underscores',
+        autoHide: false,
+        visibilityTime: 10000,
       })
     } else if (email === '') {
       Toast.show({
