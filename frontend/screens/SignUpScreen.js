@@ -20,11 +20,18 @@ const SignUpScreen = () => {
   const [agreedChecked, setAgreedChecked] = useState(false)
 
   const {
+    userInfo,
     isSignUpSuccess,
     isSignUpLoading,
     isSignUpError,
     signUpErrorMessage,
   } = useSelector((state) => state.auth)
+
+  console.log(userInfo)
+  console.log(isSignUpSuccess)
+  console.log(isSignUpLoading)
+  console.log(isSignUpError)
+  console.log(signUpErrorMessage)
 
   //regex patterns for username validation
   const userNamePattern = /^[a-zA-Z0-9_]{6,32}$/

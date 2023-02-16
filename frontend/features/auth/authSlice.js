@@ -5,20 +5,29 @@ import authService from './authService'
 
 //Fetch user from async storage
 const getUserFromAsyncStorage = async () => {
-  const user = await asyncStorage.getItem('userInfo')
-  return JSON.parse(user)
+  try {
+    const user = await asyncStorage.getItem('userInfo')
+    return user != null ? JSON.parse(user) : null
+  } catch (err) {
+    console.log(err)
+  }
 }
 
 //Remove user from async storage
 const removeUserFromAsyncStorage = async () => {
-  await asyncStorage.removeItem('userInfo')
+  try {
+    await asyncStorage.removeItem('userInfo')
+  } catch (err) {
+    console.log(err)
+  }
 }
 
 //get user from asyncstorage
-const userInfo = getUserFromAsyncStorage()
+const userInfoRetrieved = getUserFromAsyncStorage()
 
+//initial state
 const initialState = {
-  userInfo: userInfo ? userInfo : null,
+  userInfo: {},
   isSignUpError: false,
   isSignUpLoading: false,
   isSignUpSuccess: false,
@@ -87,9 +96,9 @@ const authSlice = createSlice({
     builder
       .addCase(signupLocal.pending, (state) => {
         state.isSignUpLoading = true
-        state.isSignInSuccess = false
-        state.isSignInError = false
-        state.signInErrorMessage = ''
+        state.isSignUpSuccess = false
+        state.isSignUpError = false
+        state.signUpErrorMessage = ''
       })
       .addCase(signupLocal.fulfilled, (state, action) => {
         state.isSignUpLoading = false
