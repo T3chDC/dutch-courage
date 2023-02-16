@@ -3,11 +3,14 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { CheckBox } from '@rneui/themed'
 import React, { useEffect, useState } from 'react'
 import { useRoute, useNavigation } from '@react-navigation/native'
+import { signupLocal, resetAuth } from '../features/auth/authSlice'
+import { useDispatch, useSelector } from 'react-redux'
 import Toast from 'react-native-toast-message'
 import validator from 'validator'
 
 const SignUpScreen = () => {
   const navigation = useNavigation()
+  const dispatch = useDispatch()
 
   //local state variables
   const [userName, setUserName] = useState('')
@@ -15,6 +18,13 @@ const SignUpScreen = () => {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [agreedChecked, setAgreedChecked] = useState(false)
+
+  const {
+    isSignUpSuccess,
+    isSignUpLoading,
+    isSignUpError,
+    signUpErrorMessage,
+  } = useSelector((state) => state.auth)
 
   //regex patterns for username validation
   const userNamePattern = /^[a-zA-Z0-9_]{6,32}$/
@@ -74,12 +84,14 @@ const SignUpScreen = () => {
         visibilityTime: 2000,
       })
     } else {
-      Toast.show({
-        type: 'success',
-        text1: 'Account created successfully',
-        visibilityTime: 2000,
-      })
-      navigation.navigate('OwnProfile')
+      dispatch(
+        signupLocal({
+          userName,
+          email,
+          password,
+          loginType: 'local',
+        })
+      )
     }
   }
 
@@ -96,7 +108,7 @@ const SignUpScreen = () => {
           keyboardType='default'
           className='bg-[#F6F6F6] border border-[#E8E8E8] rounded-md h-12 w-80 px-4'
           value={userName}
-          onChangeText={(text) => setUserName(text)}
+          onChangeText={(text) => setUserName(text.trim())}
         />
       </View>
       {/* Email Field */}
@@ -106,7 +118,7 @@ const SignUpScreen = () => {
           keyboardType='email-address'
           className='bg-[#F6F6F6] border border-[#E8E8E8] rounded-md h-12 w-80 px-4 mt-4'
           value={email}
-          onChangeText={(text) => setEmail(text)}
+          onChangeText={(text) => setEmail(text.trim())}
         />
       </View>
       {/* Password Field */}
@@ -117,7 +129,7 @@ const SignUpScreen = () => {
           keyboardType='default'
           className='bg-[#F6F6F6] flex-1 w-64'
           value={password}
-          onChangeText={(text) => setPassword(text)}
+          onChangeText={(text) => setPassword(text.trim())}
         />
         <TouchableOpacity
           className='flex-row justify-center items-center'

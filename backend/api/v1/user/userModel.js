@@ -81,7 +81,6 @@ const userSchema = new mongoose.Schema(
 
     gender: {
       type: String,
-      default: '',
       enum: {
         values: ['male', 'female', 'others'],
         messages: ['Gender should be male female or others'],
@@ -102,7 +101,7 @@ const userSchema = new mongoose.Schema(
 
     userType: {
       type: String,
-      default: 'tourist',
+      default: 'regularUser',
       enum: {
         values: ['adminUser', 'regularUser'],
         message: 'User type needs to be adminUser or regularUser',
