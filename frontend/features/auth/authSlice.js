@@ -1,12 +1,12 @@
 // This file is responsible for handling the state of the authentication process
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import asyncStorage from '@react-native-async-storage/async-storage'
+import * as SecureStore from 'expo-secure-store'
 import authService from './authService'
 
 //Fetch user from async storage
 const getUserFromAsyncStorage = async () => {
   try {
-    const user = await asyncStorage.getItem('DCUserInfo')
+    const user = await SecureStore.getItemAsync('DCUserInfo')
     return user != null ? JSON.parse(user) : null
   } catch (err) {
     console.log(err)
@@ -16,7 +16,7 @@ const getUserFromAsyncStorage = async () => {
 //Remove user from async storage
 const removeUserFromAsyncStorage = async () => {
   try {
-    await asyncStorage.removeItem('DCUserInfo')
+    await SecureStore.deleteItemAsync('DCUserInfo')
   } catch (err) {
     console.log(err)
   }
