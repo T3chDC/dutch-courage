@@ -33,7 +33,7 @@ const SignUpScreen = () => {
   console.log('loading: ', isSignUpLoading)
   console.log('error: ', isSignUpError)
   console.log('errorMessage: ', signUpErrorMessage)
-  console.log('requestStatus: ', signUpRequestStatus)
+  console.log('requestStatus: ', signUpRequestStatus) // For debugging purposes only
 
   //regex patterns for username validation
   const userNamePattern = /^[a-zA-Z0-9_]{6,32}$/
