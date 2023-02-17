@@ -6,7 +6,7 @@ import authService from './authService'
 //Fetch user from async storage
 const getUserFromAsyncStorage = async () => {
   try {
-    const user = await asyncStorage.getItem('userInfo')
+    const user = await asyncStorage.getItem('DCUserInfo')
     return user != null ? JSON.parse(user) : null
   } catch (err) {
     console.log(err)
@@ -16,7 +16,7 @@ const getUserFromAsyncStorage = async () => {
 //Remove user from async storage
 const removeUserFromAsyncStorage = async () => {
   try {
-    await asyncStorage.removeItem('userInfo')
+    await asyncStorage.removeItem('DCUserInfo')
   } catch (err) {
     console.log(err)
   }
@@ -27,15 +27,17 @@ const userInfoRetrieved = getUserFromAsyncStorage()
 
 //initial state
 const initialState = {
-  userInfo: {},
+  userInfo: userInfoRetrieved,
   isSignUpError: false,
   isSignUpLoading: false,
   isSignUpSuccess: false,
   signUpErrorMessage: '',
+  signUpRequestStatus: '', // for debugging purposes only
   isSignInError: false,
   isSignInLoading: false,
   isSignInSuccess: false,
   signInErrorMessage: '',
+  signInRequestStatus: '', // for debugging purposes only
 }
 
 //signup user locally
@@ -99,6 +101,7 @@ const authSlice = createSlice({
         state.isSignUpSuccess = false
         state.isSignUpError = false
         state.signUpErrorMessage = ''
+        state.signUpRequestStatus = 'pending'
       })
       .addCase(signupLocal.fulfilled, (state, action) => {
         state.isSignUpLoading = false
@@ -106,18 +109,21 @@ const authSlice = createSlice({
         state.isSignUpError = false
         state.signUpErrorMessage = ''
         state.userInfo = action.payload
+        state.signUpRequestStatus = 'fulfilled'
       })
       .addCase(signupLocal.rejected, (state, action) => {
         state.isSignUpLoading = false
         state.isSignUpError = true
         state.isSignUpSuccess = false
         state.signUpErrorMessage = action.payload
+        state.signUpRequestStatus = 'rejected'
       })
       .addCase(signinLocal.pending, (state) => {
         state.isSignInLoading = true
         state.isSignInSuccess = false
         state.isSignInError = false
         state.signInErrorMessage = ''
+        state.signInRequestStatus = 'pending'
       })
       .addCase(signinLocal.fulfilled, (state, action) => {
         state.isSignInLoading = false
@@ -125,12 +131,14 @@ const authSlice = createSlice({
         state.isSignInError = false
         state.signInErrorMessage = ''
         state.userInfo = action.payload
+        state.signInRequestStatus = 'fulfilled'
       })
       .addCase(signinLocal.rejected, (state, action) => {
         state.isSignInLoading = false
         state.isSignInError = true
         state.isSignInSuccess = false
         state.signInErrorMessage = action.payload
+        state.signInRequestStatus = 'rejected'
       })
   },
 })

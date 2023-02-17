@@ -3,7 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { CheckBox } from '@rneui/themed'
 import React, { useEffect, useState } from 'react'
 import { useRoute, useNavigation } from '@react-navigation/native'
-import { signupLocal, resetAuth } from '../features/auth/authSlice'
+import { signupLocal, resetSignUp, logout } from '../features/auth/authSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import Toast from 'react-native-toast-message'
 import validator from 'validator'
@@ -25,13 +25,15 @@ const SignUpScreen = () => {
     isSignUpLoading,
     isSignUpError,
     signUpErrorMessage,
+    signUpRequestStatus,
   } = useSelector((state) => state.auth)
 
-  console.log(userInfo)
-  console.log(isSignUpSuccess)
-  console.log(isSignUpLoading)
-  console.log(isSignUpError)
-  console.log(signUpErrorMessage)
+  console.log('user: ', userInfo)
+  console.log('success: ', isSignUpSuccess)
+  console.log('loading: ', isSignUpLoading)
+  console.log('error: ', isSignUpError)
+  console.log('errorMessage: ', signUpErrorMessage)
+  console.log('requestStatus: ', signUpRequestStatus)
 
   //regex patterns for username validation
   const userNamePattern = /^[a-zA-Z0-9_]{6,32}$/
@@ -100,6 +102,10 @@ const SignUpScreen = () => {
         })
       )
     }
+  }
+
+  const handleLogout = () => {
+    dispatch(logout())
   }
 
   return (
@@ -174,6 +180,14 @@ const SignUpScreen = () => {
           onPress={() => handleSignUp()}
         >
           <Text className='text-white text-base font-semibold'>Sign Up</Text>
+        </TouchableOpacity>
+      </View>
+      <View className='mt-2'>
+        <TouchableOpacity
+          className='bg-[#22A6B3] rounded-full h-12 w-80 flex-row justify-center items-center'
+          onPress={() => handleLogout()}
+        >
+          <Text className='text-white text-base font-semibold'>logout</Text>
         </TouchableOpacity>
       </View>
       {/* Or */}
