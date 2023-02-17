@@ -3,17 +3,19 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import * as SecureStore from 'expo-secure-store'
 import authService from './authService'
 
-//Fetch user from async storage
-const getUserFromAsyncStorage = async () => {
+//get user from secure storage
+const getUserFromSecureStorage = async () => {
   try {
-    const user = await SecureStore.getItemAsync('DCUserInfo')
-    return user != null ? JSON.parse(user) : null
+    const userInfo = await SecureStore.getItemAsync('DCUserInfo')
+    if (userInfo) {
+      return JSON.parse(userInfo)
+    }
   } catch (err) {
     console.log(err)
   }
 }
 
-//Remove user from async storage
+//Remove user from secure storage
 const removeUserFromAsyncStorage = async () => {
   try {
     await SecureStore.deleteItemAsync('DCUserInfo')
@@ -22,12 +24,12 @@ const removeUserFromAsyncStorage = async () => {
   }
 }
 
-//get user from asyncstorage
-const userInfoRetrieved = getUserFromAsyncStorage()
+// //get user from asyncstorage
+// const userInfoRetrieved = getUserFromSecureStorage()
 
 //initial state
 const initialState = {
-  userInfo: userInfoRetrieved,
+  userInfo: null,
   isSignUpError: false,
   isSignUpLoading: false,
   isSignUpSuccess: false,
@@ -76,6 +78,10 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    getInitialState: (state) => {
+      state.userInfo = getUserFromSecureStorage()
+    },
+
     logout: (state) => {
       state.userInfo = null
       removeUserFromAsyncStorage()
@@ -143,6 +149,7 @@ const authSlice = createSlice({
   },
 })
 
-export const { resetSignIn, resetSignUp, logout } = authSlice.actions
+export const { resetSignIn, resetSignUp, logout, getInitialState } =
+  authSlice.actions
 
 export default authSlice.reducer
