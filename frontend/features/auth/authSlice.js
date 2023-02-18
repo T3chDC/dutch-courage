@@ -45,12 +45,10 @@ const initialState = {
   isSignUpLoading: false,
   isSignUpSuccess: false,
   signUpErrorMessage: '',
-  signUpRequestStatus: '', // for debugging purposes only
   isSignInError: false,
   isSignInLoading: false,
   isSignInSuccess: false,
   signInErrorMessage: '',
-  signInRequestStatus: '', // for debugging purposes only
 }
 
 //signup user locally
@@ -105,10 +103,6 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    // logout: (state) => {
-    //   state.userInfo = null
-    //   removeUserFromAsyncStorage()
-    // },
     resetSignUp: (state) => {
       state.isSignUpError = false
       state.isSignUpLoading = false

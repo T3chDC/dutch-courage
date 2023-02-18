@@ -25,24 +25,7 @@ const SignUpScreen = () => {
     isSignUpLoading,
     isSignUpError,
     signUpErrorMessage,
-    signUpRequestStatus,
   } = useSelector((state) => state.auth)
-
-  useEffect(() => {
-    console.log('user: ', userInfo)
-    console.log('success: ', isSignUpSuccess)
-    console.log('loading: ', isSignUpLoading)
-    console.log('error: ', isSignUpError)
-    console.log('errorMessage: ', signUpErrorMessage)
-    console.log('requestStatus: ', signUpRequestStatus) // For debugging purposes only
-  }, [
-    userInfo,
-    isSignUpSuccess,
-    isSignUpLoading,
-    isSignUpError,
-    signUpErrorMessage,
-    signUpRequestStatus,
-  ])
 
   //regex patterns for username validation
   const userNamePattern = /^[a-zA-Z0-9_]{6,32}$/
