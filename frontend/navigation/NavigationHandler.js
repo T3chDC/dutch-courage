@@ -21,7 +21,7 @@ const NavigationHandler = () => {
   NavigationBar.setBackgroundColorAsync('#000000')
   const dispatch = useDispatch()
 
-  const { userInfo } = useSelector((state) => state.auth)
+  // const { userInfo } = useSelector((state) => state.auth)
 
   useEffect(() => {
     dispatch(getInitialState())
@@ -32,65 +32,58 @@ const NavigationHandler = () => {
       <NavigationContainer>
         <Stack.Navigator>
           {/*Screens*/}
-          {!userInfo ? (
-            <>
-              {/* Home screen */}
-              <Stack.Screen name='Home' component={HomeScreen} />
-              {/* Login screen */}
-              <Stack.Screen
-                name='Login'
-                component={LoginScreen}
-                options={{
-                  headerShown: false,
-                }}
-              />
-              {/* Sign Up Screen */}
-              <Stack.Screen
-                name='SignUp'
-                component={SignUpScreen}
-                options={{
-                  headerShown: false,
-                }}
-              />
-              {/* Forgot Password Screen */}
-              <Stack.Screen
-                name='ForgotPassword'
-                component={ForgotPasswordScreen}
-                options={{
-                  headerShown: false,
-                }}
-              />
-              {/* Password Reset Code Screen */}
-              <Stack.Screen
-                name='PasswordResetCode'
-                component={PasswordResetCodeScreen}
-                options={{
-                  headerShown: false,
-                }}
-              />
-              {/* Password Reset Screen */}
-              <Stack.Screen
-                name='PasswordReset'
-                component={PasswordResetScreen}
-                options={{
-                  headerShown: false,
-                }}
-              />
-            </>
-          ) : (
-            <>
-              {/* Home screen */}
-              <Stack.Screen name='Home' component={HomeScreen} />
-              {/* Own Profile Screen */}
-              <Stack.Screen
-                name='OwnProfile'
-                component={OwnProfileScreen}
-                options={{
-                  headerShown: false,
-                }}
-              />
-            </>
-          )}
+
+          {/* Home screen */}
+          <Stack.Screen name='Home' component={HomeScreen} />
+          {/* Login screen */}
+          <Stack.Screen
+            name='Login'
+            component={LoginScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          {/* Sign Up Screen */}
+          <Stack.Screen
+            name='SignUp'
+            component={SignUpScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          {/* Forgot Password Screen */}
+          <Stack.Screen
+            name='ForgotPassword'
+            component={ForgotPasswordScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          {/* Password Reset Code Screen */}
+          <Stack.Screen
+            name='PasswordResetCode'
+            component={PasswordResetCodeScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          {/* Password Reset Screen */}
+          <Stack.Screen
+            name='PasswordReset'
+            component={PasswordResetScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+
+          {/* Own Profile Screen */}
+          <Stack.Screen
+            name='OwnProfile'
+            component={OwnProfileScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
       <StatusBar style='light' />

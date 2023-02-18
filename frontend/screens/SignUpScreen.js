@@ -3,7 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { CheckBox } from '@rneui/themed'
 import React, { useEffect, useState } from 'react'
 import { useRoute, useNavigation } from '@react-navigation/native'
-import { signupLocal, resetSignUp} from '../features/auth/authSlice'
+import { signupLocal, resetSignUp } from '../features/auth/authSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import Toast from 'react-native-toast-message'
 import validator from 'validator'
@@ -26,6 +26,39 @@ const SignUpScreen = () => {
     isSignUpError,
     signUpErrorMessage,
   } = useSelector((state) => state.auth)
+
+  useEffect(() => {
+    if (userInfo) {
+      navigation.navigate('Home')
+    }
+  }, [userInfo, navigation])
+
+  useEffect(() => {
+    if (isSignUpSuccess) {
+      Toast.show({
+        type: 'success',
+        text1: 'Sign Up Successful',
+        text2: 'Your Account Was Created Successfully',
+        visibilityTime: 3000,
+      })
+      navigation.navigate('Home')
+      dispatch(resetSignUp())
+    } else if (isSignUpError) {
+      Toast.show({
+        type: 'error',
+        text1: 'Sign Up Failed',
+        text2: signUpErrorMessage,
+        visibilityTime: 3000,
+      })
+      dispatch(resetSignUp())
+    }
+  }, [isSignUpSuccess, isSignUpError, signUpErrorMessage, dispatch, navigation])
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetSignUp())
+    }
+  }, [dispatch])
 
   //regex patterns for username validation
   const userNamePattern = /^[a-zA-Z0-9_]{6,32}$/

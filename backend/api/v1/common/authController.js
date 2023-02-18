@@ -17,7 +17,7 @@ export const signupLocal = catchAsync(async (req, res, next) => {
   }
 
   const userNameCheckedUser = await User.findOne({
-    username: req.body.userName,
+    userName: req.body.userName,
   })
 
   if (userNameCheckedUser) {
