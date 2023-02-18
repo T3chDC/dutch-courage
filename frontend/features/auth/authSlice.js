@@ -3,29 +3,40 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import * as SecureStore from 'expo-secure-store'
 import authService from './authService'
 
-//get user from secure storage
-const getUserFromSecureStorage = async () => {
-  try {
-    const userInfo = await SecureStore.getItemAsync('DCUserInfo')
-    if (userInfo) {
-      return JSON.parse(userInfo)
-    }
-  } catch (err) {
-    console.log(err)
-  }
-}
+// //get user from secure storage
+// const getUserFromSecureStorage = async () => {
+//   try {
+//     const userInfo = await SecureStore.getItemAsync('DCUserInfo')
+//     if (userInfo) {
+//       return JSON.parse(userInfo)
+//     }
+//   } catch (err) {
+//     console.log(err)
+//   }
+// }
 
 //Remove user from secure storage
-const removeUserFromAsyncStorage = async () => {
+// const removeUserFromAsyncStorage = async () => {
+//   try {
+//     await SecureStore.deleteItemAsync('DCUserInfo')
+//   } catch (err) {
+//     console.log(err)
+//   }
+// }
+
+//logout user asynchronously by removing user from storage
+export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
   try {
     await SecureStore.deleteItemAsync('DCUserInfo')
+    return null
   } catch (err) {
-    console.log(err)
+    const message =
+      (err.response && err.response.data && err.response.data.message) ||
+      err.message ||
+      err.toString()
+    return thunkAPI.rejectWithValue(message)
   }
-}
-
-// //get user from asyncstorage
-// const userInfoRetrieved = getUserFromSecureStorage()
+})
 
 //initial state
 const initialState = {
@@ -74,18 +85,30 @@ export const signinLocal = createAsyncThunk(
   }
 )
 
+// get user from secure storage
+export const getInitialState = createAsyncThunk(
+  'auth/getInitialState',
+  async (_, thunkAPI) => {
+    try {
+      return await SecureStore.getItemAsync('DCUserInfo')
+    } catch (err) {
+      const message =
+        (err.response && err.response.data && err.response.data.message) ||
+        err.message ||
+        err.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    getInitialState: (state) => {
-      state.userInfo = getUserFromSecureStorage()
-    },
-
-    logout: (state) => {
-      state.userInfo = null
-      removeUserFromAsyncStorage()
-    },
+    // logout: (state) => {
+    //   state.userInfo = null
+    //   removeUserFromAsyncStorage()
+    // },
     resetSignUp: (state) => {
       state.isSignUpError = false
       state.isSignUpLoading = false
@@ -146,10 +169,15 @@ const authSlice = createSlice({
         state.signInErrorMessage = action.payload
         state.signInRequestStatus = 'rejected'
       })
+      .addCase(getInitialState.fulfilled, (state, action) => {
+        state.userInfo = action.payload
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.userInfo = null
+      })
   },
 })
 
-export const { resetSignIn, resetSignUp, logout, getInitialState } =
-  authSlice.actions
+export const { resetSignIn, resetSignUp } = authSlice.actions
 
 export default authSlice.reducer
