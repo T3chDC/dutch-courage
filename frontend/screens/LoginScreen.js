@@ -2,13 +2,87 @@ import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useRoute, useNavigation } from '@react-navigation/native'
+import { signinLocal, resetSignIn } from '../features/auth/authSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import Toast from 'react-native-toast-message'
+import validator from 'validator'
 
 const LoginScreen = () => {
   const navigation = useNavigation()
+  const dispatch = useDispatch()
 
+  // Local State variables
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+
+  const {
+    userInfo,
+    isSignInSuccess,
+    isSignInLoading,
+    isSignInError,
+    signInErrorMessage,
+  } = useSelector((state) => state.auth)
+
+  useEffect(() => {
+    if (userInfo) {
+      navigation.navigate('Home')
+    }
+  }, [userInfo, navigation])
+
+  useEffect(() => {
+    if (isSignInSuccess) {
+      Toast.show({
+        type: 'success',
+        text1: 'Log In Successful',
+        text2: 'You Have Successfully Logged In',
+        visibilityTime: 3000,
+      })
+      navigation.navigate('Home')
+      dispatch(resetSignIn())
+    } else if (isSignInError) {
+      Toast.show({
+        type: 'error',
+        text1: 'Log In Failed',
+        text2: signInErrorMessage,
+        visibilityTime: 3000,
+      })
+      dispatch(resetSignIn())
+    }
+  }, [isSignInSuccess, isSignInError, signInErrorMessage, dispatch, navigation])
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetSignIn())
+    }
+  }, [dispatch])
+
+  const handleLogin = () => {
+    if (email === '') {
+      Toast.show({
+        type: 'error',
+        text1: 'Email cannot be empty',
+        text2: 'Please enter a valid email',
+        visibilityTime: 2000,
+      })
+    } else if (!validator.isEmail(email)) {
+      Toast.show({
+        type: 'error',
+        text1: 'Invalid Email',
+        text2: 'Please enter a valid email',
+        visibilityTime: 2000,
+      })
+    } else if (password === '') {
+      Toast.show({
+        type: 'error',
+        text1: 'Password cannot be empty',
+        text2: 'Please enter a valid password',
+        visibilityTime: 2000,
+      })
+    } else {
+      dispatch(signinLocal({ email, password }))
+    }
+  }
 
   return (
     <SafeAreaView className='bg-black flex-1 justify-start items-center'>
@@ -49,7 +123,7 @@ const LoginScreen = () => {
       <View className='mt-4'>
         <TouchableOpacity
           className='bg-[#22A6B3] rounded-full h-12 w-80 flex-row justify-center items-center'
-          // onPress={() => navigation.navigate('Home')}
+          onPress={handleLogin}
         >
           <Text className='text-white text-base font-semibold'>Log In</Text>
         </TouchableOpacity>

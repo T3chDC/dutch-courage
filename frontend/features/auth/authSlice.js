@@ -3,41 +3,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import * as SecureStore from 'expo-secure-store'
 import authService from './authService'
 
-// //get user from secure storage
-// const getUserFromSecureStorage = async () => {
-//   try {
-//     const userInfo = await SecureStore.getItemAsync('DCUserInfo')
-//     if (userInfo) {
-//       return JSON.parse(userInfo)
-//     }
-//   } catch (err) {
-//     console.log(err)
-//   }
-// }
-
-//Remove user from secure storage
-// const removeUserFromAsyncStorage = async () => {
-//   try {
-//     await SecureStore.deleteItemAsync('DCUserInfo')
-//   } catch (err) {
-//     console.log(err)
-//   }
-// }
-
-//logout user asynchronously by removing user from storage
-export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
-  try {
-    await SecureStore.deleteItemAsync('DCUserInfo')
-    return null
-  } catch (err) {
-    const message =
-      (err.response && err.response.data && err.response.data.message) ||
-      err.message ||
-      err.toString()
-    return thunkAPI.rejectWithValue(message)
-  }
-})
-
 //initial state
 const initialState = {
   userInfo: null,
@@ -98,6 +63,20 @@ export const getInitialState = createAsyncThunk(
     }
   }
 )
+
+//logout user asynchronously by removing user from storage
+export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
+  try {
+    await SecureStore.deleteItemAsync('DCUserInfo')
+    return null
+  } catch (err) {
+    const message =
+      (err.response && err.response.data && err.response.data.message) ||
+      err.message ||
+      err.toString()
+    return thunkAPI.rejectWithValue(message)
+  }
+})
 
 const authSlice = createSlice({
   name: 'auth',

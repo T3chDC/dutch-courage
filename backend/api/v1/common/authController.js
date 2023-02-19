@@ -64,6 +64,10 @@ export const signinLocal = catchAsync(async (req, res, next) => {
     email,
   })
 
+  if (!authedUser) {
+    return next(new AppError('Invalid Email', 401))
+  }
+
   if (authedUser && (await authedUser.matchPassword(password))) {
     res.status(200).json({
       status: 'success',
@@ -78,7 +82,7 @@ export const signinLocal = catchAsync(async (req, res, next) => {
       },
     })
   } else {
-    return next(new AppError('Invalid email or password', 401))
+    return next(new AppError('Invalid Password', 401))
   }
 })
 
