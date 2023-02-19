@@ -3,7 +3,6 @@
 import mongoose from 'mongoose'
 import bcrypt from 'bcryptjs'
 import validator from 'validator'
-import crypto from 'crypto'
 
 //create a user schema
 const userSchema = new mongoose.Schema(
@@ -123,6 +122,26 @@ const userSchema = new mongoose.Schema(
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password)
 }
+
+//method to check if password was changed after token was issued
+userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
+  if (this.passwordChangedAt) {
+    const changedTimestamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    )
+
+    return JWTTimestamp < changedTimestamp
+  }
+
+  // False means NOT changed
+  return false
+}
+
+//method to create password reset OTP
+// userSchema.methods.createPasswordResetOTP = function () {
+
+// }
 
 //hashing password before document is created
 userSchema.pre('save', async function (next) {
