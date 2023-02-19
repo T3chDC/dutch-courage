@@ -1,7 +1,7 @@
 // This file is responsible for making the API calls to the backend
 import axios from 'axios'
 import * as SecureStore from 'expo-secure-store'
-import { BACKEND_URL } from '@env'
+import { BACKEND_URL } from '../../config'
 
 const API_URL = BACKEND_URL + '/api/v1/users'
 
