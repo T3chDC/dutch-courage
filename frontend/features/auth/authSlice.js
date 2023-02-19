@@ -103,7 +103,6 @@ const authSlice = createSlice({
         state.isSignUpSuccess = false
         state.isSignUpError = false
         state.signUpErrorMessage = ''
-        state.signUpRequestStatus = 'pending'
       })
       .addCase(signupLocal.fulfilled, (state, action) => {
         state.isSignUpLoading = false
@@ -111,21 +110,18 @@ const authSlice = createSlice({
         state.isSignUpError = false
         state.signUpErrorMessage = ''
         state.userInfo = action.payload
-        state.signUpRequestStatus = 'fulfilled'
       })
       .addCase(signupLocal.rejected, (state, action) => {
         state.isSignUpLoading = false
         state.isSignUpError = true
         state.isSignUpSuccess = false
         state.signUpErrorMessage = action.payload
-        state.signUpRequestStatus = 'rejected'
       })
       .addCase(signinLocal.pending, (state) => {
         state.isSignInLoading = true
         state.isSignInSuccess = false
         state.isSignInError = false
         state.signInErrorMessage = ''
-        state.signInRequestStatus = 'pending'
       })
       .addCase(signinLocal.fulfilled, (state, action) => {
         state.isSignInLoading = false
@@ -133,14 +129,12 @@ const authSlice = createSlice({
         state.isSignInError = false
         state.signInErrorMessage = ''
         state.userInfo = action.payload
-        state.signInRequestStatus = 'fulfilled'
       })
       .addCase(signinLocal.rejected, (state, action) => {
         state.isSignInLoading = false
         state.isSignInError = true
         state.isSignInSuccess = false
         state.signInErrorMessage = action.payload
-        state.signInRequestStatus = 'rejected'
       })
       .addCase(getInitialState.fulfilled, (state, action) => {
         state.userInfo = action.payload
