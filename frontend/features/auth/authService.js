@@ -7,6 +7,7 @@ const API_URL = BACKEND_URL + '/api/v1/users'
 
 //signup user locally
 const signupLocal = async (userData) => {
+  console.log(API_URL)
   const response = await axios.post(API_URL + '/signup/local', userData)
   if (response.data.status === 'success') {
     //store in async storage of device
@@ -20,6 +21,7 @@ const signupLocal = async (userData) => {
 
 //signin user locally
 const signinLocal = async (userData) => {
+  console.log(API_URL)
   const response = await axios.post(API_URL + '/signin/local', userData)
   if (response.data.status === 'success') {
     //store in async storage of device

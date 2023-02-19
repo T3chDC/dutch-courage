@@ -37,6 +37,7 @@ const LoginScreen = () => {
         text1: 'Log In Successful',
         text2: 'You Have Successfully Logged In',
         visibilityTime: 3000,
+        position: 'bottom',
       })
       navigation.navigate('Home')
       dispatch(resetSignIn())
@@ -46,6 +47,7 @@ const LoginScreen = () => {
         text1: 'Log In Failed',
         text2: signInErrorMessage,
         visibilityTime: 3000,
+        position: 'bottom',
       })
       dispatch(resetSignIn())
     }
