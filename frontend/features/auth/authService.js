@@ -1,4 +1,4 @@
-// This file is responsible for making the API calls to the backend
+// This file is responsible for making the API calls to the backend for authentication
 import axios from 'axios'
 import * as SecureStore from 'expo-secure-store'
 import { BACKEND_URL } from '../../config'
