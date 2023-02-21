@@ -53,7 +53,7 @@ export const getInitialState = createAsyncThunk(
   'auth/getInitialState',
   async (_, thunkAPI) => {
     try {
-      return await SecureStore.getItemAsync('DCUserInfo')
+      return JSON.parse(await SecureStore.getItemAsync('DCUserInfo'))
     } catch (err) {
       const message =
         (err.response && err.response.data && err.response.data.message) ||

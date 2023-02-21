@@ -36,7 +36,7 @@ export const updateMeUser = createAsyncThunk(
   async (userData, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.userInfo.token
-      return await userService.updateMeUser(userData, token)
+      return await userService.updateMeUser(token, userData)
     } catch (err) {
       const message =
         (err.response && err.response.data && err.response.data.message) ||
@@ -56,13 +56,13 @@ export const userSlice = createSlice({
       state.isMeGetError = false
       state.isMeGetSuccess = false
       state.isMeGetLoading = false
-      state.meGetMessage = ''
+      state.meGetErrorMessage = ''
     },
     resetMeUpdateUser: (state) => {
       state.isMeUpdateError = false
       state.isMeUpdateSuccess = false
       state.isMeUpdateLoading = false
-      state.meUpdateMessage = ''
+      state.meUpdateErrorMessage = ''
     },
   },
   extraReducers: (builder) => {
@@ -71,7 +71,7 @@ export const userSlice = createSlice({
         state.isMeGetLoading = true
         state.isMeGetError = false
         state.isMeGetSuccess = false
-        state.meGetMessage = ''
+        state.meGetErrorMessage = ''
       })
       .addCase(getMeUser.fulfilled, (state, action) => {
         state.isMeGetLoading = false
@@ -89,7 +89,7 @@ export const userSlice = createSlice({
         state.isMeUpdateLoading = true
         state.isMeUpdateError = false
         state.isMeUpdateSuccess = false
-        state.meUpdateMessage = ''
+        state.meUpdateErrorMessage = ''
       })
       .addCase(updateMeUser.fulfilled, (state, action) => {
         state.isMeUpdateLoading = false

@@ -4,7 +4,6 @@ import User from '../user/userModel.js'
 import catchAsync from '../utils/catchAsync.js'
 import AppError from '../utils/appError.js'
 import generateToken from '../utils/generateToken.js' //JWT Token Generator
-import crypto from 'crypto' //crypto for token hashing
 
 // @desc    Sign up a new user locally
 // @route   POST /api/v1/users/signup/local

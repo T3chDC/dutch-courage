@@ -12,7 +12,7 @@ const getMeUser = async (token) => {
       Authorization: `Bearer ${token}`,
     },
   })
-  return response.data
+  return response.data.data
 }
 
 //update info about logged in user
@@ -22,7 +22,7 @@ const updateMeUser = async (token, data) => {
       Authorization: `Bearer ${token}`,
     },
   })
-  return response.data
+  return response.data.data
 }
 
 const userService = {

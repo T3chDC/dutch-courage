@@ -53,7 +53,7 @@ const OwnProfileScreen = () => {
 
   useEffect(() => {
     if (!userInfo) {
-      navigation.navigate('/login')
+      navigation.navigate('Login')
     }
   }, [userInfo, navigation])
 
@@ -65,7 +65,6 @@ const OwnProfileScreen = () => {
         visibilityTime: 3000,
         position: 'bottom',
       })
-      dispatch(resetMeUser())
     } else if (isMeGetSuccess) {
       setMantra(meUser.mantra)
       setBirthYear(meUser.birthYear)
@@ -77,6 +76,33 @@ const OwnProfileScreen = () => {
       dispatch(getMeUser())
     }
   }, [isMeGetError, isMeGetSuccess, meGetErrorMessage, dispatch, meUser])
+
+  useEffect(() => {
+    if (isMeUpdateError) {
+      Toast.show({
+        type: 'error',
+        text1: meUpdateErrorMessage,
+        visibilityTime: 3000,
+        position: 'bottom',
+      })
+    } else if (isMeUpdateSuccess) {
+      Toast.show({
+        type: 'success',
+        text1: 'Profile Updated Successfully',
+        visibilityTime: 3000,
+        position: 'bottom',
+      })
+      setEditMode(false)
+      dispatch(getMeUser())
+    }
+  }, [isMeUpdateError, isMeUpdateSuccess, meUpdateErrorMessage, dispatch])
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetMeUser())
+      dispatch(resetMeUpdateUser())
+    }
+  }, [dispatch])
 
   // Function to pick image from gallery
   const pickImage = async () => {
@@ -115,6 +141,19 @@ const OwnProfileScreen = () => {
   // Function to open modal to choose between camera and gallery
   const openModal = () => {
     setIsImageChooseModalVisible(true)
+  }
+
+  // Function to update user profile
+  const updateUserHandler = () => {
+    dispatch(
+      updateMeUser({
+        mantra,
+        birthYear,
+        gender,
+        location,
+        topInterests,
+      })
+    )
   }
 
   return (
@@ -179,70 +218,139 @@ const OwnProfileScreen = () => {
           </View>
         </Modal>
       </View>
-
-      {editMode ? (
+      {!isMeGetLoading && !isMeUpdateLoading && (
         <>
-          {/* mantra */}
-          <View className='mt-5'>
-            <TextInput
-              placeholder='Mantra'
-              keyboardType='email-address'
-              className='bg-[#F6F6F6] border border-[#E8E8E8] rounded-md h-12 w-80 px-4 mt-4'
-              value={mantra}
-              onChangeText={(text) => setMantra(text)}
-            />
-          </View>
+          {editMode ? (
+            <>
+              {/* mantra */}
+              <View className='mt-5'>
+                <TextInput
+                  placeholder='Mantra'
+                  keyboardType='email-address'
+                  className='bg-[#F6F6F6] border border-[#E8E8E8] rounded-md h-12 w-80 px-4 mt-4'
+                  value={mantra}
+                  onChangeText={(text) => setMantra(text)}
+                />
+              </View>
 
-          {/* birth year */}
-          <View className='mt-2 bg-white h-12 w-28 rounded-md pl-2 flex justify-center'>
-            <Picker
-              selectedValue={birthYear}
-              onValueChange={(itemValue, itemIndex) => setBirthYear(itemValue)}
-            >
-              <Picker.Item label='YYYY' value='' color='#898A8D' />
-              {[...Array(101).keys()]
-                .map((i) => 1950 + i)
-                .map((year) => (
-                  <Picker.Item key={year} label={`${year}`} value={`${year}`} />
-                ))}
-            </Picker>
-          </View>
+              {/* birth year */}
+              <View className='mt-2 bg-white h-12 w-28 rounded-md pl-2 flex justify-center'>
+                <Picker
+                  selectedValue={birthYear.toString()}
+                  onValueChange={(itemValue, itemIndex) =>
+                    setBirthYear(itemValue * 1)
+                  }
+                >
+                  <Picker.Item
+                    label='YYYY'
+                    enabled={false}
+                    value=''
+                    color='#898A8D'
+                  />
+                  {[...Array(101).keys()]
+                    .map((i) => 1950 + i)
+                    .map((year) => (
+                      <Picker.Item
+                        key={year}
+                        label={`${year}`}
+                        value={`${year}`}
+                      />
+                    ))}
+                </Picker>
+              </View>
 
-          {/* Gender */}
-          <View className='mt-2 bg-white h-12 w-40 rounded-full pl-10 flex justify-center'>
-            <Picker
-              selectedValue={gender}
-              onValueChange={(itemValue, itemIndex) => setGender(itemValue)}
-            >
-              <Picker.Item label='Gender' value='' color='#898A8D' />
-              <Picker.Item label='Male' value='male' />
-              <Picker.Item label='Female' value='female' />
-              <Picker.Item label='Others' value='others' />
-            </Picker>
-          </View>
+              {/* Gender */}
+              <View className='mt-2 bg-white h-12 w-40 rounded-full pl-10 flex justify-center'>
+                <Picker
+                  selectedValue={gender}
+                  onValueChange={(itemValue, itemIndex) => setGender(itemValue)}
+                >
+                  <Picker.Item
+                    label='Gender'
+                    enabled={false}
+                    value=''
+                    color='#898A8D'
+                  />
+                  <Picker.Item label='Male' value='male' />
+                  <Picker.Item label='Female' value='female' />
+                  <Picker.Item label='Others' value='others' />
+                </Picker>
+              </View>
 
-          {/* Location */}
-          <View>
-            <TouchableOpacity className='bg-[#F6F6F6] border border-[#E8E8E8] flex rounded-full h-12 w-40 px-4 mt-4 flex-row justify-center items-center'>
-              <Text className='text-[#898A8D] text-base font-medium'>
-                Location
-              </Text>
-            </TouchableOpacity>
-          </View>
+              {/* Location */}
+              <View>
+                <TouchableOpacity className='bg-[#F6F6F6] border border-[#E8E8E8] flex rounded-full h-12 w-40 px-4 mt-4 flex-row justify-center items-center'>
+                  <Text
+                    className={
+                      location
+                        ? `text-black text-base font-medium`
+                        : `text-[#898A8D] text-base font-medium`
+                    }
+                  >
+                    {location ? location : 'Location'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
 
-          {/* Top Interests */}
-          <View>
-            <TouchableOpacity
-              disabled={true}
-              className='bg-[#F6F6F6] border border-[#E8E8E8] flex rounded-full h-12 w-80 px-4 mt-4 flex-row justify-center items-center'
-            >
-              <Text className='text-[#898A8D] text-base font-medium'>
-                3 Top Interests
-              </Text>
-            </TouchableOpacity>
-          </View>
+              {/* Top Interests */}
+              <View>
+                <TouchableOpacity className='bg-[#F6F6F6] border border-[#E8E8E8] flex rounded-full h-12 w-80 px-4 mt-4 flex-row justify-center items-center'>
+                  <Text
+                    className={
+                      topInterests && topInterests.length > 0
+                        ? `text-black text-base font-medium`
+                        : 'text-[#898A8D] text-base font-medium'
+                    }
+                  >
+                    {topInterests && topInterests.length === 0
+                      ? '3 Top Interests'
+                      : `${topInterests[0]}, ${topInterests[1]}, ${topInterests[2]}`}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          ) : (
+            <>
+              {/* mantra */}
+              <View className='mt-5'>
+                <Text className='text-white text-base font-medium'>
+                  {mantra}
+                </Text>
+              </View>
+
+              {/* birth year */}
+              <View className='mt-2'>
+                <Text className='text-white text-base font-medium'>
+                  {birthYear}
+                </Text>
+              </View>
+
+              {/* Gender */}
+              <View className='mt-2'>
+                <Text className='text-white text-base font-medium'>
+                  {gender}
+                </Text>
+              </View>
+
+              {/* Location */}
+              <View className='mt-2'>
+                <Text className='text-white text-base font-medium'>
+                  {location}
+                </Text>
+              </View>
+
+              {/* Top Interests */}
+              <View className='mt-2'>
+                <Text className='text-white text-base font-medium'>
+                  {topInterests &&
+                    topInterests.length > 0 &&
+                    `${topInterests[0]}, ${topInterests[1]}, ${topInterests[2]}`}
+                </Text>
+              </View>
+            </>
+          )}
         </>
-      ) : null}
+      )}
 
       {/* edit profile button */}
       {!editMode ? (
@@ -260,7 +368,7 @@ const OwnProfileScreen = () => {
         <View className='mt-4'>
           <TouchableOpacity
             className='bg-[#22A6B3] rounded-full w-40 h-12 flex-row justify-center items-center'
-            onPress={() => setEditMode(false)}
+            onPress={updateUserHandler}
           >
             <Text className='text-white text-base font-semibold'>Save</Text>
           </TouchableOpacity>
