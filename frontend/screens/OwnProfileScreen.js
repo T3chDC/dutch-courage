@@ -236,7 +236,7 @@ const OwnProfileScreen = () => {
               {/* birth year */}
               <View className='mt-2 bg-white h-12 w-28 rounded-md pl-2 flex justify-center'>
                 <Picker
-                  selectedValue={birthYear.toString()}
+                  selectedValue={birthYear?.toString()}
                   onValueChange={(itemValue, itemIndex) =>
                     setBirthYear(itemValue * 1)
                   }
