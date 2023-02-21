@@ -40,7 +40,6 @@ const LoginScreen = () => {
         position: 'bottom',
       })
       navigation.navigate('Home')
-      dispatch(resetSignIn())
     } else if (isSignInError) {
       Toast.show({
         type: 'error',

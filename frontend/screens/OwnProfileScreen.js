@@ -12,10 +12,20 @@ import { PlusIcon } from 'react-native-heroicons/solid'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useRoute, useNavigation } from '@react-navigation/native'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  getMeUser,
+  updateMeUser,
+  resetMeUser,
+  resetMeUpdateUser,
+} from '../features/user/userSlice'
+import Toast from 'react-native-toast-message'
 
 const OwnProfileScreen = () => {
   const navigation = useNavigation()
+  const dispatch = useDispatch()
 
+  // Local State variables
   const [mantra, setMantra] = useState('')
   const [birthYear, setBirthYear] = useState('')
   const [gender, setGender] = useState('')
@@ -26,6 +36,47 @@ const OwnProfileScreen = () => {
   const [selectedImage, setSelectedImage] = useState(null)
   const [isImageChooseModalVisible, setIsImageChooseModalVisible] =
     useState(false)
+
+  const { userInfo } = useSelector((state) => state.auth)
+
+  const {
+    meUser,
+    isMeGetError,
+    isMeGetSuccess,
+    isMeGetLoading,
+    meGetErrorMessage,
+    isMeUpdateError,
+    isMeUpdateSuccess,
+    isMeUpdateLoading,
+    meUpdateErrorMessage,
+  } = useSelector((state) => state.user)
+
+  useEffect(() => {
+    if (!userInfo) {
+      navigation.navigate('/login')
+    }
+  }, [userInfo, navigation])
+
+  useEffect(() => {
+    if (isMeGetError) {
+      Toast.show({
+        type: 'error',
+        text1: meGetErrorMessage,
+        visibilityTime: 3000,
+        position: 'bottom',
+      })
+      dispatch(resetMeUser())
+    } else if (isMeGetSuccess) {
+      setMantra(meUser.mantra)
+      setBirthYear(meUser.birthYear)
+      setGender(meUser.gender)
+      setLocation(meUser.location)
+      setTopInterests(meUser.topInterests)
+      setImageUrl(meUser.imageUrl)
+    } else {
+      dispatch(getMeUser())
+    }
+  }, [isMeGetError, isMeGetSuccess, meGetErrorMessage, dispatch, meUser])
 
   // Function to pick image from gallery
   const pickImage = async () => {
@@ -181,7 +232,10 @@ const OwnProfileScreen = () => {
 
           {/* Top Interests */}
           <View>
-            <TouchableOpacity className='bg-[#F6F6F6] border border-[#E8E8E8] flex rounded-full h-12 w-80 px-4 mt-4 flex-row justify-center items-center'>
+            <TouchableOpacity
+              disabled={true}
+              className='bg-[#F6F6F6] border border-[#E8E8E8] flex rounded-full h-12 w-80 px-4 mt-4 flex-row justify-center items-center'
+            >
               <Text className='text-[#898A8D] text-base font-medium'>
                 3 Top Interests
               </Text>

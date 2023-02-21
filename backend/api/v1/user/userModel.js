@@ -88,15 +88,15 @@ const userSchema = new mongoose.Schema(
 
     //These are the fields that needs clarificaiton
 
-    // location: {
-    //   type: String,
-    //   default: '',
-    // },
+    location: {
+      type: String,
+      default: '',
+    },
 
-    // topInterests: {
-    //   type: [String],
-    //   default: [],
-    // },
+    topInterests: {
+      type: [String],
+      default: [],
+    },
 
     userType: {
       type: String,
