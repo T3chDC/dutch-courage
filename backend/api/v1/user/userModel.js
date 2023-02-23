@@ -57,9 +57,15 @@ const userSchema = new mongoose.Schema(
         'There needs to be a password for the user',
       ],
     },
-    passwordChangedAt: Date,
-    passwordResetOTP: String,
-    passwordResetExpires: Date,
+    passwordChangedAt: {
+      type: Date,
+    },
+    passwordResetOTP: {
+      type: Number,
+    },
+    passwordResetExpires: {
+      type: Date,
+    },
     // newUser: {
     //   type: Boolean,
     //   default: true,
@@ -139,9 +145,12 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
 }
 
 //method to create password reset OTP
-// userSchema.methods.createPasswordResetOTP = function () {
-
-// }
+userSchema.methods.createPasswordResetOTP = function () {
+  const resetOTP = Math.floor(100000 + Math.random() * 900000)
+  this.passwordResetOTP = resetOTP
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000
+  return resetOTP
+}
 
 //hashing password before document is created
 userSchema.pre('save', async function (next) {
