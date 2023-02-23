@@ -137,6 +137,62 @@ export const forgotPassword = catchAsync(async (req, res, next) => {
   }
 })
 
+// @desc    Endpoint for checking password reset OTP
+// @route   POST /api/v1/users/checkPasswordResetOTP
+// @access  Public
+export const checkPasswordResetOTP = catchAsync(async (req, res, next) => {
+  const user = await User.findOne({
+    passwordResetOTP: req.body.passwordResetOTP,
+    passwordResetExpires: { $gt: Date.now() },
+    email: req.body.email,
+  })
+
+  if (!user) {
+    return next(new AppError('Invalid OTP or OTP has expired', 401))
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      verified: true,
+    },
+  })
+})
+
+// @desc    Endpoint for resetting password
+// @route   POST /api/v1/users/resetPassword
+// @access  Public
+export const resetPassword = catchAsync(async (req, res, next) => {
+  // 1) Get user based on the email
+  const user = await User.findOne({
+    email: req.body.email,
+  })
+
+  if (!user) {
+    return next(new AppError('There is no user with this email address', 404))
+  }
+
+  user.password = req.body.password
+  user.passwordResetOTP = undefined
+  user.passwordResetExpires = undefined
+  await user.save()
+
+  // 4) Log the user in, send JWT
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      _id: user._id,
+      userName: user.userName,
+      email: user.email,
+      loginType: user.loginType,
+      userType: user.userType,
+      newUser: user.newUser,
+      token: generateToken(user._id),
+    },
+  })
+})
+
 //Middleware that checks if the user is authenticated
 export const protect = catchAsync(async (req, res, next) => {
   let token

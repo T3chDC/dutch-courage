@@ -16,6 +16,8 @@ import {
   signupLocal,
   signinLocal,
   forgotPassword,
+  checkPasswordResetOTP,
+  resetPassword,
   protect,
   restrictTo,
 } from '../common/authController.js' //import Auth controller
@@ -26,6 +28,8 @@ router.route('/signup/local').post(signupLocal) //signup user locally
 router.route('/signin/local').post(signinLocal) //signin users locally
 
 router.route('/forgotPassword').post(forgotPassword) //route to handle forgot password
+router.route('/checkPasswordResetOTP').post(checkPasswordResetOTP) //route to handle forgot password
+router.route('/resetPassword').post(resetPassword) //route to handle forgot password
 
 router.route('/getMe').get(protect, getMe, getUser) //route to get profile information
 router.route('/updateMe').patch(protect, updateMe) //route to handle profile information update by user
