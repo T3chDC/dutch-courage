@@ -11,7 +11,7 @@ import * as ImagePicker from 'expo-image-picker'
 import { PlusIcon } from 'react-native-heroicons/solid'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useRoute, useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   getMeUser,

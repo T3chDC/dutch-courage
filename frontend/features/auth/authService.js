@@ -31,9 +31,20 @@ const signinLocal = async (userData) => {
   return response.data.data
 }
 
+//Forgot password request
+const forgotPassword = async (userData) => {
+  try {
+    const response = await axios.post(API_URL + '/forgotPassword', userData)
+    return response.data
+  } catch (err) {
+    return err.response.data
+  }
+}
+
 const authService = {
   signupLocal,
   signinLocal,
+  forgotPassword,
 }
 
 export default authService

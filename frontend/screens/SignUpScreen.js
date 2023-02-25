@@ -40,7 +40,7 @@ const SignUpScreen = () => {
         text1: 'Sign Up Successful',
         text2: 'Your Account Was Created Successfully',
         visibilityTime: 3000,
-        position: 'bottom',
+        
       })
       navigation.navigate('Home')
       dispatch(resetSignUp())
@@ -50,7 +50,7 @@ const SignUpScreen = () => {
         text1: 'Sign Up Failed',
         text2: signUpErrorMessage,
         visibilityTime: 3000,
-        position: 'bottom',
+        
       })
       dispatch(resetSignUp())
     }

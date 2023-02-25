@@ -121,7 +121,7 @@ export const forgotPassword = catchAsync(async (req, res, next) => {
 
     res.status(200).json({
       status: 'success',
-      message: 'OTP sent to email!',
+      message: 'Password Reset OTP is sent to email!',
     })
   } catch (err) {
     user.passwordResetOTP = undefined

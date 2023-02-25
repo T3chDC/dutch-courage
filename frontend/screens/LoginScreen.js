@@ -1,7 +1,7 @@
 import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useRoute, useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import { signinLocal, resetSignIn } from '../features/auth/authSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import Toast from 'react-native-toast-message'
@@ -37,7 +37,7 @@ const LoginScreen = () => {
         text1: 'Log In Successful',
         text2: 'You Have Successfully Logged In',
         visibilityTime: 3000,
-        position: 'bottom',
+        
       })
       navigation.navigate('Home')
     } else if (isSignInError) {
@@ -46,7 +46,7 @@ const LoginScreen = () => {
         text1: 'Log In Failed',
         text2: signInErrorMessage,
         visibilityTime: 3000,
-        position: 'bottom',
+        
       })
       dispatch(resetSignIn())
     }

@@ -2,13 +2,38 @@ import { View, Text, TouchableOpacity, TextInput } from 'react-native'
 import React, { useEffect, useState, useRef } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useRoute, useNavigation } from '@react-navigation/native'
+import Toast from 'react-native-toast-message'
 
 const PasswordResetCodeScreen = () => {
   const navigation = useNavigation()
+  const route = useRoute()
+
+  const { email } = route.params
+
   const refs = useRef([])
 
   const [otp, setOtp] = useState(Array(6).fill(''))
   const [otpString, setOtpString] = useState('')
+
+  const handleOtpSubmit = async () => {
+    if (otpString.length !== 6) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Please enter a valid code',
+        visibilityTime: 3000,
+        autoHide: true,
+      })
+      return
+    }
+
+    console.log(email, otpString * 1)
+
+    // navigation.navigate('PasswordReset', {
+    //   email,
+    //   code: otpString,
+    // })
+  }
 
   return (
     <SafeAreaView className='bg-black flex-1 justify-start items-center'>
@@ -37,6 +62,13 @@ const PasswordResetCodeScreen = () => {
             keyboardType='number-pad'
             maxLength={1}
             value={data}
+            onFocus={() => {
+              if (index !== 0 && otp[index - 1] === '') {
+                refs.current[index - 1].focus()
+              } else if (index === 1 && otp[0] === '') {
+                refs.current[0].focus()
+              }
+            }}
             onChangeText={(text) => {
               if (isNaN(text)) {
                 return
@@ -53,6 +85,7 @@ const PasswordResetCodeScreen = () => {
                 }
               }
               setOtpString(otp.join(''))
+              console.log(otpString.length, index)
             }}
             onKeyPress={(e) => {
               if (e.nativeEvent.key === 'Backspace') {
@@ -69,7 +102,7 @@ const PasswordResetCodeScreen = () => {
       <View className='mt-8'>
         <TouchableOpacity
           className='bg-[#22A6B3] rounded-full h-12 flex-row justify-center items-center px-4'
-          onPress={() => navigation.navigate('PasswordReset')}
+          onPress={handleOtpSubmit}
         >
           <Text className='text-white text-base font-semibold'>Submit</Text>
         </TouchableOpacity>
