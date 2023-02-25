@@ -41,10 +41,35 @@ const forgotPassword = async (userData) => {
   }
 }
 
+//Verify password reset OTP
+const verifyPasswordResetOtp = async (userData) => {
+  try {
+    const response = await axios.post(
+      API_URL + '/checkPasswordResetOTP',
+      userData
+    )
+    return response.data
+  } catch (err) {
+    return err.response.data
+  }
+}
+
+//Reset password
+const resetPassword = async (userData) => {
+  try {
+    const response = await axios.post(API_URL + '/resetPassword', userData)
+    return response.data
+  } catch (err) {
+    return err.response.data
+  }
+}
+
 const authService = {
   signupLocal,
   signinLocal,
   forgotPassword,
+  verifyPasswordResetOtp,
+  resetPassword,
 }
 
 export default authService

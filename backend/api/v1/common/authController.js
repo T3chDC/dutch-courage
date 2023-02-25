@@ -5,6 +5,7 @@ import catchAsync from '../utils/catchAsync.js'
 import AppError from '../utils/appError.js'
 import generateToken from '../utils/generateToken.js' //JWT Token Generator
 import sendMail from '../utils/emailHandler.js' //Email Handler
+import crypto from 'crypto' //imprt crypto library for token hashing
 
 // @desc    Sign up a new user locally
 // @route   POST /api/v1/users/signup/local
@@ -151,10 +152,12 @@ export const checkPasswordResetOTP = catchAsync(async (req, res, next) => {
     return next(new AppError('Invalid OTP or OTP has expired', 401))
   }
 
+  const resetToken = user.createPasswordResetToken()
+
   res.status(200).json({
     status: 'success',
     data: {
-      verified: true,
+      resetToken,
     },
   })
 })
@@ -163,32 +166,43 @@ export const checkPasswordResetOTP = catchAsync(async (req, res, next) => {
 // @route   POST /api/v1/users/resetPassword
 // @access  Public
 export const resetPassword = catchAsync(async (req, res, next) => {
-  // 1) Get user based on the email
+  // 1) Get user based on the token
+  const hashedToken = crypto
+    .createHash('sha256')
+    .update(req.body.resetToken)
+    .digest('hex')
+  
+  console.log('Hashed token: ', hashedToken)
+
   const user = await User.findOne({
-    email: req.body.email,
+    passwordResetToken: hashedToken,
+    passwordResetTokenExpires: { $gt: Date.now() },
   })
 
+  // 2) If token has not expired, and there is user, set the new password
   if (!user) {
-    return next(new AppError('There is no user with this email address', 404))
+    return next(new AppError('Token is invalid or has expired', 400))
   }
-
+  
   user.password = req.body.password
+  user.passwordResetToken = undefined
+  user.passwordResetTokenExpires = undefined
   user.passwordResetOTP = undefined
   user.passwordResetExpires = undefined
   await user.save()
 
+  // 3) Update changedPasswordAt property for the user
   // 4) Log the user in, send JWT
-
   res.status(200).json({
     status: 'success',
     data: {
-      _id: user._id,
-      userName: user.userName,
-      email: user.email,
-      loginType: user.loginType,
-      userType: user.userType,
-      newUser: user.newUser,
-      token: generateToken(user._id),
+      _id: authedUser._id,
+      userName: authedUser.userName,
+      email: authedUser.email,
+      loginType: authedUser.loginType,
+      userType: authedUser.userType,
+      //   newUser: authedUser.newUser,
+      token: generateToken(authedUser._id),
     },
   })
 })

@@ -2,7 +2,9 @@ import { View, Text, TouchableOpacity, TextInput } from 'react-native'
 import React, { useEffect, useState, useRef } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useRoute, useNavigation } from '@react-navigation/native'
+import authService from '../features/auth/authService'
 import Toast from 'react-native-toast-message'
+import * as Progress from 'react-native-progress'
 
 const PasswordResetCodeScreen = () => {
   const navigation = useNavigation()
@@ -14,6 +16,7 @@ const PasswordResetCodeScreen = () => {
 
   const [otp, setOtp] = useState(Array(6).fill(''))
   const [otpString, setOtpString] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const handleOtpSubmit = async () => {
     if (otpString.length !== 6) {
@@ -26,13 +29,43 @@ const PasswordResetCodeScreen = () => {
       })
       return
     }
-
-    console.log(email, otpString * 1)
-
-    // navigation.navigate('PasswordReset', {
-    //   email,
-    //   code: otpString,
-    // })
+    setLoading(true)
+    const timeout = setTimeout(() => {
+      setLoading(false)
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Request timed out. Please try again',
+        visibilityTime: 3000,
+        autoHide: true,
+      })
+    }, 15000) // Set timeout to 5 seconds
+    const response = await authService.verifyPasswordResetOtp({
+      email,
+      passwordResetOTP: otpString * 1,
+    })
+    clearTimeout(timeout)
+    setLoading(false)
+    if (response.status === 'success') {
+      Toast.show({
+        type: 'success',
+        text1: 'Success',
+        text2: 'OTP verified successfully, please reset your password',
+        visibilityTime: 3000,
+        autoHide: true,
+      })
+      navigation.navigate('PasswordReset', {
+        resetToken: response.data.resetToken,
+      })
+    } else {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: response.message,
+        visibilityTime: 3000,
+        autoHide: true,
+      })
+    }
   }
 
   return (
@@ -107,6 +140,16 @@ const PasswordResetCodeScreen = () => {
           <Text className='text-white text-base font-semibold'>Submit</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Loading Indicator */}
+      {loading && (
+        <View className='mt-8'>
+          <Progress.CircleSnail
+            color={['#22A6B3', '#22A6B3', '#22A6B3']}
+            size={60}
+          />
+        </View>
+      )}
     </SafeAreaView>
   )
 }

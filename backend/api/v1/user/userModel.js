@@ -1,8 +1,9 @@
 /* This file contains the data modelling and data tier fuinctionalities for users */
 
-import mongoose from 'mongoose'
-import bcrypt from 'bcryptjs'
-import validator from 'validator'
+import mongoose from 'mongoose' //import mongoose from
+import bcrypt from 'bcryptjs' //import bcrypt for password hashing
+import validator from 'validator' //imprt validator functionalities
+import crypto from 'crypto' //imprt crypto library for token hashing
 
 //create a user schema
 const userSchema = new mongoose.Schema(
@@ -63,9 +64,21 @@ const userSchema = new mongoose.Schema(
     passwordResetOTP: {
       type: Number,
     },
+
+    passwordResetToken: {
+      type: String,
+      default: null,
+    },
+
     passwordResetExpires: {
       type: Date,
     },
+
+    passwordResetTokenExpires: {
+      default: null,
+      type: Date,
+    },
+
     // newUser: {
     //   type: Boolean,
     //   default: true,
@@ -150,6 +163,22 @@ userSchema.methods.createPasswordResetOTP = function () {
   this.passwordResetOTP = resetOTP
   this.passwordResetExpires = Date.now() + 10 * 60 * 1000
   return resetOTP
+}
+
+//Generate Password Reset Token
+userSchema.methods.createPasswordResetToken = function () {
+  const resetToken = crypto.randomBytes(32).toString('hex')
+
+  this.passwordResetToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex')
+
+  this.passwordResetTokenExpires = Date.now() + 10 * 60 * 1000
+
+  console.log('saved token:', this.passwordResetToken)
+
+  return resetToken
 }
 
 //hashing password before document is created

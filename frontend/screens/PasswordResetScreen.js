@@ -5,6 +5,10 @@ import { useRoute, useNavigation } from '@react-navigation/native'
 
 const PasswordResetScreen = () => {
   const navigation = useNavigation()
+  const route = useRoute()
+
+  const { resetToken } = route.params
+  console.log(resetToken)
 
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
