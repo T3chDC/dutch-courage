@@ -2,6 +2,9 @@ import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useRoute, useNavigation } from '@react-navigation/native'
+import authService from '../features/auth/authService'
+import Toast from 'react-native-toast-message'
+import * as Progress from 'react-native-progress'
 
 const PasswordResetScreen = () => {
   const navigation = useNavigation()
@@ -14,6 +17,90 @@ const PasswordResetScreen = () => {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [showNewPassword, setShowNewPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [loading, setLoading] = useState(false)
+
+  //regex patterns for password validation
+  const passwordPattern = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[a-zA-Z0-9]).{8,}$/
+
+  const handleResetPassword = async () => {
+    if (newPassword === '') {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Please enter your new password',
+        visibilityTime: 3000,
+        autoHide: true,
+      })
+      return
+    }
+    if (!passwordPattern.test(newPassword)) {
+      Toast.show({
+        type: 'error',
+        text1: 'Invalid Password',
+        text2:
+          'Password must be 8 characters long and must contain at least one uppercase letter and one special character',
+        visibilityTime: 3000,
+        autoHide: true,
+      })
+      return
+    }
+    if (confirmPassword === '') {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Please confirm your new password',
+        visibilityTime: 3000,
+        autoHide: true,
+      })
+      return
+    }
+
+    if (newPassword !== confirmPassword) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Password and Confirmed passwords do not match',
+        visibilityTime: 3000,
+        autoHide: true,
+      })
+      return
+    }
+    setLoading(true)
+    const timeout = setTimeout(() => {
+      setLoading(false)
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Request timed out. Please try again',
+        visibilityTime: 3000,
+        autoHide: true,
+      })
+    }, 15000) // Set timeout to 5 seconds
+    const response = await authService.resetPassword({
+      resetToken,
+      password: newPassword,
+    })
+    clearTimeout(timeout)
+    setLoading(false)
+    if (response.status === 'success') {
+      Toast.show({
+        type: 'success',
+        text1: 'Success',
+        text2: 'Password reset successful',
+        visibilityTime: 3000,
+        autoHide: true,
+      })
+      navigation.navigate('Login')
+    } else {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: response.message,
+        visibilityTime: 3000,
+        autoHide: true,
+      })
+    }
+  }
 
   return (
     <SafeAreaView className='bg-black flex-1 justify-start items-center'>
@@ -65,11 +152,21 @@ const PasswordResetScreen = () => {
       <View className='mt-8'>
         <TouchableOpacity
           className='bg-[#22A6B3] rounded-full h-12 flex-row justify-center items-center px-10'
-          onPress={() => navigation.navigate('Login')}
+          onPress={handleResetPassword}
         >
           <Text className='text-white text-base font-semibold'>Save</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Loading Indicator */}
+      {loading && (
+        <View className='mt-8'>
+          <Progress.CircleSnail
+            color={['#22A6B3', '#22A6B3', '#22A6B3']}
+            size={60}
+          />
+        </View>
+      )}
     </SafeAreaView>
   )
 }

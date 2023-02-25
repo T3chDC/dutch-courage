@@ -166,8 +166,6 @@ userSchema.methods.createPasswordResetToken = function () {
 
   this.passwordResetTokenExpires = Date.now() + 10 * 60 * 1000
 
-  console.log('saved token:', this.passwordResetToken)
-
   return resetToken
 }
 
