@@ -153,6 +153,7 @@ export const checkPasswordResetOTP = catchAsync(async (req, res, next) => {
   }
 
   const resetToken = user.createPasswordResetToken()
+  await user.save({ validateBeforeSave: false })
 
   res.status(200).json({
     status: 'success',
@@ -171,7 +172,7 @@ export const resetPassword = catchAsync(async (req, res, next) => {
     .createHash('sha256')
     .update(req.body.resetToken)
     .digest('hex')
-  
+
   console.log('Hashed token: ', hashedToken)
 
   const user = await User.findOne({
@@ -183,7 +184,7 @@ export const resetPassword = catchAsync(async (req, res, next) => {
   if (!user) {
     return next(new AppError('Token is invalid or has expired', 400))
   }
-  
+
   user.password = req.body.password
   user.passwordResetToken = undefined
   user.passwordResetTokenExpires = undefined
@@ -196,13 +197,13 @@ export const resetPassword = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     data: {
-      _id: authedUser._id,
-      userName: authedUser.userName,
-      email: authedUser.email,
-      loginType: authedUser.loginType,
-      userType: authedUser.userType,
-      //   newUser: authedUser.newUser,
-      token: generateToken(authedUser._id),
+      _id: user._id,
+      userName: user.userName,
+      email: user.email,
+      loginType: user.loginType,
+      userType: user.userType,
+      //   newUser: user.newUser,
+      token: generateToken(user._id),
     },
   })
 })

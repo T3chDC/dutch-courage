@@ -67,7 +67,6 @@ const userSchema = new mongoose.Schema(
 
     passwordResetToken: {
       type: String,
-      default: null,
     },
 
     passwordResetExpires: {
@@ -75,7 +74,6 @@ const userSchema = new mongoose.Schema(
     },
 
     passwordResetTokenExpires: {
-      default: null,
       type: Date,
     },
 
@@ -157,14 +155,6 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
   return false
 }
 
-//method to create password reset OTP
-userSchema.methods.createPasswordResetOTP = function () {
-  const resetOTP = Math.floor(100000 + Math.random() * 900000)
-  this.passwordResetOTP = resetOTP
-  this.passwordResetExpires = Date.now() + 10 * 60 * 1000
-  return resetOTP
-}
-
 //Generate Password Reset Token
 userSchema.methods.createPasswordResetToken = function () {
   const resetToken = crypto.randomBytes(32).toString('hex')
@@ -179,6 +169,14 @@ userSchema.methods.createPasswordResetToken = function () {
   console.log('saved token:', this.passwordResetToken)
 
   return resetToken
+}
+
+//method to create password reset OTP
+userSchema.methods.createPasswordResetOTP = function () {
+  const resetOTP = Math.floor(100000 + Math.random() * 900000)
+  this.passwordResetOTP = resetOTP
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000
+  return resetOTP
 }
 
 //hashing password before document is created
