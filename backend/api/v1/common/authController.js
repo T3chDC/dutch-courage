@@ -111,13 +111,62 @@ export const forgotPassword = catchAsync(async (req, res, next) => {
   await user.save({ validateBeforeSave: false })
 
   // 3) Send OTP to user's email
-  const message = `Your password reset OTP is ${resetOTP}. Please use this OTP to reset your password. If you did not request this OTP, please ignore this email.`
+  // const message = `Your password reset OTP is ${resetOTP}. Please use this OTP to reset your password. If you did not request this OTP, please ignore this email.`
 
   try {
     await sendMail({
       email: user.email,
-      subject: 'Your password reset OTP (valid for 10 minutes)',
-      message,
+      subject:
+        'Your password reset OTP for Dutch Courage (valid for 10 minutes)',
+      // message,
+      html: `
+    <html>
+      <head>
+        <title>Password Reset OTP for dutch courage</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+          }
+          .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+          }
+          h1 {
+            font-size: 24px;
+            margin-top: 0;
+          }
+          p {
+            font-size: 16px;
+            margin-bottom: 20px;
+          }
+          .otp {
+            font-size: 32px;
+            font-weight: bold;
+            color: #1e88e5;
+            padding: 10px;
+            border: 1px solid #1e88e5;
+            border-radius: 5px;
+            text-align: center;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>Password Reset OTP for Dutch Courage</h1>
+          <p>Dear User,</p>
+          <p>Please use the following OTP to reset your password:</p>
+          <div class="otp">${resetOTP}</div>
+          <p>This OTP will not stay valid after 10 minutes.</p>
+          <p>If you did not request this password reset, please ignore this email and contact us immediately.</p>
+          <p>Thank you,</p>
+          <p>Dutch-Courage</p>
+        </div>
+      </body>
+    </html>
+      `,
     })
 
     res.status(200).json({
@@ -172,7 +221,6 @@ export const resetPassword = catchAsync(async (req, res, next) => {
     .createHash('sha256')
     .update(req.body.resetToken)
     .digest('hex')
-
 
   const user = await User.findOne({
     passwordResetToken: hashedToken,
