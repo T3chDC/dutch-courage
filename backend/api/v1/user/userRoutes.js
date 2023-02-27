@@ -28,6 +28,7 @@ const router = express.Router() //create router instance
 router.route('/signup/local').post(signupLocal) //signup user locally
 router.route('/signup/google').post(googleSignUp) //signup user with google
 router.route('/signin/local').post(signinLocal) //signin users locally
+router.route('/signin/google').post(googleSignUp) //signin users with google
 
 router.route('/forgotPassword').post(forgotPassword) //route to handle forgot password
 router.route('/checkPasswordResetOTP').post(checkPasswordResetOTP) //route to handle forgot password

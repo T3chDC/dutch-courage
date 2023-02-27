@@ -18,7 +18,7 @@ const signupLocal = async (userData) => {
   return response.data.data
 }
 
-//post google authenticaiton token and get saved userdata from backend
+//post google authenticaiton token for signup and get saved userdata from backend
 const signupGoogle = async (userData) => {
   const response = await axios.post(API_URL + '/signup/google', userData)
   if (response.data.status === 'success') {
@@ -34,6 +34,19 @@ const signupGoogle = async (userData) => {
 //signin user locally
 const signinLocal = async (userData) => {
   const response = await axios.post(API_URL + '/signin/local', userData)
+  if (response.data.status === 'success') {
+    //store in async storage of device
+    await SecureStore.setItemAsync(
+      'DCUserInfo',
+      JSON.stringify(response.data.data)
+    )
+  }
+  return response.data.data
+}
+
+//post google authenticaiton token for signin and get saved userdata from backend
+const signinGoogle = async (userData) => {
+  const response = await axios.post(API_URL + '/signin/google', userData)
   if (response.data.status === 'success') {
     //store in async storage of device
     await SecureStore.setItemAsync(
@@ -81,6 +94,7 @@ const authService = {
   signupLocal,
   signupGoogle,
   signinLocal,
+  signinGoogle,
   forgotPassword,
   verifyPasswordResetOtp,
   resetPassword,

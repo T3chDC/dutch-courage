@@ -152,11 +152,10 @@ const SignUpScreen = () => {
     }
 
     if (googleResponse?.type === 'success') {
+      console.log('response success')
       const { access_token } = googleResponse.params
       dispatch(signupGoogle({ access_token }))
-    }
-
-    if (googleResponse?.type === 'error') {
+    } else if (googleResponse?.type === 'error') {
       Toast.show({
         type: 'error',
         text1: 'Sign Up Failed',

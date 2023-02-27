@@ -2,7 +2,13 @@ import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useNavigation } from '@react-navigation/native'
-import { signinLocal, resetSignIn } from '../features/auth/authSlice'
+import { GOOGLE_CLIENT_ID_EXPO } from '../config'
+import {
+  signinLocal,
+  signinGoogle,
+  resetSignIn,
+} from '../features/auth/authSlice'
+import * as Google from 'expo-auth-session/providers/google'
 import { useDispatch, useSelector } from 'react-redux'
 import Toast from 'react-native-toast-message'
 import validator from 'validator'
@@ -10,6 +16,14 @@ import validator from 'validator'
 const LoginScreen = () => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
+
+  const [googleRequest, googleResponse, googlePromptAsync] =
+    Google.useAuthRequest({
+      expoClientId: GOOGLE_CLIENT_ID_EXPO,
+      iosClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
+      androidClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
+      webClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
+    })
 
   // Local State variables
   const [email, setEmail] = useState('')
@@ -37,7 +51,6 @@ const LoginScreen = () => {
         text1: 'Log In Successful',
         text2: 'You Have Successfully Logged In',
         visibilityTime: 3000,
-        
       })
       navigation.navigate('Home')
     } else if (isSignInError) {
@@ -46,7 +59,6 @@ const LoginScreen = () => {
         text1: 'Log In Failed',
         text2: signInErrorMessage,
         visibilityTime: 3000,
-        
       })
       dispatch(resetSignIn())
     }
@@ -82,6 +94,27 @@ const LoginScreen = () => {
       })
     } else {
       dispatch(signinLocal({ email, password }))
+    }
+  }
+
+  // function to handle google login
+  const handleGoogleLogin = async () => {
+    try {
+      await googlePromptAsync()
+    } catch (error) {
+      console.log(error)
+    }
+
+    if (googleResponse?.type === 'success') {
+      const { access_token } = googleResponse.params
+      dispatch(signinGoogle({ access_token }))
+    } else if (googleResponse?.type === 'error') {
+      Toast.show({
+        type: 'error',
+        text1: 'Login Failed',
+        text2: 'Something went wrong. Please try again',
+        visibilityTime: 3000,
+      })
     }
   }
 
@@ -152,7 +185,7 @@ const LoginScreen = () => {
       <View className='mt-8'>
         <TouchableOpacity
           className='bg-[#F6F6F6] rounded-md h-12 w-80 flex-row justify-center items-center'
-          // onPress={() => navigation.navigate('Home')}
+          onPress={() => handleGoogleLogin()}
         >
           <Image
             source={require('../assets/projectImages/google.png')}
