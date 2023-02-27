@@ -18,6 +18,7 @@ import {
   forgotPassword,
   checkPasswordResetOTP,
   resetPassword,
+  googleSignUp,
   protect,
   restrictTo,
 } from '../common/authController.js' //import Auth controller
@@ -25,6 +26,7 @@ import {
 const router = express.Router() //create router instance
 
 router.route('/signup/local').post(signupLocal) //signup user locally
+router.route('/signup/google').post(googleSignUp) //signup user with google
 router.route('/signin/local').post(signinLocal) //signin users locally
 
 router.route('/forgotPassword').post(forgotPassword) //route to handle forgot password

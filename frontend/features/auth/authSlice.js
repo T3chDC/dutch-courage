@@ -32,6 +32,22 @@ export const signupLocal = createAsyncThunk(
   }
 )
 
+//signup user with google
+export const signupGoogle = createAsyncThunk(
+  'auth/signupGoogle',
+  async (userData, thunkAPI) => {
+    try {
+      return await authService.signupGoogle(userData)
+    } catch (err) {
+      const message =
+        (err.response && err.response.data && err.response.data.message) ||
+        err.message ||
+        err.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
 //signin user locally
 export const signinLocal = createAsyncThunk(
   'auth/signinLocal',
@@ -116,6 +132,25 @@ const authSlice = createSlice({
         state.isSignUpError = true
         state.isSignUpSuccess = false
         state.signUpErrorMessage = action.payload
+      })
+      .addCase(signupGoogle.pending, (state) => {
+        state.isSignUpLoading = true
+        state.isSignUpSuccess = false
+        state.isSignUpError = false
+        state.signUpErrorMessage = ''
+      })
+      .addCase(signupGoogle.fulfilled, (state, action) => {
+        state.isSignUpLoading = false
+        state.isSignUpSuccess = true
+        state.isSignUpError = false
+        state.signUpErrorMessage = ''
+        // state.userInfo = action.payload
+      })
+      .addCase(signupGoogle.rejected, (state, action) => {
+        state.isSignUpLoading = false
+        state.isSignUpError = true
+        state.isSignUpSuccess = false
+        // state.signUpErrorMessage = action.payload
       })
       .addCase(signinLocal.pending, (state) => {
         state.isSignInLoading = true

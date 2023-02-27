@@ -3,7 +3,13 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { CheckBox } from '@rneui/themed'
 import React, { useEffect, useState } from 'react'
 import { useRoute, useNavigation } from '@react-navigation/native'
-import { signupLocal, resetSignUp } from '../features/auth/authSlice'
+import { GOOGLE_CLIENT_ID_EXPO } from '../config'
+import {
+  signupLocal,
+  signupGoogle,
+  resetSignUp,
+} from '../features/auth/authSlice'
+import * as Google from 'expo-auth-session/providers/google'
 import { useDispatch, useSelector } from 'react-redux'
 import Toast from 'react-native-toast-message'
 import validator from 'validator'
@@ -11,6 +17,14 @@ import validator from 'validator'
 const SignUpScreen = () => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
+
+  const [googleRequest, googleResponse, googlePromptAsync] =
+    Google.useAuthRequest({
+      expoClientId: GOOGLE_CLIENT_ID_EXPO,
+      iosClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
+      androidClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
+      webClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
+    })
 
   //local state variables
   const [userName, setUserName] = useState('')
@@ -40,7 +54,6 @@ const SignUpScreen = () => {
         text1: 'Sign Up Successful',
         text2: 'Your Account Was Created Successfully',
         visibilityTime: 3000,
-        
       })
       navigation.navigate('Home')
       dispatch(resetSignUp())
@@ -50,7 +63,6 @@ const SignUpScreen = () => {
         text1: 'Sign Up Failed',
         text2: signUpErrorMessage,
         visibilityTime: 3000,
-        
       })
       dispatch(resetSignUp())
     }
@@ -128,6 +140,29 @@ const SignUpScreen = () => {
           loginType: 'local',
         })
       )
+    }
+  }
+
+  //function to handle google signup
+  const handleGoogleSignUp = async () => {
+    try {
+      await googlePromptAsync()
+    } catch (error) {
+      console.log(error)
+    }
+
+    if (googleResponse?.type === 'success') {
+      const { access_token } = googleResponse.params
+      dispatch(signupGoogle({ access_token }))
+    }
+
+    if (googleResponse?.type === 'error') {
+      Toast.show({
+        type: 'error',
+        text1: 'Sign Up Failed',
+        text2: 'Something went wrong. Please try again',
+        visibilityTime: 3000,
+      })
     }
   }
 
@@ -215,7 +250,10 @@ const SignUpScreen = () => {
       </View>
       {/* Google Sign Up */}
       <View className='mt-8'>
-        <TouchableOpacity className='bg-[#F6F6F6] rounded-md h-12 w-80 flex-row justify-center items-center'>
+        <TouchableOpacity
+          className='bg-[#F6F6F6] rounded-md h-12 w-80 flex-row justify-center items-center'
+          onPress={() => handleGoogleSignUp()}
+        >
           <Image
             source={require('../assets/projectImages/google.png')}
             className='h-6 w-6'

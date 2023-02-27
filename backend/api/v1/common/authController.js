@@ -255,6 +255,20 @@ export const resetPassword = catchAsync(async (req, res, next) => {
   })
 })
 
+//@desc Sign up a User with Google and save data to backend
+//@route POST /api/v1/users/signup/google
+export const googleSignUp = catchAsync(async (req, res, next) => {
+  const { access_token } = req.body
+  console.log('accessToken', access_token)
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      access_token,
+    },
+  })
+})
+
 //Middleware that checks if the user is authenticated
 export const protect = catchAsync(async (req, res, next) => {
   let token
