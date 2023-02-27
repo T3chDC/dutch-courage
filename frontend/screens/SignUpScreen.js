@@ -143,16 +143,8 @@ const SignUpScreen = () => {
     }
   }
 
-  //function to handle google signup
-  const handleGoogleSignUp = async () => {
-    try {
-      await googlePromptAsync()
-    } catch (error) {
-      console.log(error)
-    }
-
+  useEffect(() => {
     if (googleResponse?.type === 'success') {
-      console.log('response success')
       const { access_token } = googleResponse.params
       dispatch(signupGoogle({ access_token }))
     } else if (googleResponse?.type === 'error') {
@@ -162,6 +154,15 @@ const SignUpScreen = () => {
         text2: 'Something went wrong. Please try again',
         visibilityTime: 3000,
       })
+    }
+  }, [googleResponse, dispatch])
+
+  //function to handle google signup
+  const handleGoogleSignUp = async () => {
+    try {
+      await googlePromptAsync()
+    } catch (error) {
+      console.log(error)
     }
   }
 

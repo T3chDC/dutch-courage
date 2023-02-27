@@ -86,18 +86,7 @@ export const googleSignUp = catchAsync(async (req, res, next) => {
   const user = await User.findOne({ email })
 
   if (user) {
-    res.status(200).json({
-      status: 'success',
-      data: {
-        _id: user._id,
-        userName: user.userName,
-        email: user.email,
-        loginType: user.loginType,
-        userType: user.userType,
-        //   newUser: user.newUser,
-        token: generateToken(user._id),
-      },
-    })
+    return next(new AppError('User with this email already exists', 400))
   } else {
     const newUser = await User.create({
       userName,
@@ -158,6 +147,56 @@ export const signinLocal = catchAsync(async (req, res, next) => {
     })
   } else {
     return next(new AppError('Invalid Password', 401))
+  }
+})
+
+// @desc    Sign in a user with Google
+// @route   POST /api/v1/users/signin/google
+// @access  Public
+export const googleSignIn = catchAsync(async (req, res, next) => {
+  const { access_token } = req.body
+
+  const client = new OAuth2Client(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    process.env.GOOGLE_CLIENT_REDIRECT
+  )
+
+  client.setCredentials({ access_token })
+
+  const people = google.people({ version: 'v1', auth: client })
+
+  const { data } = await people.people.get({
+    resourceName: 'people/me',
+    personFields: 'emailAddresses,names',
+  })
+
+  const { emailAddresses, names } = data
+
+  const email = emailAddresses[0].value
+  const userName = names[0].displayName
+  const googleID = data.resourceName.split('/')[1]
+
+  console.log(email, userName, googleID)
+
+  //check if user exists with this email
+  const user = await User.findOne({ email })
+
+  if (!user) {
+    return next(new AppError('User with this email does not exist', 400))
+  } else {
+    res.status(200).json({
+      status: 'success',
+      data: {
+        _id: user._id,
+        userName: user.userName,
+        email: user.email,
+        loginType: user.loginType,
+        userType: user.userType,
+        //   newUser: user.newUser,
+        token: generateToken(user._id),
+      },
+    })
   }
 })
 

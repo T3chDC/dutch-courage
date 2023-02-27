@@ -97,14 +97,7 @@ const LoginScreen = () => {
     }
   }
 
-  // function to handle google login
-  const handleGoogleLogin = async () => {
-    try {
-      await googlePromptAsync()
-    } catch (error) {
-      console.log(error)
-    }
-
+  useEffect(() => {
     if (googleResponse?.type === 'success') {
       const { access_token } = googleResponse.params
       dispatch(signinGoogle({ access_token }))
@@ -115,6 +108,15 @@ const LoginScreen = () => {
         text2: 'Something went wrong. Please try again',
         visibilityTime: 3000,
       })
+    }
+  }, [googleResponse, dispatch])
+
+  // function to handle google login
+  const handleGoogleLogin = async () => {
+    try {
+      await googlePromptAsync()
+    } catch (error) {
+      console.log(error)
     }
   }
 
