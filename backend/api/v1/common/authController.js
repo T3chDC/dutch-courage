@@ -6,6 +6,8 @@ import AppError from '../utils/appError.js'
 import generateToken from '../utils/generateToken.js' //JWT Token Generator
 import sendMail from '../utils/emailHandler.js' //Email Handler
 import crypto from 'crypto' //imprt crypto library for token hashing
+import { OAuth2Client } from 'google-auth-library' //import google auth library
+import { google } from 'googleapis' //import google api library
 
 // @desc    Sign up a new user locally
 // @route   POST /api/v1/users/signup/local
@@ -49,6 +51,78 @@ export const signupLocal = catchAsync(async (req, res, next) => {
       token: generateToken(newUser._id),
     },
   })
+})
+
+//@desc Sign up a User with Google and save data to backend
+//@route POST /api/v1/users/signup/google
+//@access Public
+export const googleSignUp = catchAsync(async (req, res, next) => {
+  const { access_token } = req.body
+
+  const client = new OAuth2Client(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    process.env.GOOGLE_CLIENT_REDIRECT
+  )
+
+  client.setCredentials({ access_token })
+
+  const people = google.people({ version: 'v1', auth: client })
+
+  const { data } = await people.people.get({
+    resourceName: 'people/me',
+    personFields: 'emailAddresses,names',
+  })
+
+  const { emailAddresses, names } = data
+
+  const email = emailAddresses[0].value
+  const userName = names[0].displayName
+  const googleID = data.resourceName.split('/')[1]
+
+  console.log(email, userName, googleID)
+
+  //check if user exists with this email
+  const user = await User.findOne({ email })
+
+  if (user) {
+    res.status(200).json({
+      status: 'success',
+      data: {
+        _id: user._id,
+        userName: user.userName,
+        email: user.email,
+        loginType: user.loginType,
+        userType: user.userType,
+        //   newUser: user.newUser,
+        token: generateToken(user._id),
+      },
+    })
+  } else {
+    const newUser = await User.create({
+      userName,
+      email,
+      loginType: 'google',
+      googleID,
+    })
+
+    if (!newUser) {
+      return next(new AppError('No new user could be created', 429))
+    }
+
+    res.status(201).json({
+      status: 'success',
+      data: {
+        _id: newUser._id,
+        userName: newUser.userName,
+        email: newUser.email,
+        loginType: newUser.loginType,
+        userType: newUser.userType,
+        //   newUser: newUser.newUser,
+        token: generateToken(newUser._id),
+      },
+    })
+  }
 })
 
 // @desc    Sign in a user locally
@@ -251,20 +325,6 @@ export const resetPassword = catchAsync(async (req, res, next) => {
       userType: user.userType,
       //   newUser: user.newUser,
       token: generateToken(user._id),
-    },
-  })
-})
-
-//@desc Sign up a User with Google and save data to backend
-//@route POST /api/v1/users/signup/google
-export const googleSignUp = catchAsync(async (req, res, next) => {
-  const { access_token } = req.body
-  console.log('accessToken', access_token)
-
-  res.status(200).json({
-    status: 'success',
-    data: {
-      access_token,
     },
   })
 })

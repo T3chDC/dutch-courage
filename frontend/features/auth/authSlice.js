@@ -144,13 +144,13 @@ const authSlice = createSlice({
         state.isSignUpSuccess = true
         state.isSignUpError = false
         state.signUpErrorMessage = ''
-        // state.userInfo = action.payload
+        state.userInfo = action.payload
       })
       .addCase(signupGoogle.rejected, (state, action) => {
         state.isSignUpLoading = false
         state.isSignUpError = true
         state.isSignUpSuccess = false
-        // state.signUpErrorMessage = action.payload
+        state.signUpErrorMessage = action.payload
       })
       .addCase(signinLocal.pending, (state) => {
         state.isSignInLoading = true
