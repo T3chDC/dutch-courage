@@ -3,14 +3,14 @@ import {
   Text,
   Image,
   TouchableOpacity,
-  Modal,
   TextInput,
+  ScrollView,
 } from 'react-native'
+import Modal from 'react-native-modal'
 import { Picker } from '@react-native-picker/picker'
 import * as ImagePicker from 'expo-image-picker'
 import { PlusIcon } from 'react-native-heroicons/solid'
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -20,6 +20,8 @@ import {
   resetMeUpdateUser,
 } from '../features/user/userSlice'
 import Toast from 'react-native-toast-message'
+import interests from '../assets/staticData/interests'
+import locations from '../assets/staticData/locations'
 
 const OwnProfileScreen = () => {
   const navigation = useNavigation()
@@ -34,8 +36,14 @@ const OwnProfileScreen = () => {
   const [imageUrl, setImageUrl] = useState('')
   const [editMode, setEditMode] = useState(false)
   const [selectedImage, setSelectedImage] = useState(null)
+  const [locationSearchQuery, setLocationSearchQuery] = useState('')
+  const [filteredLocations, setFilteredLocations] = useState([])
+
+  // Modal State variables
   const [isImageChooseModalVisible, setIsImageChooseModalVisible] =
     useState(false)
+  const [isInterestModalVisible, setIsInterestModalVisible] = useState(false)
+  const [isLocationModalVisible, setIsLocationModalVisible] = useState(false)
 
   const { userInfo } = useSelector((state) => state.auth)
 
@@ -63,7 +71,6 @@ const OwnProfileScreen = () => {
         type: 'error',
         text1: meGetErrorMessage,
         visibilityTime: 3000,
-        position: 'bottom',
       })
     } else if (isMeGetSuccess) {
       setMantra(meUser.mantra)
@@ -83,14 +90,12 @@ const OwnProfileScreen = () => {
         type: 'error',
         text1: meUpdateErrorMessage,
         visibilityTime: 3000,
-        position: 'bottom',
       })
     } else if (isMeUpdateSuccess) {
       Toast.show({
         type: 'success',
         text1: 'Profile Updated Successfully',
         visibilityTime: 3000,
-        position: 'bottom',
       })
       setEditMode(false)
       dispatch(getMeUser())
@@ -138,9 +143,17 @@ const OwnProfileScreen = () => {
     }
   }
 
-  // Function to open modal to choose between camera and gallery
-  const openModal = () => {
-    setIsImageChooseModalVisible(true)
+  // Function to handle location search
+  const handleLocationSearch = (query) => {
+    const filtered = locations.filter((selectedLocation) => {
+      if (query === '') {
+        return null
+      } else if (selectedLocation.toLowerCase().includes(query.toLowerCase())) {
+        return selectedLocation
+      }
+    })
+    setFilteredLocations(filtered)
+    setLocationSearchQuery(query)
   }
 
   // Function to update user profile
@@ -165,7 +178,7 @@ const OwnProfileScreen = () => {
       />
       {/* profile image and image picker */}
       <View className='mt-[-230] w-64 h-64 rounded-full bg-[#FCFCFE] flex-row justify-center items-center'>
-        <TouchableOpacity onPress={() => openModal()}>
+        <TouchableOpacity onPress={() => setIsImageChooseModalVisible(true)}>
           {imageUrl || selectedImage ? (
             <Image
               source={{ uri: selectedImage || imageUrl }}
@@ -180,14 +193,15 @@ const OwnProfileScreen = () => {
 
         {/* image picker modal */}
         <Modal
-          animationType='slide'
-          transparent={true}
-          visible={isImageChooseModalVisible}
+          animationIn={'slideInUp'}
+          animationOut={'slideOutDown'}
+          isVisible={isImageChooseModalVisible}
+          onBackdropPress={() => setIsImageChooseModalVisible(false)}
           onRequestClose={() => {
             setIsImageChooseModalVisible(false)
           }}
         >
-          <View className='absolute bottom-0 flex-1 justify-center items-center'>
+          <View className='flex-1 justify-center items-center'>
             <View className='w-[100vw] h-[200] rounded-2xl flex-col justify-between items-center py-5 bg-gray-800'>
               <TouchableOpacity
                 className='bg-[#22A6B3] rounded-full w-40 h-12 flex-row justify-center items-center'
@@ -279,7 +293,10 @@ const OwnProfileScreen = () => {
 
               {/* Location */}
               <View>
-                <TouchableOpacity className='bg-[#F6F6F6] border border-[#E8E8E8] flex rounded-full h-12 w-40 px-4 mt-4 flex-row justify-center items-center'>
+                <TouchableOpacity
+                  className='bg-[#F6F6F6] border border-[#E8E8E8] flex rounded-full h-12 w-40 px-4 mt-4 flex-row justify-center items-center'
+                  onPress={() => setIsLocationModalVisible(true)}
+                >
                   <Text
                     className={
                       location
@@ -291,6 +308,49 @@ const OwnProfileScreen = () => {
                   </Text>
                 </TouchableOpacity>
               </View>
+
+              {/* Location picker modal */}
+              <Modal
+                animationIn={'slideInUp'}
+                animationOut={'slideOutDown'}
+                isVisible={isLocationModalVisible}
+                onBackdropPress={() => setIsLocationModalVisible(false)}
+                onRequestClose={() => {
+                  setIsLocationModalVisible(false)
+                }}
+                avoidKeyboard={true}
+              >
+                <View className='flex-1 justify-center items-center'>
+                  <View className=' absolute top-4 w-[100vw] h-[25vh] rounded-2xl justify-start items-center py-5'>
+                    <Text className='text-white text-base font-semibold'>
+                      Choose your location
+                    </Text>
+                    <TextInput
+                      placeholder='Search location...'
+                      className='bg-[#F6F6F6] border border-[#E8E8E8] rounded-md h-12 w-80 px-4 mt-4'
+                      value={locationSearchQuery}
+                      onChangeText={handleLocationSearch}
+                    />
+                    {filteredLocations.map(
+                      (location, idx) =>
+                        idx < 5 && (
+                          <TouchableOpacity
+                            key={location}
+                            className='bg-[#F6F6F6] w-80 h-12 flex-row justify-center items-center'
+                            onPress={() => {
+                              setLocation(location)
+                              setIsLocationModalVisible(false)
+                            }}
+                          >
+                            <Text className='text-base font-semibold'>
+                              {location}
+                            </Text>
+                          </TouchableOpacity>
+                        )
+                    )}
+                  </View>
+                </View>
+              </Modal>
 
               {/* Top Interests */}
               <View>
