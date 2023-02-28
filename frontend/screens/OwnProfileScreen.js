@@ -20,6 +20,7 @@ import {
   resetMeUpdateUser,
 } from '../features/user/userSlice'
 import Toast from 'react-native-toast-message'
+import * as Progress from 'react-native-progress'
 import interests from '../assets/staticData/interests'
 import locations from '../assets/staticData/locations'
 
@@ -248,7 +249,7 @@ const OwnProfileScreen = () => {
               </View>
 
               {/* birth year */}
-              <View className='mt-2 bg-white h-12 w-28 rounded-md pl-2 flex justify-center'>
+              <View className='mt-2 bg-white h-12 w-36 rounded-md flex justify-center'>
                 <Picker
                   selectedValue={birthYear?.toString()}
                   onValueChange={(itemValue, itemIndex) =>
@@ -274,7 +275,7 @@ const OwnProfileScreen = () => {
               </View>
 
               {/* Gender */}
-              <View className='mt-2 bg-white h-12 w-40 rounded-full pl-10 flex justify-center'>
+              <View className='mt-2 bg-white h-12 w-40 rounded-full flex justify-center'>
                 <Picker
                   selectedValue={gender}
                   onValueChange={(itemValue, itemIndex) => setGender(itemValue)}
@@ -414,25 +415,45 @@ const OwnProfileScreen = () => {
 
       {/* edit profile button */}
       {!editMode ? (
-        <View className='mt-4'>
-          <TouchableOpacity
-            className='bg-[#22A6B3] rounded-full h-12 w-40 flex-row justify-center items-center'
-            onPress={() => setEditMode(true)}
-          >
-            <Text className='text-white text-base font-semibold'>
-              Edit Profile
-            </Text>
-          </TouchableOpacity>
-        </View>
+        <>
+          <View className='mt-4'>
+            <TouchableOpacity
+              className='bg-[#22A6B3] rounded-full h-12 w-40 flex-row justify-center items-center'
+              onPress={() => setEditMode(true)}
+            >
+              <Text className='text-white text-base font-semibold'>
+                Edit Profile
+              </Text>
+            </TouchableOpacity>
+          </View>
+          {isMeGetLoading && (
+            <View className='mt-8'>
+              <Progress.CircleSnail
+                color='#22A6B3'
+                size={60}
+              />
+            </View>
+          )}
+        </>
       ) : (
-        <View className='mt-4'>
-          <TouchableOpacity
-            className='bg-[#22A6B3] rounded-full w-40 h-12 flex-row justify-center items-center'
-            onPress={updateUserHandler}
-          >
-            <Text className='text-white text-base font-semibold'>Save</Text>
-          </TouchableOpacity>
-        </View>
+        <>
+          <View className='mt-4'>
+            <TouchableOpacity
+              className='bg-[#22A6B3] rounded-full w-40 h-12 flex-row justify-center items-center'
+              onPress={updateUserHandler}
+            >
+              <Text className='text-white text-base font-semibold'>Save</Text>
+            </TouchableOpacity>
+            </View>
+            {isMeUpdateLoading && (
+            <View className='mt-8'>
+              <Progress.CircleSnail
+                color='#22A6B3'
+                size={60}
+              />
+            </View>
+          )}
+        </>
       )}
     </View>
   )
