@@ -1,4 +1,5 @@
 import { StatusBar } from 'expo-status-bar'
+import { Platform } from 'react-native'
 import Toast from 'react-native-toast-message'
 import ToastConfig from '../utils/toastConfig'
 import * as NavigationBar from 'expo-navigation-bar'
@@ -18,7 +19,10 @@ import { getInitialState } from '../features/auth/authSlice'
 const Stack = createNativeStackNavigator()
 
 const NavigationHandler = () => {
-  NavigationBar.setBackgroundColorAsync('#000000')
+  if (Platform.OS !== 'ios') {
+    NavigationBar.setBackgroundColorAsync('#000000')
+  }
+
   const dispatch = useDispatch()
 
   // const { userInfo } = useSelector((state) => state.auth)
