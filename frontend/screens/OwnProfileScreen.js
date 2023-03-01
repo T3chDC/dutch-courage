@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  ScrollView,
-} from 'react-native'
+import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native'
 import Modal from 'react-native-modal'
 import { Picker } from '@react-native-picker/picker'
 import * as ImagePicker from 'expo-image-picker'
@@ -22,7 +15,7 @@ import {
 import Toast from 'react-native-toast-message'
 import * as Progress from 'react-native-progress'
 import interests from '../assets/staticData/interests'
-import locations from '../assets/staticData/locations'
+import LocationPickerModal from '../components/LocationPickerModal'
 
 const OwnProfileScreen = () => {
   const navigation = useNavigation()
@@ -37,8 +30,6 @@ const OwnProfileScreen = () => {
   const [imageUrl, setImageUrl] = useState('')
   const [editMode, setEditMode] = useState(false)
   const [selectedImage, setSelectedImage] = useState(null)
-  const [locationSearchQuery, setLocationSearchQuery] = useState('')
-  const [filteredLocations, setFilteredLocations] = useState([])
 
   // Modal State variables
   const [isImageChooseModalVisible, setIsImageChooseModalVisible] =
@@ -142,19 +133,6 @@ const OwnProfileScreen = () => {
       setSelectedImage(result.assets[0].uri)
       setIsImageChooseModalVisible(false)
     }
-  }
-
-  // Function to handle location search
-  const handleLocationSearch = (query) => {
-    const filtered = locations.filter((selectedLocation) => {
-      if (query === '') {
-        return null
-      } else if (selectedLocation.toLowerCase().includes(query.toLowerCase())) {
-        return selectedLocation
-      }
-    })
-    setFilteredLocations(filtered)
-    setLocationSearchQuery(query)
   }
 
   // Function to update user profile
@@ -311,47 +289,11 @@ const OwnProfileScreen = () => {
               </View>
 
               {/* Location picker modal */}
-              <Modal
-                animationIn={'slideInUp'}
-                animationOut={'slideOutDown'}
-                isVisible={isLocationModalVisible}
-                onBackdropPress={() => setIsLocationModalVisible(false)}
-                onRequestClose={() => {
-                  setIsLocationModalVisible(false)
-                }}
-                avoidKeyboard={true}
-              >
-                <View className='flex-1 justify-center items-center'>
-                  <View className=' absolute top-4 w-[100vw] h-[25vh] rounded-2xl justify-start items-center py-5'>
-                    <Text className='text-white text-base font-semibold'>
-                      Choose your location
-                    </Text>
-                    <TextInput
-                      placeholder='Search location...'
-                      className='bg-[#F6F6F6] border border-[#E8E8E8] rounded-md h-12 w-80 px-4 mt-4'
-                      value={locationSearchQuery}
-                      onChangeText={handleLocationSearch}
-                    />
-                    {filteredLocations.map(
-                      (location, idx) =>
-                        idx < 5 && (
-                          <TouchableOpacity
-                            key={location}
-                            className='bg-[#F6F6F6] w-80 h-12 flex-row justify-center items-center'
-                            onPress={() => {
-                              setLocation(location)
-                              setIsLocationModalVisible(false)
-                            }}
-                          >
-                            <Text className='text-base font-semibold'>
-                              {location}
-                            </Text>
-                          </TouchableOpacity>
-                        )
-                    )}
-                  </View>
-                </View>
-              </Modal>
+              <LocationPickerModal
+                isLocationModalVisible={isLocationModalVisible}
+                setIsLocationModalVisible={setIsLocationModalVisible}
+                setLocation={setLocation}
+              />
 
               {/* Top Interests */}
               <View>
@@ -428,10 +370,7 @@ const OwnProfileScreen = () => {
           </View>
           {isMeGetLoading && (
             <View className='mt-8'>
-              <Progress.CircleSnail
-                color='#22A6B3'
-                size={60}
-              />
+              <Progress.CircleSnail color='#22A6B3' size={60} />
             </View>
           )}
         </>
@@ -444,13 +383,10 @@ const OwnProfileScreen = () => {
             >
               <Text className='text-white text-base font-semibold'>Save</Text>
             </TouchableOpacity>
-            </View>
-            {isMeUpdateLoading && (
+          </View>
+          {isMeUpdateLoading && (
             <View className='mt-8'>
-              <Progress.CircleSnail
-                color='#22A6B3'
-                size={60}
-              />
+              <Progress.CircleSnail color='#22A6B3' size={60} />
             </View>
           )}
         </>
