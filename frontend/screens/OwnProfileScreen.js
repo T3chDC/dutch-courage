@@ -12,9 +12,9 @@ import {
 } from '../features/user/userSlice'
 import Toast from 'react-native-toast-message'
 import * as Progress from 'react-native-progress'
-import interests from '../assets/staticData/interests'
 import LocationPickerModal from '../components/LocationPickerModal'
 import ImagePickerModal from '../components/ImagePickerModal'
+import InterestPickerModal from '../components/InterestPickerModal'
 
 const OwnProfileScreen = () => {
   const navigation = useNavigation()
@@ -228,7 +228,10 @@ const OwnProfileScreen = () => {
 
               {/* Top Interests */}
               <View>
-                <TouchableOpacity className='bg-[#F6F6F6] border border-[#E8E8E8] flex rounded-full h-12 w-80 px-4 mt-4 flex-row justify-center items-center'>
+                <TouchableOpacity
+                  className='bg-[#F6F6F6] border border-[#E8E8E8] flex rounded-full h-12 w-80 px-4 mt-4 flex-row justify-center items-center'
+                  onPress={() => setIsInterestModalVisible(true)}
+                >
                   <Text
                     className={
                       topInterests && topInterests.length > 0
@@ -242,6 +245,13 @@ const OwnProfileScreen = () => {
                   </Text>
                 </TouchableOpacity>
               </View>
+
+              {/* Interst picker modal */}
+              <InterestPickerModal
+                isInterestModalVisible={isInterestModalVisible}
+                setIsInterestModalVisible={setIsInterestModalVisible}
+                setTopInterests={setTopInterests}
+              />
             </>
           ) : (
             <>
