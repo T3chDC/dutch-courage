@@ -4,6 +4,8 @@ import { PlusIcon } from 'react-native-heroicons/solid'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
+import axios from 'axios'
+import { BACKEND_URL } from '../config'
 import {
   getMeUser,
   updateMeUser,
@@ -100,17 +102,61 @@ const OwnProfileScreen = () => {
     }
   }, [dispatch])
 
+  //Function to handle Image Upload
+  const imageUploadHandler = async () => {
+    const formData = new FormData()
+    formData.append('image', {
+      uri: selectedImage,
+      type: 'image/jpeg',
+      name: 'image.jpg',
+    })
+
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+      const res = await axios.post(
+        BACKEND_URL + '/api/v1/upload',
+        formData,
+        config
+      )
+      // console.log(res.data)
+      return res.data
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   // Function to update user profile
-  const updateUserHandler = () => {
-    dispatch(
-      updateMeUser({
-        mantra,
-        birthYear,
-        gender,
-        location,
-        topInterests,
+  const updateUserHandler = async () => {
+    if (selectedImage) {
+      imageUploadHandler().then((res) => {
+        console.log(selectedImage)
+        console.log(res)
+        // dispatch(
+        //   updateMeUser({
+        //     mantra,
+        //     birthYear,
+        //     gender,
+        //     location,
+        //     topInterests,
+        //     imageUrl: res,
+        //   })
+        // )
       })
-    )
+    } else {
+      dispatch(
+        updateMeUser({
+          mantra,
+          birthYear,
+          gender,
+          location,
+          topInterests,
+        })
+      )
+    }
   }
 
   return (

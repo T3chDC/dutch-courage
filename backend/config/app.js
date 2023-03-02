@@ -3,6 +3,8 @@
   and global middlewares with configurations.
 */
 
+import path from 'path' //import path for folder locationing
+
 import dotenv from 'dotenv' //import dotenv
 dotenv.config() //load the .env file
 
@@ -21,6 +23,10 @@ app.use(cors()) //enable cors
 app.use(express.json()) //enable json parsing
 
 app.use('/api/v1', v1Router) //use v1Router for /api/v1
+
+//serve static files
+const __dirname = path.resolve()
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
 
 app.get('/', (req, res) => {
   res.status(200).json({ message: 'API is running...', app: 'dutch-courage' })
