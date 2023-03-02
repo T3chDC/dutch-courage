@@ -51,7 +51,7 @@ const LoginScreen = () => {
         type: 'success',
         text1: 'Log In Successful',
         text2: 'You Have Successfully Logged In',
-        visibilityTime: 3000,
+        visibilityTime: 5000,
       })
       navigation.navigate('Home')
     } else if (isSignInError) {
@@ -59,7 +59,7 @@ const LoginScreen = () => {
         type: 'error',
         text1: 'Log In Failed',
         text2: signInErrorMessage,
-        visibilityTime: 3000,
+        visibilityTime: 5000,
       })
       dispatch(resetSignIn())
     }
@@ -77,21 +77,21 @@ const LoginScreen = () => {
         type: 'error',
         text1: 'Email cannot be empty',
         text2: 'Please enter a valid email',
-        visibilityTime: 2000,
+        visibilityTime: 5000,
       })
     } else if (!validator.isEmail(email)) {
       Toast.show({
         type: 'error',
         text1: 'Invalid Email',
         text2: 'Please enter a valid email',
-        visibilityTime: 2000,
+        visibilityTime:5000,
       })
     } else if (password === '') {
       Toast.show({
         type: 'error',
         text1: 'Password cannot be empty',
         text2: 'Please enter a valid password',
-        visibilityTime: 2000,
+        visibilityTime: 5000,
       })
     } else {
       dispatch(signinLocal({ email, password }))
@@ -107,7 +107,7 @@ const LoginScreen = () => {
         type: 'error',
         text1: 'Login Failed',
         text2: 'Something went wrong. Please try again',
-        visibilityTime: 3000,
+        visibilityTime: 5000,
       })
     }
   }, [googleResponse, dispatch])

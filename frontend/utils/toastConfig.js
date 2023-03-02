@@ -16,7 +16,7 @@ const ToastConfig = {
   success: (props) => (
     <SuccessToast
       {...props}
-      style={{ borderLeftColor: 'green', zIndex: 9999 }}
+      style={{ borderLeftColor: 'green',  zIndex: 9999 }}
       text1NumberOfLines={3}
       text1Style={{ fontSize: 14 }}
       text2NumberOfLines={3}

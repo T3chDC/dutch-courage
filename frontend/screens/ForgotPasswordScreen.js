@@ -18,7 +18,7 @@ const ForgotPasswordScreen = () => {
         type: 'error',
         text1: 'Error',
         text2: 'Please enter your email',
-        visibilityTime: 3000,
+        visibilityTime: 5000,
         autoHide: true,
       })
       return
@@ -31,7 +31,7 @@ const ForgotPasswordScreen = () => {
         type: 'error',
         text1: 'Error',
         text2: 'Request timed out. Please try again',
-        visibilityTime: 3000,
+        visibilityTime: 5000,
         autoHide: true,
       })
     }, 15000) // Set timeout to 5 seconds
@@ -45,7 +45,7 @@ const ForgotPasswordScreen = () => {
         type: 'success',
         text1: 'Success',
         text2: response.message,
-        visibilityTime: 3000,
+        visibilityTime: 5000,
         autoHide: true,
       })
       navigation.navigate('PasswordResetCode', {
@@ -56,7 +56,7 @@ const ForgotPasswordScreen = () => {
         type: 'error',
         text1: 'Error',
         text2: response.message,
-        visibilityTime: 3000,
+        visibilityTime: 5000,
         autoHide: true,
       })
     }

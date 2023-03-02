@@ -54,7 +54,7 @@ const SignUpScreen = () => {
         type: 'success',
         text1: 'Sign Up Successful',
         text2: 'Your Account Was Created Successfully',
-        visibilityTime: 3000,
+        visibilityTime: 5000,
       })
       navigation.navigate('Home')
       dispatch(resetSignUp())
@@ -63,7 +63,7 @@ const SignUpScreen = () => {
         type: 'error',
         text1: 'Sign Up Failed',
         text2: signUpErrorMessage,
-        visibilityTime: 3000,
+        visibilityTime: 5000,
       })
       dispatch(resetSignUp())
     }
@@ -87,7 +87,7 @@ const SignUpScreen = () => {
         type: 'error',
         text1: 'Username cannot be empty',
         text2: 'Please enter a valid username',
-        visibilityTime: 2000,
+        visibilityTime: 5000,
       })
     } else if (!userNamePattern.test(userName)) {
       Toast.show({
@@ -95,28 +95,28 @@ const SignUpScreen = () => {
         text1: 'Invalid username',
         text2:
           'Username must be 6-32 characters long and can only contain letters, numbers and underscores',
-        visibilityTime: 10000,
+        visibilityTime: 5000,
       })
     } else if (email === '') {
       Toast.show({
         type: 'error',
         text1: 'Email cannot be empty',
         text2: 'Please enter a valid email',
-        visibilityTime: 2000,
+        visibilityTime: 5000,
       })
     } else if (!validator.isEmail(email)) {
       Toast.show({
         type: 'error',
         text1: 'Invalid email',
         text2: 'Please enter a valid email address',
-        visibilityTime: 10000,
+        visibilityTime: 5000,
       })
     } else if (password === '') {
       Toast.show({
         type: 'error',
         text1: 'Password cannot be empty',
         text2: 'Please enter a valid password',
-        visibilityTime: 2000,
+        visibilityTime: 5000,
       })
     } else if (!passwordPattern.test(password)) {
       Toast.show({
@@ -124,13 +124,13 @@ const SignUpScreen = () => {
         text1: 'Invalid password',
         text2:
           'Password must be 8 characters long and must contain at least one uppercase letter and one special character',
-        visibilityTime: 10000,
+        visibilityTime: 5000,
       })
     } else if (!agreedChecked) {
       Toast.show({
         type: 'error',
         text1: 'Please agree to the terms and conditions to continue',
-        visibilityTime: 2000,
+        visibilityTime: 5000,
       })
     } else {
       dispatch(
