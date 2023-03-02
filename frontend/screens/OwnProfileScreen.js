@@ -117,12 +117,22 @@ const OwnProfileScreen = () => {
           'Content-Type': 'multipart/form-data',
         },
       }
-      const res = await axios.post(
-        BACKEND_URL + '/api/v1/upload',
-        formData,
-        config
-      )
-      return res.data
+      if (imageUrl) {
+        const extractedFilePath = imageUrl.slice(imageUrl.lastIndexOf('/') + 1)
+        const res = await axios.post(
+          BACKEND_URL + '/api/v1/upload/' + `${extractedFilePath}`,
+          formData,
+          config
+        )
+        return res.data
+      } else {
+        const res = await axios.post(
+          BACKEND_URL + '/api/v1/upload',
+          formData,
+          config
+        )
+        return res.data
+      }
     } catch (error) {
       console.log(error)
     }

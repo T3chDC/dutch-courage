@@ -16,6 +16,29 @@ const storage = multer.diskStorage({
   },
 })
 
-const upload = multer({ storage: storage })
+function checkFileType(file, cb) {
+  const filetypes = /jpg|jpeg|png/
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase())
+  const mimetype = filetypes.test(file.mimetype)
 
-export { upload }
+  if (extname && mimetype) {
+    return cb(null, true)
+  } else {
+    cb('Only jpg, jpeg or png file acceptable!')
+  }
+}
+
+const upload = multer({
+  storage: storage,
+  fileFilter: function (req, file, cb) {
+    checkFileType(file, cb)
+  },
+})
+
+const deleteFile = (filePath) => {
+  fs.unlink(filePath, (err) => {
+    if (err) throw err
+  })
+}
+
+export { upload, deleteFile }
