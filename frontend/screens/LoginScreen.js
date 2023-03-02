@@ -84,7 +84,7 @@ const LoginScreen = () => {
         type: 'error',
         text1: 'Invalid Email',
         text2: 'Please enter a valid email',
-        visibilityTime:5000,
+        visibilityTime: 5000,
       })
     } else if (password === '') {
       Toast.show({
