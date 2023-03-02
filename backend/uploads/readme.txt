@@ -1,0 +1,1 @@
+This folder is for saving uploaded files to the server
