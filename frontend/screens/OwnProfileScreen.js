@@ -122,7 +122,6 @@ const OwnProfileScreen = () => {
         formData,
         config
       )
-      // console.log(res.data)
       return res.data
     } catch (error) {
       console.log(error)
@@ -133,30 +132,27 @@ const OwnProfileScreen = () => {
   const updateUserHandler = async () => {
     if (selectedImage) {
       imageUploadHandler().then((res) => {
-        console.log(selectedImage)
-        console.log(res)
-        // dispatch(
-        //   updateMeUser({
-        //     mantra,
-        //     birthYear,
-        //     gender,
-        //     location,
-        //     topInterests,
-        //     imageUrl: res,
-        //   })
-        // )
+        dispatch(
+          updateMeUser({
+            mantra,
+            birthYear,
+            gender,
+            location,
+            topInterests,
+            imageUrl: res,
+          })
+        )
       })
     } else {
-      console.log('no image selected')
-      // dispatch(
-      //   updateMeUser({
-      //     mantra,
-      //     birthYear,
-      //     gender,
-      //     location,
-      //     topInterests,
-      //   })
-      // )
+      dispatch(
+        updateMeUser({
+          mantra,
+          birthYear,
+          gender,
+          location,
+          topInterests,
+        })
+      )
     }
   }
 

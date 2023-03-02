@@ -81,7 +81,7 @@ const userSchema = new mongoose.Schema(
     //   type: Boolean,
     //   default: true,
     // },
-    image: {
+    imageUrl: {
       type: String,
       default: '',
     },
