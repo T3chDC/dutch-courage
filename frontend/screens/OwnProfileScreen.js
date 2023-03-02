@@ -147,15 +147,16 @@ const OwnProfileScreen = () => {
         // )
       })
     } else {
-      dispatch(
-        updateMeUser({
-          mantra,
-          birthYear,
-          gender,
-          location,
-          topInterests,
-        })
-      )
+      console.log('no image selected')
+      // dispatch(
+      //   updateMeUser({
+      //     mantra,
+      //     birthYear,
+      //     gender,
+      //     location,
+      //     topInterests,
+      //   })
+      // )
     }
   }
 
