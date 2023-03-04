@@ -81,7 +81,6 @@ export const googleSignUp = catchAsync(async (req, res, next) => {
   const googleID = data.resourceName.split('/')[1]
   const photo = photos[0].url
 
-  console.log(photo)
 
   //check if user exists with this email
   const user = await User.findOne({ email })
