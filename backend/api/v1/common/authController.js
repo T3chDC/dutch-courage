@@ -177,7 +177,7 @@ export const googleSignIn = catchAsync(async (req, res, next) => {
   const userName = names[0].displayName
   const googleID = data.resourceName.split('/')[1]
 
-  console.log(email, userName, googleID)
+  // console.log(email, userName, googleID)
 
   //check if user exists with this email
   const user = await User.findOne({ email })
