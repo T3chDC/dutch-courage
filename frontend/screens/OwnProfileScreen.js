@@ -184,7 +184,10 @@ const OwnProfileScreen = () => {
       />
       {/* profile image and image picker */}
       <View className='mt-[-230] w-64 h-64 rounded-full bg-[#FCFCFE] flex-row justify-center items-center'>
-        <TouchableOpacity onPress={() => setIsImageChooseModalVisible(true)}>
+        <TouchableOpacity
+          onPress={() => setIsImageChooseModalVisible(true)}
+          disabled={!editMode}
+        >
           {imageUrl || selectedImage ? (
             <Image
               source={{ uri: selectedImage || imageUrl }}
