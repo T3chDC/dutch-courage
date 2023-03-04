@@ -71,16 +71,17 @@ export const googleSignUp = catchAsync(async (req, res, next) => {
 
   const { data } = await people.people.get({
     resourceName: 'people/me',
-    personFields: 'emailAddresses,names',
+    personFields: 'emailAddresses,names,photos',
   })
 
-  const { emailAddresses, names } = data
+  const { emailAddresses, names, photos } = data
 
   const email = emailAddresses[0].value
   const userName = names[0].displayName
   const googleID = data.resourceName.split('/')[1]
+  const photo = photos[0].url
 
-  console.log(email, userName, googleID)
+  console.log(photo)
 
   //check if user exists with this email
   const user = await User.findOne({ email })
@@ -93,6 +94,7 @@ export const googleSignUp = catchAsync(async (req, res, next) => {
       email,
       loginType: 'google',
       googleID,
+      imageUrl: photo,
     })
 
     if (!newUser) {
@@ -168,16 +170,12 @@ export const googleSignIn = catchAsync(async (req, res, next) => {
 
   const { data } = await people.people.get({
     resourceName: 'people/me',
-    personFields: 'emailAddresses,names',
+    personFields: 'emailAddresses',
   })
 
-  const { emailAddresses, names } = data
+  const { emailAddresses } = data
 
   const email = emailAddresses[0].value
-  const userName = names[0].displayName
-  const googleID = data.resourceName.split('/')[1]
-
-  // console.log(email, userName, googleID)
 
   //check if user exists with this email
   const user = await User.findOne({ email })

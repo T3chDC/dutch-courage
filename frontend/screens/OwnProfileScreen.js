@@ -119,12 +119,21 @@ const OwnProfileScreen = () => {
       }
       if (imageUrl) {
         const extractedFilePath = imageUrl.slice(imageUrl.lastIndexOf('/') + 1)
-        const res = await axios.post(
-          BACKEND_URL + '/api/v1/upload/' + `${extractedFilePath}`,
-          formData,
-          config
-        )
-        return res.data
+        if (extractedFilePath.startsWith('image')) {
+          const res = await axios.post(
+            BACKEND_URL + '/api/v1/upload/' + `${extractedFilePath}`,
+            formData,
+            config
+          )
+          return res.data
+        } else {
+          const res = await axios.post(
+            BACKEND_URL + '/api/v1/upload',
+            formData,
+            config
+          )
+          return res.data
+        }
       } else {
         const res = await axios.post(
           BACKEND_URL + '/api/v1/upload',
