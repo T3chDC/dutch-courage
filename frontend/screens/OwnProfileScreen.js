@@ -236,8 +236,8 @@ const OwnProfileScreen = () => {
                     value=''
                     color='#898A8D'
                   />
-                  {[...Array(101).keys()]
-                    .map((i) => 1950 + i)
+                  {[...Array(71).keys()]
+                    .map((i) => 2020 - i)
                     .map((year) => (
                       <Picker.Item
                         key={year}
