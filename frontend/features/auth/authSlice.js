@@ -96,6 +96,22 @@ export const signinGoogle = createAsyncThunk(
   }
 )
 
+//signin user with facebook
+export const signinFacebook = createAsyncThunk(
+  'auth/signinFacebook',
+  async (userData, thunkAPI) => {
+    try {
+      return await authService.signinFacebook(userData)
+    } catch (err) {
+      const message =
+        (err.response && err.response.data && err.response.data.message) ||
+        err.message ||
+        err.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
 // get user from secure storage
 export const getInitialState = createAsyncThunk(
   'auth/getInitialState',
@@ -236,6 +252,25 @@ const authSlice = createSlice({
         state.userInfo = action.payload
       })
       .addCase(signinGoogle.rejected, (state, action) => {
+        state.isSignInLoading = false
+        state.isSignInError = true
+        state.isSignInSuccess = false
+        state.signInErrorMessage = action.payload
+      })
+      .addCase(signinFacebook.pending, (state) => {
+        state.isSignInLoading = true
+        state.isSignInSuccess = false
+        state.isSignInError = false
+        state.signInErrorMessage = ''
+      })
+      .addCase(signinFacebook.fulfilled, (state, action) => {
+        state.isSignInLoading = false
+        state.isSignInSuccess = true
+        state.isSignInError = false
+        state.signInErrorMessage = ''
+        state.userInfo = action.payload
+      })
+      .addCase(signinFacebook.rejected, (state, action) => {
         state.isSignInLoading = false
         state.isSignInError = true
         state.isSignInSuccess = false

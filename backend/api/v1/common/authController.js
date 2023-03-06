@@ -241,6 +241,38 @@ export const googleSignIn = catchAsync(async (req, res, next) => {
   }
 })
 
+// @desc    Sign in a user with Facebook
+// @route   POST /api/v1/users/signin/facebook
+// @access  Public
+export const facebookSignIn = catchAsync(async (req, res, next) => {
+  const { access_token } = req.body
+
+  const requestUrl = `https://graph.facebook.com/me?fields=id,name,email,picture.type(large)&access_token=${access_token}`
+  const data = await (await axios.get(requestUrl)).data
+
+  const { id } = data
+
+  //check if user exists with this id
+  const user = await User.findOne({ facebookID: id })
+
+  if (!user) {
+    return next(new AppError('User with this facebook id does not exist', 400))
+  } else {
+    res.status(200).json({
+      status: 'success',
+      data: {
+        _id: user._id,
+        userName: user.userName,
+        email: user.email,
+        loginType: user.loginType,
+        userType: user.userType,
+        //   newUser: user.newUser,
+        token: generateToken(user._id),
+      },
+    })
+  }
+})
+
 // @desc    Endpoint for sending password reset email
 // @route   POST /api/v1/users/forgotPassword
 // @access  Public

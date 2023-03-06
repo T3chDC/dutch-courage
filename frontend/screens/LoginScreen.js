@@ -2,28 +2,41 @@ import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useNavigation } from '@react-navigation/native'
-import { GOOGLE_CLIENT_ID_EXPO } from '../config'
+import { GOOGLE_CLIENT_ID_EXPO, FACEBOOK_APP_ID_EXPO } from '../config'
 import {
   signinLocal,
   signinGoogle,
+  signinFacebook,
   resetSignIn,
 } from '../features/auth/authSlice'
+import * as AuthSession from 'expo-auth-session'
+import * as WebBrowser from 'expo-web-browser'
+import * as Facebook from 'expo-auth-session/providers/facebook'
 import * as Google from 'expo-auth-session/providers/google'
 import { useDispatch, useSelector } from 'react-redux'
 import Toast from 'react-native-toast-message'
 import validator from 'validator'
 import * as Progress from 'react-native-progress'
 
+WebBrowser.maybeCompleteAuthSession()
+
 const LoginScreen = () => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
 
+  // google auth session
   const [googleRequest, googleResponse, googlePromptAsync] =
     Google.useAuthRequest({
       expoClientId: GOOGLE_CLIENT_ID_EXPO,
       iosClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
       androidClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
       webClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
+    })
+
+  // facebook auth session
+  const [facebookRequest, facebookResponse, facebookPromptAsync] =
+    Facebook.useAuthRequest({
+      clientId: FACEBOOK_APP_ID_EXPO,
     })
 
   // Local State variables
@@ -98,6 +111,25 @@ const LoginScreen = () => {
     }
   }
 
+  // function to handle google login
+  const handleGoogleLogin = async () => {
+    try {
+      await googlePromptAsync()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  // function to handle facebook login
+  const handleFacebookLogin = async () => {
+    try {
+      await facebookPromptAsync()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  // handle google login response
   useEffect(() => {
     if (googleResponse?.type === 'success') {
       const { access_token } = googleResponse.params
@@ -112,14 +144,23 @@ const LoginScreen = () => {
     }
   }, [googleResponse, dispatch])
 
-  // function to handle google login
-  const handleGoogleLogin = async () => {
-    try {
-      await googlePromptAsync()
-    } catch (error) {
-      console.log(error)
+  // handle facebook login response
+  useEffect(() => {
+    if (
+      facebookResponse?.type === 'success' &&
+      facebookResponse?.authentication
+    ) {
+      const { accessToken } = facebookResponse.authentication
+      dispatch(signinFacebook({ access_token: accessToken }))
+    } else if (facebookResponse?.type === 'error') {
+      Toast.show({
+        type: 'error',
+        text1: 'Sign Up Failed',
+        text2: 'Something went wrong. Please try again',
+        visibilityTime: 3000,
+      })
     }
-  }
+  }, [facebookResponse, dispatch])
 
   return (
     <SafeAreaView className='bg-black flex-1 justify-start items-center'>
@@ -220,7 +261,7 @@ const LoginScreen = () => {
           <View className='mt-4'>
             <TouchableOpacity
               className='bg-[#F6F6F6] rounded-md h-12 w-80 flex-row justify-center items-center'
-              // onPress={() => navigation.navigate('Home')}
+              onPress={() => handleFacebookLogin()}
             >
               <Image
                 source={require('../assets/projectImages/facebook.png')}

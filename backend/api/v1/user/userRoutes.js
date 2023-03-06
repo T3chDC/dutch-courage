@@ -18,6 +18,7 @@ import {
   facebookSignUp,
   signinLocal,
   googleSignIn,
+  facebookSignIn,
   forgotPassword,
   checkPasswordResetOTP,
   resetPassword,
@@ -32,6 +33,7 @@ router.route('/signup/google').post(googleSignUp) //signup user with google
 router.route('/signup/facebook').post(facebookSignUp) //signup user with facebook
 router.route('/signin/local').post(signinLocal) //signin users locally
 router.route('/signin/google').post(googleSignIn) //signin users with google
+router.route('/signin/facebook').post(facebookSignIn) //signin users with facebook
 
 router.route('/forgotPassword').post(forgotPassword) //route to handle forgot password
 router.route('/checkPasswordResetOTP').post(checkPasswordResetOTP) //route to handle forgot password

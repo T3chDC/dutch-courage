@@ -11,12 +11,15 @@ import {
   resetSignUp,
 } from '../features/auth/authSlice'
 import * as AuthSession from 'expo-auth-session'
+import * as WebBrowser from 'expo-web-browser'
 import * as Facebook from 'expo-auth-session/providers/facebook'
 import * as Google from 'expo-auth-session/providers/google'
 import { useDispatch, useSelector } from 'react-redux'
 import Toast from 'react-native-toast-message'
 import validator from 'validator'
 import * as Progress from 'react-native-progress'
+
+WebBrowser.maybeCompleteAuthSession()
 
 const SignUpScreen = () => {
   const navigation = useNavigation()
