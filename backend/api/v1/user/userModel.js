@@ -14,13 +14,6 @@ const userSchema = new mongoose.Schema(
       maxlength: [50, 'user name cannot be more than 50 characters'],
       required: [true, 'Please provide your user name'],
     },
-    email: {
-      type: String,
-      required: [true, 'Please provide your email'],
-      unique: true,
-      trim: true,
-      validate: [validator.isEmail, 'Please provide a valid email'],
-    },
     loginType: {
       type: String,
       required: [true, 'there must be a login type for users'],
@@ -28,6 +21,18 @@ const userSchema = new mongoose.Schema(
         values: ['local', 'google', 'facebook'],
         message: 'User type needs to be local or google',
       },
+    },
+    email: {
+      type: String,
+      required: [
+        function () {
+          return this.loginType !== 'facebook'
+        },
+        'Please provide your email',
+      ],
+      unique: true,
+      trim: true,
+      validate: [validator.isEmail, 'Please provide a valid email'],
     },
     googleID: {
       type: String,
