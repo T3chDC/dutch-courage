@@ -31,6 +31,19 @@ const signupGoogle = async (userData) => {
   return response.data.data
 }
 
+//post facebook authenticaiton token for signup and get saved userdata from backend
+const signupFacebook = async (userData) => {
+  const response = await axios.post(API_URL + '/signup/facebook', userData)
+  if (response.data.status === 'success') {
+    //store in async storage of device
+    await SecureStore.setItemAsync(
+      'DCUserInfo',
+      JSON.stringify(response.data.data)
+    )
+  }
+  return response.data.data
+}
+
 //signin user locally
 const signinLocal = async (userData) => {
   const response = await axios.post(API_URL + '/signin/local', userData)
@@ -93,6 +106,7 @@ const resetPassword = async (userData) => {
 const authService = {
   signupLocal,
   signupGoogle,
+  signupFacebook,
   signinLocal,
   signinGoogle,
   forgotPassword,

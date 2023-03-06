@@ -7,6 +7,7 @@ import { GOOGLE_CLIENT_ID_EXPO, FACEBOOK_APP_ID_EXPO } from '../config'
 import {
   signupLocal,
   signupGoogle,
+  signupFacebook,
   resetSignUp,
 } from '../features/auth/authSlice'
 import * as AuthSession from 'expo-auth-session'
@@ -193,7 +194,7 @@ const SignUpScreen = () => {
       facebookResponse?.authentication
     ) {
       const { accessToken } = facebookResponse.authentication
-      console.log(accessToken)
+      dispatch(signupFacebook({ access_token: accessToken }))
     } else if (facebookResponse?.type === 'error') {
       Toast.show({
         type: 'error',

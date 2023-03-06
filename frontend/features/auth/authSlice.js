@@ -48,12 +48,12 @@ export const signupGoogle = createAsyncThunk(
   }
 )
 
-//signin user with google
-export const signinGoogle = createAsyncThunk(
-  'auth/signinGoogle',
+//signup user with facebook
+export const signupFacebook = createAsyncThunk(
+  'auth/signupFacebook',
   async (userData, thunkAPI) => {
     try {
-      return await authService.signinGoogle(userData)
+      return await authService.signupFacebook(userData)
     } catch (err) {
       const message =
         (err.response && err.response.data && err.response.data.message) ||
@@ -70,6 +70,22 @@ export const signinLocal = createAsyncThunk(
   async (userData, thunkAPI) => {
     try {
       return await authService.signinLocal(userData)
+    } catch (err) {
+      const message =
+        (err.response && err.response.data && err.response.data.message) ||
+        err.message ||
+        err.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+//signin user with google
+export const signinGoogle = createAsyncThunk(
+  'auth/signinGoogle',
+  async (userData, thunkAPI) => {
+    try {
+      return await authService.signinGoogle(userData)
     } catch (err) {
       const message =
         (err.response && err.response.data && err.response.data.message) ||
@@ -163,6 +179,25 @@ const authSlice = createSlice({
         state.userInfo = action.payload
       })
       .addCase(signupGoogle.rejected, (state, action) => {
+        state.isSignUpLoading = false
+        state.isSignUpError = true
+        state.isSignUpSuccess = false
+        state.signUpErrorMessage = action.payload
+      })
+      .addCase(signupFacebook.pending, (state) => {
+        state.isSignUpLoading = true
+        state.isSignUpSuccess = false
+        state.isSignUpError = false
+        state.signUpErrorMessage = ''
+      })
+      .addCase(signupFacebook.fulfilled, (state, action) => {
+        state.isSignUpLoading = false
+        state.isSignUpSuccess = true
+        state.isSignUpError = false
+        state.signUpErrorMessage = ''
+        state.userInfo = action.payload
+      })
+      .addCase(signupFacebook.rejected, (state, action) => {
         state.isSignUpLoading = false
         state.isSignUpError = true
         state.isSignUpSuccess = false

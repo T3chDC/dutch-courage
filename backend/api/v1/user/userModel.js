@@ -32,7 +32,13 @@ const userSchema = new mongoose.Schema(
       ],
       unique: true,
       trim: true,
-      validate: [validator.isEmail, 'Please provide a valid email'],
+      validate: [
+        function (email) {
+          if (email === 'no email') return true
+          return validator.isEmail(email)
+        },
+        'Please provide a valid email',
+      ],
     },
     googleID: {
       type: String,

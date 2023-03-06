@@ -8,6 +8,7 @@ import sendMail from '../utils/emailHandler.js' //Email Handler
 import crypto from 'crypto' //imprt crypto library for token hashing
 import { OAuth2Client } from 'google-auth-library' //import google auth library
 import { google } from 'googleapis' //import google api library
+import axios from 'axios' //import axios for http requests
 
 // @desc    Sign up a new user locally
 // @route   POST /api/v1/users/signup/local
@@ -81,7 +82,6 @@ export const googleSignUp = catchAsync(async (req, res, next) => {
   const googleID = data.resourceName.split('/')[1]
   const photo = photos[0].url
 
-
   //check if user exists with this email
   const user = await User.findOne({ email })
 
@@ -94,6 +94,50 @@ export const googleSignUp = catchAsync(async (req, res, next) => {
       loginType: 'google',
       googleID,
       imageUrl: photo,
+    })
+
+    if (!newUser) {
+      return next(new AppError('No new user could be created', 429))
+    }
+
+    res.status(201).json({
+      status: 'success',
+      data: {
+        _id: newUser._id,
+        userName: newUser.userName,
+        email: newUser.email,
+        loginType: newUser.loginType,
+        userType: newUser.userType,
+        //   newUser: newUser.newUser,
+        token: generateToken(newUser._id),
+      },
+    })
+  }
+})
+
+//@desc Sign up a User with Facebook and save data to backend
+//@route POST /api/v1/users/signup/facebook
+//@access Public
+export const facebookSignUp = catchAsync(async (req, res, next) => {
+  const { access_token } = req.body
+
+  const requestUrl = `https://graph.facebook.com/me?fields=id,name,email,picture.type(large)&access_token=${access_token}`
+  const data = await (await axios.get(requestUrl)).data
+
+  const { email, name, id, picture } = data
+
+  //check if user exists with this id
+  const user = await User.findOne({ facebookID: id })
+
+  if (user) {
+    return next(new AppError('User with this facebook id already exists', 400))
+  } else {
+    const newUser = await User.create({
+      userName: name,
+      email: email ? email : 'no email',
+      loginType: 'facebook',
+      facebookID: id,
+      imageUrl: picture.data.url,
     })
 
     if (!newUser) {

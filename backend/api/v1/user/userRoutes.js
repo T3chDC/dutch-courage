@@ -15,6 +15,7 @@ import {
 import {
   signupLocal,
   googleSignUp,
+  facebookSignUp,
   signinLocal,
   googleSignIn,
   forgotPassword,
@@ -28,6 +29,7 @@ const router = express.Router() //create router instance
 
 router.route('/signup/local').post(signupLocal) //signup user locally
 router.route('/signup/google').post(googleSignUp) //signup user with google
+router.route('/signup/facebook').post(facebookSignUp) //signup user with facebook
 router.route('/signin/local').post(signinLocal) //signin users locally
 router.route('/signin/google').post(googleSignIn) //signin users with google
 
