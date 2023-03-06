@@ -3,12 +3,14 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { CheckBox } from '@rneui/themed'
 import React, { useEffect, useState } from 'react'
 import { useRoute, useNavigation } from '@react-navigation/native'
-import { GOOGLE_CLIENT_ID_EXPO } from '../config'
+import { GOOGLE_CLIENT_ID_EXPO, FACEBOOK_APP_ID_EXPO } from '../config'
 import {
   signupLocal,
   signupGoogle,
   resetSignUp,
 } from '../features/auth/authSlice'
+import * as AuthSession from 'expo-auth-session'
+import * as Facebook from 'expo-auth-session/providers/facebook'
 import * as Google from 'expo-auth-session/providers/google'
 import { useDispatch, useSelector } from 'react-redux'
 import Toast from 'react-native-toast-message'
@@ -19,12 +21,19 @@ const SignUpScreen = () => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
 
+  // google auth session
   const [googleRequest, googleResponse, googlePromptAsync] =
     Google.useAuthRequest({
       expoClientId: GOOGLE_CLIENT_ID_EXPO,
       iosClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
       androidClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
       webClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
+    })
+
+  // facebook auth session
+  const [facebookRequest, facebookResponse, facebookPromptAsync] =
+    Facebook.useAuthRequest({
+      clientId: FACEBOOK_APP_ID_EXPO,
     })
 
   //local state variables
@@ -144,6 +153,25 @@ const SignUpScreen = () => {
     }
   }
 
+  //function to handle google signup
+  const handleGoogleSignUp = async () => {
+    try {
+      await googlePromptAsync()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  //function to handle facebook signup
+  const handleFacebookSignUp = async () => {
+    try {
+      await facebookPromptAsync()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  //handle google signup response
   useEffect(() => {
     if (googleResponse?.type === 'success') {
       const { access_token } = googleResponse.params
@@ -158,14 +186,23 @@ const SignUpScreen = () => {
     }
   }, [googleResponse, dispatch])
 
-  //function to handle google signup
-  const handleGoogleSignUp = async () => {
-    try {
-      await googlePromptAsync()
-    } catch (error) {
-      console.log(error)
+  //handle facebook signup response
+  useEffect(() => {
+    if (
+      facebookResponse?.type === 'success' &&
+      facebookResponse?.authentication
+    ) {
+      const { accessToken } = facebookResponse.authentication
+      console.log(accessToken)
+    } else if (facebookResponse?.type === 'error') {
+      Toast.show({
+        type: 'error',
+        text1: 'Sign Up Failed',
+        text2: 'Something went wrong. Please try again',
+        visibilityTime: 3000,
+      })
     }
-  }
+  }, [facebookResponse, dispatch])
 
   return (
     <SafeAreaView className='bg-black flex-1 justify-start items-center'>
@@ -287,7 +324,7 @@ const SignUpScreen = () => {
           <View className='mt-4'>
             <TouchableOpacity
               className='bg-[#F6F6F6] rounded-md h-12 w-80 flex-row justify-center items-center'
-              // onPress={() => navigation.navigate('Home')}
+              onPress={() => handleFacebookSignUp()}
             >
               <Image
                 source={require('../assets/projectImages/facebook.png')}
