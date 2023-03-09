@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "frontend",
-    "slug": "frontend",
-    "scheme": "frontend",
+    "name": "dutch-courage-frontend",
+    "slug": "dutch-courage-frontend",
+    "scheme": "dutch-courage-frontend",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
