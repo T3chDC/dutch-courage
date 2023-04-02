@@ -211,8 +211,20 @@ const OwnProfileScreen = () => {
         <>
           {editMode ? (
             <>
+            {/* name */}
+              <View className='mt-2'>
+                <TextInput
+                  placeholder='Username'
+                  keyboardType='email-address'
+                  className='bg-[#F6F6F6] border border-[#E8E8E8] rounded-md h-12 w-80 px-4 mt-4'
+                  value='username here'
+                  editable={false}
+                  // onChangeText={(text) => setMantra(text)}
+                />
+              </View>
+
               {/* mantra */}
-              <View className='mt-5'>
+              <View>
                 <TextInput
                   placeholder='Mantra'
                   keyboardType='email-address'
