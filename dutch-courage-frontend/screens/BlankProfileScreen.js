@@ -18,7 +18,7 @@ import LocationPickerModal from '../components/LocationPickerModal'
 import ImagePickerModal from '../components/ImagePickerModal'
 import InterestPickerModal from '../components/InterestPickerModal'
 
-const OwnProfileScreen = () => {
+const BlankProfileScreen = () => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
 
@@ -413,4 +413,4 @@ const OwnProfileScreen = () => {
   )
 }
 
-export default OwnProfileScreen
+export default BlankProfileScreen

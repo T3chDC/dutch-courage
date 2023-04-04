@@ -6,7 +6,7 @@ import * as Animatable from 'react-native-animatable'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout } from '../features/auth/authSlice'
 
-const HomeScreen = () => {
+const InitialLoaderScreen = () => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
 
@@ -22,11 +22,23 @@ const HomeScreen = () => {
     dispatch(logout())
   }
 
+  useEffect(() => {
+    setTimeout(() => {
+      if (userInfo && userInfo.newUser) {
+        navigation.navigate('BlankProfile')
+      } else if (userInfo && !userInfo.newUser) {
+        navigation.navigate('UserProfile')
+      } else {
+        navigation.navigate('Login')
+      }
+    }, 4000)
+  }, [userInfo, navigation])
+
   return (
     <SafeAreaView className='bg-black flex-1 justify-center items-center'>
       <Animatable.Image
         source={require('../assets/projectImages/TempLogo1.png')}
-        animation='slideInDown'
+        animation='fadeIn'
         iterationCount={1}
         className='h-96 w-[100vw] rounded-lg'
       />
@@ -35,7 +47,7 @@ const HomeScreen = () => {
         iterationCount={1}
         className='flex-row justify-between w-80 mt-10'
       >
-        {!userInfo && (
+        {/* {!userInfo && (
           <TouchableOpacity
             onPress={() => navigation.navigate('Login')}
             className='bg-white rounded-md h-12 w-20 justify-center items-center'
@@ -51,7 +63,7 @@ const HomeScreen = () => {
           >
             <Text className='text-black'>Sign Up</Text>
           </TouchableOpacity>
-        )}
+        )} */}
 
         {userInfo && (
           <TouchableOpacity
@@ -62,17 +74,26 @@ const HomeScreen = () => {
           </TouchableOpacity>
         )}
 
-        {userInfo && (
+        {/* {userInfo && (
           <TouchableOpacity
-            onPress={() => navigation.navigate('OwnProfile')}
+            onPress={() => navigation.navigate('BlankProfile')}
             className='bg-white rounded-md h-12 w-20 justify-center items-center'
           >
-            <Text className='text-black'>My Profile</Text>
+            <Text className='text-black'>Blank Profile</Text>
           </TouchableOpacity>
         )}
+
+        {userInfo && (
+          <TouchableOpacity
+            onPress={() => navigation.navigate('UserProfile')}
+            className='bg-white rounded-md h-12 w-20 justify-center items-center'
+          >
+            <Text className='text-black'>Filled Profile</Text>
+          </TouchableOpacity>
+        )} */}
       </Animatable.View>
     </SafeAreaView>
   )
 }
 
-export default HomeScreen
+export default InitialLoaderScreen

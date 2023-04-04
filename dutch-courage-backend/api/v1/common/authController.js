@@ -48,7 +48,7 @@ export const signupLocal = catchAsync(async (req, res, next) => {
       email: newUser.email,
       loginType: newUser.loginType,
       userType: newUser.userType,
-      //   newUser: newUser.newUser,
+      newUser: newUser.newUser,
       token: generateToken(newUser._id),
     },
   })
@@ -108,7 +108,7 @@ export const googleSignUp = catchAsync(async (req, res, next) => {
         email: newUser.email,
         loginType: newUser.loginType,
         userType: newUser.userType,
-        //   newUser: newUser.newUser,
+        newUser: newUser.newUser,
         token: generateToken(newUser._id),
       },
     })
@@ -152,7 +152,7 @@ export const facebookSignUp = catchAsync(async (req, res, next) => {
         email: newUser.email,
         loginType: newUser.loginType,
         userType: newUser.userType,
-        //   newUser: newUser.newUser,
+        newUser: newUser.newUser,
         token: generateToken(newUser._id),
       },
     })
@@ -186,7 +186,7 @@ export const signinLocal = catchAsync(async (req, res, next) => {
         email: authedUser.email,
         loginType: authedUser.loginType,
         userType: authedUser.userType,
-        //   newUser: authedUser.newUser,
+        newUser: authedUser.newUser,
         token: generateToken(authedUser._id),
       },
     })
@@ -234,7 +234,7 @@ export const googleSignIn = catchAsync(async (req, res, next) => {
         email: user.email,
         loginType: user.loginType,
         userType: user.userType,
-        //   newUser: user.newUser,
+        newUser: user.newUser,
         token: generateToken(user._id),
       },
     })
@@ -266,7 +266,7 @@ export const facebookSignIn = catchAsync(async (req, res, next) => {
         email: user.email,
         loginType: user.loginType,
         userType: user.userType,
-        //   newUser: user.newUser,
+        newUser: user.newUser,
         token: generateToken(user._id),
       },
     })
@@ -435,7 +435,7 @@ export const resetPassword = catchAsync(async (req, res, next) => {
       email: user.email,
       loginType: user.loginType,
       userType: user.userType,
-      //   newUser: user.newUser,
+      newUser: user.newUser,
       token: generateToken(user._id),
     },
   })

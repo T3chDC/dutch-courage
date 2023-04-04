@@ -56,8 +56,10 @@ const SignUpScreen = () => {
   } = useSelector((state) => state.auth)
 
   useEffect(() => {
-    if (userInfo) {
-      navigation.navigate('Home')
+    if (userInfo && userInfo.newUser) {
+      navigation.navigate('BlankProfile')
+    } else if (userInfo && !userInfo.newUser) {
+      navigation.navigate('UserProfile')
     }
   }, [userInfo, navigation])
 
@@ -69,7 +71,6 @@ const SignUpScreen = () => {
         text2: 'Your Account Was Created Successfully',
         visibilityTime: 5000,
       })
-      navigation.navigate('Home')
       dispatch(resetSignUp())
     } else if (isSignUpError) {
       Toast.show({

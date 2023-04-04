@@ -88,10 +88,11 @@ const userSchema = new mongoose.Schema(
       type: Date,
     },
 
-    // newUser: {
-    //   type: Boolean,
-    //   default: true,
-    // },
+    newUser: {
+      type: Boolean,
+      default: true,
+    },
+
     imageUrl: {
       type: String,
       default: '',

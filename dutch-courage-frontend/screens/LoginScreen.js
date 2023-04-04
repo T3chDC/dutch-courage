@@ -53,8 +53,10 @@ const LoginScreen = () => {
   } = useSelector((state) => state.auth)
 
   useEffect(() => {
-    if (userInfo) {
-      navigation.navigate('Home')
+    if (userInfo && userInfo.newUser) {
+      navigation.navigate('BlankProfile')
+    } else if (userInfo && !userInfo.newUser) {
+      navigation.navigate('UserProfile')
     }
   }, [userInfo, navigation])
 
@@ -66,7 +68,7 @@ const LoginScreen = () => {
         text2: 'You Have Successfully Logged In',
         visibilityTime: 5000,
       })
-      navigation.navigate('Home')
+      dispatch(resetSignIn())
     } else if (isSignInError) {
       Toast.show({
         type: 'error',

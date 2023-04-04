@@ -5,13 +5,14 @@ import ToastConfig from '../utils/toastConfig'
 import * as NavigationBar from 'expo-navigation-bar'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import HomeScreen from '../screens/HomeScreen'
+import InitialLoaderScreen from '../screens/InitialLoaderScreen'
 import LoginScreen from '../screens/LoginScreen'
 import SignUpScreen from '../screens/SignUpScreen'
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen'
 import PasswordResetCodeScreen from '../screens/PasswordResetCodeScreen'
 import PasswordResetScreen from '../screens/PasswordResetScreen'
-import OwnProfileScreen from '../screens/OwnProfileScreen'
+import BlankProfileScreen from '../screens/BlankProfileScreen'
+import UserProfileScreen from '../screens/UserProfileScreen'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { getInitialState } from '../features/auth/authSlice'
@@ -38,7 +39,7 @@ const NavigationHandler = () => {
           {/*Screens*/}
 
           {/* Home screen */}
-          <Stack.Screen name='Home' component={HomeScreen} />
+          <Stack.Screen name='InitialLoaader' component={InitialLoaderScreen} />
           {/* Login screen */}
           <Stack.Screen
             name='Login'
@@ -80,14 +81,24 @@ const NavigationHandler = () => {
             }}
           />
 
-          {/* Own Profile Screen */}
+          {/* Blank Profile Screen */}
           <Stack.Screen
-            name='OwnProfile'
-            component={OwnProfileScreen}
+            name='BlankProfile'
+            component={BlankProfileScreen}
             options={{
               headerShown: false,
             }}
           />
+
+          {/* User Profile Screen */}
+          <Stack.Screen
+            name='UserProfile'
+            component={UserProfileScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+
         </Stack.Navigator>
       </NavigationContainer>
       <StatusBar style='light' />
