@@ -1,4 +1,12 @@
-import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native'
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  TextInput,
+  Alert,
+  BackHandler,
+} from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { CheckBox } from '@rneui/themed'
 import React, { useEffect, useState } from 'react'
@@ -54,6 +62,31 @@ const SignUpScreen = () => {
     isSignUpError,
     signUpErrorMessage,
   } = useSelector((state) => state.auth)
+
+  //Exit App on Back Press
+  useEffect(() => {
+    const backAction = () => {
+      Alert.alert(
+        'Hold on!',
+        'Are you sure you want to exit the app?',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => null,
+            style: 'cancel',
+          },
+          { text: 'YES', onPress: () => BackHandler.exitApp() },
+        ],
+        { cancelable: false }
+      )
+      return true
+    }
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction
+    )
+    return () => backHandler.remove()
+  }, [])
 
   useEffect(() => {
     if (userInfo && userInfo.newUser) {
