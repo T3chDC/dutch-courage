@@ -22,8 +22,10 @@ const BlankProfileScreen = () => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
 
+  const { userInfo } = useSelector((state) => state.auth)
+
   // Local State variables
-  const [userName, setUserName] = useState('')
+  const [userName, setUserName] = useState(userInfo.userName)
   const [userNameCount, setUserNameCount] = useState(0)
   const [mantra, setMantra] = useState('')
   const [mantraCount, setMantraCount] = useState(0)
@@ -31,7 +33,7 @@ const BlankProfileScreen = () => {
   const [gender, setGender] = useState('')
   const [location, setLocation] = useState('')
   const [topInterests, setTopInterests] = useState([])
-  const [imageUrl, setImageUrl] = useState('')
+  const [imageUrl, setImageUrl] = useState(userInfo.imageUrl)
   const [selectedImage, setSelectedImage] = useState(null)
 
   // Modal State variables
@@ -39,8 +41,6 @@ const BlankProfileScreen = () => {
     useState(false)
   const [isInterestModalVisible, setIsInterestModalVisible] = useState(false)
   const [isLocationModalVisible, setIsLocationModalVisible] = useState(false)
-
-  const { userInfo } = useSelector((state) => state.auth)
 
   const {
     meUser,
@@ -69,7 +69,7 @@ const BlankProfileScreen = () => {
         text1: 'Profile Updated Successfully',
         visibilityTime: 3000,
       })
-      dispatch(getMeUser())
+      navigation.navigate('UserProfile')
     }
   }, [isMeUpdateError, isMeUpdateSuccess, meUpdateErrorMessage, dispatch])
 
@@ -130,6 +130,7 @@ const BlankProfileScreen = () => {
       imageUploadHandler().then((res) => {
         dispatch(
           updateMeUser({
+            userName,
             mantra,
             birthYear,
             gender,
@@ -142,6 +143,7 @@ const BlankProfileScreen = () => {
     } else {
       dispatch(
         updateMeUser({
+          userName,
           mantra,
           birthYear,
           gender,

@@ -48,7 +48,7 @@ const LocationPickerModal = ({
           />
           {filteredLocations.map(
             (location, idx) =>
-              idx < 5 && (
+              idx < 3 && (
                 <TouchableOpacity
                   key={location}
                   className='bg-[#F6F6F6] w-80 h-12 flex-row justify-center items-center'

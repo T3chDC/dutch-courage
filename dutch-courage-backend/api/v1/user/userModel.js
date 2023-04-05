@@ -97,6 +97,13 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
+
+    images: [
+      {
+        type: String,
+      },
+    ],
+
     mantra: {
       type: String,
       default: '',
