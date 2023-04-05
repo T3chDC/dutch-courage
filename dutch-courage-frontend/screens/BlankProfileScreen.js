@@ -1,11 +1,20 @@
-import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native'
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  TextInput,
+  Alert,
+  BackHandler,
+} from 'react-native'
 import { Picker } from '@react-native-picker/picker'
-import { PlusIcon } from 'react-native-heroicons/solid'
+import { PlusIcon, ChevronDownIcon } from 'react-native-heroicons/solid'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import { BACKEND_URL } from '../config'
+
 import {
   getMeUser,
   updateMeUser,
@@ -17,6 +26,7 @@ import * as Progress from 'react-native-progress'
 import LocationPickerModal from '../components/LocationPickerModal'
 import ImagePickerModal from '../components/ImagePickerModal'
 import InterestPickerModal from '../components/InterestPickerModal'
+import GenderPickerModal from '../components/GenderPickerModal'
 
 const BlankProfileScreen = () => {
   const navigation = useNavigation()
@@ -24,12 +34,14 @@ const BlankProfileScreen = () => {
 
   const { userInfo } = useSelector((state) => state.auth)
 
+  const ageRanges = ['18-25', '26-33', '34-41', '42-49', '50+']
+
   // Local State variables
   const [userName, setUserName] = useState(userInfo.userName)
   const [userNameCount, setUserNameCount] = useState(0)
   const [mantra, setMantra] = useState('')
   const [mantraCount, setMantraCount] = useState(0)
-  const [birthYear, setBirthYear] = useState('')
+  const [ageRange, setAgeRange] = useState('')
   const [gender, setGender] = useState('')
   const [location, setLocation] = useState('')
   const [topInterests, setTopInterests] = useState([])
@@ -41,6 +53,7 @@ const BlankProfileScreen = () => {
     useState(false)
   const [isInterestModalVisible, setIsInterestModalVisible] = useState(false)
   const [isLocationModalVisible, setIsLocationModalVisible] = useState(false)
+  const [isGenderModalVisible, setIsGenderModalVisible] = useState(false)
 
   const {
     meUser,
@@ -55,6 +68,31 @@ const BlankProfileScreen = () => {
       navigation.navigate('Login')
     }
   }, [userInfo, navigation])
+
+  //Exit App on Back Press
+  useEffect(() => {
+    const backAction = () => {
+      Alert.alert(
+        'Hold on!',
+        'Are you sure you want to exit the app?',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => null,
+            style: 'cancel',
+          },
+          { text: 'YES', onPress: () => BackHandler.exitApp() },
+        ],
+        { cancelable: false }
+      )
+      return true
+    }
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction
+    )
+    return () => backHandler.remove()
+  }, [])
 
   useEffect(() => {
     if (isMeUpdateError) {
@@ -132,11 +170,12 @@ const BlankProfileScreen = () => {
           updateMeUser({
             userName,
             mantra,
-            birthYear,
+            ageRange,
             gender,
             location,
             topInterests,
             imageUrl: res,
+            newUser: false,
           })
         )
       })
@@ -145,10 +184,11 @@ const BlankProfileScreen = () => {
         updateMeUser({
           userName,
           mantra,
-          birthYear,
+          ageRange,
           gender,
           location,
           topInterests,
+          newUser: false,
         })
       )
     }
@@ -231,13 +271,11 @@ const BlankProfileScreen = () => {
             />
           </View>
 
-          {/* birth year */}
+          {/* age Range */}
           <View className='mt-2 bg-white h-10 w-36 rounded-md flex justify-center'>
             <Picker
-              selectedValue={birthYear?.toString()}
-              onValueChange={(itemValue, itemIndex) =>
-                setBirthYear(itemValue * 1)
-              }
+              selectedValue={ageRange}
+              onValueChange={(itemValue, itemIndex) => setAgeRange(itemValue)}
             >
               <Picker.Item
                 label='YYYY'
@@ -245,31 +283,39 @@ const BlankProfileScreen = () => {
                 value=''
                 color='#898A8D'
               />
-              {[...Array(71).keys()]
-                .map((i) => 2020 - i)
-                .map((year) => (
-                  <Picker.Item key={year} label={`${year}`} value={`${year}`} />
-                ))}
+              {ageRanges.map((ageRange, idx) => {
+                return (
+                  <Picker.Item key={idx} label={ageRange} value={ageRange} />
+                )
+              })}
             </Picker>
           </View>
 
           {/* Gender */}
           <View className='mt-2 bg-white h-10 w-40 rounded-full flex justify-center'>
-            <Picker
-              selectedValue={gender}
-              onValueChange={(itemValue, itemIndex) => setGender(itemValue)}
+            <TouchableOpacity
+              className='flex-row justify-between items-center pr-6'
+              onPress={() => setIsGenderModalVisible(true)}
             >
-              <Picker.Item
-                label='Gender'
-                enabled={false}
-                value=''
-                color='#898A8D'
-              />
-              <Picker.Item label='Male' value='male' />
-              <Picker.Item label='Female' value='female' />
-              <Picker.Item label='Others' value='others' />
-            </Picker>
+              <Text
+                className={
+                  gender !== ''
+                    ? `text-black text-base font-medium pl-3`
+                    : `text-[#898A8D] text-base font-medium pl-4`
+                }
+              >
+                <>{gender !== '' ? gender : 'Gender'}</>
+              </Text>
+              <ChevronDownIcon size={15} color={'#898A8D'} />
+            </TouchableOpacity>
           </View>
+
+          {/* Gender picker modal */}
+          <GenderPickerModal
+            isGenderModalVisible={isGenderModalVisible}
+            setIsGenderModalVisible={setIsGenderModalVisible}
+            setGender={setGender}
+          />
 
           {/* Location */}
           <View>

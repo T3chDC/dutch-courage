@@ -109,16 +109,35 @@ const userSchema = new mongoose.Schema(
       default: '',
     },
 
-    birthYear: {
-      type: Number,
-      default: null,
+    ageRange: {
+      type: String,
+      default: '18-25',
+      enum: {
+        values: ['18-25', '26-33', '34-41', '42-49', '50+'],
+        message: 'Age range should be 18-25, 26-33, 34-41, 42-49 or 50+',
+      },
     },
 
     gender: {
       type: String,
       enum: {
-        values: ['male', 'female', 'others'],
-        messages: ['Gender should be male female or others'],
+        values: [
+          'Man',
+          'Woman',
+          'Agender',
+          'Bigender',
+          'Gender Fluid',
+          'Gender Nonconforming',
+          'Gender Queer',
+          'Intersex',
+          'Non Binary',
+          'Pangender',
+          'Trans',
+          'Other',
+        ],
+        messages: [
+          'Gender must be one of the following options: Man, Woman, Agender, Bigender, Gender Fluid, Gender nonconforming, Gender Queer, Intersex, Non binary, Pangender, Trans, Other',
+        ],
       },
     },
 
