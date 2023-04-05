@@ -16,9 +16,7 @@ import axios from 'axios'
 import { BACKEND_URL } from '../config'
 
 import {
-  getMeUser,
   updateMeUser,
-  resetMeUser,
   resetMeUpdateUser,
 } from '../features/user/userSlice'
 import Toast from 'react-native-toast-message'
