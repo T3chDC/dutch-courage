@@ -141,6 +141,13 @@ const userSchema = new mongoose.Schema(
       },
     },
 
+    rating: {
+      type: Number,
+      default: 5,
+      min: 1,
+      max: 5,
+    },
+
     //These are the fields that needs clarificaiton
 
     location: {
