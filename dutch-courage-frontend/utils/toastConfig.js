@@ -17,7 +17,11 @@ const ToastConfig = {
     <SuccessToast
       {...props}
       style={{ borderLeftColor: 'green', zIndex: 9999 }}
-      contentContainerStyle={{ backgroundColor: 'green' }}
+      contentContainerStyle={{
+        backgroundColor: 'green',
+        borderTopRightRadius: 7,
+        borderBottomRightRadius: 7,
+      }}
       text1NumberOfLines={3}
       text1Style={{ fontSize: 14, color: 'white' }}
       text2NumberOfLines={3}
@@ -33,7 +37,11 @@ const ToastConfig = {
     <ErrorToast
       {...props}
       style={{ borderLeftColor: 'red', zIndex: 9999 }}
-      contentContainerStyle={{ backgroundColor: 'red' }}
+      contentContainerStyle={{
+        backgroundColor: 'red',
+        borderTopRightRadius: 7,
+        borderBottomRightRadius: 7,
+      }}
       text1NumberOfLines={3}
       text1Style={{ fontSize: 14, color: 'white' }}
       text2NumberOfLines={3}
@@ -49,7 +57,11 @@ const ToastConfig = {
     <InfoToast
       {...props}
       style={{ borderLeftColor: 'blue', zIndex: 9999 }}
-      contentContainerStyle={{ backgroundColor: 'blue' }}
+      contentContainerStyle={{
+        backgroundColor: 'blue',
+        borderTopRightRadius: 7,
+        borderBottomRightRadius: 7,
+      }}
       text1NumberOfLines={3}
       text1Style={{ fontSize: 14, color: 'white' }}
       text2NumberOfLines={3}
