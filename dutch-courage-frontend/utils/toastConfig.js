@@ -19,8 +19,8 @@ const ToastConfig = {
       style={{ borderLeftColor: 'green', zIndex: 9999 }}
       contentContainerStyle={{
         backgroundColor: 'green',
-        borderTopRightRadius: 7,
-        borderBottomRightRadius: 7,
+        borderTopRightRadius: 6,
+        borderBottomRightRadius: 6,
       }}
       text1NumberOfLines={3}
       text1Style={{ fontSize: 14, color: 'white' }}
@@ -39,8 +39,8 @@ const ToastConfig = {
       style={{ borderLeftColor: 'red', zIndex: 9999 }}
       contentContainerStyle={{
         backgroundColor: 'red',
-        borderTopRightRadius: 7,
-        borderBottomRightRadius: 7,
+        borderTopRightRadius: 6,
+        borderBottomRightRadius: 6,
       }}
       text1NumberOfLines={3}
       text1Style={{ fontSize: 14, color: 'white' }}
@@ -59,8 +59,8 @@ const ToastConfig = {
       style={{ borderLeftColor: 'blue', zIndex: 9999 }}
       contentContainerStyle={{
         backgroundColor: 'blue',
-        borderTopRightRadius: 7,
-        borderBottomRightRadius: 7,
+        borderTopRightRadius: 6,
+        borderBottomRightRadius: 6,
       }}
       text1NumberOfLines={3}
       text1Style={{ fontSize: 14, color: 'white' }}
