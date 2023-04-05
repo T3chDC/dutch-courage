@@ -14,11 +14,7 @@ import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import { BACKEND_URL } from '../config'
-
-import {
-  updateMeUser,
-  resetMeUpdateUser,
-} from '../features/user/userSlice'
+import { updateMeUser, resetMeUpdateUser } from '../features/user/userSlice'
 import Toast from 'react-native-toast-message'
 import * as Progress from 'react-native-progress'
 import LocationPickerModal from '../components/LocationPickerModal'
@@ -27,11 +23,22 @@ import InterestPickerModal from '../components/InterestPickerModal'
 import GenderPickerModal from '../components/GenderPickerModal'
 
 const BlankProfileScreen = () => {
+  // Navigation hook
   const navigation = useNavigation()
+  // Redux Dispatch hook
   const dispatch = useDispatch()
 
+  // Redux State variables
   const { userInfo } = useSelector((state) => state.auth)
+  const {
+    // meUser,
+    isMeUpdateError,
+    isMeUpdateSuccess,
+    isMeUpdateLoading,
+    meUpdateErrorMessage,
+  } = useSelector((state) => state.user)
 
+  // Constants
   const ageRanges = ['18-25', '26-33', '34-41', '42-49', '50+']
 
   // Local State variables
@@ -53,14 +60,7 @@ const BlankProfileScreen = () => {
   const [isLocationModalVisible, setIsLocationModalVisible] = useState(false)
   const [isGenderModalVisible, setIsGenderModalVisible] = useState(false)
 
-  const {
-    meUser,
-    isMeUpdateError,
-    isMeUpdateSuccess,
-    isMeUpdateLoading,
-    meUpdateErrorMessage,
-  } = useSelector((state) => state.user)
-
+  // Check if user is logged in
   useEffect(() => {
     if (!userInfo) {
       navigation.navigate('Login')
@@ -92,6 +92,7 @@ const BlankProfileScreen = () => {
     return () => backHandler.remove()
   }, [])
 
+  // Update user profile infromation and status
   useEffect(() => {
     if (isMeUpdateError) {
       Toast.show({
@@ -109,6 +110,7 @@ const BlankProfileScreen = () => {
     }
   }, [isMeUpdateError, isMeUpdateSuccess, meUpdateErrorMessage, dispatch])
 
+  // Reset user profile update status on unmount
   useEffect(() => {
     return () => {
       dispatch(resetMeUpdateUser())
@@ -160,7 +162,7 @@ const BlankProfileScreen = () => {
     }
   }
 
-  // Function to update user profile
+  // Function to update user information
   const updateUserHandler = async () => {
     if (selectedImage) {
       imageUploadHandler().then((res) => {
