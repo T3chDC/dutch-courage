@@ -6,6 +6,7 @@ import {
   Alert,
   BackHandler,
 } from 'react-native'
+import { UserIcon, ChatBubbleLeftRightIcon } from 'react-native-heroicons/solid'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
@@ -13,6 +14,7 @@ import { getMeUser, resetMeUser } from '../features/user/userSlice'
 import RatingStars from '../components/RatingStars'
 import Toast from 'react-native-toast-message'
 import * as Progress from 'react-native-progress'
+import SwipeButton from 'rn-swipe-button'
 import { logout } from '../features/auth/authSlice'
 
 const UserProfileScreen = () => {
@@ -26,7 +28,7 @@ const UserProfileScreen = () => {
   const {
     meUser,
     isMeGetLoading,
-    ismeGetSuccess,
+    isMeGetSuccess,
     isMeGetError,
     meGetErrorMessage,
   } = useSelector((state) => state.user)
@@ -82,7 +84,7 @@ const UserProfileScreen = () => {
         text1: meGetErrorMessage,
         visibilityTime: 3000,
       })
-    } else if (ismeGetSuccess) {
+    } else if (isMeGetSuccess) {
       setRating(meUser.rating)
       setImageUrl(meUser.imageUrl)
       setImages(meUser.images)
@@ -95,7 +97,7 @@ const UserProfileScreen = () => {
     } else {
       dispatch(getMeUser())
     }
-  }, [isMeGetError, ismeGetSuccess, meGetErrorMessage, meUser, dispatch])
+  }, [isMeGetError, isMeGetSuccess, meGetErrorMessage, dispatch])
 
   // Logout
   const handleLogout = () => {
@@ -118,19 +120,120 @@ const UserProfileScreen = () => {
         source={require('../assets/projectImages/profileBackgroundCutOff.png')}
         className='w-[100vw] h-[40vh]'
       />
-      {/* rating stars based on rating values */}
-      <View className='mt-[-240] w-[100vw] flex-row justify-center items-center'>
-        <RatingStars rating={rating} />
-      </View>
-
-      {/* profile image */}
-      <View className='mt-4 w-64 h-64 rounded-full bg-[#FCFCFE] flex-row justify-center items-center'>
-        <Image
-          source={{ uri: imageUrl }}
-          className='w-64 h-64 rounded-full'
-          resizeMode='cover'
+      {isMeGetLoading ? (
+        <Progress.CircleSnail
+          color={['#F9A826', '#F9A826', '#F9A826']}
+          size={100}
+          thickness={5}
+          className='mt-[-240] w-[100vw] flex-row justify-center items-center'
         />
-      </View>
+      ) : (
+        <>
+          {/* rating stars based on rating values */}
+          <View className='mt-[-240] w-[100vw] flex-row justify-center items-center'>
+            <RatingStars rating={rating} />
+          </View>
+
+          {/* profile image */}
+          <View className='mt-4 w-68 h-68 rounded-full bg-[#FCFCFE] flex-row justify-center items-center border-2 border-white'>
+            <Image
+              source={{
+                uri: imageUrl,
+              }}
+              className='w-64 h-64 rounded-full'
+              resizeMode='cover'
+            />
+          </View>
+
+          {/* Images */}
+          <View className='mt-4 w-[100vw] flex-row justify-center items-center'>
+            {images.map((image, idx) => (
+              <View
+                key={idx}
+                className='w-11 h-11 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center'
+              >
+                <Image
+                  source={{
+                    uri: image,
+                  }}
+                  className='w-10 h-10 rounded-full'
+                  resizeMode='cover'
+                />
+              </View>
+            ))}
+          </View>
+
+          {/* User Name */}
+          <View className='mt-4 w-[100vw] flex-row justify-center items-center'>
+            <Text className='text-white text-3xl font-medium'>{userName}</Text>
+          </View>
+
+          {/* Mantra */}
+          <View className='mt-1 w-[100vw] flex-row justify-center items-center'>
+            <Text className='text-white text-xl font-medium'>{mantra}</Text>
+          </View>
+
+          {/* Age Range, gender and location */}
+          <View className='mt-1 w-[100vw] flex-row justify-center items-center'>
+            <Text className='text-white text-base font-normal'>
+              {ageRange} {gender}, {location}
+            </Text>
+          </View>
+
+          {/* Top Interests */}
+          <View className='mt-1 w-[100vw] flex-row justify-center items-center'>
+            <Text className='text-white text-base font-normal'>
+              {topInterests.map((interest, idx) => (
+                <Text key={idx} className='text-white text-base font-normal'>
+                  {' '}
+                  {idx < 2 ? `${interest}, ` : idx === 2 ? `${interest}` : ''}
+                </Text>
+              ))}
+            </Text>
+          </View>
+
+          {/* Swipable Button */}
+          <View className='mt-2 w-[100vw] flex-row justify-center items-center'>
+            <SwipeButton
+              title='Swipe to go Live'
+              swipeSuccessThreshold={70}
+              height={45}
+              width={300}
+              onSwipeSuccess={() =>
+                Toast.show({
+                  type: 'success',
+                  text1: 'You are now live!',
+                  visibilityTime: 3000,
+                })
+              }
+              thumbIconBackgroundColor='#655A5A'
+              thumbIconBorderColor='#655A5A'
+              railBackgroundColor='#D9D9D9'
+              railBorderColor='#D9D9D9'
+              railFillBackgroundColor='rgba(34, 166, 179, 0.5)'
+              railFillBorderColor='#22A6B3'
+            />
+          </View>
+
+          {/* Chat and User Profile Icons */}
+          <View className='absolute bottom-3 w-[100vw] flex-row justify-between items-center'>
+            <View className='w-1/2 flex-row justify-center items-center'>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('UserProfileEdit')}
+              >
+                <ChatBubbleLeftRightIcon size={40} color={'white'} />
+              </TouchableOpacity>
+            </View>
+            <View className='w-1/2 flex-row justify-center items-center'>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('UserProfileEdit')}
+              >
+                <UserIcon size={40} color={'white'} />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </>
+      )}
     </View>
   )
 }
