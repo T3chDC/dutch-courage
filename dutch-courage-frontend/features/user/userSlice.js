@@ -58,6 +58,12 @@ export const userSlice = createSlice({
       state.isMeGetLoading = false
       state.meGetErrorMessage = ''
     },
+    resetMeGetUser: (state) => {
+      state.isMeGetError = false
+      state.isMeGetSuccess = false
+      state.isMeGetLoading = false
+      state.meGetErrorMessage = ''
+    },
     resetMeUpdateUser: (state) => {
       state.isMeUpdateError = false
       state.isMeUpdateSuccess = false
@@ -106,6 +112,7 @@ export const userSlice = createSlice({
   },
 })
 
-export const { resetMeUser, resetMeUpdateUser } = userSlice.actions
+export const { resetMeUser, resetMeGetUser, resetMeUpdateUser } =
+  userSlice.actions
 
 export default userSlice.reducer

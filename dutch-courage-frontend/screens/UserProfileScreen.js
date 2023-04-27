@@ -10,7 +10,11 @@ import { UserIcon, ChatBubbleLeftRightIcon } from 'react-native-heroicons/solid'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
-import { getMeUser, resetMeUser } from '../features/user/userSlice'
+import {
+  getMeUser,
+  resetMeUser,
+  resetMeGetUser,
+} from '../features/user/userSlice'
 import RatingStars from '../components/RatingStars'
 import Toast from 'react-native-toast-message'
 import * as Progress from 'react-native-progress'
@@ -109,7 +113,7 @@ const UserProfileScreen = () => {
   // Reset user profile update status on unmount
   useEffect(() => {
     return () => {
-      dispatch(resetMeUser())
+      dispatch(resetMeGetUser())
     }
   }, [dispatch])
 
@@ -135,33 +139,46 @@ const UserProfileScreen = () => {
           </View>
 
           {/* profile image */}
-          <View className='mt-4 w-68 h-68 rounded-full bg-[#FCFCFE] flex-row justify-center items-center border-2 border-white'>
-            <Image
-              source={{
-                uri: imageUrl,
-              }}
-              className='w-64 h-64 rounded-full'
-              resizeMode='cover'
-            />
-          </View>
+          {imageUrl ? (
+            <View className='mt-4 w-68 h-68 rounded-full bg-[#FCFCFE] flex-row justify-center items-center border-2 border-white'>
+              <Image
+                source={{
+                  uri: imageUrl,
+                }}
+                className='w-64 h-64 rounded-full'
+                resizeMode='cover'
+              />
+            </View>
+          ) : (
+            <View className='mt-4 w-68 h-68 rounded-full bg-[#FCFCFE] flex-row justify-center items-center border-2 border-white'>
+              <UserIcon
+                name='user'
+                size={64}
+                color='#F9A826'
+                className='w-64 h-64 rounded-full'
+              />
+            </View>
+          )}
 
           {/* Images */}
-          <View className='mt-4 w-[100vw] flex-row justify-center items-center'>
-            {images.map((image, idx) => (
-              <View
-                key={idx}
-                className='w-11 h-11 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center'
-              >
-                <Image
-                  source={{
-                    uri: image,
-                  }}
-                  className='w-10 h-10 rounded-full'
-                  resizeMode='cover'
-                />
-              </View>
-            ))}
-          </View>
+          {images.length > 0 && (
+            <View className='mt-4 w-[100vw] flex-row justify-center items-center'>
+              {images.map((image, idx) => (
+                <View
+                  key={idx}
+                  className='w-11 h-11 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center'
+                >
+                  <Image
+                    source={{
+                      uri: image,
+                    }}
+                    className='w-10 h-10 rounded-full'
+                    resizeMode='cover'
+                  />
+                </View>
+              ))}
+            </View>
+          )}
 
           {/* User Name */}
           <View className='mt-4 w-[100vw] flex-row justify-center items-center'>
