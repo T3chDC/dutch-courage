@@ -106,11 +106,12 @@ const UserProfileScreen = () => {
   // Logout
   const handleLogout = () => {
     dispatch(logout())
+    dispatch(resetMeGetUser())
     dispatch(resetMeUser())
     navigation.navigate('Login')
   }
 
-  // Reset user profile update status on unmount
+  // Reset user profile get status on unmount
   useEffect(() => {
     return () => {
       dispatch(resetMeGetUser())
