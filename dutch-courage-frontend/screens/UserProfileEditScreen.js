@@ -1,12 +1,18 @@
 import {
   View,
   Text,
+  TextInput,
   Image,
   TouchableOpacity,
   Alert,
   BackHandler,
 } from 'react-native'
-import { ChevronLeftIcon, PlusIcon } from 'react-native-heroicons/solid'
+import { Picker } from '@react-native-picker/picker'
+import {
+  ChevronLeftIcon,
+  PlusIcon,
+  ChevronDownIcon,
+} from 'react-native-heroicons/solid'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
@@ -24,6 +30,7 @@ import LocationPickerModal from '../components/LocationPickerModal'
 import ImagePickerModal from '../components/ImagePickerModal'
 import InterestPickerModal from '../components/InterestPickerModal'
 import GenderPickerModal from '../components/GenderPickerModal'
+import AgeRangePickerModal from '../components/AgeRangePickerModal'
 
 const UserProfileEditScreen = () => {
   // Navigation hook
@@ -45,6 +52,7 @@ const UserProfileEditScreen = () => {
   const [imageUrl, setImageUrl] = useState(meUser?.imageUrl)
   const [images, setImages] = useState(meUser?.images)
   const [userName, setUserName] = useState(meUser?.userName)
+  const [userNameCount, setUserNameCount] = useState(meUser?.userName.length)
   const [mantra, setMantra] = useState(meUser?.mantra)
   const [ageRange, setAgeRange] = useState(meUser?.ageRange)
   const [gender, setGender] = useState(meUser?.gender)
@@ -53,8 +61,12 @@ const UserProfileEditScreen = () => {
   const [selectedProfileImage, setSelectedProfileImage] = useState(null)
 
   // Modal State variables
-  const [isImageChooseModalVisible, setIsImageChooseModalVisible] =
-    useState(false)
+  // const [isImageChooseModalVisible, setIsImageChooseModalVisible] =
+  //   useState(false)
+  const [isInterestModalVisible, setIsInterestModalVisible] = useState(false)
+  const [isLocationModalVisible, setIsLocationModalVisible] = useState(false)
+  const [isGenderModalVisible, setIsGenderModalVisible] = useState(false)
+  const [isAgeRangeModalVisible, setIsAgeRangeModalVisible] = useState(false)
 
   // Check if user is logged in
   useEffect(() => {
@@ -184,6 +196,8 @@ const UserProfileEditScreen = () => {
     }
   }, [dispatch])
 
+  console.log(userName)
+
   return (
     <View className='bg-black flex-1 justify-start items-center relative'>
       {/* background cutoff image*/}
@@ -259,6 +273,53 @@ const UserProfileEditScreen = () => {
               </View>
             </TouchableOpacity>
           </View>
+
+          {/* User Name label */}
+          <View className='flex-row mt-5 justify-center items-center'>
+            <Text className='text-[#898A8D] text-xs mr-48'>Imaginary Name</Text>
+            <Text className='text-[#898A8D] text-xs'>{userNameCount}/35</Text>
+          </View>
+
+          {/* UserName */}
+          <View>
+            <TextInput
+              placeholder='Username'
+              keyboardType='default'
+              className='bg-black w-80 h-10 flex-row justify-start items-center border-b-2 border-[#22A6B3] text-white text-lg font-bold px-1'
+              value={userName}
+              onChangeText={(text) => {
+                if (text.length <= 35) {
+                  setUserName(text)
+                  setUserNameCount(text.length)
+                }
+              }}
+            />
+          </View>
+
+          {/* User Age range label */}
+          <View className='flex-row mt-5 justify-center items-center'>
+            <Text className='text-[#898A8D] text-xs mr-64'>Age Range</Text>
+          </View>
+
+          {/* Age range */}
+          <View>
+            <TouchableOpacity onPress={() => setIsAgeRangeModalVisible(true)}>
+              <TextInput
+                placeholder='Age Range'
+                keyboardType='default'
+                className='bg-black w-80 h-10 flex-row justify-start items-center border-b-2 border-[#22A6B3] text-white text-sm px-1'
+                value={ageRange}
+                editable={false}
+              />
+            </TouchableOpacity>
+          </View>
+
+          {/* Age range picker modal */}
+          <AgeRangePickerModal
+            isAgeRangeModalVisible={isAgeRangeModalVisible}
+            setIsAgeRangeModalVisible={setIsAgeRangeModalVisible}
+            setAgeRange={setAgeRange}
+          />
         </>
       )}
     </View>

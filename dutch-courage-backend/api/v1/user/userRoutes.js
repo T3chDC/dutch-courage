@@ -40,7 +40,7 @@ router.route('/checkPasswordResetOTP').post(checkPasswordResetOTP) //route to ha
 router.route('/resetPassword').post(resetPassword) //route to handle forgot password
 
 router.route('/getMe').get(protect, getMe, getUser) //route to get profile information
-router.route('/updateMe').patch(protect, updateMe) //route to handle profile information update by user
+router.route('/updateMe').patch(protect, updateMe, updateUser) //route to handle profile information update by user
 router.route('/deleteMe').delete(protect, deleteMe) //route to handle profile deletion by user
 
 //base CRUD functionality for admin only
