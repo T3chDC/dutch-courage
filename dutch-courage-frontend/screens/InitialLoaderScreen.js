@@ -26,7 +26,7 @@ const InitialLoaderScreen = () => {
     setTimeout(() => {
       if (userInfo && userInfo.newUser) {
         navigation.navigate('BlankProfile')
-      } else if (userInfo && !userInfo.newUser) {
+      } else if (userInfo && userInfo.newUser === false) {
         navigation.navigate('UserProfile')
       } else {
         navigation.navigate('Login')
