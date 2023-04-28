@@ -60,28 +60,25 @@ export const updateMe = catchAsync(async (req, res, next) => {
     )
   }
 
-  req.params.id = req.user.id
-  next()
-
   // 2) Update user document
-  // const updatedUser = await User.findByIdAndUpdate(req.user._id, req.body, {
-  //   new: true,
-  //   runValidators: true,
-  // })
+  const updatedUser = await User.findByIdAndUpdate(req.user._id, req.body, {
+    new: true,
+    runValidators: true,
+  })
 
-  // res.status(200).json({
-  //   status: 'success',
-  //   data: {
-  //     _id: updatedUser._id,
-  //     userName: updatedUser.userName,
-  //     email: updatedUser.email,
-  //     loginType: updatedUser.loginType,
-  //     imageUrl: updatedUser.imageUrl,
-  //     userType: updatedUser.userType,
-  //     newUser: updatedUser.newUser,
-  //     token: generateToken(updatedUser._id),
-  //   },
-  // })
+  res.status(200).json({
+    status: 'success',
+    data: {
+      _id: updatedUser._id,
+      userName: updatedUser.userName,
+      email: updatedUser.email,
+      loginType: updatedUser.loginType,
+      imageUrl: updatedUser.imageUrl,
+      userType: updatedUser.userType,
+      newUser: updatedUser.newUser,
+      token: generateToken(updatedUser._id),
+    },
+  })
 })
 
 // @desc    Delete current logged in user
