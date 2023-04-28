@@ -15,6 +15,7 @@ import axios from 'axios'
 import { BACKEND_URL } from '../config'
 import {
   updateMeUser,
+  getMeUser,
   resetMeUser,
   resetMeUpdateUser,
 } from '../features/user/userSlice'
@@ -77,7 +78,7 @@ const UserProfileEditScreen = () => {
       'The changes you made will be automatically saved when you leave this screen. Are you sure you want to exit the profile editing screen?',
       [
         {
-          text: 'Cancel',
+          text: 'Cancel Changes',
           onPress: () => null,
           style: 'cancel',
         },
@@ -96,6 +97,7 @@ const UserProfileEditScreen = () => {
                 topInterests,
               })
             ),
+          // navigation.goBack(),
         },
       ],
       { cancelable: false }
@@ -107,10 +109,50 @@ const UserProfileEditScreen = () => {
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
-      backAction
+      () => {
+        Alert.alert(
+          'Hold on!',
+          'The changes you made will be automatically saved when you leave this screen. Are you sure you want to exit the profile editing screen?',
+          [
+            {
+              text: 'Cancel Changes',
+              onPress: () => null,
+              style: 'cancel',
+            },
+            {
+              text: 'YES',
+              onPress: () =>
+                dispatch(
+                  updateMeUser({
+                    userName,
+                    imageUrl,
+                    images,
+                    mantra,
+                    ageRange,
+                    gender,
+                    location,
+                    topInterests,
+                  })
+                ),
+              // navigation.goBack(),
+            },
+          ],
+          { cancelable: false }
+        )
+        return true
+      }
     )
     return () => backHandler.remove()
-  }, [])
+  }, [
+    userName,
+    imageUrl,
+    images,
+    mantra,
+    ageRange,
+    gender,
+    location,
+    topInterests,
+  ])
 
   // Update user profile
   useEffect(() => {
@@ -126,6 +168,7 @@ const UserProfileEditScreen = () => {
         text1: 'Profile information updated successfully',
         visibilityTime: 3000,
       })
+      dispatch(getMeUser())
       navigation.goBack()
     }
   }, [isMeUpdateError, isMeUpdateSuccess])
@@ -265,8 +308,8 @@ const UserProfileEditScreen = () => {
                 <PlusIcon size={20} color={'black'} />
               </View>
             </TouchableOpacity>
-            </View>
-            {/* User Name label */}
+          </View>
+          {/* User Name label */}
           <View className='flex-row mt-5 justify-center items-center'>
             <Text className='text-[#898A8D] text-xs mr-48'>Imaginary Name</Text>
             <Text className='text-[#898A8D] text-xs'>{userNameCount}/35</Text>
