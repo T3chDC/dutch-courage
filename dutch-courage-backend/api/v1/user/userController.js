@@ -68,16 +68,7 @@ export const updateMe = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: 'success',
-    data: {
-      _id: updatedUser._id,
-      userName: updatedUser.userName,
-      email: updatedUser.email,
-      loginType: updatedUser.loginType,
-      imageUrl: updatedUser.imageUrl,
-      userType: updatedUser.userType,
-      newUser: updatedUser.newUser,
-      token: generateToken(updatedUser._id),
-    },
+    data: updatedUser,
   })
 })
 // @desc    Delete current logged in user
