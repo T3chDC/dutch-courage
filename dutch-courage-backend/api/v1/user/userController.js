@@ -80,7 +80,6 @@ export const updateMe = catchAsync(async (req, res, next) => {
     },
   })
 })
-
 // @desc    Delete current logged in user
 // @route   DELETE /api/v1/users/me
 // @access  Private
