@@ -127,7 +127,7 @@ const UserProfileScreen = () => {
       />
       {isMeGetLoading ? (
         <Progress.CircleSnail
-          color={['#F9A826', '#F9A826', '#F9A826']}
+          color={['#22A6B3', '#22A6B3', '#22A6B3']}
           size={100}
           thickness={5}
           className='mt-[-240] w-[100vw] flex-row justify-center items-center'
@@ -155,7 +155,7 @@ const UserProfileScreen = () => {
               <UserIcon
                 name='user'
                 size={64}
-                color='#F9A826'
+                color='gray'
                 className='w-64 h-64 rounded-full'
               />
             </View>

@@ -1,5 +1,6 @@
 import {
   View,
+  KeyboardAvoidingView,
   Text,
   TextInput,
   Image,
@@ -50,6 +51,7 @@ const UserProfileEditScreen = () => {
   const [userName, setUserName] = useState(meUser?.userName)
   const [userNameCount, setUserNameCount] = useState(meUser?.userName.length)
   const [mantra, setMantra] = useState(meUser?.mantra)
+  const [mantraCount, setMantraCount] = useState(meUser?.mantra.length)
   const [ageRange, setAgeRange] = useState(meUser?.ageRange)
   const [gender, setGender] = useState(meUser?.gender)
   const [location, setLocation] = useState(meUser?.location)
@@ -212,7 +214,7 @@ const UserProfileEditScreen = () => {
 
       {isMeUpdateLoading ? (
         <Progress.CircleSnail
-          color={['#F9A826', '#F9A826', '#F9A826']}
+          color={['#22A6B3', '#22A6B3', '#22A6B3']}
           size={100}
           thickness={5}
           className='mt-[-240] w-[100vw] flex-row justify-center items-center'
@@ -278,7 +280,7 @@ const UserProfileEditScreen = () => {
             </TouchableOpacity>
           </View>
           {/* User Name label */}
-          <View className='flex-row mt-5 justify-center items-center'>
+          <View className='flex-row mt-3 justify-center items-center mb-[-5] z-10'>
             <Text className='text-[#898A8D] text-xs mr-48'>Imaginary Name</Text>
             <Text className='text-[#898A8D] text-xs'>{userNameCount}/35</Text>
           </View>
@@ -299,8 +301,8 @@ const UserProfileEditScreen = () => {
             />
           </View>
 
-          {/* User Age range label */}
-          <View className='flex-row mt-5 justify-center items-center'>
+          {/* Age range label */}
+          <View className='flex-row mt-3 justify-center items-center mb-[-5] z-10'>
             <Text className='text-[#898A8D] text-xs mr-64'>Age Range</Text>
           </View>
 
@@ -323,6 +325,87 @@ const UserProfileEditScreen = () => {
             setIsAgeRangeModalVisible={setIsAgeRangeModalVisible}
             setAgeRange={setAgeRange}
           />
+
+          {/* Gender label */}
+          <View className='flex-row mt-3 justify-center items-center mb-[-5] z-10'>
+            <Text className='text-[#898A8D] text-xs mr-[275]'>Gender</Text>
+          </View>
+
+          {/* Gender */}
+          <View>
+            <TouchableOpacity onPress={() => setIsGenderModalVisible(true)}>
+              <TextInput
+                placeholder='Gender'
+                keyboardType='default'
+                className='bg-black w-80 h-10 flex-row justify-start items-center border-b-2 border-[#22A6B3] text-white text-sm px-1'
+                value={gender}
+                editable={false}
+              />
+            </TouchableOpacity>
+          </View>
+
+          {/* Gender picker modal */}
+          <GenderPickerModal
+            isGenderModalVisible={isGenderModalVisible}
+            setIsGenderModalVisible={setIsGenderModalVisible}
+            setGender={setGender}
+          />
+
+          {/* Location label */}
+          <View className='flex-row mt-3 justify-center items-center mb-[-5] z-10'>
+            <Text className='text-[#898A8D] text-xs mr-[265]'>Location</Text>
+          </View>
+
+          {/* Location */}
+          <View>
+            <TouchableOpacity onPress={() => setIsLocationModalVisible(true)}>
+              <TextInput
+                placeholder='Location'
+                keyboardType='default'
+                className='bg-black w-80 h-10 flex-row justify-start items-center border-b-2 border-[#22A6B3] text-white text-sm px-1'
+                value={location}
+                editable={false}
+              />
+            </TouchableOpacity>
+          </View>
+
+          {/* Location picker modal */}
+          <LocationPickerModal
+            isLocationModalVisible={isLocationModalVisible}
+            setIsLocationModalVisible={setIsLocationModalVisible}
+            setLocation={setLocation}
+          />
+
+          {/* Mantra label */}
+          <View className='flex-row mt-3 justify-center items-center mb-[-5] z-10'>
+            <Text className='text-[#898A8D] text-xs mr-56'>Your Mantra</Text>
+            <Text className='text-[#898A8D] text-xs'>{mantraCount}/40</Text>
+          </View>
+
+          {/* Mantra */}
+          <View>
+            <TextInput
+              placeholder='Mantra'
+              keyboardType='default'
+              className='bg-black w-80 h-10 flex-row justify-start items-center border-b-2 border-[#22A6B3] text-white text-sm px-1'
+              value={mantra}
+              onChangeText={(text) => {
+                if (text.length <= 40) {
+                  setMantra(text)
+                  setMantraCount(text.length)
+                }
+              }}
+            />
+          </View>
+
+          {/* Mantra instructions */}
+          <View className='flex-row justify-center items-center mb-[-5] z-10'>
+            <Text className='text-[#898A8D] text-xs text-center'>
+              {
+                '(Keep it simple. No social media accounts, other app details, no phone numbers or any solicitation)'
+              }
+            </Text>
+          </View>
         </>
       )}
     </View>
