@@ -107,40 +107,8 @@ const UserProfileEditScreen = () => {
 
   //Inform user that the changes made will be lost when back is pressed
   useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      () => {
-        Alert.alert(
-          'Hold on!',
-          'The changes you made will be automatically saved when you leave this screen. Are you sure you want to exit the profile editing screen?',
-          [
-            {
-              text: 'Cancel Changes',
-              onPress: () => null,
-              style: 'cancel',
-            },
-            {
-              text: 'YES',
-              onPress: () =>
-                dispatch(
-                  updateMeUser({
-                    userName,
-                    imageUrl,
-                    images,
-                    mantra,
-                    ageRange,
-                    gender,
-                    location,
-                    topInterests,
-                  })
-                ),
-              // navigation.goBack(),
-            },
-          ],
-          { cancelable: false }
-        )
-        return true
-      }
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () =>
+      backAction()
     )
     return () => backHandler.remove()
   }, [
@@ -221,7 +189,7 @@ const UserProfileEditScreen = () => {
   // Logout
   const handleLogout = () => {
     dispatch(logout())
-    dispatch(resetMeUpdateUser())
+    // dispatch(resetMeUpdateUser())
     dispatch(resetMeUser())
     navigation.navigate('Login')
   }
@@ -229,7 +197,7 @@ const UserProfileEditScreen = () => {
   // Reset user profile update status on unmount
   useEffect(() => {
     return () => {
-      console.log('UserProfileEditScreen unmounted')
+      // console.log('UserProfileEditScreen unmounted')
       dispatch(resetMeUpdateUser())
     }
   }, [dispatch])

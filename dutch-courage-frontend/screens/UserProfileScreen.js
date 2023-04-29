@@ -106,7 +106,7 @@ const UserProfileScreen = () => {
   // Logout
   const handleLogout = () => {
     dispatch(logout())
-    dispatch(resetMeGetUser())
+    // dispatch(resetMeGetUser())
     dispatch(resetMeUser())
     navigation.navigate('Login')
   }
