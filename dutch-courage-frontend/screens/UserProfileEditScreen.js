@@ -80,9 +80,16 @@ const UserProfileEditScreen = () => {
       'The changes you made will be automatically saved when you leave this screen. Are you sure you want to exit the profile editing screen?',
       [
         {
-          text: 'Cancel Changes',
+          text: 'Keep Editing',
           onPress: () => null,
           style: 'cancel',
+        },
+        {
+          text: 'Cancel Changes',
+          onPress: () => {
+            navigation.goBack()
+            dispatch(resetMeUpdateUser())
+          },
         },
         {
           text: 'YES',
@@ -405,6 +412,15 @@ const UserProfileEditScreen = () => {
                 '(Keep it simple. No social media accounts, other app details, no phone numbers or any solicitation)'
               }
             </Text>
+          </View>
+
+          {/* Logout button */}
+          <View className='flex-row justify-center items-center mt-2'>
+            <TouchableOpacity onPress={() => handleLogout()}>
+              <View className='w-32 h-8 rounded-full bg-[#22A6B3] flex-row justify-center items-center'>
+                <Text className='text-white text-lg font-bold'>Logout</Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </>
       )}
