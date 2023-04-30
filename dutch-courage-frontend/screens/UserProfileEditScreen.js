@@ -1,6 +1,5 @@
 import {
   View,
-  KeyboardAvoidingView,
   Text,
   TextInput,
   Image,
@@ -28,6 +27,7 @@ import ImagePickerModal from '../components/ImagePickerModal'
 import InterestPickerModal from '../components/InterestPickerModal'
 import GenderPickerModal from '../components/GenderPickerModal'
 import AgeRangePickerModal from '../components/AgeRangePickerModal'
+import MantraModal from '../components/MantraModal'
 
 const UserProfileEditScreen = () => {
   // Navigation hook
@@ -61,10 +61,11 @@ const UserProfileEditScreen = () => {
   // Modal State variables
   // const [isImageChooseModalVisible, setIsImageChooseModalVisible] =
   //   useState(false)
-  const [isInterestModalVisible, setIsInterestModalVisible] = useState(false)
+  // const [isInterestModalVisible, setIsInterestModalVisible] = useState(false)
   const [isLocationModalVisible, setIsLocationModalVisible] = useState(false)
-  const [isGenderModalVisible, setIsGenderModalVisible] = useState(false)
+  // const [isGenderModalVisible, setIsGenderModalVisible] = useState(false)
   const [isAgeRangeModalVisible, setIsAgeRangeModalVisible] = useState(false)
+  const [isMantraModalVisible, setIsMantraModalVisible] = useState(false)
 
   // Check if user is logged in
   useEffect(() => {
@@ -234,13 +235,13 @@ const UserProfileEditScreen = () => {
             onPress={() => backAction()}
           >
             {/* <ChevronLeftIcon size={20} color='white' /> */}
-              <Text className='text-white text-base top-[-1]'>{ '< Back' }</Text>
+            <Text className='text-white text-base top-[-1]'>{'< Back'}</Text>
           </TouchableOpacity>
 
           {/* profile image and image picker */}
           <View className='mt-[-200] mr-4 w-60 h-60 rounded-full bg-[#FCFCFE] flex-row justify-center items-center'>
             <TouchableOpacity
-              // onPress={() => setIsImageChooseModalVisible(true)}
+            // onPress={() => setIsImageChooseModalVisible(true)}
             >
               {imageUrl || selectedProfileImage ? (
                 <Image
@@ -286,6 +287,7 @@ const UserProfileEditScreen = () => {
               </View>
             </TouchableOpacity>
           </View>
+
           {/* User Name label */}
           <View className='flex-row mt-3 justify-center items-center mb-[-5] z-10'>
             <Text className='text-[#898A8D] text-xs mr-48'>Imaginary Name</Text>
@@ -341,13 +343,13 @@ const UserProfileEditScreen = () => {
           {/* Gender */}
           <View>
             {/* <TouchableOpacity onPress={() => setIsGenderModalVisible(true)}> */}
-              <TextInput
-                placeholder='Gender'
-                keyboardType='default'
-                className='bg-black w-80 h-10 flex-row justify-start items-center border-b-2 border-[#22A6B3] text-white text-sm px-1'
-                value={gender}
-                editable={false}
-              />
+            <TextInput
+              placeholder='Gender'
+              keyboardType='default'
+              className='bg-black w-80 h-10 flex-row justify-start items-center border-b-2 border-[#22A6B3] text-white text-sm px-1'
+              value={gender}
+              editable={false}
+            />
             {/* </TouchableOpacity> */}
           </View>
 
@@ -391,18 +393,15 @@ const UserProfileEditScreen = () => {
 
           {/* Mantra */}
           <View>
-            <TextInput
-              placeholder='Mantra'
-              keyboardType='default'
-              className='bg-black w-80 h-10 flex-row justify-start items-center border-b-2 border-[#22A6B3] text-white text-sm px-1'
-              value={mantra}
-              onChangeText={(text) => {
-                if (text.length <= 40) {
-                  setMantra(text)
-                  setMantraCount(text.length)
-                }
-              }}
-            />
+            <TouchableOpacity onPress={() => setIsMantraModalVisible(true)}>
+              <TextInput
+                placeholder='Mantra'
+                keyboardType='default'
+                className='bg-black w-80 h-10 flex-row justify-start items-center border-b-2 border-[#22A6B3] text-white text-sm px-1'
+                value={mantra}
+                editable={false}
+              />
+            </TouchableOpacity>
           </View>
 
           {/* Mantra instructions */}
@@ -413,6 +412,16 @@ const UserProfileEditScreen = () => {
               }
             </Text>
           </View>
+
+          {/* Mantra modifier modal */}
+          <MantraModal
+            isMantraModalVisible={isMantraModalVisible}
+            setIsMantraModalVisible={setIsMantraModalVisible}
+            mantra={mantra}
+            mantraCount={mantraCount}
+            setMantra={setMantra}
+            setMantraCount={setMantraCount}
+          />
 
           {/* Logout button */}
           <View className='flex-row justify-center items-center mt-2'>
