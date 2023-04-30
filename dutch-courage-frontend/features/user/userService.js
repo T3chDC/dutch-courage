@@ -22,13 +22,6 @@ const updateMeUser = async (token, data) => {
       Authorization: `Bearer ${token}`,
     },
   })
-  if (response.data.status === 'success') {
-    //store in async storage of device
-    await SecureStore.setItemAsync(
-      'DCUserInfo',
-      JSON.stringify(response.data.data)
-    )
-  }
   return response.data.data
 }
 

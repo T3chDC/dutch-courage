@@ -233,14 +233,14 @@ const UserProfileEditScreen = () => {
             className='absolute top-10 left-4 flex-row items-center'
             onPress={() => backAction()}
           >
-            <ChevronLeftIcon size={20} color='white' />
-            <Text className='text-white text-base top-[-1]'>Back</Text>
+            {/* <ChevronLeftIcon size={20} color='white' /> */}
+              <Text className='text-white text-base top-[-1]'>{ '< Back' }</Text>
           </TouchableOpacity>
 
           {/* profile image and image picker */}
           <View className='mt-[-200] mr-4 w-60 h-60 rounded-full bg-[#FCFCFE] flex-row justify-center items-center'>
             <TouchableOpacity
-              onPress={() => setIsImageChooseModalVisible(true)}
+              // onPress={() => setIsImageChooseModalVisible(true)}
             >
               {imageUrl || selectedProfileImage ? (
                 <Image
@@ -340,7 +340,7 @@ const UserProfileEditScreen = () => {
 
           {/* Gender */}
           <View>
-            <TouchableOpacity onPress={() => setIsGenderModalVisible(true)}>
+            {/* <TouchableOpacity onPress={() => setIsGenderModalVisible(true)}> */}
               <TextInput
                 placeholder='Gender'
                 keyboardType='default'
@@ -348,15 +348,15 @@ const UserProfileEditScreen = () => {
                 value={gender}
                 editable={false}
               />
-            </TouchableOpacity>
+            {/* </TouchableOpacity> */}
           </View>
 
           {/* Gender picker modal */}
-          <GenderPickerModal
+          {/* <GenderPickerModal
             isGenderModalVisible={isGenderModalVisible}
             setIsGenderModalVisible={setIsGenderModalVisible}
             setGender={setGender}
-          />
+          /> */}
 
           {/* Location label */}
           <View className='flex-row mt-3 justify-center items-center mb-[-5] z-10'>
