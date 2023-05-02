@@ -151,7 +151,7 @@ const UserProfileEditScreen = () => {
     }
   }, [isMeUpdateError, isMeUpdateSuccess])
 
-  //Function to handle Image Upload
+  //Function to handle profile Image Upload
   const profileImageUploadHandler = async () => {
     const formData = new FormData()
     formData.append('image', {
