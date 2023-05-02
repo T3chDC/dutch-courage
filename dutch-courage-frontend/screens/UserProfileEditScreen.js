@@ -29,6 +29,7 @@ import AgeRangePickerModal from '../components/AgeRangePickerModal'
 import MantraModal from '../components/MantraModal'
 import ImagePickerModal from '../components/ImagePickerModal'
 import ProfileImageViewerModal from '../components/ProfileImageViewerModal'
+import GalleryImageViewerModal from '../components/GalleryImageViewerModal'
 
 const UserProfileEditScreen = () => {
   // Navigation hook
@@ -58,9 +59,14 @@ const UserProfileEditScreen = () => {
   const [location, setLocation] = useState(meUser?.location)
   const [topInterests, setTopInterests] = useState(meUser?.topInterests)
   const [selectedProfileImage, setSelectedProfileImage] = useState(null)
+  const [selectedGalleryImage, setSelectedGalleryImage] = useState(null)
 
   // Modal State variables
   const [isProfileImageModalVisible, setIsProfileImageModalVisible] =
+    useState(false)
+  const [isGalleryImageModalVisible, setIsGalleryImageModalVisible] =
+    useState(false)
+  const [isImagePickerModalVisible, setIsImagePickerModalVisible] =
     useState(false)
   // const [isInterestModalVisible, setIsInterestModalVisible] = useState(false)
   const [isLocationModalVisible, setIsLocationModalVisible] = useState(false)
@@ -264,13 +270,17 @@ const UserProfileEditScreen = () => {
               setSelectedProfileImage={setSelectedProfileImage}
               imageUrl={imageUrl}
             />
-
           </View>
 
           {/* Vertical Images Thumbnails */}
           <View className='absolute h-56 top-10 right-[-10] flex justify-between items-center'>
             {images?.map((image, idx) => (
-              <TouchableOpacity key={idx}>
+              <TouchableOpacity
+                key={idx}
+                onPress={() => {
+                  setIsGalleryImageModalVisible(true)
+                }}
+              >
                 <View
                   key={idx}
                   className='w-12 h-12 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center'
@@ -285,11 +295,42 @@ const UserProfileEditScreen = () => {
                 </View>
               </TouchableOpacity>
             ))}
-            <TouchableOpacity>
+
+            {/* Gallery image viewer modal */}
+            <GalleryImageViewerModal
+              isGalleryImageModalVisible={isGalleryImageModalVisible}
+              setIsGalleryImageModalVisible={setIsGalleryImageModalVisible}
+              images={images}
+              setImages={setImages}
+              setSelectedProfileImage={setSelectedProfileImage}
+            />
+
+              <TouchableOpacity
+                onPress={() => {
+                  if (images.length < 3) {
+                    setIsImagePickerModalVisible(true)
+                  } else {
+                    Toast.show({
+                      type: 'error',
+                      text1: 'Maximum 3 images allowed apart from profile picture',
+                      visibilityTime: 3000,
+                    })
+                  }
+                }}
+              >
               <View className='w-12 h-12 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center'>
                 <PlusIcon size={20} color={'black'} />
               </View>
             </TouchableOpacity>
+
+            {/* Image Picker Modal */}
+            <ImagePickerModal
+              isImageChooseModalVisible={isImagePickerModalVisible}
+              setIsImageChooseModalVisible={setIsImagePickerModalVisible}
+              setSelectedImage={setSelectedGalleryImage}
+              images={images}
+              setImages={setImages}
+            />
           </View>
 
           {/* User Name label */}
