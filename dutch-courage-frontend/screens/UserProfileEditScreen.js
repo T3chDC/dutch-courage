@@ -23,11 +23,12 @@ import Toast from 'react-native-toast-message'
 import { logout } from '../features/auth/authSlice'
 import * as Progress from 'react-native-progress'
 import LocationPickerModal from '../components/LocationPickerModal'
-import ImagePickerModal from '../components/ImagePickerModal'
-import InterestPickerModal from '../components/InterestPickerModal'
-import GenderPickerModal from '../components/GenderPickerModal'
+// import InterestPickerModal from '../components/InterestPickerModal'
+// import GenderPickerModal from '../components/GenderPickerModal'
 import AgeRangePickerModal from '../components/AgeRangePickerModal'
 import MantraModal from '../components/MantraModal'
+import ImagePickerModal from '../components/ImagePickerModal'
+import ProfileImageViewerModal from '../components/ProfileImageViewerModal'
 
 const UserProfileEditScreen = () => {
   // Navigation hook
@@ -59,8 +60,8 @@ const UserProfileEditScreen = () => {
   const [selectedProfileImage, setSelectedProfileImage] = useState(null)
 
   // Modal State variables
-  // const [isImageChooseModalVisible, setIsImageChooseModalVisible] =
-  //   useState(false)
+  const [isProfileImageModalVisible, setIsProfileImageModalVisible] =
+    useState(false)
   // const [isInterestModalVisible, setIsInterestModalVisible] = useState(false)
   const [isLocationModalVisible, setIsLocationModalVisible] = useState(false)
   // const [isGenderModalVisible, setIsGenderModalVisible] = useState(false)
@@ -241,7 +242,7 @@ const UserProfileEditScreen = () => {
           {/* profile image and image picker */}
           <View className='mt-[-200] mr-4 w-60 h-60 rounded-full bg-[#FCFCFE] flex-row justify-center items-center'>
             <TouchableOpacity
-            // onPress={() => setIsImageChooseModalVisible(true)}
+              onPress={() => setIsProfileImageModalVisible(true)}
             >
               {imageUrl || selectedProfileImage ? (
                 <Image
@@ -255,12 +256,15 @@ const UserProfileEditScreen = () => {
               )}
             </TouchableOpacity>
 
-            {/* image picker modal */}
-            {/* <ImagePickerModal
-              isImageChooseModalVisible={isImageChooseModalVisible}
-              setIsImageChooseModalVisible={setIsImageChooseModalVisible}
-              setSelectedImage={setSelectedImage}
-            /> */}
+            {/* Profile image modal */}
+            <ProfileImageViewerModal
+              isProfileImageModalVisible={isProfileImageModalVisible}
+              setIsProfileImageModalVisible={setIsProfileImageModalVisible}
+              selectedProfileImage={selectedProfileImage}
+              setSelectedProfileImage={setSelectedProfileImage}
+              imageUrl={imageUrl}
+            />
+
           </View>
 
           {/* Vertical Images Thumbnails */}
