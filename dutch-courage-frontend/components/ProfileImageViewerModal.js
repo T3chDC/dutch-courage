@@ -18,6 +18,7 @@ const ProfileImageViewerModal = ({
     <Modal
       animationIn={'slideInUp'}
       animationOut={'slideOutDown'}
+      backdropOpacity={0.9}
       isVisible={isProfileImageModalVisible}
       onBackdropPress={() => setIsProfileImageModalVisible(false)}
       onRequestClose={() => {
@@ -27,7 +28,10 @@ const ProfileImageViewerModal = ({
     >
       <View className='flex-1 justify-center items-center'>
         {/* Image viw area */}
-        <Image source={{ uri: imageUrl }} style={{ width: 300, height: 300 }} />
+        <Image
+          source={{ uri: selectedProfileImage || imageUrl }}
+          style={{ width: 300, height: 300 }}
+        />
         {/* Image Chooser Button */}
         <TouchableOpacity
           onPress={() => {
@@ -35,8 +39,18 @@ const ProfileImageViewerModal = ({
           }}
           className='bg-[#22A6B3] rounded-full w-40 h-12 flex-row justify-center items-center mt-10'
         >
-          <Text className='text-white'>Choose Profile Picture</Text>
+          <Text className='text-white'>Change Profile Picture</Text>
         </TouchableOpacity>
+
+        {/* Cancel Button */}
+        {/* <TouchableOpacity
+          onPress={() => {
+            setIsProfileImageModalVisible(false)
+          }}
+          className='bg-[#22A6B3] rounded-full w-40 h-12 flex-row justify-center items-center mt-10'
+        >
+          <Text className='text-white'>Cancel</Text>
+        </TouchableOpacity> */}
 
         {/* Image Picker Modal */}
         <ImagePickerModal
@@ -44,7 +58,6 @@ const ProfileImageViewerModal = ({
           setIsImageChooseModalVisible={setIsImagePickerModalVisible}
           setSelectedImage={setSelectedProfileImage}
         />
-        
       </View>
     </Modal>
   )
