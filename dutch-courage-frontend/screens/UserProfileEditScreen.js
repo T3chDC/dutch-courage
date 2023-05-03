@@ -164,20 +164,20 @@ const UserProfileEditScreen = () => {
         dispatch(updateMeUser(updatedUser))
       })
     }
-    if (selectedGalleryImage) {
-      galleryImageUploadHandler().then((res) => {
-        const updatedUser = {
-          userName,
-          images: res,
-          mantra,
-          ageRange,
-          gender,
-          location,
-          topInterests,
-        }
-        dispatch(updateMeUser(updatedUser))
-      })
-    }
+    // if (selectedGalleryImage) {
+    //   galleryImageUploadHandler().then((res) => {
+    //     const updatedUser = {
+    //       userName,
+    //       images: res,
+    //       mantra,
+    //       ageRange,
+    //       gender,
+    //       location,
+    //       topInterests,
+    //     }
+    //     dispatch(updateMeUser(updatedUser))
+    //   })
+    // }
   }
 
   //Function to handle profile Image Upload
