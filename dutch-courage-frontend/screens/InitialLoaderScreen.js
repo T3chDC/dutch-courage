@@ -18,6 +18,10 @@ const InitialLoaderScreen = () => {
     })
   }, [navigation])
 
+  const handleLogout = () => {
+    dispatch(logout())
+  }
+
   useEffect(() => {
     setTimeout(() => {
       if (userInfo && userInfo.newUser) {
@@ -61,14 +65,14 @@ const InitialLoaderScreen = () => {
           </TouchableOpacity>
         )} */}
 
-        {/* {userInfo && (
+        {userInfo && (
           <TouchableOpacity
             onPress={() => handleLogout()}
             className='bg-white rounded-md h-12 w-20 justify-center items-center'
           >
             <Text className='text-black'>Log Out</Text>
           </TouchableOpacity>
-        )} */}
+        )}
 
         {/* {userInfo && (
           <TouchableOpacity
