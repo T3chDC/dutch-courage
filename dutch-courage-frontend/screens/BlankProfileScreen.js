@@ -66,6 +66,9 @@ const BlankProfileScreen = () => {
     if (!userInfo) {
       navigation.navigate('Login')
     }
+    else if (!userInfo.newUser) {
+      navigation.navigate('UserProfile')
+    }
   }, [userInfo, navigation])
 
   //Exit App on Back Press
