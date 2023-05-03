@@ -49,7 +49,6 @@ const UserProfileEditScreen = () => {
 
   // Local State variables
   const [imageUrl, setImageUrl] = useState(meUser?.imageUrl)
-  const [initialImages, setInitialImages] = useState(meUser?.images)
   const [images, setImages] = useState(meUser?.images)
   const [userName, setUserName] = useState(meUser?.userName)
   const [userNameCount, setUserNameCount] = useState(meUser?.userName.length)
@@ -102,7 +101,7 @@ const UserProfileEditScreen = () => {
         },
         {
           text: 'YES',
-          onPress: () => updateUserHandler(),
+          onPress: async () => updateUserHandler(),
           // navigation.goBack(),
         },
       ],
@@ -126,6 +125,8 @@ const UserProfileEditScreen = () => {
     gender,
     location,
     topInterests,
+    selectedProfileImage,
+    selectedGalleryImage,
   ])
 
   // Update user profile
@@ -149,70 +150,27 @@ const UserProfileEditScreen = () => {
 
   // Functin to update user information
   const updateUserHandler = async () => {
-    if (selectedProfileImage && initialImages !== images) {
+    if (selectedProfileImage) {
       profileImageUploadHandler().then((res) => {
-        galleryImageUploadHandler().then((uploadedImages) => {
-          console.log("profile added and gallery changed")
-          console.log(uploadedImages)
-          console.log(res)
-          // dispatch(
-          //   updateMeUser({
-          //     userName,
-          //     imageUrl: res,
-          //     images: uploadedImages,
-          //     mantra,
-          //     ageRange,
-          //     gender,
-          //     location,
-          //     topInterests,
-          //   })
-          // )
-        })
+        setImageUrl(res)
       })
-    } else if (selectedProfileImage && initialImages === images) {
-      profileImageUploadHandler().then((res) => {
-        console.log("profile added and gallery not changed");
-        console.log(res)
-        // dispatch(
-        //   updateMeUser({
-        //     userName,
-        //     imageUrl: res,
-        //     mantra,
-        //     ageRange,
-        //     gender,
-        //     location,
-        //     topInterests,
-        //   })
-        // )
-      })
-    } else if (!selectedProfileImage && initialImages !== images) {
-      galleryImageUploadHandler().then((uploadedImages) => {
-        console.log("profile not added and gallery changed")
-        console.log(uploadedImages)
-        // dispatch(
-        //   updateMeUser({
-        //     userName,
-        //     images: uploadedImages,
-        //     mantra,
-        //     ageRange,
-        //     gender,
-        //     location,
-        //     topInterests,
-        //   })
-        // )
-      })
-    } else {
-      dispatch(
-        updateMeUser({
-          userName,
-          mantra,
-          ageRange,
-          gender,
-          location,
-          topInterests,
-        })
-      )
     }
+    if (selectedGalleryImage) {
+      galleryImageUploadHandler().then((res) => {
+        setImages(res)
+      })
+    }
+    const updatedUser = {
+      userName,
+      imageUrl,
+      images,
+      mantra,
+      ageRange,
+      gender,
+      location,
+      topInterests,
+    }
+    dispatch(updateMeUser(updatedUser))
   }
 
   //Function to handle profile Image Upload
@@ -325,10 +283,10 @@ const UserProfileEditScreen = () => {
     }
   }, [dispatch])
 
-  console.log('Initial images', initialImages)
-  console.log('Images', images)
-  console.log('imageUrl', imageUrl)
-  console.log('Selected Profile Image', selectedProfileImage)
+  // console.log('Initial images', initialImages)
+  // console.log('Images', images)
+  // console.log('imageUrl', imageUrl)
+  // console.log('Selected Profile Image', selectedProfileImage)
 
   return (
     <View className='bg-black flex-1 justify-start items-center relative'>
