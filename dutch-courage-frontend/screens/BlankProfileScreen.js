@@ -66,7 +66,7 @@ const BlankProfileScreen = () => {
     if (!userInfo) {
       navigation.navigate('Login')
     }
-    else if (!userInfo.newUser) {
+    else if (userInfo && !userInfo.newUser) {
       navigation.navigate('UserProfile')
     }
   }, [userInfo, navigation])

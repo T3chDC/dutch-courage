@@ -83,15 +83,13 @@ const NavigationHandler = () => {
           />
 
           {/* Blank Profile Screen */}
-          {userInfo && userInfo.newUser && (
-            <Stack.Screen
-              name='BlankProfile'
-              component={BlankProfileScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
-          )}
+          <Stack.Screen
+            name='BlankProfile'
+            component={BlankProfileScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
 
           {/* User Profile Screen */}
           <Stack.Screen
