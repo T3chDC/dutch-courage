@@ -107,6 +107,7 @@ const BlankProfileScreen = () => {
         text1: 'Profile Updated Successfully',
         visibilityTime: 3000,
       })
+      dispatch(resetMeUpdateUser())
       navigation.navigate('UserProfile')
     }
   }, [isMeUpdateError, isMeUpdateSuccess, meUpdateErrorMessage, dispatch])
