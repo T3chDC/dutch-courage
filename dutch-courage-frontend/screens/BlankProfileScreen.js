@@ -65,8 +65,7 @@ const BlankProfileScreen = () => {
   useEffect(() => {
     if (!userInfo) {
       navigation.navigate('Login')
-    }
-    else if (userInfo && !userInfo.newUser) {
+    } else if (userInfo && !userInfo.newUser) {
       navigation.navigate('UserProfile')
     }
   }, [userInfo, navigation])
@@ -94,7 +93,7 @@ const BlankProfileScreen = () => {
       backAction
     )
     return () => backHandler.remove()
-  }, [])
+  }, [userInfo, dispatch, navigation])
 
   // Update user profile infromation and status
   useEffect(() => {

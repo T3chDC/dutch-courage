@@ -78,7 +78,7 @@ const UserProfileScreen = () => {
       backAction
     )
     return () => backHandler.remove()
-  }, [])
+  }, [userInfo, dispatch, navigation])
 
   // Get user info
   useEffect(() => {
