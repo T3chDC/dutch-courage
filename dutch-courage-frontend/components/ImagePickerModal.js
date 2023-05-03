@@ -19,7 +19,7 @@ const ImagePickerModal = ({
       quality: 1,
     })
 
-    console.log(result)
+    // console.log(result)
 
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri)
@@ -39,7 +39,7 @@ const ImagePickerModal = ({
       quality: 1,
     })
 
-    console.log(result)
+    // console.log(result)
 
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri)

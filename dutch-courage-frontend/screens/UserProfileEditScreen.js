@@ -49,6 +49,7 @@ const UserProfileEditScreen = () => {
 
   // Local State variables
   const [imageUrl, setImageUrl] = useState(meUser?.imageUrl)
+  const [initialImages, setInitialImages] = useState(meUser?.images)
   const [images, setImages] = useState(meUser?.images)
   const [userName, setUserName] = useState(meUser?.userName)
   const [userNameCount, setUserNameCount] = useState(meUser?.userName.length)
@@ -101,19 +102,7 @@ const UserProfileEditScreen = () => {
         },
         {
           text: 'YES',
-          onPress: () =>
-            dispatch(
-              updateMeUser({
-                userName,
-                imageUrl,
-                images,
-                mantra,
-                ageRange,
-                gender,
-                location,
-                topInterests,
-              })
-            ),
+          onPress: () => updateUserHandler(),
           // navigation.goBack(),
         },
       ],
@@ -157,6 +146,67 @@ const UserProfileEditScreen = () => {
       navigation.goBack()
     }
   }, [isMeUpdateError, isMeUpdateSuccess])
+
+  // Functin to update user information
+  const updateUserHandler = async () => {
+    if (selectedProfileImage && initialImages !== images) {
+      profileImageUploadHandler().then((res) => {
+        galleryImageUploadHandler().then((uploadedImages) => {
+          dispatch(
+            updateMeUser({
+              userName,
+              imageUrl: res,
+              images: uploadedImages,
+              mantra,
+              ageRange,
+              gender,
+              location,
+              topInterests,
+            })
+          )
+        })
+      })
+    } else if (selectedProfileImage && initialImages === images) {
+      profileImageUploadHandler().then((res) => {
+        dispatch(
+          updateMeUser({
+            userName,
+            imageUrl: res,
+            mantra,
+            ageRange,
+            gender,
+            location,
+            topInterests,
+          })
+        )
+      })
+    } else if (!selectedProfileImage && initialImages !== images) {
+      galleryImageUploadHandler().then((uploadedImages) => {
+        dispatch(
+          updateMeUser({
+            userName,
+            images: uploadedImages,
+            mantra,
+            ageRange,
+            gender,
+            location,
+            topInterests,
+          })
+        )
+      })
+    } else {
+      dispatch(
+        updateMeUser({
+          userName,
+          mantra,
+          ageRange,
+          gender,
+          location,
+          topInterests,
+        })
+      )
+    }
+  }
 
   //Function to handle profile Image Upload
   const profileImageUploadHandler = async () => {
@@ -203,6 +253,55 @@ const UserProfileEditScreen = () => {
     }
   }
 
+  //Function to handle gallery Image Upload
+  const galleryImageUploadHandler = async () => {
+    let uploadedImages = []
+    images.forEach(async (image) => {
+      const formData = new FormData()
+      formData.append('image', {
+        uri: image,
+        type: 'image/jpeg',
+        name: 'image.jpg',
+      })
+
+      try {
+        const config = {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+        if (image) {
+          const extractedFilePath = image.slice(image.lastIndexOf('/') + 1)
+          if (extractedFilePath.startsWith('image')) {
+            const res = await axios.post(
+              BACKEND_URL + '/api/v1/upload/' + `${extractedFilePath}`,
+              formData,
+              config
+            )
+            uploadedImages.push(res.data)
+          } else {
+            const res = await axios.post(
+              BACKEND_URL + '/api/v1/upload',
+              formData,
+              config
+            )
+            uploadedImages.push(res.data)
+          }
+        } else {
+          const res = await axios.post(
+            BACKEND_URL + '/api/v1/upload',
+            formData,
+            config
+          )
+          uploadedImages.push(res.data)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    })
+    return uploadedImages
+  }
+
   // Logout
   const handleLogout = () => {
     dispatch(logout())
@@ -232,7 +331,7 @@ const UserProfileEditScreen = () => {
           color={['#22A6B3', '#22A6B3', '#22A6B3']}
           size={100}
           thickness={5}
-          className='mt-[-240] w-[100vw] flex-row justify-center items-center'
+          className='w-[100vw] flex-row justify-center items-center'
         />
       ) : (
         <>
@@ -306,19 +405,20 @@ const UserProfileEditScreen = () => {
               setSelectedProfileImage={setSelectedProfileImage}
             />
 
-              <TouchableOpacity
-                onPress={() => {
-                  if (images.length < 3) {
-                    setIsImagePickerModalVisible(true)
-                  } else {
-                    Toast.show({
-                      type: 'error',
-                      text1: 'Maximum 3 images allowed apart from profile picture',
-                      visibilityTime: 3000,
-                    })
-                  }
-                }}
-              >
+            <TouchableOpacity
+              onPress={() => {
+                if (images.length < 3) {
+                  setIsImagePickerModalVisible(true)
+                } else {
+                  Toast.show({
+                    type: 'error',
+                    text1:
+                      'Maximum 3 images allowed apart from profile picture',
+                    visibilityTime: 3000,
+                  })
+                }
+              }}
+            >
               <View className='w-12 h-12 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center'>
                 <PlusIcon size={20} color={'black'} />
               </View>
