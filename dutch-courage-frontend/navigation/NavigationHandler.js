@@ -27,7 +27,7 @@ const NavigationHandler = () => {
 
   const dispatch = useDispatch()
 
-  // const { userInfo } = useSelector((state) => state.auth)
+  const { userInfo } = useSelector((state) => state.auth)
 
   useEffect(() => {
     dispatch(getInitialState())
@@ -83,13 +83,15 @@ const NavigationHandler = () => {
           />
 
           {/* Blank Profile Screen */}
-          <Stack.Screen
-            name='BlankProfile'
-            component={BlankProfileScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
+          {userInfo && userInfo.newUser && (
+            <Stack.Screen
+              name='BlankProfile'
+              component={BlankProfileScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+          )}
 
           {/* User Profile Screen */}
           <Stack.Screen
