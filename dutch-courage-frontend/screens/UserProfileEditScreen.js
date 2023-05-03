@@ -152,25 +152,32 @@ const UserProfileEditScreen = () => {
   const updateUserHandler = async () => {
     if (selectedProfileImage) {
       profileImageUploadHandler().then((res) => {
-        setImageUrl(res)
+        const updatedUser = {
+          userName,
+          imageUrl: res,
+          mantra,
+          ageRange,
+          gender,
+          location,
+          topInterests,
+        }
+        dispatch(updateMeUser(updatedUser))
       })
     }
     if (selectedGalleryImage) {
       galleryImageUploadHandler().then((res) => {
-        setImages(res)
+        const updatedUser = {
+          userName,
+          images: res,
+          mantra,
+          ageRange,
+          gender,
+          location,
+          topInterests,
+        }
+        dispatch(updateMeUser(updatedUser))
       })
     }
-    const updatedUser = {
-      userName,
-      imageUrl,
-      images,
-      mantra,
-      ageRange,
-      gender,
-      location,
-      topInterests,
-    }
-    dispatch(updateMeUser(updatedUser))
   }
 
   //Function to handle profile Image Upload
