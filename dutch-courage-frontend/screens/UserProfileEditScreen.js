@@ -273,13 +273,14 @@ const UserProfileEditScreen = () => {
           </View>
 
           {/* Vertical Images Thumbnails */}
-          <View className='absolute h-56 top-10 right-[-10] flex justify-between items-center'>
+          <View className='absolute h-56 top-10 right-[-10] flex justify-start items-center'>
             {images?.map((image, idx) => (
               <TouchableOpacity
                 key={idx}
                 onPress={() => {
                   setIsGalleryImageModalVisible(true)
                 }}
+                className='mb-2'
               >
                 <View
                   key={idx}
