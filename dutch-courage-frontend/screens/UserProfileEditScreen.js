@@ -152,47 +152,54 @@ const UserProfileEditScreen = () => {
     if (selectedProfileImage && initialImages !== images) {
       profileImageUploadHandler().then((res) => {
         galleryImageUploadHandler().then((uploadedImages) => {
-          dispatch(
-            updateMeUser({
-              userName,
-              imageUrl: res,
-              images: uploadedImages,
-              mantra,
-              ageRange,
-              gender,
-              location,
-              topInterests,
-            })
-          )
+          console.log("profile added and gallery changed")
+          console.log(uploadedImages)
+          console.log(res)
+          // dispatch(
+          //   updateMeUser({
+          //     userName,
+          //     imageUrl: res,
+          //     images: uploadedImages,
+          //     mantra,
+          //     ageRange,
+          //     gender,
+          //     location,
+          //     topInterests,
+          //   })
+          // )
         })
       })
     } else if (selectedProfileImage && initialImages === images) {
       profileImageUploadHandler().then((res) => {
-        dispatch(
-          updateMeUser({
-            userName,
-            imageUrl: res,
-            mantra,
-            ageRange,
-            gender,
-            location,
-            topInterests,
-          })
-        )
+        console.log("profile added and gallery not changed");
+        console.log(res)
+        // dispatch(
+        //   updateMeUser({
+        //     userName,
+        //     imageUrl: res,
+        //     mantra,
+        //     ageRange,
+        //     gender,
+        //     location,
+        //     topInterests,
+        //   })
+        // )
       })
     } else if (!selectedProfileImage && initialImages !== images) {
       galleryImageUploadHandler().then((uploadedImages) => {
-        dispatch(
-          updateMeUser({
-            userName,
-            images: uploadedImages,
-            mantra,
-            ageRange,
-            gender,
-            location,
-            topInterests,
-          })
-        )
+        console.log("profile not added and gallery changed")
+        console.log(uploadedImages)
+        // dispatch(
+        //   updateMeUser({
+        //     userName,
+        //     images: uploadedImages,
+        //     mantra,
+        //     ageRange,
+        //     gender,
+        //     location,
+        //     topInterests,
+        //   })
+        // )
       })
     } else {
       dispatch(
@@ -317,6 +324,11 @@ const UserProfileEditScreen = () => {
       dispatch(resetMeUpdateUser())
     }
   }, [dispatch])
+
+  console.log('Initial images', initialImages)
+  console.log('Images', images)
+  console.log('imageUrl', imageUrl)
+  console.log('Selected Profile Image', selectedProfileImage)
 
   return (
     <View className='bg-black flex-1 justify-start items-center relative'>

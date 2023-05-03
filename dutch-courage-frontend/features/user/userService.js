@@ -22,6 +22,11 @@ const updateMeUser = async (token, data) => {
       Authorization: `Bearer ${token}`,
     },
   })
+  const savedUser = await SecureStore.getItemAsync('DCUserInfo')
+  await SecureStore.setItemAsync(
+    'DCUserInfo',
+    JSON.stringify({ ...JSON.parse(savedUser), newUser: false })
+  )
   return response.data.data
 }
 
