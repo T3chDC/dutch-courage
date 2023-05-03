@@ -128,6 +128,25 @@ export const getInitialState = createAsyncThunk(
   }
 )
 
+// change new User
+export const changeNewUser = createAsyncThunk(
+  'auth/changeNewUser',
+  async (_, thunkAPI) => {
+    try {
+      await SecureStore.setItemAsync(
+        'DCUserInfo',
+        JSON.stringify({ ...thunkAPI.getState().auth.userInfo, newUser: false })
+      )
+    } catch (err) {
+      const message =
+        (err.response && err.response.data && err.response.data.message) ||
+        err.message ||
+        err.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
 //logout user asynchronously by removing user from storage
 export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
   try {
@@ -278,6 +297,12 @@ const authSlice = createSlice({
       })
       .addCase(getInitialState.fulfilled, (state, action) => {
         state.userInfo = action.payload
+      })
+      .addCase(changeNewUser.fulfilled, (state, action) => {
+        state.userInfo = {
+          ...state.userInfo,
+          newUser: false,
+        }
       })
       .addCase(logout.fulfilled, (state) => {
         state.userInfo = null

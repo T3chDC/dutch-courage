@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import { BACKEND_URL } from '../config'
 import { updateMeUser, resetMeUpdateUser } from '../features/user/userSlice'
+import { changeNewUser } from '../features/auth/authSlice'
 import Toast from 'react-native-toast-message'
 import * as Progress from 'react-native-progress'
 import LocationPickerModal from '../components/LocationPickerModal'
@@ -178,6 +179,7 @@ const BlankProfileScreen = () => {
             newUser: false,
           })
         )
+        dispatch(changeNewUser())
       })
     } else {
       dispatch(
@@ -191,6 +193,7 @@ const BlankProfileScreen = () => {
           newUser: false,
         })
       )
+      dispatch(changeNewUser())
     }
   }
 
