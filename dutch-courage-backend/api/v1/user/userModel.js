@@ -98,11 +98,20 @@ const userSchema = new mongoose.Schema(
       default: '',
     },
 
-    images: [
-      {
-        type: String,
-      },
-    ],
+    galleryImage1Url: {
+      type: String,
+      default: '',
+    },
+
+    galleryImage2Url: {
+      type: String,
+      default: '',
+    },
+
+    galleryImage3Url: {
+      type: String,
+      default: '',
+    },
 
     mantra: {
       type: String,
