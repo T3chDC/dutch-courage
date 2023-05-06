@@ -27,9 +27,11 @@ import LocationPickerModal from '../components/LocationPickerModal'
 // import GenderPickerModal from '../components/GenderPickerModal'
 import AgeRangePickerModal from '../components/AgeRangePickerModal'
 import MantraModal from '../components/MantraModal'
+import InterestPickerModal from '../components/InterestPickerModal'
 import ImagePickerModal from '../components/ImagePickerModal'
 import ProfileImageViewerModal from '../components/ProfileImageViewerModal'
 import GalleryImageViewerModal from '../components/GalleryImageViewerModal'
+import interests from '../assets/staticData/interests'
 
 const UserProfileEditScreen = () => {
   // Navigation hook
@@ -49,7 +51,15 @@ const UserProfileEditScreen = () => {
 
   // Local State variables
   const [imageUrl, setImageUrl] = useState(meUser?.imageUrl)
-  const [images, setImages] = useState(meUser?.images)
+  const [galleryImage1Url, setGalleryImage1Url] = useState(
+    meUser?.galleryImage1Url
+  )
+  const [galleryImage2Url, setGalleryImage2Url] = useState(
+    meUser?.galleryImage2Url
+  )
+  const [galleryImage3Url, setGalleryImage3Url] = useState(
+    meUser?.galleryImage3Url
+  )
   const [userName, setUserName] = useState(meUser?.userName)
   const [userNameCount, setUserNameCount] = useState(meUser?.userName.length)
   const [mantra, setMantra] = useState(meUser?.mantra)
@@ -68,7 +78,7 @@ const UserProfileEditScreen = () => {
     useState(false)
   const [isImagePickerModalVisible, setIsImagePickerModalVisible] =
     useState(false)
-  // const [isInterestModalVisible, setIsInterestModalVisible] = useState(false)
+  const [isInterestModalVisible, setIsInterestModalVisible] = useState(false)
   const [isLocationModalVisible, setIsLocationModalVisible] = useState(false)
   // const [isGenderModalVisible, setIsGenderModalVisible] = useState(false)
   const [isAgeRangeModalVisible, setIsAgeRangeModalVisible] = useState(false)
@@ -119,7 +129,6 @@ const UserProfileEditScreen = () => {
   }, [
     userName,
     imageUrl,
-    images,
     mantra,
     ageRange,
     gender,
@@ -236,62 +245,62 @@ const UserProfileEditScreen = () => {
     }
   }
 
-  //Function to handle gallery Image Upload
-  const galleryImageUploadHandler = async () => {
-    let uploadedImages = []
-    images.forEach(async (image) => {
-      const formData = new FormData()
-      formData.append('image', {
-        uri: image,
-        type: 'image/jpeg',
-        name: 'image.jpg',
-      })
+  // //Function to handle gallery Image Upload
+  // const galleryImageUploadHandler = async () => {
+  //   let uploadedImages = []
+  //   images.forEach(async (image) => {
+  //     const formData = new FormData()
+  //     formData.append('image', {
+  //       uri: image,
+  //       type: 'image/jpeg',
+  //       name: 'image.jpg',
+  //     })
 
-      try {
-        const config = {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-        if (image) {
-          const extractedFilePath = image.slice(image.lastIndexOf('/') + 1)
-          if (extractedFilePath.startsWith('image')) {
-            const res = await axios.post(
-              BACKEND_URL + '/api/v1/upload/' + `${extractedFilePath}`,
-              formData,
-              config
-            )
-            uploadedImages.push(res.data)
-          } else {
-            const res = await axios.post(
-              BACKEND_URL + '/api/v1/upload',
-              formData,
-              config
-            )
-            uploadedImages.push(res.data)
-          }
-        } else {
-          const res = await axios.post(
-            BACKEND_URL + '/api/v1/upload',
-            formData,
-            config
-          )
-          uploadedImages.push(res.data)
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    })
-    return uploadedImages
-  }
+  //     try {
+  //       const config = {
+  //         headers: {
+  //           'Content-Type': 'multipart/form-data',
+  //         },
+  //       }
+  //       if (image) {
+  //         const extractedFilePath = image.slice(image.lastIndexOf('/') + 1)
+  //         if (extractedFilePath.startsWith('image')) {
+  //           const res = await axios.post(
+  //             BACKEND_URL + '/api/v1/upload/' + `${extractedFilePath}`,
+  //             formData,
+  //             config
+  //           )
+  //           uploadedImages.push(res.data)
+  //         } else {
+  //           const res = await axios.post(
+  //             BACKEND_URL + '/api/v1/upload',
+  //             formData,
+  //             config
+  //           )
+  //           uploadedImages.push(res.data)
+  //         }
+  //       } else {
+  //         const res = await axios.post(
+  //           BACKEND_URL + '/api/v1/upload',
+  //           formData,
+  //           config
+  //         )
+  //         uploadedImages.push(res.data)
+  //       }
+  //     } catch (error) {
+  //       console.log(error)
+  //     }
+  //   })
+  //   return uploadedImages
+  // }
 
   // Logout
-  const handleLogout = () => {
-    dispatch(logout())
-    // dispatch(resetMeUpdateUser())
-    dispatch(resetMeUser())
-    navigation.navigate('Login')
-  }
+  // const handleLogout = () => {
+  //   dispatch(logout())
+  //   // dispatch(resetMeUpdateUser())
+  //   dispatch(resetMeUser())
+  //   navigation.navigate('Login')
+  // }
 
   // Reset user profile update status on unmount
   useEffect(() => {
@@ -340,7 +349,7 @@ const UserProfileEditScreen = () => {
           </TouchableOpacity>
 
           {/* profile image and image picker */}
-          <View className='mt-[-200] mr-4 w-60 h-60 rounded-full bg-[#FCFCFE] flex-row justify-center items-center'>
+          <View className='mt-[-230] mr-4 w-60 h-60 rounded-full bg-[#FCFCFE] flex-row justify-center items-center'>
             <TouchableOpacity
               onPress={() => setIsProfileImageModalVisible(true)}
             >
@@ -368,41 +377,75 @@ const UserProfileEditScreen = () => {
 
           {/* Vertical Images Thumbnails */}
           <View className='absolute h-56 top-10 right-[-10] flex justify-start items-center'>
-            {images?.map((image, idx) => (
+            {galleryImage1Url && (
               <TouchableOpacity
-                key={idx}
                 onPress={() => {
                   setIsGalleryImageModalVisible(true)
                 }}
                 className='mb-2'
               >
-                <View
-                  key={idx}
-                  className='w-12 h-12 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center'
-                >
+                <View className='w-12 h-12 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center'>
                   <Image
                     source={{
-                      uri: image,
+                      uri: galleryImage1Url,
                     }}
                     className='w-10 h-10 rounded-full'
                     resizeMode='cover'
                   />
                 </View>
               </TouchableOpacity>
-            ))}
+            )}
+
+            {galleryImage2Url && (
+              <TouchableOpacity
+                onPress={() => {
+                  setIsGalleryImageModalVisible(true)
+                }}
+                className='mb-2'
+              >
+                <View className='w-12 h-12 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center'>
+                  <Image
+                    source={{
+                      uri: galleryImage2Url,
+                    }}
+                    className='w-10 h-10 rounded-full'
+                    resizeMode='cover'
+                  />
+                </View>
+              </TouchableOpacity>
+            )}
+
+            {galleryImage3Url && (
+              <TouchableOpacity
+                onPress={() => {
+                  setIsGalleryImageModalVisible(true)
+                }}
+                className='mb-2'
+              >
+                <View className='w-12 h-12 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center'>
+                  <Image
+                    source={{
+                      uri: galleryImage3Url,
+                    }}
+                    className='w-10 h-10 rounded-full'
+                    resizeMode='cover'
+                  />
+                </View>
+              </TouchableOpacity>
+            )}
 
             {/* Gallery image viewer modal */}
-            <GalleryImageViewerModal
+            {/* <GalleryImageViewerModal
               isGalleryImageModalVisible={isGalleryImageModalVisible}
               setIsGalleryImageModalVisible={setIsGalleryImageModalVisible}
               images={images}
               setImages={setImages}
               setSelectedProfileImage={setSelectedProfileImage}
-            />
+            /> */}
 
             <TouchableOpacity
               onPress={() => {
-                if (images.length < 3) {
+                if (!galleryImage3Url) {
                   setIsImagePickerModalVisible(true)
                 } else {
                   Toast.show({
@@ -424,8 +467,8 @@ const UserProfileEditScreen = () => {
               isImageChooseModalVisible={isImagePickerModalVisible}
               setIsImageChooseModalVisible={setIsImagePickerModalVisible}
               setSelectedImage={setSelectedGalleryImage}
-              images={images}
-              setImages={setImages}
+              // images={images}
+              // setImages={setImages}
             />
           </View>
 
@@ -526,6 +569,24 @@ const UserProfileEditScreen = () => {
             setLocation={setLocation}
           />
 
+          {/* Interests label */}
+          <View className='flex-row mt-3 justify-center items-center mb-[-5] z-10'>
+            <Text className='text-[#898A8D] text-xs mr-[270]'>Interests</Text>
+          </View>
+
+          {/* Interests */}
+          <View>
+            <TouchableOpacity onPress={() => setIsInterestModalVisible(true)}>
+              <TextInput
+                placeholder='Interests'
+                keyboardType='default'
+                className='bg-black w-80 h-10 flex-row justify-start items-center border-b-2 border-[#22A6B3] text-white text-sm px-1'
+                value={`${topInterests[0]}, ${topInterests[1]}, ${topInterests[2]}`}
+                editable={false}
+              />
+            </TouchableOpacity>
+          </View>
+
           {/* Mantra label */}
           <View className='flex-row mt-3 justify-center items-center mb-[-5] z-10'>
             <Text className='text-[#898A8D] text-xs mr-56'>Your Mantra</Text>
@@ -563,15 +624,6 @@ const UserProfileEditScreen = () => {
             setMantra={setMantra}
             setMantraCount={setMantraCount}
           />
-
-          {/* Logout button */}
-          <View className='flex-row justify-center items-center mt-2'>
-            <TouchableOpacity onPress={() => handleLogout()}>
-              <View className='w-32 h-8 rounded-full bg-[#22A6B3] flex-row justify-center items-center'>
-                <Text className='text-white text-lg font-bold'>Logout</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
         </>
       )}
     </View>

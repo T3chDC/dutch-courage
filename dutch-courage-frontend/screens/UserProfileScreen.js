@@ -40,7 +40,9 @@ const UserProfileScreen = () => {
   // Local State variables
   const [rating, setRating] = useState(5)
   const [imageUrl, setImageUrl] = useState('')
-  const [images, setImages] = useState([])
+  const [galleryImage1Url, setGalleryImage1Url] = useState('')
+  const [galleryImage2Url, setGalleryImage2Url] = useState('')
+  const [galleryImage3Url, setGalleryImage3Url] = useState('')
   const [userName, setUserName] = useState('')
   const [mantra, setMantra] = useState('')
   const [ageRange, setAgeRange] = useState('')
@@ -91,7 +93,9 @@ const UserProfileScreen = () => {
     } else if (isMeGetSuccess) {
       setRating(meUser.rating)
       setImageUrl(meUser.imageUrl)
-      setImages(meUser.images)
+      setGalleryImage1Url(meUser.galleryImage1Url)
+      setGalleryImage2Url(meUser.galleryImage2Url)
+      setGalleryImage3Url(meUser.galleryImage3Url)
       setUserName(meUser.userName)
       setMantra(meUser.mantra)
       setAgeRange(meUser.ageRange)
@@ -162,22 +166,43 @@ const UserProfileScreen = () => {
           )}
 
           {/* Images */}
-          {images.length > 0 && (
+          {galleryImage1Url && (
             <View className='mt-4 w-[100vw] flex-row justify-center items-center'>
-              {images.map((image, idx) => (
-                <View
-                  key={idx}
-                  className='w-11 h-11 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center'
-                >
+              {galleryImage1Url !== '' && (
+                <View className='w-11 h-11 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center'>
                   <Image
                     source={{
-                      uri: image,
+                      uri: galleryImage1Url,
                     }}
                     className='w-10 h-10 rounded-full'
                     resizeMode='cover'
                   />
                 </View>
-              ))}
+              )}
+
+              {galleryImage2Url !== '' && (
+                <View className='w-11 h-11 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center'>
+                  <Image
+                    source={{
+                      uri: galleryImage2Url,
+                    }}
+                    className='w-10 h-10 rounded-full'
+                    resizeMode='cover'
+                  />
+                </View>
+              )}
+
+              {galleryImage3Url !== '' && (
+                <View className='w-11 h-11 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center'>
+                  <Image
+                    source={{
+                      uri: galleryImage3Url,
+                    }}
+                    className='w-10 h-10 rounded-full'
+                    resizeMode='cover'
+                  />
+                </View>
+              )}
             </View>
           )}
 
@@ -231,6 +256,15 @@ const UserProfileScreen = () => {
               railFillBackgroundColor='rgba(34, 166, 179, 0.5)'
               railFillBorderColor='#22A6B3'
             />
+          </View>
+
+          {/* Logout button */}
+          <View className='flex-row justify-center items-center mt-2'>
+            <TouchableOpacity onPress={() => handleLogout()}>
+              <View className='w-32 h-8 rounded-full bg-[#22A6B3] flex-row justify-center items-center'>
+                <Text className='text-white text-lg font-bold'>Logout</Text>
+              </View>
+            </TouchableOpacity>
           </View>
 
           {/* Chat and User Profile Icons */}
