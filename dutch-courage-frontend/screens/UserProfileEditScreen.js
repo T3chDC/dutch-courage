@@ -178,6 +178,17 @@ const UserProfileEditScreen = () => {
     //     dispatch(updateMeUser(updatedUser))
     //   })
     // }
+    else {
+      const updatedUser = {
+        userName,
+        mantra,
+        ageRange,
+        gender,
+        location,
+        topInterests,
+      }
+      dispatch(updateMeUser(updatedUser))
+    }
   }
 
   //Function to handle profile Image Upload
