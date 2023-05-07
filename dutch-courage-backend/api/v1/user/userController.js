@@ -66,6 +66,10 @@ export const updateMe = catchAsync(async (req, res, next) => {
     runValidators: true,
   })
 
+  if (!updatedUser) {
+    return next(new AppError('No user found with that ID', 404))
+  }
+
   res.status(200).json({
     status: 'success',
     data: updatedUser,
