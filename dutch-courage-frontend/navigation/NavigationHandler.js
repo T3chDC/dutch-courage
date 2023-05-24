@@ -14,6 +14,7 @@ import PasswordResetScreen from '../screens/PasswordResetScreen'
 import BlankProfileScreen from '../screens/BlankProfileScreen'
 import UserProfileScreen from '../screens/UserProfileScreen'
 import UserProfileEditScreen from '../screens/UserProfileEditScreen'
+import InboxScreen from '../screens/InboxScreen'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { getInitialState } from '../features/auth/authSlice'
@@ -95,6 +96,15 @@ const NavigationHandler = () => {
           <Stack.Screen
             name='UserProfile'
             component={UserProfileScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+
+          {/* Inbox Screen */}
+          <Stack.Screen
+            name='UserInbox'
+            component={InboxScreen}
             options={{
               headerShown: false,
             }}
