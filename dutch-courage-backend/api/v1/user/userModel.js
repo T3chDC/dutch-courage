@@ -1,6 +1,6 @@
 /* This file contains the data modelling and data tier fuinctionalities for users */
 
-import mongoose from 'mongoose' //import mongoose from
+import mongoose from 'mongoose' //import mongoose 
 import bcrypt from 'bcryptjs' //import bcrypt for password hashing
 import validator from 'validator' //imprt validator functionalities
 import crypto from 'crypto' //imprt crypto library for token hashing
