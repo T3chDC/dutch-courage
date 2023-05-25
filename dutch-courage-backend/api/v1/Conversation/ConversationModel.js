@@ -1,4 +1,4 @@
-/* This file contains the data modelling and data tier fuinctionalities for conversations */
+/* This file contains the data modelling and data tier for conversations */
 
 import mongoose from 'mongoose' //import mongoose
 
