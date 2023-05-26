@@ -5,16 +5,20 @@ import mongoose from 'mongoose' //import mongoose
 //create a conversation schema
 const conversationSchema = new mongoose.Schema(
   {
-    participants: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        required: [
-          true,
-          'there must be at least one participant in a conversation',
-        ],
-        ref: 'User',
+    participants: {
+      type: [mongoose.Schema.Types.ObjectId],
+      required: [
+        true,
+        'there must be at least one participant in a conversation',
+      ],
+      validate: {
+        validator: function (val) {
+          return val.length > 0
+        },
+        message: 'there must be at least one participant in a conversation',
       },
-    ],
+      ref: 'User',
+    },
   },
   {
     timestamps: true,
