@@ -39,18 +39,20 @@ router.route('/forgotPassword').post(forgotPassword) //route to handle forgot pa
 router.route('/checkPasswordResetOTP').post(checkPasswordResetOTP) //route to handle forgot password
 router.route('/resetPassword').post(resetPassword) //route to handle forgot password
 
-router.route('/getMe').get(protect, getMe, getUser) //route to get profile information
-router.route('/updateMe').patch(protect, updateMe) //route to handle profile information update by user
-router.route('/deleteMe').delete(protect, deleteMe) //route to handle profile deletion by user
+router.route('/getMe').get(protect, restrictTo('regularUser'), getMe, getUser) //route to get profile information
+router.route('/updateMe').patch(protect, restrictTo('regularUser'), updateMe) //route to handle profile information update by user
+router.route('/deleteMe').delete(protect, restrictTo('regularUser'), deleteMe) //route to handle profile deletion by user
 
 //base CRUD functionality for admin only
-// router.use(protect, restrictTo('admin'))
-router.route('/').get(getAllUsers).post(createUser)
+router
+  .route('/')
+  .get(protect, restrictTo('adminUser'), getAllUsers)
+  .post(protect, restrictTo('adminUser'), createUser)
 router
   .route('/:id')
-  .get(getUser)
-  .patch(updateUser)
-  .put(updateUser)
-  .delete(deleteUser)
+  .get(protect, restrictTo('adminUser'), getUser)
+  .patch(protect, restrictTo('adminUser'), updateUser)
+  .put(protect, restrictTo('adminUser'), updateUser)
+  .delete(protect, restrictTo('adminUser'), deleteUser)
 
 export default router

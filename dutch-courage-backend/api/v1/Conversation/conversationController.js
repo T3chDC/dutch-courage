@@ -23,7 +23,7 @@ export const createConversation = createOne(Conversation)
 
 export const getAllConversationsOfUser = catchAsync(async (req, res, next) => {
   const doc = await Conversation.find({
-    participants: { $in: [req.params.userId] },
+    participants: { $in: [req.user._id] },
   })
 
   if (!doc) {
