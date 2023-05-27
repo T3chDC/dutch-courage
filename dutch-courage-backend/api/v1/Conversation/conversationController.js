@@ -22,15 +22,15 @@ export const createConversation = createOne(Conversation)
 // @access  Private/regularUser
 export const deleteConversation = deleteOne(Conversation)
 
-// @desc    Get all conversations of a specific user
-// @route   GET /api/v1/connversations/:userId
+// @desc    Get all conversations of logged in user
+// @route   GET /api/v1/connversations/getMyConversations
 // @access  Private/regularUser
 export const getAllConversationsOfUser = catchAsync(async (req, res, next) => {
-  const doc = await Conversation.find({
+  const conversations = await Conversation.find({
     participants: { $in: [req.user._id] },
   })
 
-  if (!doc) {
+  if (!conversations) {
     return next(
       new AppError(
         `No Conversations found for user with id ${req.params.userId}`,
@@ -41,6 +41,6 @@ export const getAllConversationsOfUser = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: 'success',
-    data: doc,
+    data: conversations,
   })
 })

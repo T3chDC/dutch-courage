@@ -34,7 +34,7 @@ const messageSchema = new mongoose.Schema(
       ],
     },
 
-    imageUrl: {
+    messageImageUrl: {
       type: String,
       required: [
         function () {
