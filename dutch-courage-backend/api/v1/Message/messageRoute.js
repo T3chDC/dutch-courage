@@ -10,7 +10,7 @@ import { protect, restrictTo } from '../common/authController.js' //import Auth 
 
 const router = express.Router() //create router instance
 
-router.use(protect, restrictTo('regularUser')) //protect all routes after this middleware
+// router.use(protect, restrictTo('regularUser')) //protect all routes after this middleware
 router.route('/').post(createMessage) //route to create a message
 router.route('/:id').delete(deleteMessage) //route to delete a message
 

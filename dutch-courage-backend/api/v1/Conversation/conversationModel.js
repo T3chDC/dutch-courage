@@ -22,6 +22,8 @@ const conversationSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 )
 
@@ -32,6 +34,13 @@ conversationSchema.pre(/^find/, function (next) {
     select: 'userName imageUrl',
   })
   next()
+})
+
+//create a virtual field for the messages in a conversation
+conversationSchema.virtual('messages', {
+  ref: 'Message',
+  foreignField: 'conversationId',
+  localField: '_id',
 })
 
 //create a conversation model

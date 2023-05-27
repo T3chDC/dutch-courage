@@ -44,3 +44,27 @@ export const getAllConversationsOfUser = catchAsync(async (req, res, next) => {
     data: conversations,
   })
 })
+
+// @desc    Get a specific conversation by id with all messages
+// @route   GET /api/v1/connversations/:id
+// @access  Private/regularUser
+export const getConversation = catchAsync(async (req, res, next) => {
+  const conversation = await Conversation.findById(req.params.id).populate(
+    'messages',
+    'sender messageType message messageImageUrl createdAt'
+  )
+
+  if (!conversation) {
+    return next(
+      new AppError(
+        `No Conversation found with id ${req.params.id} for user with id ${req.user._id}`,
+        404
+      )
+    )
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: conversation,
+  })
+})
