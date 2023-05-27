@@ -20,7 +20,6 @@ export const createConversation = createOne(Conversation)
 // @desc    Get all conversations of a specific user
 // @route   GET /api/v1/connversations/:userId
 // @access  Private/user
-
 export const getAllConversationsOfUser = catchAsync(async (req, res, next) => {
   const doc = await Conversation.find({
     participants: { $in: [req.user._id] },
