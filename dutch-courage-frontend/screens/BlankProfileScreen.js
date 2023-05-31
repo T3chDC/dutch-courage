@@ -110,7 +110,7 @@ const BlankProfileScreen = () => {
         visibilityTime: 3000,
       })
       dispatch(resetMeUpdateUser())
-      navigation.navigate('UserProfile')
+      navigation.replace('UserProfile')
     }
   }, [isMeUpdateError, isMeUpdateSuccess, meUpdateErrorMessage, dispatch])
 
