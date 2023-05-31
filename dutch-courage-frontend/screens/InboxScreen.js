@@ -34,8 +34,8 @@ const InboxScreen = () => {
             </View>
 
             {/* Messages On Inbox /> */}
-            <View className='mt-[15]  mx-[5] flex-row'>
-                <View className='w-[60] flex-row'>
+            <View className='mt-[15] flex flex-row'>
+                <View className='w-[60] flex-col'>
                     <View className='w-[42] h-[40] rounded-full bg-[#FCFCFE] justify-center items-center'>
                         <Image
                             source='https://w0.peakpx.com/wallpaper/979/89/HD-wallpaper-purple-smile-design-eye-smily-profile-pic-face-thumbnail.jpg'
@@ -44,27 +44,28 @@ const InboxScreen = () => {
                         />
                     </View>
                 </View>
-
                 <View>
-                    <View className='w-[180] flex-row'>
-                        <View className='w-[240] flex-row'>
-                            <Text className='text-white font-bold'>Khonshu</Text>
+                    <View className='flex flex-row'>
+                        <View className='w-[220] flex flex-col'>
+                            <View>
+                                <Text className='text-white font-bold'>Khonshu</Text>
+                            </View>
+                            <View className='mt-1'>
+                                <Text className='text-white text-xs'>Your souls belongs to me</Text>
+                            </View>
                         </View>
-                        <View className='w-[80] flex-row'>
-                            <Text className='text-white text-xs text-[#22A6B3]'>16:31</Text>
+
+                        <View className='w-[70] flex flex-col'>
+                            <Text className='text-white text-xs text-right text-[#22A6B3]'>16:01</Text>
                         </View>
                     </View>
-                    <View className='w-[180] flex-row mt-1'>
-                        <Text className='text-white text-xs'>Your souls belongs to me</Text>
-                    </View>
-                    <View className='mt-3 h-[1] w-[300] bg-[#22A6B3]'>
+                    <View className='flex flex-row mt-3 h-[1] w-[300] bg-[#22A6B3]'>
                     </View>
                 </View>
-
             </View>
 
-            <View className='mt-[15]  mx-[5] flex-row'>
-                <View className='w-[60] flex-row'>
+            <View className='mt-[15] flex flex-row'>
+                <View className='w-[60] flex-col'>
                     <View className='w-[42] h-[40] rounded-full bg-[#FCFCFE] justify-center items-center'>
                         <Image
                             source='https://w0.peakpx.com/wallpaper/979/89/HD-wallpaper-purple-smile-design-eye-smily-profile-pic-face-thumbnail.jpg'
@@ -73,27 +74,28 @@ const InboxScreen = () => {
                         />
                     </View>
                 </View>
-
                 <View>
-                    <View className='w-[180] flex-row'>
-                        <View className='w-[240] flex-row'>
-                            <Text className='text-white font-bold'>Thor</Text>
+                    <View className='flex flex-row'>
+                        <View className='w-[220] flex flex-col'>
+                            <View>
+                                <Text className='text-white font-bold'>Thor</Text>
+                            </View>
+                            <View className='mt-1'>
+                                <Text className='text-white text-xs'>You stole my hammer, where is it?</Text>
+                            </View>
                         </View>
-                        <View className='w-[80] flex-row'>
-                            <Text className='text-white text-xs text-end text-[#808080]'>Yesterday</Text>
+
+                        <View className='w-[70] flex flex-col'>
+                            <Text className='text-white text-xs text-right text-[#808080]'>Yesterday</Text>
                         </View>
                     </View>
-                    <View className='w-[180] flex-row mt-1'>
-                        <Text className='text-white text-xs'>You stole my hammer, where is it?</Text>
-                    </View>
-                    <View className='mt-3 h-[1] w-[300] bg-[#22A6B3]'>
+                    <View className='flex flex-row mt-3 h-[1] w-[300] bg-[#22A6B3]'>
                     </View>
                 </View>
-
             </View>
 
-            <View className='mt-[15]  mx-[5] flex-row'>
-                <View className='w-[60] flex-row'>
+            <View className='mt-[15] flex flex-row'>
+                <View className='w-[60] flex-col'>
                     <View className='w-[42] h-[40] rounded-full bg-[#FCFCFE] justify-center items-center'>
                         <Image
                             source='https://w0.peakpx.com/wallpaper/979/89/HD-wallpaper-purple-smile-design-eye-smily-profile-pic-face-thumbnail.jpg'
@@ -102,27 +104,28 @@ const InboxScreen = () => {
                         />
                     </View>
                 </View>
-
                 <View>
-                    <View className='w-[180] flex-row'>
-                        <View className='w-[240] flex-row'>
-                            <Text className='text-white font-bold'>Captain America</Text>
+                    <View className='flex flex-row'>
+                        <View className='w-[220] flex flex-col'>
+                            <View>
+                                <Text className='text-white font-bold'>Captain America</Text>
+                            </View>
+                            <View className='mt-1'>
+                                <Text className='text-white text-xs'>I don't know what you're talking about</Text>
+                            </View>
                         </View>
-                        <View className='w-[80] flex-row'>
-                            <Text className='text-white text-xs text-end text-[#808080]'>Saturday</Text>
+
+                        <View className='w-[70] flex flex-col'>
+                            <Text className='text-white text-xs text-right text-[#808080]'>Saturday</Text>
                         </View>
                     </View>
-                    <View className='w-[180] flex-row mt-1'>
-                        <Text className='text-white text-xs'>I don't know what you're talking about</Text>
-                    </View>
-                    <View className='mt-3 h-[1] w-[300] bg-[#22A6B3]'>
+                    <View className='flex flex-row mt-3 h-[1] w-[300] bg-[#22A6B3]'>
                     </View>
                 </View>
-
             </View>
 
-            <View className='mt-[15]  mx-[5] flex-row'>
-                <View className='w-[60] flex-row'>
+            <View className='mt-[15] flex flex-row'>
+                <View className='w-[60] flex-col'>
                     <View className='w-[42] h-[40] rounded-full bg-[#FCFCFE] justify-center items-center'>
                         <Image
                             source='https://w0.peakpx.com/wallpaper/979/89/HD-wallpaper-purple-smile-design-eye-smily-profile-pic-face-thumbnail.jpg'
@@ -131,25 +134,26 @@ const InboxScreen = () => {
                         />
                     </View>
                 </View>
-
                 <View>
-                    <View className='w-[180] flex-row'>
-                        <View className='w-[240] flex-row'>
-                            <Text className='text-white font-bold'>Iron Man</Text>
+                    <View className='flex flex-row'>
+                        <View className='w-[220] flex flex-col'>
+                            <View>
+                                <Text className='text-white font-bold'>Iron Man</Text>
+                            </View>
+                            <View className='mt-1'>
+                                <Text className='text-white text-xs'>I am iron man, Live in Uganda</Text>
+                            </View>
                         </View>
-                        <View className='w-[80] flex-row'>
-                            <Text className='text-white text-xs text-end text-[#808080]'>21/04/2023</Text>
+
+                        <View className='w-[70] flex flex-col'>
+                            <Text className='text-white text-xs text-right text-[#808080]'>21/04/2023</Text>
                         </View>
                     </View>
-                    <View className='w-[180] flex-row mt-1'>
-                        <Text className='text-white text-xs'>I am iron man, Live in Uganda</Text>
-                    </View>
-                    <View className='mt-3 h-[1] w-[300] bg-[#22A6B3]'>
+                    <View className='flex flex-row mt-3 h-[1] w-[300] bg-[#22A6B3]'>
                     </View>
                 </View>
-
             </View>
-            
+
         </View>
     )
 }
