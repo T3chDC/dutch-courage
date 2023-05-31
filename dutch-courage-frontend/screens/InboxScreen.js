@@ -111,7 +111,7 @@ const InboxScreen = () => {
                                 <Text className='text-white font-bold'>Captain America</Text>
                             </View>
                             <View className='mt-1'>
-                                <Text className='text-white text-xs'>I don't know what you're talking about</Text>
+                                <Text className='text-white text-xs'>I don't know what you're talking about.</Text>
                             </View>
                         </View>
 
