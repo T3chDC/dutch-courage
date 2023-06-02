@@ -109,11 +109,6 @@ const UserProfileEditScreen = () => {
             dispatch(resetMeUpdateUser())
           },
         },
-        {
-          text: 'YES',
-          onPress: async () => updateUserHandler(),
-          // navigation.goBack(),
-        },
       ],
       { cancelable: false }
     )

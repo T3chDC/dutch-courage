@@ -14,6 +14,18 @@ import SwipeButton from 'rn-swipe-button'
 
 const InboxScreen = () => {
 
+    // Navigation hook
+    const navigation = useNavigation()
+    // Redux Dispatch hook
+    const dispatch = useDispatch()
+
+    // Functionality when user is trying togo back to profile screen
+    const backAction = () => {
+        navigation.goBack()
+    }
+
+
+
     return (
         <View className='bg-black flex-1 justify-start items-center relative'>
             <TouchableOpacity
@@ -56,7 +68,7 @@ const InboxScreen = () => {
                         </View>
 
                         <View className='w-[70] flex flex-col'>
-                            <Text className='text-white text-xs text-right text-[#22A6B3]'>16:01</Text>
+                            <Text className='text-white text-xs text-right text-[#22A6B3]'>16:31</Text>
                         </View>
                     </View>
                     <View className='flex flex-row mt-3 h-[1] w-[300] bg-[#22A6B3]'>
