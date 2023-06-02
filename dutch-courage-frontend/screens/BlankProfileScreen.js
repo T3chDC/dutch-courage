@@ -168,8 +168,39 @@ const BlankProfileScreen = () => {
 
   // Function to update user information
   const updateUserHandler = async () => {
-    if (selectedImage) {
-      imageUploadHandler().then((res) => {
+    if (
+      !userName ||
+      !mantra ||
+      !ageRange ||
+      !gender ||
+      !location ||
+      topInterests.length < 3 ||
+      !selectedImage
+    ) {
+      Toast.show({
+        type: 'error',
+        text1: 'Please fill all the fields and add a profile picture',
+        visibilityTime: 3000,
+      })
+      return
+    } else {
+      if (selectedImage) {
+        imageUploadHandler().then((res) => {
+          dispatch(
+            updateMeUser({
+              userName,
+              mantra,
+              ageRange,
+              gender,
+              location,
+              topInterests,
+              imageUrl: res,
+              newUser: false,
+            })
+          )
+          dispatch(changeNewUser())
+        })
+      } else {
         dispatch(
           updateMeUser({
             userName,
@@ -178,25 +209,11 @@ const BlankProfileScreen = () => {
             gender,
             location,
             topInterests,
-            imageUrl: res,
             newUser: false,
           })
         )
         dispatch(changeNewUser())
-      })
-    } else {
-      dispatch(
-        updateMeUser({
-          userName,
-          mantra,
-          ageRange,
-          gender,
-          location,
-          topInterests,
-          newUser: false,
-        })
-      )
-      dispatch(changeNewUser())
+      }
     }
   }
 
