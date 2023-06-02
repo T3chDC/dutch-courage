@@ -70,7 +70,7 @@ const ForgotPasswordScreen = () => {
 
   useEffect(() => {
     const backAction = () => {
-      navigation.navigate('Login')
+      navigation.goBack()
       return true
     }
     const backHandler = BackHandler.addEventListener(

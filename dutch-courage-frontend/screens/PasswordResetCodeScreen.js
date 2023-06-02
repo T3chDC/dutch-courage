@@ -76,7 +76,7 @@ const PasswordResetCodeScreen = () => {
 
   useEffect(() => {
     const backAction = () => {
-      navigation.navigate('ForgotPassword')
+      navigation.goBack()
       return true
     }
 
