@@ -50,14 +50,6 @@ const NavigationHandler = () => {
               headerShown: false,
             }}
           />
-          {/* Sign Up Screen */}
-          <Stack.Screen
-            name='SignUp'
-            component={SignUpScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
           {/* Forgot Password Screen */}
           <Stack.Screen
             name='ForgotPassword'
@@ -82,6 +74,16 @@ const NavigationHandler = () => {
               headerShown: false,
             }}
           />
+          
+          {/* Sign Up Screen */}
+          <Stack.Screen
+            name='SignUp'
+            component={SignUpScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          
 
           {/* Blank Profile Screen */}
           <Stack.Screen
