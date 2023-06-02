@@ -15,6 +15,7 @@ import BlankProfileScreen from '../screens/BlankProfileScreen'
 import UserProfileScreen from '../screens/UserProfileScreen'
 import UserProfileEditScreen from '../screens/UserProfileEditScreen'
 import InboxScreen from '../screens/InboxScreen'
+import ConversationScreen from '../screens/ConversationScreen'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { getInitialState } from '../features/auth/authSlice'
@@ -100,6 +101,14 @@ const NavigationHandler = () => {
               headerShown: false,
             }}
           />
+          {/* User Profile Edit Screen */}
+          <Stack.Screen
+            name='UserProfileEdit'
+            component={UserProfileEditScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
 
           {/* Inbox Screen */}
           <Stack.Screen
@@ -110,14 +119,15 @@ const NavigationHandler = () => {
             }}
           />
 
-          {/* User Profile Edit Screen */}
+          {/* Conversation Screen */}
           <Stack.Screen
-            name='UserProfileEdit'
-            component={UserProfileEditScreen}
+            name='Conversation'
+            component={ConversationScreen}
             options={{
               headerShown: false,
             }}
           />
+
         </Stack.Navigator>
       </NavigationContainer>
       <StatusBar style='light' />

@@ -46,36 +46,46 @@ const InboxScreen = () => {
             </View>
 
             {/* Messages On Inbox /> */}
-            <View className='mt-[15] flex flex-row'>
-                <View className='w-[60] flex-col'>
-                    <View className='w-[42] h-[40] rounded-full bg-[#FCFCFE] justify-center items-center'>
-                        <Image
-                            source='https://w0.peakpx.com/wallpaper/979/89/HD-wallpaper-purple-smile-design-eye-smily-profile-pic-face-thumbnail.jpg'
-                            className='w-10 h-10 rounded-full'
-                            resizeMode='cover'
-                        />
-                    </View>
-                </View>
-                <View>
-                    <View className='flex flex-row'>
-                        <View className='w-[220] flex flex-col'>
-                            <View>
-                                <Text className='text-white font-bold'>Khonshu</Text>
-                            </View>
-                            <View className='mt-1'>
-                                <Text className='text-white text-xs'>Your souls belongs to me</Text>
-                            </View>
-                        </View>
+            <TouchableOpacity
+                onPress={() => navigation.navigate('Conversation')}
+            >
+                <View className='mt-[15] flex flex-row'>
 
-                        <View className='w-[70] flex flex-col'>
-                            <Text className='text-white text-xs text-right text-[#22A6B3]'>16:31</Text>
+                    <View className='w-[60] flex-col'>
+                        <View className='w-[42] h-[40] rounded-full bg-[#FCFCFE] justify-center items-center'>
+                            <Image
+                                source='https://w0.peakpx.com/wallpaper/979/89/HD-wallpaper-purple-smile-design-eye-smily-profile-pic-face-thumbnail.jpg'
+                                className='w-10 h-10 rounded-full'
+                                resizeMode='cover'
+                            />
                         </View>
                     </View>
-                    <View className='flex flex-row mt-3 h-[1] w-[300] bg-[#22A6B3]'>
-                    </View>
-                </View>
-            </View>
+                    <View>
+                        <View className='flex flex-row'>
+                            <View className='w-[220] flex flex-col'>
+                                <View>
+                                    <Text className='text-white font-bold'>Khonshu</Text>
+                                </View>
+                                <View className='mt-1'>
+                                    <Text className='text-white text-xs'>Your souls belongs to me</Text>
+                                </View>
+                            </View>
 
+                            <View className='w-[70] flex flex-col'>
+                                <Text className='text-white text-xs text-right text-[#22A6B3]'>16:31</Text>
+                            </View>
+                        </View>
+                        <View className='flex flex-row mt-3 h-[1] w-[300] bg-[#22A6B3]'>
+                        </View>
+                    </View>
+
+                </View>
+                </TouchableOpacity>
+
+
+            <TouchableOpacity
+                onPress={() => navigation.navigate('Conversation')}
+            >
             <View className='mt-[15] flex flex-row'>
                 <View className='w-[60] flex-col'>
                     <View className='w-[42] h-[40] rounded-full bg-[#FCFCFE] justify-center items-center'>
@@ -104,8 +114,13 @@ const InboxScreen = () => {
                     <View className='flex flex-row mt-3 h-[1] w-[300] bg-[#22A6B3]'>
                     </View>
                 </View>
-            </View>
+                </View>
+                </TouchableOpacity>
 
+
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('Conversation')}
+                >
             <View className='mt-[15] flex flex-row'>
                 <View className='w-[60] flex-col'>
                     <View className='w-[42] h-[40] rounded-full bg-[#FCFCFE] justify-center items-center'>
@@ -135,7 +150,12 @@ const InboxScreen = () => {
                     </View>
                 </View>
             </View>
+            </TouchableOpacity>
 
+
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate('Conversation')}
+                    >
             <View className='mt-[15] flex flex-row'>
                 <View className='w-[60] flex-col'>
                     <View className='w-[42] h-[40] rounded-full bg-[#FCFCFE] justify-center items-center'>
@@ -165,6 +185,7 @@ const InboxScreen = () => {
                     </View>
                 </View>
             </View>
+            </TouchableOpacity>
 
         </View>
     )
