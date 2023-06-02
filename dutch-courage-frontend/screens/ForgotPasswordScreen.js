@@ -3,6 +3,7 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
+  BackHandler,
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -67,6 +68,17 @@ const ForgotPasswordScreen = () => {
     }
   }
 
+  useEffect(() => {
+    const backAction = () => {
+      navigation.navigate('Login')
+      return true
+    }
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction
+    )
+    return () => backHandler.remove()
+  }, [])
 
   return (
     <SafeAreaView className='bg-black flex-1 justify-start items-center'>

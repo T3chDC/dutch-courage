@@ -1,4 +1,10 @@
-import { View, Text, TouchableOpacity, TextInput } from 'react-native'
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  BackHandler,
+} from 'react-native'
 import React, { useEffect, useState, useRef } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useRoute, useNavigation } from '@react-navigation/native'
@@ -67,6 +73,20 @@ const PasswordResetCodeScreen = () => {
       })
     }
   }
+
+  useEffect(() => {
+    const backAction = () => {
+      navigation.navigate('ForgotPassword')
+      return true
+    }
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction
+    )
+
+    return () => backHandler.remove()
+  }, [])
 
   return (
     <SafeAreaView className='bg-black flex-1 justify-start items-center'>
