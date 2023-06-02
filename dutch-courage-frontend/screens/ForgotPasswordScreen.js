@@ -1,4 +1,9 @@
-import { View, Text, TouchableOpacity, TextInput } from 'react-native'
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+} from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useRoute, useNavigation } from '@react-navigation/native'
@@ -61,6 +66,7 @@ const ForgotPasswordScreen = () => {
       })
     }
   }
+
 
   return (
     <SafeAreaView className='bg-black flex-1 justify-start items-center'>

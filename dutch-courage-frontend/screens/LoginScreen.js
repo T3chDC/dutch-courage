@@ -87,9 +87,9 @@ const LoginScreen = () => {
 
   useEffect(() => {
     if (userInfo && userInfo.newUser) {
-      navigation.navigate('BlankProfile')
+      navigation.replace('BlankProfile')
     } else if (userInfo && !userInfo.newUser) {
-      navigation.navigate('UserProfile')
+      navigation.replace('UserProfile')
     }
   }, [userInfo, navigation])
 

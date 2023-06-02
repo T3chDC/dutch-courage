@@ -38,23 +38,15 @@ const NavigationHandler = () => {
   return (
     <>
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator initialRouteName='InitialLoader'>
           {/*Screens*/}
 
           {/* Home screen */}
-          <Stack.Screen name='InitialLoaader' component={InitialLoaderScreen} />
+          <Stack.Screen name='InitialLoader' component={InitialLoaderScreen} />
           {/* Login screen */}
           <Stack.Screen
             name='Login'
             component={LoginScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          {/* Sign Up Screen */}
-          <Stack.Screen
-            name='SignUp'
-            component={SignUpScreen}
             options={{
               headerShown: false,
             }}
@@ -83,6 +75,16 @@ const NavigationHandler = () => {
               headerShown: false,
             }}
           />
+
+          {/* Sign Up Screen */}
+          <Stack.Screen
+            name='SignUp'
+            component={SignUpScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          
 
           {/* Blank Profile Screen */}
           <Stack.Screen
