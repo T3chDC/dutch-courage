@@ -109,6 +109,12 @@ const UserProfileEditScreen = () => {
             dispatch(resetMeUpdateUser())
           },
         },
+        {
+          text: 'Save Changes',
+          onPress: () => {
+            updateUserHandler()
+          },
+        }
       ],
       { cancelable: false }
     )

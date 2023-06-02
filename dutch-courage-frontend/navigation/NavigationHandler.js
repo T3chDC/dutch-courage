@@ -37,11 +37,11 @@ const NavigationHandler = () => {
   return (
     <>
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator initialRouteName='InitialLoader'>
           {/*Screens*/}
 
           {/* Home screen */}
-          <Stack.Screen name='InitialLoaader' component={InitialLoaderScreen} />
+          <Stack.Screen name='InitialLoader' component={InitialLoaderScreen} />
           {/* Login screen */}
           <Stack.Screen
             name='Login'
@@ -74,7 +74,7 @@ const NavigationHandler = () => {
               headerShown: false,
             }}
           />
-          
+
           {/* Sign Up Screen */}
           <Stack.Screen
             name='SignUp'
