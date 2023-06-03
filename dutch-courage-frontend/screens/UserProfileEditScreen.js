@@ -60,6 +60,11 @@ const UserProfileEditScreen = () => {
   const [galleryImage3Url, setGalleryImage3Url] = useState(
     meUser?.galleryImage3Url
   )
+  const [images, setImages] = useState([
+    galleryImage1Url ? galleryImage1Url : null,
+    galleryImage2Url ? galleryImage2Url : null,
+    galleryImage3Url ? galleryImage3Url : null,
+  ])
   const [userName, setUserName] = useState(meUser?.userName)
   const [userNameCount, setUserNameCount] = useState(meUser?.userName.length)
   const [mantra, setMantra] = useState(meUser?.mantra)
@@ -83,6 +88,26 @@ const UserProfileEditScreen = () => {
   // const [isGenderModalVisible, setIsGenderModalVisible] = useState(false)
   const [isAgeRangeModalVisible, setIsAgeRangeModalVisible] = useState(false)
   const [isMantraModalVisible, setIsMantraModalVisible] = useState(false)
+
+  // function to change the url of the gallery images
+  const changeGalleryImages = (imageUrls) => {
+    imageUrls.length === 3
+      ? (setGalleryImage1Url(imageUrls[0]),
+        setGalleryImage2Url(imageUrls[1]),
+        setGalleryImage3Url(imageUrls[2]))
+      : imageUrls.length === 2
+      ? (setGalleryImage1Url(imageUrls[0]),
+        setGalleryImage2Url(imageUrls[1]),
+        setGalleryImage3Url(null))
+      : imageUrls.length === 1
+      ? (setGalleryImage1Url(imageUrls[0]),
+        setGalleryImage2Url(null),
+        setGalleryImage3Url(null))
+      : (setGalleryImage1Url(null),
+        setGalleryImage2Url(null),
+        setGalleryImage3Url(null))
+    setImages(imageUrls)
+  }
 
   // Check if user is logged in
   useEffect(() => {
@@ -114,7 +139,7 @@ const UserProfileEditScreen = () => {
           onPress: () => {
             updateUserHandler()
           },
-        }
+        },
       ],
       { cancelable: false }
     )
@@ -173,22 +198,7 @@ const UserProfileEditScreen = () => {
         }
         dispatch(updateMeUser(updatedUser))
       })
-    }
-    // if (selectedGalleryImage) {
-    //   galleryImageUploadHandler().then((res) => {
-    //     const updatedUser = {
-    //       userName,
-    //       images: res,
-    //       mantra,
-    //       ageRange,
-    //       gender,
-    //       location,
-    //       topInterests,
-    //     }
-    //     dispatch(updateMeUser(updatedUser))
-    //   })
-    // }
-    else {
+    } else {
       const updatedUser = {
         userName,
         mantra,
@@ -245,55 +255,6 @@ const UserProfileEditScreen = () => {
       console.log(error)
     }
   }
-
-  // //Function to handle gallery Image Upload
-  // const galleryImageUploadHandler = async () => {
-  //   let uploadedImages = []
-  //   images.forEach(async (image) => {
-  //     const formData = new FormData()
-  //     formData.append('image', {
-  //       uri: image,
-  //       type: 'image/jpeg',
-  //       name: 'image.jpg',
-  //     })
-
-  //     try {
-  //       const config = {
-  //         headers: {
-  //           'Content-Type': 'multipart/form-data',
-  //         },
-  //       }
-  //       if (image) {
-  //         const extractedFilePath = image.slice(image.lastIndexOf('/') + 1)
-  //         if (extractedFilePath.startsWith('image')) {
-  //           const res = await axios.post(
-  //             BACKEND_URL + '/api/v1/upload/' + `${extractedFilePath}`,
-  //             formData,
-  //             config
-  //           )
-  //           uploadedImages.push(res.data)
-  //         } else {
-  //           const res = await axios.post(
-  //             BACKEND_URL + '/api/v1/upload',
-  //             formData,
-  //             config
-  //           )
-  //           uploadedImages.push(res.data)
-  //         }
-  //       } else {
-  //         const res = await axios.post(
-  //           BACKEND_URL + '/api/v1/upload',
-  //           formData,
-  //           config
-  //         )
-  //         uploadedImages.push(res.data)
-  //       }
-  //     } catch (error) {
-  //       console.log(error)
-  //     }
-  //   })
-  //   return uploadedImages
-  // }
 
   // Logout
   // const handleLogout = () => {
@@ -436,13 +397,13 @@ const UserProfileEditScreen = () => {
             )}
 
             {/* Gallery image viewer modal */}
-            {/* <GalleryImageViewerModal
+            <GalleryImageViewerModal
               isGalleryImageModalVisible={isGalleryImageModalVisible}
               setIsGalleryImageModalVisible={setIsGalleryImageModalVisible}
-              images={images}
-              setImages={setImages}
+                images={images}
+                changeGalleryImages={changeGalleryImages}
               setSelectedProfileImage={setSelectedProfileImage}
-            /> */}
+            />
 
             <TouchableOpacity
               onPress={() => {

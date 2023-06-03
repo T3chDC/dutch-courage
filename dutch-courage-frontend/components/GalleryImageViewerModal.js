@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native'
+import { View, Text, Image, TouchableOpacity, Alert } from 'react-native'
 import Modal from 'react-native-modal'
 import React, { useState } from 'react'
 import Swiper from 'react-native-swiper'
@@ -7,9 +7,10 @@ const GalleryImageViewerModal = ({
   isGalleryImageModalVisible,
   setIsGalleryImageModalVisible,
   images,
-  setImages,
+  changeGalleryImages,
   setSelectedProfileImage,
 }) => {
+  console.log(images)
   return (
     <Modal
       animationIn={'slideInUp'}
@@ -25,7 +26,7 @@ const GalleryImageViewerModal = ({
       <View className='flex-1 justify-center items-center'>
         {/* Image swiper */}
         <Swiper
-          style={{ height: 600 }}
+          style={{ height: 800 }}
           showsButtons={true}
           showsPagination={false}
           loop={false}
@@ -51,7 +52,27 @@ const GalleryImageViewerModal = ({
               {/* Delete Image Button */}
               <TouchableOpacity
                 onPress={() => {
-                  setImages(images.filter((img) => img !== image))
+                  Alert.alert(
+                    'Are you sure you want to delete this image?',
+                    'This action cannot be undone',
+                    [
+                      {
+                        text: 'Cancel',
+                        onPress: () => null,
+                        style: 'cancel',
+                      },
+                      {
+                        text: 'Delete',
+                        onPress: () => {
+                          const newImages = images.filter(
+                            (img) => img !== image
+                          )
+                          changeGalleryImages(newImages)
+                        },
+                      },
+                    ],
+                    { cancelable: false }
+                  )
                 }}
                 className='bg-[#22A6B3] rounded-full w-40 h-12 flex-row justify-center items-center mt-10'
               >
