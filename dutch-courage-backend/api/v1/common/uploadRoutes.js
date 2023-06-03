@@ -5,13 +5,19 @@ import { upload, deleteFile } from './uploadController.js'
 
 const router = express.Router()
 
-router.post('/:filePath', upload.single('image'), (req, res) => {
-  const filePath = `uploads/${req.params.filePath}`
-  deleteFile(filePath)
-  const port = process.env.PORT || 5000
-  const imagePath = req.file.path.replace('\\', '/')
-  res.send(`${req.protocol}://${req.hostname}:${port}/${imagePath}`)
-})
+router
+  .post('/:filePath', upload.single('image'), (req, res) => {
+    const filePath = `uploads/${req.params.filePath}`
+    deleteFile(filePath)
+    const port = process.env.PORT || 5000
+    const imagePath = req.file.path.replace('\\', '/')
+    res.send(`${req.protocol}://${req.hostname}:${port}/${imagePath}`)
+  })
+  .delete('/:filePath', (req, res) => {
+    const filePath = `uploads/${req.params.filePath}`
+    deleteFile(filePath)
+    res.send('File deleted')
+  })
 
 router.post('/', upload.single('image'), (req, res) => {
   const port = process.env.PORT || 5000
