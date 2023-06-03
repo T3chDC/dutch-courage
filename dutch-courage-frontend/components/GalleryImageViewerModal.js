@@ -10,7 +10,6 @@ const GalleryImageViewerModal = ({
   changeGalleryImages,
   setSelectedProfileImage,
 }) => {
-  console.log(images)
   return (
     <Modal
       animationIn={'slideInUp'}

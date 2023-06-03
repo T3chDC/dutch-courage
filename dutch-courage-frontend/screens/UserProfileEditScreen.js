@@ -74,7 +74,9 @@ const UserProfileEditScreen = () => {
   const [location, setLocation] = useState(meUser?.location)
   const [topInterests, setTopInterests] = useState(meUser?.topInterests)
   const [selectedProfileImage, setSelectedProfileImage] = useState(null)
-  const [selectedGalleryImage, setSelectedGalleryImage] = useState(null)
+  const [selectedGalleryImage1, setSelectedGalleryImage1] = useState(null)
+  const [selectedGalleryImage2, setSelectedGalleryImage2] = useState(null)
+  const [selectedGalleryImage3, setSelectedGalleryImage3] = useState(null)
 
   // Modal State variables
   const [isProfileImageModalVisible, setIsProfileImageModalVisible] =
@@ -161,7 +163,9 @@ const UserProfileEditScreen = () => {
     location,
     topInterests,
     selectedProfileImage,
-    selectedGalleryImage,
+    selectedGalleryImage1,
+    selectedGalleryImage2,
+    selectedGalleryImage3,
   ])
 
   // Update user profile
@@ -256,6 +260,148 @@ const UserProfileEditScreen = () => {
     }
   }
 
+  // Function to handle gallery Image 1 Upload
+  const galleryImage1UploadHandler = async () => {
+    const formData = new FormData()
+    formData.append('image', {
+      uri: selectedGalleryImage1,
+      type: 'image/jpeg',
+      name: 'image.jpg',
+    })
+
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+      if (galleryImage1Url) {
+        const extractedFilePath = galleryImage1Url.slice(
+          galleryImage1Url.lastIndexOf('/') + 1
+        )
+        if (extractedFilePath.startsWith('image')) {
+          const res = await axios.post(
+            BACKEND_URL + '/api/v1/upload/' + `${extractedFilePath}`,
+            formData,
+            config
+          )
+          return res.data
+        } else {
+          const res = await axios.post(
+            BACKEND_URL + '/api/v1/upload',
+            formData,
+            config
+          )
+          return res.data
+        }
+      } else {
+        const res = await axios.post(
+          BACKEND_URL + '/api/v1/upload',
+          formData,
+          config
+        )
+        return res.data
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  // Function to handle gallery Image 2 Upload
+  const galleryImage2UploadHandler = async () => {
+    const formData = new FormData()
+    formData.append('image', {
+      uri: selectedGalleryImage2,
+      type: 'image/jpeg',
+      name: 'image.jpg',
+    })
+
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+      if (galleryImage2Url) {
+        const extractedFilePath = galleryImage2Url.slice(
+          galleryImage2Url.lastIndexOf('/') + 1
+        )
+        if (extractedFilePath.startsWith('image')) {
+          const res = await axios.post(
+            BACKEND_URL + '/api/v1/upload/' + `${extractedFilePath}`,
+            formData,
+            config
+          )
+          return res.data
+        } else {
+          const res = await axios.post(
+            BACKEND_URL + '/api/v1/upload',
+            formData,
+            config
+          )
+          return res.data
+        }
+      } else {
+        const res = await axios.post(
+          BACKEND_URL + '/api/v1/upload',
+          formData,
+          config
+        )
+        return res.data
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  // Function to handle gallery Image 3 Upload
+  const galleryImage3UploadHandler = async () => {
+    const formData = new FormData()
+    formData.append('image', {
+      uri: selectedGalleryImage3,
+      type: 'image/jpeg',
+      name: 'image.jpg',
+    })
+
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+      if (galleryImage3Url) {
+        const extractedFilePath = galleryImage3Url.slice(
+          galleryImage3Url.lastIndexOf('/') + 1
+        )
+        if (extractedFilePath.startsWith('image')) {
+          const res = await axios.post(
+            BACKEND_URL + '/api/v1/upload/' + `${extractedFilePath}`,
+            formData,
+            config
+          )
+          return res.data
+        } else {
+          const res = await axios.post(
+            BACKEND_URL + '/api/v1/upload',
+            formData,
+            config
+          )
+          return res.data
+        }
+      } else {
+        const res = await axios.post(
+          BACKEND_URL + '/api/v1/upload',
+          formData,
+          config
+        )
+        return res.data
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
   // Logout
   // const handleLogout = () => {
   //   dispatch(logout())
@@ -271,11 +417,6 @@ const UserProfileEditScreen = () => {
       dispatch(resetMeUpdateUser())
     }
   }, [dispatch])
-
-  // console.log('Initial images', initialImages)
-  // console.log('Images', images)
-  // console.log('imageUrl', imageUrl)
-  // console.log('Selected Profile Image', selectedProfileImage)
 
   return (
     <View className='bg-black flex-1 justify-start items-center relative'>
@@ -339,7 +480,7 @@ const UserProfileEditScreen = () => {
 
           {/* Vertical Images Thumbnails */}
           <View className='absolute h-56 top-10 right-[-10] flex justify-start items-center'>
-            {galleryImage1Url && (
+            {(galleryImage1Url || selectedGalleryImage1) && (
               <TouchableOpacity
                 onPress={() => {
                   setIsGalleryImageModalVisible(true)
@@ -349,7 +490,7 @@ const UserProfileEditScreen = () => {
                 <View className='w-12 h-12 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center'>
                   <Image
                     source={{
-                      uri: galleryImage1Url,
+                      uri: selectedGalleryImage1 || galleryImage1Url,
                     }}
                     className='w-10 h-10 rounded-full'
                     resizeMode='cover'
@@ -358,7 +499,7 @@ const UserProfileEditScreen = () => {
               </TouchableOpacity>
             )}
 
-            {galleryImage2Url && (
+            {(galleryImage2Url || selectedGalleryImage2) && (
               <TouchableOpacity
                 onPress={() => {
                   setIsGalleryImageModalVisible(true)
@@ -368,7 +509,7 @@ const UserProfileEditScreen = () => {
                 <View className='w-12 h-12 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center'>
                   <Image
                     source={{
-                      uri: galleryImage2Url,
+                      uri: selectedGalleryImage2 || galleryImage2Url,
                     }}
                     className='w-10 h-10 rounded-full'
                     resizeMode='cover'
@@ -377,7 +518,7 @@ const UserProfileEditScreen = () => {
               </TouchableOpacity>
             )}
 
-            {galleryImage3Url && (
+            {(galleryImage3Url || selectedGalleryImage3) && (
               <TouchableOpacity
                 onPress={() => {
                   setIsGalleryImageModalVisible(true)
@@ -387,7 +528,7 @@ const UserProfileEditScreen = () => {
                 <View className='w-12 h-12 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center'>
                   <Image
                     source={{
-                      uri: galleryImage3Url,
+                      uri: selectedGalleryImage3 || galleryImage3Url,
                     }}
                     className='w-10 h-10 rounded-full'
                     resizeMode='cover'
@@ -400,22 +541,22 @@ const UserProfileEditScreen = () => {
             <GalleryImageViewerModal
               isGalleryImageModalVisible={isGalleryImageModalVisible}
               setIsGalleryImageModalVisible={setIsGalleryImageModalVisible}
-                images={images}
-                changeGalleryImages={changeGalleryImages}
+              images={images}
+              changeGalleryImages={changeGalleryImages}
               setSelectedProfileImage={setSelectedProfileImage}
             />
 
             <TouchableOpacity
               onPress={() => {
-                if (!galleryImage3Url) {
-                  setIsImagePickerModalVisible(true)
-                } else {
+                if (galleryImage3Url || selectedGalleryImage3) {
                   Toast.show({
                     type: 'info',
                     text1:
                       'Maximum 3 images are allowed apart from profile picture',
                     visibilityTime: 3000,
                   })
+                } else {
+                  setIsImagePickerModalVisible(true)
                 }
               }}
             >
@@ -428,9 +569,13 @@ const UserProfileEditScreen = () => {
             <ImagePickerModal
               isImageChooseModalVisible={isImagePickerModalVisible}
               setIsImageChooseModalVisible={setIsImagePickerModalVisible}
-              setSelectedImage={setSelectedGalleryImage}
-              // images={images}
-              // setImages={setImages}
+              setSelectedImage={
+                galleryImage1Url || selectedGalleryImage1
+                  ? galleryImage2Url || selectedGalleryImage2
+                    ? setSelectedGalleryImage3
+                    : setSelectedGalleryImage2
+                  : setSelectedGalleryImage1
+              }
             />
           </View>
 
