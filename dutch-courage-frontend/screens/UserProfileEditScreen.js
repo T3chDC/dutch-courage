@@ -189,30 +189,57 @@ const UserProfileEditScreen = () => {
 
   // Functin to update user information
   const updateUserHandler = async () => {
-    if (selectedProfileImage) {
-      profileImageUploadHandler().then((res) => {
-        const updatedUser = {
-          userName,
-          imageUrl: res,
-          mantra,
-          ageRange,
-          gender,
-          location,
-          topInterests,
-        }
-        dispatch(updateMeUser(updatedUser))
-      })
-    } else {
-      const updatedUser = {
+    // Check if user has uploaded any new images
+    if (
+      selectedProfileImage ||
+      selectedGalleryImage1 ||
+      selectedGalleryImage2 ||
+      selectedGalleryImage3
+    ) {
+      // Check if user has uploaded a new profile image
+      if (selectedProfileImage) {
+        const profileImageUrl = await profileImageUploadHandler()
+        setImageUrl(profileImageUrl)
+      }
+
+      // Check if user has uploaded a new gallery image
+      if (selectedGalleryImage1) {
+        const galleryImage1Url = await galleryImage1UploadHandler(
+          selectedGalleryImage1
+        )
+        setGalleryImage1Url(galleryImage1Url)
+      }
+
+      if (selectedGalleryImage2) {
+        const galleryImage2Url = await galleryImage2UploadHandler(
+          selectedGalleryImage2
+        )
+        setGalleryImage2Url(galleryImage2Url)
+      }
+
+      if (selectedGalleryImage3) {
+        const galleryImage3Url = await galleryImage3UploadHandler(
+          selectedGalleryImage3
+        )
+        setGalleryImage3Url(galleryImage3Url)
+      }
+    }
+
+    // Update user information
+    dispatch(
+      updateMeUser(
         userName,
+        imageUrl,
         mantra,
         ageRange,
         gender,
         location,
         topInterests,
-      }
-      dispatch(updateMeUser(updatedUser))
-    }
+        galleryImage1Url,
+        galleryImage2Url,
+        galleryImage3Url
+      )
+    )
   }
 
   //Function to handle profile Image Upload
@@ -400,7 +427,6 @@ const UserProfileEditScreen = () => {
       console.log(error)
     }
   }
-
 
   // Logout
   // const handleLogout = () => {
