@@ -450,9 +450,9 @@ const UserProfileEditScreen = () => {
                   setIsImagePickerModalVisible(true)
                 } else {
                   Toast.show({
-                    type: 'error',
+                    type: 'info',
                     text1:
-                      'Maximum 3 images allowed apart from profile picture',
+                      'Maximum 3 images are allowed apart from profile picture',
                     visibilityTime: 3000,
                   })
                 }

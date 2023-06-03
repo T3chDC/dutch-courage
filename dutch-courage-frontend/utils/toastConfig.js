@@ -56,9 +56,9 @@ const ToastConfig = {
   info: (props) => (
     <InfoToast
       {...props}
-      style={{ borderLeftColor: 'blue', zIndex: 9999 }}
+      style={{ borderLeftColor: '#ffbb33', zIndex: 9999 }}
       contentContainerStyle={{
-        backgroundColor: 'blue',
+        backgroundColor: '#ffbb33',
         borderTopRightRadius: 6,
         borderBottomRightRadius: 6,
       }}
