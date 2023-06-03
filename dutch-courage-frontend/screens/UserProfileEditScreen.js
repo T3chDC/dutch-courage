@@ -187,8 +187,13 @@ const UserProfileEditScreen = () => {
     }
   }, [isMeUpdateError, isMeUpdateSuccess])
 
-  // Functin to update user information
-  const updateUserHandler = async () => {
+  // Upload all images to server storage and get the urls
+  const uploadImages = async () => {
+    let profileImageUrl = ''
+    let galleryImageUrl1 = ''
+    let galleryImageUrl2 = ''
+    let galleryImageUrl3 = ''
+
     // Check if user has uploaded any new images
     if (
       selectedProfileImage ||
@@ -198,47 +203,67 @@ const UserProfileEditScreen = () => {
     ) {
       // Check if user has uploaded a new profile image
       if (selectedProfileImage) {
-        const profileImageUrl = await profileImageUploadHandler()
-        setImageUrl(profileImageUrl)
+        const profileImage = await profileImageUploadHandler()
+        profileImageUrl = profileImage
+        console.log('profileImage', profileImageUrl)
       }
 
       // Check if user has uploaded a new gallery image
       if (selectedGalleryImage1) {
-        const galleryImage1Url = await galleryImage1UploadHandler(
-          selectedGalleryImage1
-        )
-        setGalleryImage1Url(galleryImage1Url)
+        const galleryImage1 = await galleryImage1UploadHandler()
+        galleryImageUrl1 = galleryImage1
       }
 
       if (selectedGalleryImage2) {
-        const galleryImage2Url = await galleryImage2UploadHandler(
-          selectedGalleryImage2
-        )
-        setGalleryImage2Url(galleryImage2Url)
+        const galleryImage2 = await galleryImage2UploadHandler()
+        galleryImageUrl2 = galleryImage2
       }
 
       if (selectedGalleryImage3) {
-        const galleryImage3Url = await galleryImage3UploadHandler(
-          selectedGalleryImage3
-        )
-        setGalleryImage3Url(galleryImage3Url)
+        const galleryImage3 = await galleryImage3UploadHandler()
+        galleryImageUrl3 = galleryImage3
       }
     }
 
-    // Update user information
+    // return the image urls
+    return {
+      profileImageUrl,
+      galleryImageUrl1,
+      galleryImageUrl2,
+      galleryImageUrl3,
+    }
+  }
+
+  // update user information with the new data and uploaded image urls
+  const updateUserHandler = async () => {
+    // upload all images to server storage and get the urls
+    const {
+      profileImageUrl,
+      galleryImageUrl1,
+      galleryImageUrl2,
+      galleryImageUrl3,
+    } = await uploadImages()
+
+    // update user information with the new data and uploaded image urls
     dispatch(
-      updateMeUser(
+      updateMeUser({
         userName,
-        imageUrl,
+        imageUrl: profileImageUrl ? profileImageUrl : imageUrl,
         mantra,
         ageRange,
         gender,
         location,
         topInterests,
-        galleryImage1Url,
-        galleryImage2Url,
-        galleryImage3Url
-      )
+        galleryImage1Url: galleryImageUrl1
+          ? galleryImageUrl1
+          : galleryImage1Url,
+        galleryImage2Url: galleryImageUrl2
+          ? galleryImageUrl2
+          : galleryImage2Url,
+        galleryImage3Url: galleryImageUrl3
+          ? galleryImageUrl3
+          : galleryImage3Url,
+      })
     )
   }
 
@@ -312,6 +337,7 @@ const UserProfileEditScreen = () => {
             formData,
             config
           )
+
           return res.data
         } else {
           const res = await axios.post(
@@ -319,6 +345,7 @@ const UserProfileEditScreen = () => {
             formData,
             config
           )
+
           return res.data
         }
       } else {
@@ -327,6 +354,7 @@ const UserProfileEditScreen = () => {
           formData,
           config
         )
+
         return res.data
       }
     } catch (error) {

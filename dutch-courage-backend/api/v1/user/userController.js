@@ -39,7 +39,7 @@ export const updateUser = updateOne(User)
 export const deleteUser = deleteOne(User)
 
 // @desc    Get current logged in user
-// @route   GET /api/v1/users/me
+// @route   GET /api/v1/users/getMe
 // @access  Private/regularUser
 export const getMe = (req, res, next) => {
   req.params.id = req.user.id
@@ -47,7 +47,7 @@ export const getMe = (req, res, next) => {
 }
 
 // @desc    Update current logged in user
-// @route   PATCH /api/v1/users/me
+// @route   PATCH /api/v1/users/updateMe
 // @access  Private/regularUser
 export const updateMe = catchAsync(async (req, res, next) => {
   // 1) Create error if user POSTs password data
@@ -76,7 +76,7 @@ export const updateMe = catchAsync(async (req, res, next) => {
   })
 })
 // @desc    Delete current logged in user
-// @route   DELETE /api/v1/users/me
+// @route   DELETE /api/v1/users/deleteMe
 // @access  Private/regularUser
 
 export const deleteMe = catchAsync(async (req, res, next) => {
