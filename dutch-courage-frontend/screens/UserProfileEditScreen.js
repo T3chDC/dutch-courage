@@ -67,6 +67,8 @@ const UserProfileEditScreen = () => {
   const [gender, setGender] = useState(meUser?.gender)
   const [location, setLocation] = useState(meUser?.location)
   const [topInterests, setTopInterests] = useState(meUser?.topInterests)
+
+  // Image State variables
   const [selectedProfileImage, setSelectedProfileImage] = useState(null)
   const [selectedGalleryImage1, setSelectedGalleryImage1] = useState(null)
   const [selectedGalleryImage2, setSelectedGalleryImage2] = useState(null)
