@@ -6,12 +6,14 @@ import Swiper from 'react-native-swiper'
 const GalleryImageViewerModal = ({
   isGalleryImageModalVisible,
   setIsGalleryImageModalVisible,
-  images,
-  changeGalleryImages,
+  galleryImage1Url,
+  setGalleryImage1Url,
+  galleryImage2Url,
+  setGalleryImage2Url,
+  galleryImage3Url,
+  setGalleryImage3Url,
   setSelectedProfileImage,
 }) => {
-  const filteredImages = images.filter((image) => image !== '')
-
   return (
     <Modal
       animationIn={'slideInUp'}
@@ -32,17 +34,17 @@ const GalleryImageViewerModal = ({
           showsPagination={false}
           loop={false}
         >
-          {filteredImages.map((image, idx) => (
-            <View key={idx} className='flex-1 justify-center items-center'>
+          {galleryImage1Url && (
+            <View className='flex-1 justify-center items-center'>
               <Image
-                source={{ uri: image }}
+                source={{ uri: galleryImage1Url }}
                 style={{ width: 300, height: 300 }}
               />
 
               {/* Image Choose as profile picture Button */}
               <TouchableOpacity
                 onPress={() => {
-                  setSelectedProfileImage(image)
+                  setSelectedProfileImage(galleryImage1Url)
                   setIsGalleryImageModalVisible(false)
                 }}
                 className='bg-[#22A6B3] rounded-full w-60 h-12 flex-row justify-center items-center mt-10'
@@ -65,10 +67,8 @@ const GalleryImageViewerModal = ({
                       {
                         text: 'Delete',
                         onPress: () => {
-                          const newImages = images.filter(
-                            (img) => img !== image
-                          )
-                          changeGalleryImages(newImages)
+                          setGalleryImage1Url('')
+                          setIsGalleryImageModalVisible(false)
                         },
                       },
                     ],
@@ -79,18 +79,105 @@ const GalleryImageViewerModal = ({
               >
                 <Text className='text-white'>Delete Image</Text>
               </TouchableOpacity>
+            </View>
+          )}
 
-              {/* Cancel Button */}
-              {/* <TouchableOpacity
+          {galleryImage2Url && (
+            <View className='flex-1 justify-center items-center'>
+              <Image
+                source={{ uri: galleryImage2Url }}
+                style={{ width: 300, height: 300 }}
+              />
+
+              {/* Image Choose as profile picture Button */}
+
+              <TouchableOpacity
                 onPress={() => {
+                  setSelectedProfileImage(galleryImage2Url)
                   setIsGalleryImageModalVisible(false)
+                }}
+                className='bg-[#22A6B3] rounded-full w-60 h-12 flex-row justify-center items-center mt-10'
+              >
+                <Text className='text-white'>Choose as Profile Picture</Text>
+              </TouchableOpacity>
+
+              {/* Delete Image Button */}
+              <TouchableOpacity
+                onPress={() => {
+                  Alert.alert(
+                    'Are you sure you want to delete this image?',
+                    'This action cannot be undone',
+                    [
+                      {
+                        text: 'Cancel',
+                        onPress: () => null,
+                        style: 'cancel',
+                      },
+                      {
+                        text: 'Delete',
+                        onPress: () => {
+                          setGalleryImage2Url('')
+                          setIsGalleryImageModalVisible(false)
+                        },
+                      },
+                    ],
+                    { cancelable: false }
+                  )
                 }}
                 className='bg-[#22A6B3] rounded-full w-40 h-12 flex-row justify-center items-center mt-10'
               >
-                <Text className='text-white'>Cancel</Text>  
-              </TouchableOpacity> */}
+                <Text className='text-white'>Delete Image</Text>
+              </TouchableOpacity>
             </View>
-          ))}
+          )}
+
+          {galleryImage3Url && (
+            <View className='flex-1 justify-center items-center'>
+              <Image
+                source={{ uri: galleryImage3Url }}
+                style={{ width: 300, height: 300 }}
+              />
+
+              {/* Image Choose as profile picture Button */}
+              <TouchableOpacity
+                onPress={() => {
+                  setSelectedProfileImage(galleryImage3Url)
+                  setIsGalleryImageModalVisible(false)
+                }}
+                className='bg-[#22A6B3] rounded-full w-60 h-12 flex-row justify-center items-center mt-10'
+              >
+                <Text className='text-white'>Choose as Profile Picture</Text>
+              </TouchableOpacity>
+
+              {/* Delete Image Button */}
+              <TouchableOpacity
+                onPress={() => {
+                  Alert.alert(
+                    'Are you sure you want to delete this image?',
+                    'This action cannot be undone',
+                    [
+                      {
+                        text: 'Cancel',
+                        onPress: () => null,
+                        style: 'cancel',
+                      },
+                      {
+                        text: 'Delete',
+                        onPress: () => {
+                          setGalleryImage3Url('')
+                          setIsGalleryImageModalVisible(false)
+                        },
+                      },
+                    ],
+                    { cancelable: false }
+                  )
+                }}
+                className='bg-[#22A6B3] rounded-full w-40 h-12 flex-row justify-center items-center mt-10'
+              >
+                <Text className='text-white'>Delete Image</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </Swiper>
       </View>
     </Modal>
