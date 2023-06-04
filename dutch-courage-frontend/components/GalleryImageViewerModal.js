@@ -10,6 +10,8 @@ const GalleryImageViewerModal = ({
   changeGalleryImages,
   setSelectedProfileImage,
 }) => {
+  const filteredImages = images.filter((image) => image !== '')
+
   return (
     <Modal
       animationIn={'slideInUp'}
@@ -30,7 +32,7 @@ const GalleryImageViewerModal = ({
           showsPagination={false}
           loop={false}
         >
-          {images.map((image, idx) => (
+          {filteredImages.map((image, idx) => (
             <View key={idx} className='flex-1 justify-center items-center'>
               <Image
                 source={{ uri: image }}

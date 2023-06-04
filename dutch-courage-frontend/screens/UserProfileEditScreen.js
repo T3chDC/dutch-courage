@@ -60,10 +60,13 @@ const UserProfileEditScreen = () => {
     meUser?.galleryImage3Url
   )
   const [images, setImages] = useState([
-    galleryImage1Url ? galleryImage1Url : null,
-    galleryImage2Url ? galleryImage2Url : null,
-    galleryImage3Url ? galleryImage3Url : null,
+    // only add gallery images that are not null
+    galleryImage1Url,
+    galleryImage2Url,
+    galleryImage3Url,
   ])
+
+
   const [userName, setUserName] = useState(meUser?.userName)
   const [userNameCount, setUserNameCount] = useState(meUser?.userName.length)
   const [mantra, setMantra] = useState(meUser?.mantra)
@@ -282,8 +285,6 @@ const UserProfileEditScreen = () => {
       }
       if (imageUrl) {
         const extractedFilePath = imageUrl.slice(imageUrl.lastIndexOf('/') + 1)
-        console.log(extractedFilePath)
-        console.log(formData)
         if (extractedFilePath.startsWith('image')) {
           const res = await axios.post(
             BACKEND_URL + '/api/v1/upload/' + `${extractedFilePath}`,
@@ -472,7 +473,7 @@ const UserProfileEditScreen = () => {
     }
   }, [dispatch])
 
-  console.log('selectedProfileImage: ', selectedProfileImage)
+  console.log('images: ', images)
 
   return (
     <View className='bg-black flex-1 justify-start items-center relative'>
