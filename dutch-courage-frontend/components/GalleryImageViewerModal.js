@@ -19,6 +19,7 @@ const GalleryImageViewerModal = ({
   selectedGalleryImage3,
   setSelectedGalleryImage3,
   setSelectedProfileImage,
+  setSelectedImagesForDelete,
 }) => {
   return (
     <Modal
@@ -77,6 +78,10 @@ const GalleryImageViewerModal = ({
                         onPress: () => {
                           setGalleryImage1Url('')
                           setSelectedGalleryImage1('')
+                          setSelectedImagesForDelete((prevState) => [
+                            ...prevState,
+                            galleryImage1Url,
+                          ])
                           setIsGalleryImageModalVisible(false)
                         },
                       },
@@ -129,6 +134,10 @@ const GalleryImageViewerModal = ({
                         onPress: () => {
                           setGalleryImage2Url('')
                           setSelectedGalleryImage2('')
+                          setSelectedImagesForDelete((prevState) => [
+                            ...prevState,
+                            galleryImage2Url,
+                          ])
                           setIsGalleryImageModalVisible(false)
                         },
                       },
@@ -180,6 +189,10 @@ const GalleryImageViewerModal = ({
                         onPress: () => {
                           setGalleryImage3Url('')
                           setSelectedGalleryImage3('')
+                          setSelectedImagesForDelete((prevState) => [
+                            ...prevState,
+                            galleryImage3Url,
+                          ])
                           setIsGalleryImageModalVisible(false)
                         },
                       },

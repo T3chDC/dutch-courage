@@ -73,6 +73,7 @@ const UserProfileEditScreen = () => {
   const [selectedGalleryImage1, setSelectedGalleryImage1] = useState(null)
   const [selectedGalleryImage2, setSelectedGalleryImage2] = useState(null)
   const [selectedGalleryImage3, setSelectedGalleryImage3] = useState(null)
+  const [selectedImagesForDelete, setSelectedImagesForDelete] = useState([])
 
   // Modal State variables
   const [isProfileImageModalVisible, setIsProfileImageModalVisible] =
@@ -209,6 +210,21 @@ const UserProfileEditScreen = () => {
     }
   }
 
+  // Function to handle iterative deletion of images
+  const deleteImagesHandler = async () => {
+    // delete all selected images from server storage
+    selectedImagesForDelete.forEach(async (image) => {
+      try {
+        const extractedFilePath = image.slice(imageUrl.lastIndexOf('/') + 1)
+        await axios.delete(
+          BACKEND_URL + '/api/v1/upload/' + `${extractedFilePath}`
+        )
+      } catch (error) {
+        console.log(error)
+      }
+    })
+  }
+
   // update user information with the new data and uploaded image urls
   const updateUserHandler = async () => {
     // upload all images to server storage and get the urls
@@ -240,6 +256,9 @@ const UserProfileEditScreen = () => {
           : galleryImage3Url,
       })
     )
+
+    // delete all selected images from server storage
+    await deleteImagesHandler()
   }
 
   //Function to handle profile Image Upload
@@ -442,10 +461,11 @@ const UserProfileEditScreen = () => {
   // Reset user profile update status on unmount
   useEffect(() => {
     return () => {
-      // console.log('UserProfileEditScreen unmounted')
       dispatch(resetMeUpdateUser())
     }
   }, [dispatch])
+
+  console.log('Images for Delete: ', selectedImagesForDelete)
 
   return (
     <View className='bg-black flex-1 justify-start items-center relative'>
@@ -583,6 +603,7 @@ const UserProfileEditScreen = () => {
               selectedGalleryImage3={selectedGalleryImage3}
               setSelectedGalleryImage3={setSelectedGalleryImage3}
               setSelectedProfileImage={setSelectedProfileImage}
+              setSelectedImagesForDelete={setSelectedImagesForDelete}
             />
 
             <TouchableOpacity
