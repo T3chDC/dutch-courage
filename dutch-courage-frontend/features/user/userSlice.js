@@ -1,3 +1,4 @@
+// This file is responsible for handling the state of the user data
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import userService from './userService'
 
