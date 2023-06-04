@@ -12,6 +12,12 @@ const GalleryImageViewerModal = ({
   setGalleryImage2Url,
   galleryImage3Url,
   setGalleryImage3Url,
+  selectedGalleryImage1,
+  setSelectedGalleryImage1,
+  selectedGalleryImage2,
+  setSelectedGalleryImage2,
+  selectedGalleryImage3,
+  setSelectedGalleryImage3,
   setSelectedProfileImage,
 }) => {
   return (
@@ -34,17 +40,19 @@ const GalleryImageViewerModal = ({
           showsPagination={false}
           loop={false}
         >
-          {galleryImage1Url && (
+          {(galleryImage1Url || selectedGalleryImage1) && (
             <View className='flex-1 justify-center items-center'>
               <Image
-                source={{ uri: galleryImage1Url }}
+                source={{ uri: selectedGalleryImage1 || galleryImage1Url }}
                 style={{ width: 300, height: 300 }}
               />
 
               {/* Image Choose as profile picture Button */}
               <TouchableOpacity
                 onPress={() => {
-                  setSelectedProfileImage(galleryImage1Url)
+                  galleryImage1Url
+                    ? setSelectedProfileImage(galleryImage1Url)
+                    : setSelectedProfileImage(selectedGalleryImage1)
                   setIsGalleryImageModalVisible(false)
                 }}
                 className='bg-[#22A6B3] rounded-full w-60 h-12 flex-row justify-center items-center mt-10'
@@ -68,6 +76,7 @@ const GalleryImageViewerModal = ({
                         text: 'Delete',
                         onPress: () => {
                           setGalleryImage1Url('')
+                          setSelectedGalleryImage1('')
                           setIsGalleryImageModalVisible(false)
                         },
                       },
@@ -82,10 +91,10 @@ const GalleryImageViewerModal = ({
             </View>
           )}
 
-          {galleryImage2Url && (
+          {(galleryImage2Url || selectedGalleryImage2) && (
             <View className='flex-1 justify-center items-center'>
               <Image
-                source={{ uri: galleryImage2Url }}
+                source={{ uri: selectedGalleryImage2 || galleryImage2Url }}
                 style={{ width: 300, height: 300 }}
               />
 
@@ -93,7 +102,9 @@ const GalleryImageViewerModal = ({
 
               <TouchableOpacity
                 onPress={() => {
-                  setSelectedProfileImage(galleryImage2Url)
+                  galleryImage2Url
+                    ? setSelectedProfileImage(galleryImage2Url)
+                    : setSelectedProfileImage(selectedGalleryImage2)
                   setIsGalleryImageModalVisible(false)
                 }}
                 className='bg-[#22A6B3] rounded-full w-60 h-12 flex-row justify-center items-center mt-10'
@@ -117,6 +128,7 @@ const GalleryImageViewerModal = ({
                         text: 'Delete',
                         onPress: () => {
                           setGalleryImage2Url('')
+                          setSelectedGalleryImage2('')
                           setIsGalleryImageModalVisible(false)
                         },
                       },
@@ -131,17 +143,19 @@ const GalleryImageViewerModal = ({
             </View>
           )}
 
-          {galleryImage3Url && (
+          {(galleryImage3Url || selectedGalleryImage3) && (
             <View className='flex-1 justify-center items-center'>
               <Image
-                source={{ uri: galleryImage3Url }}
+                source={{ uri: selectedGalleryImage3 || galleryImage3Url }}
                 style={{ width: 300, height: 300 }}
               />
 
               {/* Image Choose as profile picture Button */}
               <TouchableOpacity
                 onPress={() => {
-                  setSelectedProfileImage(galleryImage3Url)
+                  galleryImage3Url
+                    ? setSelectedProfileImage(galleryImage3Url)
+                    : setSelectedProfileImage(selectedGalleryImage3)
                   setIsGalleryImageModalVisible(false)
                 }}
                 className='bg-[#22A6B3] rounded-full w-60 h-12 flex-row justify-center items-center mt-10'
@@ -165,6 +179,7 @@ const GalleryImageViewerModal = ({
                         text: 'Delete',
                         onPress: () => {
                           setGalleryImage3Url('')
+                          setSelectedGalleryImage3('')
                           setIsGalleryImageModalVisible(false)
                         },
                       },

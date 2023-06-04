@@ -576,6 +576,12 @@ const UserProfileEditScreen = () => {
               setGalleryImage2Url={setGalleryImage2Url}
               galleryImage3Url={galleryImage3Url}
               setGalleryImage3Url={setGalleryImage3Url}
+              selectedGalleryImage1={selectedGalleryImage1}
+              setSelectedGalleryImage1={setSelectedGalleryImage1}
+              selectedGalleryImage2={selectedGalleryImage2}
+              setSelectedGalleryImage2={setSelectedGalleryImage2}
+              selectedGalleryImage3={selectedGalleryImage3}
+              setSelectedGalleryImage3={setSelectedGalleryImage3}
               setSelectedProfileImage={setSelectedProfileImage}
             />
 
