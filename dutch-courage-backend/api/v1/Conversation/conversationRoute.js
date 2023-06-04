@@ -12,8 +12,8 @@ import { protect, restrictTo } from '../common/authController.js' //import Auth 
 
 const router = express.Router() //create router instance
 
-//router.use(protect, restrictTo('regularUser')) //protect all routes after this middleware
-router.route('/getMyConversations').get(getAllConversationsOfUser) //route to get all conversations of a user
+router.use(protect, restrictTo('regularUser')) //protect all routes after this middleware
+router.route('/getMyConversations').get(getAllConversationsOfUser) //route to get all conversations of logged in user
 router.route('/').post(createConversation) //route to create a conversation
 router.route('/:id').get(getConversation).delete(deleteConversation) //route to delete a conversation
 
