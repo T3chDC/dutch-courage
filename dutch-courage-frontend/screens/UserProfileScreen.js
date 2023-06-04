@@ -166,7 +166,7 @@ const UserProfileScreen = () => {
           )}
 
           {/* Images */}
-          {galleryImage1Url && (
+          {(galleryImage1Url || galleryImage2Url || galleryImage3Url) && (
             <View className='mt-4 w-[100vw] flex-row justify-center items-center'>
               {galleryImage1Url !== '' && (
                 <View className='w-11 h-11 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center'>

@@ -204,7 +204,6 @@ const UserProfileEditScreen = () => {
       if (selectedProfileImage) {
         const profileImage = await profileImageUploadHandler()
         profileImageUrl = profileImage
-        console.log('profileImage', profileImageUrl)
       }
 
       // Check if user has uploaded a new gallery image
@@ -283,6 +282,8 @@ const UserProfileEditScreen = () => {
       }
       if (imageUrl) {
         const extractedFilePath = imageUrl.slice(imageUrl.lastIndexOf('/') + 1)
+        console.log(extractedFilePath)
+        console.log(formData)
         if (extractedFilePath.startsWith('image')) {
           const res = await axios.post(
             BACKEND_URL + '/api/v1/upload/' + `${extractedFilePath}`,
@@ -470,6 +471,8 @@ const UserProfileEditScreen = () => {
       dispatch(resetMeUpdateUser())
     }
   }, [dispatch])
+
+  console.log('selectedProfileImage: ', selectedProfileImage)
 
   return (
     <View className='bg-black flex-1 justify-start items-center relative'>
