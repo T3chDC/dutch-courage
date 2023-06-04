@@ -31,7 +31,6 @@ import InterestPickerModal from '../components/InterestPickerModal'
 import ImagePickerModal from '../components/ImagePickerModal'
 import ProfileImageViewerModal from '../components/ProfileImageViewerModal'
 import GalleryImageViewerModal from '../components/GalleryImageViewerModal'
-import interests from '../assets/staticData/interests'
 
 const UserProfileEditScreen = () => {
   // Navigation hook
@@ -747,6 +746,13 @@ const UserProfileEditScreen = () => {
               />
             </TouchableOpacity>
           </View>
+
+          {/* Interests picker modal */}
+          <InterestPickerModal
+            isInterestModalVisible={isInterestModalVisible}
+            setIsInterestModalVisible={setIsInterestModalVisible}
+            setTopInterests={setTopInterests}
+          />
 
           {/* Mantra label */}
           <View className='flex-row mt-3 justify-center items-center mb-[-5] z-10'>
