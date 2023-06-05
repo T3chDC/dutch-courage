@@ -168,6 +168,7 @@ export const conversationSlice = createSlice({
         state.isCreateConversationError = false
         state.isCreateConversationSuccess = true
         state.createConversationErrorMessage = ''
+        state.conversations.push(action.payload)
         state.conversation = action.payload
       })
       .addCase(createConversation.rejected, (state, action) => {
@@ -209,7 +210,7 @@ export const conversationSlice = createSlice({
         state.conversations = state.conversations.filter(
           (conversation) => conversation._id !== action.payload._id
         )
-        state.conversation = null
+        state.conversation._id === action.payload._id && (state.conversation = null)
       })
       .addCase(deleteConversationById.rejected, (state, action) => {
         state.isDeleteConversationByIdLoading = false
