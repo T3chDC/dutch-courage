@@ -21,6 +21,11 @@ const initialState = {
   isGetConversationByIdLoading: false,
   getConversationByIdErrorMessage: '',
 
+  isUpdateConversationByIdError: false,
+  isUpdateConversationByIdSuccess: false,
+  isUpdateConversationByIdLoading: false,
+  updateConversationByIdErrorMessage: '',
+
   isDeleteConversationByIdError: false,
   isDeleteConversationByIdSuccess: false,
   isDeleteConversationByIdLoading: false,
@@ -81,6 +86,27 @@ export const getConversationById = createAsyncThunk(
   }
 )
 
+//update a conversation by id
+export const updateConversationById = createAsyncThunk(
+  'conversation/updateConversationById',
+  async ({ conversationId, data }, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.userInfo.token
+      return await conversationService.updateConversationById(
+        token,
+        conversationId,
+        data
+      )
+    } catch (err) {
+      const message =
+        (err.response && err.response.data && err.response.data.message) ||
+        err.message ||
+        err.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
 //delete a conversation by id
 export const deleteConversationById = createAsyncThunk(
   'conversation/deleteConversationById',
@@ -128,6 +154,12 @@ export const conversationSlice = createSlice({
       state.isGetConversationByIdSuccess = false
       state.isGetConversationByIdLoading = false
       state.getConversationByIdErrorMessage = ''
+    },
+    resetUpdateConversationById: (state) => {
+      state.isUpdateConversationByIdError = false
+      state.isUpdateConversationByIdSuccess = false
+      state.isUpdateConversationByIdLoading = false
+      state.updateConversationByIdErrorMessage = ''
     },
     resetDeleteConversationById: (state) => {
       state.isDeleteConversationByIdError = false
@@ -196,6 +228,30 @@ export const conversationSlice = createSlice({
         state.isGetConversationByIdSuccess = false
         state.getConversationByIdErrorMessage = action.payload
       })
+      .addCase(updateConversationById.pending, (state) => {
+        state.isUpdateConversationByIdLoading = true
+        state.isUpdateConversationByIdError = false
+        state.isUpdateConversationByIdSuccess = false
+        state.updateConversationByIdErrorMessage = ''
+      })
+      .addCase(updateConversationById.fulfilled, (state, action) => {
+        state.isUpdateConversationByIdLoading = false
+        state.isUpdateConversationByIdError = false
+        state.isUpdateConversationByIdSuccess = true
+        state.updateConversationByIdErrorMessage = ''
+        state.conversations = state.conversations.map((conversation) =>
+          conversation._id === action.payload._id
+            ? action.payload
+            : conversation
+        )
+        state.conversation = action.payload
+      })
+      .addCase(updateConversationById.rejected, (state, action) => {
+        state.isUpdateConversationByIdLoading = false
+        state.isUpdateConversationByIdError = true
+        state.isUpdateConversationByIdSuccess = false
+        state.updateConversationByIdErrorMessage = action.payload
+      })
       .addCase(deleteConversationById.pending, (state) => {
         state.isDeleteConversationByIdLoading = true
         state.isDeleteConversationByIdError = false
@@ -210,7 +266,8 @@ export const conversationSlice = createSlice({
         state.conversations = state.conversations.filter(
           (conversation) => conversation._id !== action.payload._id
         )
-        state.conversation._id === action.payload._id && (state.conversation = null)
+        state.conversation._id === action.payload._id &&
+          (state.conversation = null)
       })
       .addCase(deleteConversationById.rejected, (state, action) => {
         state.isDeleteConversationByIdLoading = false
@@ -227,6 +284,7 @@ export const {
   resetGetAllConversationsOfUser,
   resetCreateConversation,
   resetGetConversationById,
+  resetUpdateConversationById,
   resetDeleteConversationById,
 } = conversationSlice.actions
 

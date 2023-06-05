@@ -34,6 +34,16 @@ const getConversationById = async (token, id) => {
   return response.data.data
 }
 
+//update a conversation by id
+const updateConversationById = async (token, id, data) => {
+  const response = await axios.put(API_URL + `/${id}`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  return response.data.data
+}
+
 //delete a conversation by id
 const deleteConversationById = async (token, id) => {
   const response = await axios.delete(API_URL + `/${id}`, {
@@ -48,6 +58,7 @@ const conversationService = {
   getAllConversationsOfUser,
   createConversation,
   getConversationById,
+  updateConversationById,
   deleteConversationById,
 }
 
