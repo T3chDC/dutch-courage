@@ -22,6 +22,11 @@ export const createConversation = createOne(Conversation)
 // @access  Private/regularUser
 export const deleteConversation = deleteOne(Conversation)
 
+// @desc    Update a specific conversation
+// @route   PATCH /api/v1/connversations/:id
+// @access  Private/regularUser
+export const updateConversation = updateOne(Conversation)
+
 // @desc    Get all conversations of logged in user
 // @route   GET /api/v1/connversations/getMyConversations
 // @access  Private/regularUser

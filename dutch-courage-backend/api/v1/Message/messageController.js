@@ -3,6 +3,7 @@
 import catchAsync from '../utils/catchAsync.js'
 import AppError from '../utils/appError.js'
 import Message from './messageModel.js'
+import Conversation from '../Conversation/conversationModel.js'
 
 import { deleteOne } from '../common/handlerFactory.js' //import generic handler
 
@@ -10,7 +11,6 @@ import { deleteOne } from '../common/handlerFactory.js' //import generic handler
 // @route   POST /api/v1/messages
 // @access  Private/regularUser
 export const createMessage = catchAsync(async (req, res, next) => {
-
   //Check if the number of messages per participant in a conversation is not more than 10
   const messageCount = await Message.countDocuments({
     conversationId: req.body.conversationId,
@@ -31,6 +31,20 @@ export const createMessage = catchAsync(async (req, res, next) => {
 
   if (!newMessage) {
     return next(new AppError('Could not create message', 429))
+  }
+
+  //Update the conversation with the new message as the lastMessage and increase the unreadMessageCount by 1
+  const updatedConversation = await Conversation.findByIdAndUpdate(
+    req.body.conversationId,
+    {
+      lastMessage: newMessage._id,
+      $inc: { unreadMessageCount: 1 },
+    },
+    { new: true }
+  )
+
+  if (!updatedConversation) {
+    return next(new AppError('Could not update conversation', 429))
   }
 
   res.status(201).json({

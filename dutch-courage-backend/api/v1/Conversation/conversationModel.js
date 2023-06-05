@@ -32,7 +32,7 @@ const conversationSchema = new mongoose.Schema(
       },
     },
 
-    unreadCount: {
+    unreadMessageCount: {
       type: Number,
       default: 0,
     },
