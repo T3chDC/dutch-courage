@@ -112,7 +112,7 @@ const InboxScreen = () => {
             </View>
 
             <View className='w-[70] flex flex-col'>
-              <Text className='text-white text-xs text-right text-[#808080]'>
+              <Text className='text-xs text-right text-[#808080]'>
                 Yesterday
               </Text>
             </View>
@@ -145,7 +145,7 @@ const InboxScreen = () => {
             </View>
 
             <View className='w-[70] flex flex-col'>
-              <Text className='text-white text-xs text-right text-[#808080]'>
+              <Text className='text-xs text-right text-[#808080]'>
                 Saturday
               </Text>
             </View>
@@ -178,7 +178,7 @@ const InboxScreen = () => {
             </View>
 
             <View className='w-[70] flex flex-col'>
-              <Text className='text-white text-xs text-right text-[#808080]'>
+              <Text className='text-xs text-right text-[#808080]'>
                 21/04/2023
               </Text>
             </View>
