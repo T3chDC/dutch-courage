@@ -19,6 +19,23 @@ const conversationSchema = new mongoose.Schema(
       },
       ref: 'User',
     },
+
+    lastMessage: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Message',
+      default: null,
+      validate: {
+        validator: function (val) {
+          return val === null || val !== undefined
+        },
+        message: 'last message must be a valid message id',
+      },
+    },
+
+    unreadCount: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,
@@ -32,6 +49,9 @@ conversationSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'participants',
     select: 'userName imageUrl',
+  }).populate({
+    path: 'lastMessage',
+    select: 'messageType message messageImageUrl',
   })
   next()
 })
