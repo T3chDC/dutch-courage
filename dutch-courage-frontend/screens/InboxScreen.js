@@ -23,6 +23,21 @@ const InboxScreen = () => {
     navigation.goBack()
   }
 
+  // function to handle back press of hardware
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack()
+      return true
+    }
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction
+    )
+
+    return () => backHandler.remove()
+  }, [])
+
   return (
     <View className='bg-black flex-1 justify-start items-center relative'>
       <TouchableOpacity
@@ -66,9 +81,7 @@ const InboxScreen = () => {
             </View>
 
             <View className='w-[70] flex flex-col'>
-              <Text className='text-white text-xs text-right text-[#22A6B3]'>
-                16:31
-              </Text>
+              <Text className='text-xs text-right text-[#22A6B3]'>16:31</Text>
             </View>
           </View>
           <View className='flex flex-row mt-3 h-[1] w-[300] bg-[#22A6B3]'></View>
