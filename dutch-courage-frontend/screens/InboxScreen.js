@@ -14,6 +14,8 @@ import {
   resetConversations,
   resetGetAllConversationsOfUser,
 } from '../features/conversation/conversationSlice'
+import Conversation from '../components/Conversation'
+import * as Progress from 'react-native-progress'
 import Toast from 'react-native-toast-message'
 import SwipeButton from 'rn-swipe-button'
 
@@ -99,7 +101,8 @@ const InboxScreen = () => {
       </View>
 
       {/* Messages On Inbox /> */}
-      <View className='mt-[15] flex flex-row'>
+      
+      {/* <View className='mt-[15] flex flex-row'>
         <View className='w-[60] flex-col'>
           <View className='w-[42] h-[40] rounded-full bg-[#FCFCFE] justify-center items-center'>
             <Image
@@ -226,8 +229,8 @@ const InboxScreen = () => {
             </View>
           </View>
           <View className='flex flex-row mt-3 h-[1] w-[300] bg-[#22A6B3]'></View>
-        </View>
-      </View>
+        </View> 
+      </View> */}
     </View>
   )
 }
