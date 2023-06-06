@@ -33,7 +33,7 @@ export const updateConversation = updateOne(Conversation)
 export const getAllConversationsOfUser = catchAsync(async (req, res, next) => {
   const conversations = await Conversation.find({
     participants: { $in: [req.user._id] },
-  })
+  }).sort({ updatedAt: -1 })
 
   if (!conversations) {
     return next(
