@@ -21,12 +21,13 @@ const Conversation = ({ conversation, loggedInUser }) => {
     const daysDiff = Math.floor(hoursDiff / 24)
     const yearsDiff = now.getFullYear() - date.getFullYear()
 
-    if (secondsDiff < 60) {
-      return `${secondsDiff}seconds ago`
-    } else if (minutesDiff < 60) {
-      return `${minutesDiff} minutes ago`
-    } else if (hoursDiff < 24) {
-      return `${hoursDiff} hours ago`
+    // if (secondsDiff < 60) {
+    //   return `${secondsDiff} seconds`
+    // } else if (minutesDiff < 60) {
+    //   return `${minutesDiff} minutes`
+    // } else
+    if (hoursDiff < 24) {
+      return `${date.getHours()}:${date.getMinutes()}`
     } else if (daysDiff === 1) {
       return 'Yesterday'
     } else if (daysDiff < 7) {
