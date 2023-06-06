@@ -177,7 +177,7 @@ export const signinLocal = catchAsync(async (req, res, next) => {
   })
 
   if (!authedUser) {
-    return next(new AppError('Invalid Email', 401))
+    return next(new AppError('Invalid Email or Password', 401))
   }
 
   if (authedUser && (await authedUser.matchPassword(password))) {
