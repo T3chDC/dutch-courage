@@ -9,6 +9,11 @@ import {
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
+import {
+  getAllConversationsOfUser,
+  resetConversations,
+  resetGetAllConversationsOfUser,
+} from '../features/conversation/conversationSlice'
 import Toast from 'react-native-toast-message'
 import SwipeButton from 'rn-swipe-button'
 
@@ -18,10 +23,47 @@ const InboxScreen = () => {
   // Redux Dispatch hook
   const dispatch = useDispatch()
 
-  // Functionality when user is trying togo back to profile screen
-  const backAction = () => {
-    navigation.goBack()
-  }
+  // Redux State variables
+  const { userInfo } = useSelector((state) => state.auth)
+
+  const {
+    conversations,
+    isGetAllConversationsOfUserLoading,
+    isGetAllConversationsOfUserSuccess,
+    isGetAllConversationsOfUserError,
+    getAllConversationsOfUserErrorMessage,
+    isDeleteConversationByIdError,
+    isDeleteConversationByIdSuccess,
+    isDeleteConversationByIdLoading,
+    deleteConversationByIdErrorMessage,
+  } = useSelector((state) => state.conversation)
+
+  // local state variables
+  const [selectedConversations, setSelectedConversations] = useState([])
+
+  // Check if user is logged in
+  useEffect(() => {
+    if (!userInfo) {
+      navigation.navigate('Login')
+    }
+  }, [userInfo, navigation])
+
+  // Get all conversations of user
+  useEffect(() => {
+    dispatch(getAllConversationsOfUser())
+  }, [dispatch])
+
+  // Handle get all conversations of user error
+  useEffect(() => {
+    if (isGetAllConversationsOfUserError) {
+      Toast.show({
+        type: 'error',
+        text1: getAllConversationsOfUserErrorMessage,
+        visibilityTime: 3000,
+      })
+      dispatch(resetGetAllConversationsOfUser())
+    }
+  }, [isGetAllConversationsOfUserError, getAllConversationsOfUserErrorMessage])
 
   // function to handle back press of hardware
   useEffect(() => {
@@ -42,7 +84,7 @@ const InboxScreen = () => {
     <View className='bg-black flex-1 justify-start items-center relative'>
       <TouchableOpacity
         className='absolute top-10 left-4 flex-row items-center'
-        onPress={() => backAction()}
+        onPress={() => navigation.goBack()}
       >
         {/* <ChevronLeftIcon size={20} color='white' /> */}
         <Text className='text-white text-base top-[-1]'>{'< Back'}</Text>

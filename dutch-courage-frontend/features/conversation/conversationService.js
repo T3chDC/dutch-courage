@@ -6,7 +6,7 @@ const API_URL = BACKEND_URL + '/api/v1/conversations'
 
 //get all conversations for logged in user
 const getAllConversationsOfUser = async (token) => {
-  const response = await axios.get(API_URL + '/getAllConversationsOfUser', {
+  const response = await axios.get(API_URL + '/getMyConversations', {
     headers: {
       Authorization: `Bearer ${token}`,
     },
