@@ -182,7 +182,7 @@ const SignUpScreen = () => {
     } else {
       dispatch(
         signupLocal({
-          userName: userName.trim(),
+          userName, //: userName.trim()
           email,
           password,
           loginType: 'local',
@@ -272,7 +272,7 @@ const SignUpScreen = () => {
               keyboardType='default'
               className='bg-[#F6F6F6] border border-[#E8E8E8] rounded-md h-12 w-80 px-4'
               value={userName}
-              onChangeText={(text) => setUserName(text)}
+              onChangeText={(text) => setUserName(text.trim())}
             />
           </View>
           {/* Email Field */}
