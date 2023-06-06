@@ -51,7 +51,7 @@ conversationSchema.pre(/^find/, function (next) {
     select: 'userName imageUrl',
   }).populate({
     path: 'lastMessage',
-    select: 'messageType message messageImageUrl',
+    select: 'messageType message messageImageUrl createdAt',
   })
   next()
 })
