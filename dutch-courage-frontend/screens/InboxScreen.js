@@ -100,8 +100,37 @@ const InboxScreen = () => {
         <View className='mt-[110] flex-1 h-[0.8] w-60 bg-[#22A6B3]'></View>
       </View>
 
-      {/* Messages On Inbox /> */}
-      
+      {/* show loader if data is being fetched, 
+      else if there is no message, show there is no message,
+      otherwise show the messages */}
+      {isGetAllConversationsOfUserLoading ? (
+        <View className='flex-1 justify-center items-center mt-[15]'>
+          <Text className='text-[#22A6B3] text-2xl font-bold mb-4'>
+            Updating Profile...
+          </Text>
+          <Progress.CircleSnail
+            color={['#22A6B3', '#22A6B3', '#22A6B3']}
+            size={100}
+            thickness={5}
+            className='w-[100vw] flex-row justify-center items-center'
+          />
+        </View>
+      ) : conversations.length === 0 ? (
+        <View className='mt-[100]'>
+          <Text className='text-white text-base'>No messages</Text>
+        </View>
+      ) : (
+        <>
+          {conversations?.map((conversation) => (
+            <Conversation
+              key={conversation._id}
+              conversation={conversation}
+              loggedInUser={userInfo}
+            />
+          ))}
+        </>
+      )}
+
       {/* <View className='mt-[15] flex flex-row'>
         <View className='w-[60] flex-col'>
           <View className='w-[42] h-[40] rounded-full bg-[#FCFCFE] justify-center items-center'>
