@@ -1,18 +1,24 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { CheckIcon } from 'react-native-heroicons/solid'
 import { BACKEND_URL } from '../config'
+import { useNavigation } from '@react-navigation/native'
 
 const Conversation = ({
   conversation,
   loggedInUser,
+  selectedConversations,
   setSelectedConversations,
+  isDeleteMode,
+  setIsDeleteMode,
 }) => {
+  // Navigation hook
+  const navigation = useNavigation()
+
   // sender is the other user
   const sender = conversation.participants.find(
     (participant) => participant._id !== loggedInUser._id
   )
-
-  console.log('sender', sender)
 
   //state variable to check if this conversation is selected
   const [isSelected, setIsSelected] = useState(false)
@@ -56,20 +62,72 @@ const Conversation = ({
     }
   }
 
+  const shortPressHandler = () => {
+    if (isDeleteMode) {
+      setIsSelected(!isSelected)
+      if (!isSelected) {
+        setSelectedConversations((prev) => [...prev, conversation._id])
+      } else {
+        setSelectedConversations((prev) =>
+          prev.filter((id) => id !== conversation._id)
+        )
+        if (selectedConversations.length === 1) {
+          setIsDeleteMode(false)
+        }
+      }
+    } else {
+      navigation.goBack()
+      // navigation.navigate('Chat', {
+      //   conversationId: conversation._id,
+      //   sender,
+      // })
+    }
+  }
+
+  const longPressHandler = () => {
+    setIsDeleteMode(true)
+    setIsSelected(!isSelected)
+    if (!isSelected) {
+      setSelectedConversations((prev) => [...prev, conversation._id])
+    } else {
+      setSelectedConversations((prev) =>
+        prev.filter((id) => id !== conversation._id)
+      )
+      if (selectedConversations.length === 1) {
+        setIsDeleteMode(false)
+      }
+    }
+  }
+
   return (
-    <TouchableOpacity>
+    <TouchableOpacity
+      onPress={shortPressHandler}
+      onLongPress={longPressHandler}
+    >
       <View className='mt-[15] flex flex-row'>
         <View className='w-[60] flex-col'>
-          <View className='w-[42] h-[42] rounded-full bg-[#FCFCFE] justify-center items-center'>
-            <Image
-              source={{
-                uri: `${BACKEND_URL}/uploads/${sender.imageUrl.slice(
-                  sender.imageUrl.lastIndexOf('/') + 1
-                )}`,
-              }}
-              className='w-[42] h-[42] rounded-full'
-              resizeMode='cover'
-            />
+          <View
+            className={
+              isSelected
+                ? 'w-[42] h-[42] rounded-full bg-[#FF0000] justify-center items-center'
+                : 'w-[42] h-[42] rounded-full bg-[#FCFCFE] justify-center items-center'
+            }
+          >
+            {isSelected ? (
+              <View className='justify-center items-center'>
+                <CheckIcon size={20} color='#FCFCFE' />
+              </View>
+            ) : (
+              <Image
+                source={{
+                  uri: `${BACKEND_URL}/uploads/${sender.imageUrl.slice(
+                    sender.imageUrl.lastIndexOf('/') + 1
+                  )}`,
+                }}
+                className='w-[42] h-[42] rounded-full'
+                resizeMode='cover'
+              />
+            )}
           </View>
         </View>
         <View>

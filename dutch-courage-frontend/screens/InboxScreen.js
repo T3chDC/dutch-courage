@@ -7,6 +7,7 @@ import {
   BackHandler,
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
+import { TrashIcon } from 'react-native-heroicons/outline'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -42,6 +43,7 @@ const InboxScreen = () => {
 
   // local state variables
   const [selectedConversations, setSelectedConversations] = useState([])
+  const [isDeleteMode, setIsDeleteMode] = useState(false)
 
   // Check if user is logged in
   useEffect(() => {
@@ -70,8 +72,14 @@ const InboxScreen = () => {
   // function to handle back press of hardware
   useEffect(() => {
     const backAction = () => {
-      navigation.goBack()
-      return true
+      if (isDeleteMode) {
+        setIsDeleteMode(false)
+        setSelectedConversations([])
+        return true
+      } else {
+        navigation.goBack()
+        return true
+      }
     }
 
     const backHandler = BackHandler.addEventListener(
@@ -80,7 +88,11 @@ const InboxScreen = () => {
     )
 
     return () => backHandler.remove()
-  }, [])
+  }, [
+    isDeleteMode,
+    navigation,
+    selectedConversations,
+  ])
 
   // clear redux state on unmount
   useEffect(() => {
@@ -89,6 +101,8 @@ const InboxScreen = () => {
       dispatch(resetGetAllConversationsOfUser())
     }
   }, [dispatch])
+
+  console.log('selectedConversations', selectedConversations)
 
   return (
     <View className='bg-black flex-1 justify-start items-center relative'>
@@ -101,10 +115,23 @@ const InboxScreen = () => {
       </TouchableOpacity>
 
       {/* Messages Section /> */}
-      <View className='flex-row justify-center items-center'>
-        <Text className='text-[#808080] text-base  absolute top-20 left-10'>
-          Messages
-        </Text>
+      <View className='flex-row items-center justify-evenly relative'>
+        {isDeleteMode && selectedConversations.length > 0 ? (
+          <View className='flex-row items-center justify-evenly relative'>
+            <View className='flex-row items-center justify-center absolute top-6 left-10'>
+              <Text className='text-[#22A6B3] text-base'>
+                {selectedConversations.length}
+              </Text>
+            </View>
+            <View className='flex-row items-center justify-center absolute top-6 left-[350]'>
+              <TrashIcon size={20} color='#22A6B3' />
+            </View>
+          </View>
+        ) : (
+          <Text className='text-[#808080] text-base  absolute top-20 left-10'>
+            Messages
+          </Text>
+        )}
         <View className='mt-[110] flex-1 h-[0.8] w-60 bg-[#22A6B3]'></View>
       </View>
 
@@ -114,7 +141,7 @@ const InboxScreen = () => {
       {isGetAllConversationsOfUserLoading ? (
         <View className='flex-1 justify-center items-center mt-[15]'>
           <Text className='text-[#22A6B3] text-2xl font-bold mb-4'>
-            Updating Profile...
+            Getting your conversations ready...
           </Text>
           <Progress.CircleSnail
             color={['#22A6B3', '#22A6B3', '#22A6B3']}
@@ -134,7 +161,10 @@ const InboxScreen = () => {
               key={conversation._id}
               conversation={conversation}
               loggedInUser={userInfo}
+              selectedConversations={selectedConversations}
               setSelectedConversations={setSelectedConversations}
+              isDeleteMode={isDeleteMode}
+              setIsDeleteMode={setIsDeleteMode}
             />
           ))}
         </>
