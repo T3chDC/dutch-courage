@@ -22,6 +22,33 @@ export const createConversation = createOne(Conversation)
 // @access  Private/regularUser
 export const deleteConversation = deleteOne(Conversation)
 
+//@desc    Delete multiple conversations
+//@route   DELETE /api/v1/connversations/deleteMany
+//@access  Private/regularUser
+export const deleteManyConversations = catchAsync(async (req, res, next) => {
+  const { conversationIds } = req.body
+
+  const conversations = await Conversation.deleteMany({
+    _id: { $in: conversationIds },
+  })
+
+  if (!conversations) {
+    return next(
+      new AppError(
+        `No Conversations could be deleted with the given conversationIds ${conversationIds}`,
+        404
+      )
+    )
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      deletedIds: conversationIds,
+    },
+  })
+})
+
 // @desc    Update a specific conversation
 // @route   PATCH /api/v1/connversations/:id
 // @access  Private/regularUser

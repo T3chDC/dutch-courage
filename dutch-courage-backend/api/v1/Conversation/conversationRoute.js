@@ -4,6 +4,7 @@ import express from 'express' //import express
 import {
   createConversation,
   deleteConversation,
+  deleteManyConversations,
   getConversation,
   updateConversation,
   getAllConversationsOfUser,
@@ -15,6 +16,7 @@ const router = express.Router() //create router instance
 
 router.use(protect, restrictTo('regularUser')) //protect all routes after this middleware
 router.route('/getMyConversations').get(getAllConversationsOfUser) //route to get all conversations of logged in user
+router.route('/deleteMany').delete(deleteManyConversations) //route to delete multiple conversations
 router.route('/').post(createConversation) //route to create a conversation
 router
   .route('/:id')
