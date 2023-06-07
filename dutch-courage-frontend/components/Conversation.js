@@ -23,6 +23,14 @@ const Conversation = ({
   //state variable to check if this conversation is selected
   const [isSelected, setIsSelected] = useState(false)
 
+  // if isDeleteMode is updated to false then set isSelected to false
+  useEffect(() => {
+    if (!isDeleteMode) {
+      setIsSelected(false)
+    }
+  }, [isDeleteMode])
+  
+
   //functin to format date and time
   const formatDate = (datetime) => {
     const now = new Date()
