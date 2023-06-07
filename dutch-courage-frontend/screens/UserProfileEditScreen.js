@@ -507,7 +507,13 @@ const UserProfileEditScreen = () => {
             >
               {imageUrl || selectedProfileImage ? (
                 <Image
-                  source={{ uri: selectedProfileImage || imageUrl }}
+                  source={{
+                    uri:
+                      selectedProfileImage ||
+                      `${BACKEND_URL}/uploads/${imageUrl.slice(
+                        imageUrl.lastIndexOf('/') + 1
+                      )}`,
+                  }}
                   className='w-56 h-56 rounded-full'
                 />
               ) : (
@@ -539,7 +545,11 @@ const UserProfileEditScreen = () => {
                 <View className='w-12 h-12 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center'>
                   <Image
                     source={{
-                      uri: selectedGalleryImage1 || galleryImage1Url,
+                      uri:
+                        selectedGalleryImage1 ||
+                        `${BACKEND_URL}/uploads/${galleryImage1Url.slice(
+                          galleryImage1Url.lastIndexOf('/') + 1
+                        )}`,
                     }}
                     className='w-10 h-10 rounded-full'
                     resizeMode='cover'
@@ -558,7 +568,11 @@ const UserProfileEditScreen = () => {
                 <View className='w-12 h-12 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center'>
                   <Image
                     source={{
-                      uri: selectedGalleryImage2 || galleryImage2Url,
+                      uri:
+                        selectedGalleryImage2 ||
+                        `${BACKEND_URL}/uploads/${galleryImage2Url.slice(
+                          galleryImage2Url.lastIndexOf('/') + 1
+                        )}`,
                     }}
                     className='w-10 h-10 rounded-full'
                     resizeMode='cover'
@@ -577,7 +591,11 @@ const UserProfileEditScreen = () => {
                 <View className='w-12 h-12 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center'>
                   <Image
                     source={{
-                      uri: selectedGalleryImage3 || galleryImage3Url,
+                      uri:
+                        selectedGalleryImage3 ||
+                        `${BACKEND_URL}/uploads/${galleryImage3Url.slice(
+                          galleryImage3Url.lastIndexOf('/') + 1
+                        )}`,
                     }}
                     className='w-10 h-10 rounded-full'
                     resizeMode='cover'

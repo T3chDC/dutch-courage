@@ -134,6 +134,7 @@ const InboxScreen = () => {
               key={conversation._id}
               conversation={conversation}
               loggedInUser={userInfo}
+              setSelectedConversations={setSelectedConversations}
             />
           ))}
         </>

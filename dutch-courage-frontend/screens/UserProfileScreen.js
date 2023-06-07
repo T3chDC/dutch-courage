@@ -20,6 +20,7 @@ import Toast from 'react-native-toast-message'
 import * as Progress from 'react-native-progress'
 import SwipeButton from 'rn-swipe-button'
 import { logout } from '../features/auth/authSlice'
+import { BACKEND_URL } from '../config'
 
 const UserProfileScreen = () => {
   // Navigation hook
@@ -148,7 +149,9 @@ const UserProfileScreen = () => {
             <View className='mt-4 w-68 h-68 rounded-full bg-[#FCFCFE] flex-row justify-center items-center border-2 border-white'>
               <Image
                 source={{
-                  uri: imageUrl,
+                  uri: `${BACKEND_URL}/uploads/${imageUrl.slice(
+                    imageUrl.lastIndexOf('/') + 1
+                  )}`,
                 }}
                 className='w-64 h-64 rounded-full'
                 resizeMode='cover'
@@ -172,7 +175,9 @@ const UserProfileScreen = () => {
                 <View className='w-11 h-11 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center'>
                   <Image
                     source={{
-                      uri: galleryImage1Url,
+                      uri: `${BACKEND_URL}/uploads/${galleryImage1Url.slice(
+                        galleryImage1Url.lastIndexOf('/') + 1
+                      )}`,
                     }}
                     className='w-10 h-10 rounded-full'
                     resizeMode='cover'
@@ -184,7 +189,9 @@ const UserProfileScreen = () => {
                 <View className='w-11 h-11 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center'>
                   <Image
                     source={{
-                      uri: galleryImage2Url,
+                      uri: `${BACKEND_URL}/uploads/${galleryImage2Url.slice(
+                        galleryImage2Url.lastIndexOf('/') + 1
+                      )}`,
                     }}
                     className='w-10 h-10 rounded-full'
                     resizeMode='cover'
@@ -196,7 +203,9 @@ const UserProfileScreen = () => {
                 <View className='w-11 h-11 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center'>
                   <Image
                     source={{
-                      uri: galleryImage3Url,
+                      uri: `${BACKEND_URL}/uploads/${galleryImage3Url.slice(
+                        galleryImage3Url.lastIndexOf('/') + 1
+                      )}`,
                     }}
                     className='w-10 h-10 rounded-full'
                     resizeMode='cover'
@@ -276,7 +285,7 @@ const UserProfileScreen = () => {
                 <ChatBubbleLeftRightIcon size={40} color={'white'} />
               </TouchableOpacity>
             </View>
-            
+
             <View className='w-1/2 flex-row justify-center items-center'>
               <TouchableOpacity
                 onPress={() => navigation.navigate('UserProfileEdit')}
