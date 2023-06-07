@@ -88,11 +88,7 @@ const InboxScreen = () => {
     )
 
     return () => backHandler.remove()
-  }, [
-    isDeleteMode,
-    navigation,
-    selectedConversations,
-  ])
+  }, [isDeleteMode, navigation, selectedConversations])
 
   // clear redux state on unmount
   useEffect(() => {
@@ -156,17 +152,19 @@ const InboxScreen = () => {
         </View>
       ) : (
         <>
-          {conversations?.map((conversation) => (
-            <Conversation
-              key={conversation._id}
-              conversation={conversation}
-              loggedInUser={userInfo}
-              selectedConversations={selectedConversations}
-              setSelectedConversations={setSelectedConversations}
-              isDeleteMode={isDeleteMode}
-              setIsDeleteMode={setIsDeleteMode}
-            />
-          ))}
+          {conversations?.map((conversation) =>
+            conversation.deletedBy.includes(userInfo._id) ? null : (
+              <Conversation
+                key={conversation._id}
+                conversation={conversation}
+                loggedInUser={userInfo}
+                selectedConversations={selectedConversations}
+                setSelectedConversations={setSelectedConversations}
+                isDeleteMode={isDeleteMode}
+                setIsDeleteMode={setIsDeleteMode}
+              />
+            )
+          )}
         </>
       )}
     </View>
