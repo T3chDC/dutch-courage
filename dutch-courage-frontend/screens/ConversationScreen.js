@@ -32,15 +32,15 @@ const ConversationScreen = () => {
         <Text className="text-white text-base top-[-1]">{"<"}</Text>
       </TouchableOpacity>
 
-      <View className='absolute top-10 left-8 items-left'>
-        <View className="w-[42] h-[42] rounded-full bg-[#FCFCFE] justify-center items-center">
-          {/* Image will appear here */}
+      <View className="flex flex-row absolute items-left left-8 top-10">
+        <View className="w-[60] justify-center items-center">
+          <View className="w-[42] h-[42] rounded-full bg-[#FCFCFE] ">
+            {/* Image will appear here */}
+          </View>
         </View>
-      </View>
 
-      <View className='absolute top-10 left-20 items-left'>
-        <View className="w-[42] h-[42] justify-center items-center">
-          <Text className='text-white'>User Name</Text>
+        <View className="w-[220] justify-center items-left">
+          <Text className="text-white">User Name</Text>
         </View>
       </View>
     </View>
