@@ -43,6 +43,11 @@ const ConversationScreen = () => {
           <Text className="text-white">User Name</Text>
         </View>
       </View>
+
+      <View className="absolute">
+        <View className="mt-[95] flex-1 h-[1] w-[400] bg-[#22A6B3]"></View>
+      </View>
+
     </View>
   );
 };
