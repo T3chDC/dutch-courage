@@ -84,11 +84,10 @@ const Conversation = ({
         }
       }
     } else {
-      navigation.goBack()
-      // navigation.navigate('Chat', {
-      //   conversationId: conversation._id,
-      //   sender,
-      // })
+      navigation.navigate('Conversation', {
+        conversationId: conversation._id,
+        sender,
+      })
     }
   }
 
