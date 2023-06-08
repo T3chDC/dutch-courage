@@ -48,6 +48,39 @@ const ConversationScreen = () => {
         <View className="mt-[95] flex-1 h-[1] w-[400] bg-[#22A6B3]"></View>
       </View>
 
+      {/* Conversation */}
+      <View className="flex flex-col items-center justify-center p-10">
+        <View className="flex flex-col flex-grow w-full">
+          <View className="flex flex-col flex-grow p-4 overflow-auto">
+            <View className="flex w-full mt-3 space-x-3 max-w-xs">
+            <View className="flex-shrink-0 h-10"></View>
+              <View className="bg-gray-300 p-4 rounded-lg rounded-bl-0">
+                <Text className="text-sm">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Quibusdam, quos?
+                </Text>
+              </View>
+
+              <View className='text-xs'>
+                <Text className='text-gray-500'>2 min ago</Text>
+              </View>
+            </View>
+          </View>
+
+          <View className='flex w-full mt-2 ml-auto justify-end'>
+            <View className='bg-blue-600 text-white p-3 rounded-l-lg rounded-br-lg'>
+                <Text className='text-sm'>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                </Text>
+            </View>
+
+            <View className='text-xs leading-none'>
+                <Text className='text-gray-500'>1 min ago</Text>
+            </View>
+          </View>
+
+        </View>
+      </View>
     </View>
   );
 };
