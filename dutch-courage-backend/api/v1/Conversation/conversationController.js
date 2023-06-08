@@ -3,6 +3,7 @@
 import catchAsync from '../utils/catchAsync.js'
 import AppError from '../utils/appError.js'
 import Conversation from './conversationModel.js'
+import Message from '../Message/messageModel.js'
 
 import { createOne, updateOne } from '../common/handlerFactory.js' //import generic handler
 
@@ -35,6 +36,8 @@ export const deleteConversation = catchAsync(async (req, res, next) => {
 
   //if the conversation has been deleted by both users, delete the conversation
   if (conversation.deletedBy.length === 2) {
+    //delete all messages in the conversation
+    await Message.deleteMany({ conversationId: req.params.id })
     await Conversation.findByIdAndDelete(req.params.id)
   }
 
@@ -66,11 +69,21 @@ export const deleteManyConversations = catchAsync(async (req, res, next) => {
     )
   }
 
-  //if the conversation has been deleted by both users, delete the conversation
-  await Conversation.deleteMany({
+  //if the conversation has been deleted by both users, delete the conversation and all messages in it
+  const deletedConversations = await Conversation.find({
     _id: { $in: req.body.conversationIds },
     deletedBy: { $size: 2 },
   })
+
+  if (deletedConversations.length > 0) {
+    //delete all messages in the conversation
+    await Message.deleteMany({
+      conversationId: { $in: req.body.conversationIds },
+    })
+    await Conversation.deleteMany({
+      _id: { $in: req.body.conversationIds },
+    })
+  }
 
   res.status(200).json({
     status: 'success',

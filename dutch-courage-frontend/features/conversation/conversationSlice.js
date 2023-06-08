@@ -30,6 +30,11 @@ const initialState = {
   isDeleteConversationByIdSuccess: false,
   isDeleteConversationByIdLoading: false,
   deleteConversationByIdErrorMessage: '',
+
+  isDeleteConversationsError: false,
+  isDeleteConversationsSuccess: false,
+  isDeleteConversationsLoading: false,
+  deleteConversationsErrorMessage: '',
 }
 
 //get all conversations for logged in user
@@ -127,6 +132,23 @@ export const deleteConversationById = createAsyncThunk(
   }
 )
 
+// delete multiple conversations
+export const deleteConversations = createAsyncThunk(
+  'conversation/deleteConversations',
+  async (data, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.userInfo.token
+      return await conversationService.deleteConversations(token, data)
+    } catch (err) {
+      const message =
+        (err.response && err.response.data && err.response.data.message) ||
+        err.message ||
+        err.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
 export const conversationSlice = createSlice({
   name: 'conversation',
   initialState,
@@ -166,6 +188,12 @@ export const conversationSlice = createSlice({
       state.isDeleteConversationByIdSuccess = false
       state.isDeleteConversationByIdLoading = false
       state.deleteConversationByIdErrorMessage = ''
+    },
+    resetDeleteConversations: (state) => {
+      state.isDeleteConversationsError = false
+      state.isDeleteConversationsSuccess = false
+      state.isDeleteConversationsLoading = false
+      state.deleteConversationsErrorMessage = ''
     },
   },
   extraReducers: (builder) => {
@@ -275,6 +303,30 @@ export const conversationSlice = createSlice({
         state.isDeleteConversationByIdSuccess = false
         state.deleteConversationByIdErrorMessage = action.payload
       })
+      .addCase(deleteConversations.pending, (state) => {
+        state.isDeleteConversationsLoading = true
+        state.isDeleteConversationsError = false
+        state.isDeleteConversationsSuccess = false
+        state.deleteConversationsErrorMessage = ''
+      })
+      .addCase(deleteConversations.fulfilled, (state, action) => {
+        state.isDeleteConversationsLoading = false
+        state.isDeleteConversationsError = false
+        state.isDeleteConversationsSuccess = true
+        state.deleteConversationsErrorMessage = ''
+        state.conversations = state.conversations.filter(
+          (conversation) => !action.payload.includes(conversation._id)
+        )
+        state.conversation && action.payload.includes(state.conversation._id)
+          ? (state.conversation = null)
+          : null
+      })
+      .addCase(deleteConversations.rejected, (state, action) => {
+        state.isDeleteConversationsLoading = false
+        state.isDeleteConversationsError = true
+        state.isDeleteConversationsSuccess = false
+        state.deleteConversationsErrorMessage = action.payload
+      })
   },
 })
 
@@ -286,6 +338,7 @@ export const {
   resetGetConversationById,
   resetUpdateConversationById,
   resetDeleteConversationById,
+  resetDeleteConversations,
 } = conversationSlice.actions
 
 export default conversationSlice.reducer
