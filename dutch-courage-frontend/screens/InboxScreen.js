@@ -151,8 +151,6 @@ const InboxScreen = () => {
     }
   }, [dispatch])
 
-  console.log('selectedConversations', selectedConversations)
-
   return (
     <View className='bg-black flex-1 justify-start items-center relative'>
       <TouchableOpacity
