@@ -14,6 +14,10 @@ import {
   getAllConversationsOfUser,
   resetConversations,
   resetGetAllConversationsOfUser,
+  deleteConversationById,
+  resetDeleteConversationById,
+  deleteConversations,
+  resetDeleteConversations,
 } from '../features/conversation/conversationSlice'
 import Conversation from '../components/Conversation'
 import * as Progress from 'react-native-progress'
@@ -39,6 +43,10 @@ const InboxScreen = () => {
     isDeleteConversationByIdSuccess,
     isDeleteConversationByIdLoading,
     deleteConversationByIdErrorMessage,
+    isDeleteConversationsError,
+    isDeleteConversationsSuccess,
+    isDeleteConversationsLoading,
+    deleteConversationsErrorMessage,
   } = useSelector((state) => state.conversation)
 
   // local state variables
@@ -90,6 +98,51 @@ const InboxScreen = () => {
     return () => backHandler.remove()
   }, [isDeleteMode, navigation, selectedConversations])
 
+  // Handle delete conversations which are selected
+  useEffect(() => {
+    if (isDeleteConversationsSuccess) {
+      Toast.show({
+        type: 'success',
+        text1: 'Conversations deleted successfully',
+        visibilityTime: 3000,
+      })
+      dispatch(resetDeleteConversations())
+      dispatch(getAllConversationsOfUser())
+    } else if (isDeleteConversationsError) {
+      Toast.show({
+        type: 'error',
+        text1: deleteConversationsErrorMessage,
+        visibilityTime: 3000,
+      })
+      dispatch(resetDeleteConversations())
+    }
+  }, [isDeleteConversationsSuccess, dispatch])
+
+  // function to delete selected conversations
+  const deleteSelectedConversations = () => {
+    Alert.alert(
+      'Delete Conversations',
+      'Are you sure you want to delete the selected conversations?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => null,
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          onPress: () => {
+            dispatch(
+              deleteConversations({
+                conversationIds: selectedConversations,
+              })
+            )
+          },
+        },
+      ]
+    )
+  }
+
   // clear redux state on unmount
   useEffect(() => {
     return () => {
@@ -119,9 +172,12 @@ const InboxScreen = () => {
                 {selectedConversations.length}
               </Text>
             </View>
-            <View className='flex-row items-center justify-center absolute top-6 left-[350]'>
+            <TouchableOpacity
+              className='flex-row items-center justify-center absolute top-6 left-[350]'
+              onPress={() => deleteSelectedConversations()}
+            >
               <TrashIcon size={20} color='#22A6B3' />
-            </View>
+            </TouchableOpacity>
           </View>
         ) : (
           <Text className='text-[#808080] text-base  absolute top-20 left-10'>

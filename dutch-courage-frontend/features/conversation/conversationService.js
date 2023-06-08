@@ -54,12 +54,23 @@ const deleteConversationById = async (token, id) => {
   return response.data.data
 }
 
+// delete multiple conversations
+const deleteConversations = async (token, data) => {
+  const response = await axios.delete(API_URL + '/deleteMany', data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  return response.data.data
+}
+
 const conversationService = {
   getAllConversationsOfUser,
   createConversation,
   getConversationById,
   updateConversationById,
   deleteConversationById,
+  deleteConversations,
 }
 
 export default conversationService
