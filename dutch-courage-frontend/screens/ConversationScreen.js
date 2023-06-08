@@ -26,12 +26,23 @@ const ConversationScreen = () => {
   return (
     <View className="bg-black flex-1 justify-start items-center relative">
       <TouchableOpacity
-        className="absolute top-10 left-4 flex-row items-center"
+        className="absolute top-12 left-4 flex-row items-center"
         onPress={() => backAction()}
       >
-        {/* <ChevronLeftIcon size={20} color='white' /> */}
-        <Text className="text-white text-base top-[-1]">{"< Thor"}</Text>
+        <Text className="text-white text-base top-[-1]">{"<"}</Text>
       </TouchableOpacity>
+
+      <View className='absolute top-10 left-8 items-left'>
+        <View className="w-[42] h-[42] rounded-full bg-[#FCFCFE] justify-center items-center">
+          {/* Image will appear here */}
+        </View>
+      </View>
+
+      <View className='absolute top-10 left-20 items-left'>
+        <View className="w-[42] h-[42] justify-center items-center">
+          <Text className='text-white'>User Name</Text>
+        </View>
+      </View>
     </View>
   );
 };
