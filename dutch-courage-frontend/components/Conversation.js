@@ -29,7 +29,6 @@ const Conversation = ({
       setIsSelected(false)
     }
   }, [isDeleteMode])
-  
 
   //functin to format date and time
   const formatDate = (datetime) => {
