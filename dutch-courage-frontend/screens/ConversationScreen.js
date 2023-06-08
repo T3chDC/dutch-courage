@@ -56,6 +56,14 @@ const ConversationScreen = () => {
     navigation.goBack()
   }
 
+  // Clear redux state on unmount
+  useEffect(() => {
+    return () => {
+      dispatch(resetGetConversationById())
+      dispatch(resetConversation())
+    }
+  }, [dispatch])
+
   return (
     <View className='bg-black flex-1 justify-start items-center relative'>
       <TouchableOpacity
