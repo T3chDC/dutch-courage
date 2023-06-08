@@ -36,7 +36,7 @@ const getConversationById = async (token, id) => {
 
 //update a conversation by id
 const updateConversationById = async (token, id, data) => {
-  const response = await axios.put(API_URL + `/${id}`, data, {
+  const response = await axios.patch(API_URL + `/${id}`, data, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -56,10 +56,11 @@ const deleteConversationById = async (token, id) => {
 
 // delete multiple conversations
 const deleteConversations = async (token, data) => {
-  const response = await axios.delete(API_URL + '/deleteMany', data, {
+  const response = await axios.delete(API_URL + '/deleteMany', {
     headers: {
       Authorization: `Bearer ${token}`,
     },
+    data: data,
   })
   return response.data.data
 }

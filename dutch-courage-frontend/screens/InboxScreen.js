@@ -116,7 +116,7 @@ const InboxScreen = () => {
       })
       dispatch(resetDeleteConversations())
     }
-  }, [isDeleteConversationsSuccess, dispatch])
+  }, [isDeleteConversationsSuccess, isDeleteConversationsError, dispatch])
 
   // function to delete selected conversations
   const deleteSelectedConversations = () => {
