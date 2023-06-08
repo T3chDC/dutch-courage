@@ -173,7 +173,7 @@ const InboxScreen = () => {
               </Text>
             </View>
             <TouchableOpacity
-              className='flex-row items-center justify-center absolute top-6 left-[350]'
+              className='flex-row items-center justify-center absolute top-6 left-[350] w-6 h-6'
               onPress={() => deleteSelectedConversations()}
             >
               <TrashIcon size={20} color='#22A6B3' />
