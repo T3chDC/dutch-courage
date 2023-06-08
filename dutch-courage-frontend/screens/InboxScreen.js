@@ -108,6 +108,8 @@ const InboxScreen = () => {
       })
       dispatch(resetDeleteConversations())
       dispatch(getAllConversationsOfUser())
+      setIsDeleteMode(false)
+      setSelectedConversations([])
     } else if (isDeleteConversationsError) {
       Toast.show({
         type: 'error',
