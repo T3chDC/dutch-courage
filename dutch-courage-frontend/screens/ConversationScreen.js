@@ -52,9 +52,19 @@ const ConversationScreen = () => {
   }, [conversationId, dispatch])
 
   // Functionality when user is trying togo back to profile screen
-  const backAction = () => {
-    navigation.goBack()
-  }
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack()
+      return true
+    }
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction
+    )
+
+    return () => backHandler.remove()
+  }, [navigation])
 
   // Clear redux state on unmount
   useEffect(() => {
@@ -68,14 +78,14 @@ const ConversationScreen = () => {
     <View className='bg-black flex-1 justify-start items-center relative'>
       <TouchableOpacity
         className='absolute top-12 left-4 flex-row items-center'
-        onPress={() => backAction()}
+        onPress={() => navigation.goBack()}
       >
         <Text className='text-white text-base top-[-1]'>{'<'}</Text>
       </TouchableOpacity>
 
-      <View className='flex flex-row absolute items-left left-8 top-10'>
+      <View className='flex flex-row absolute items-left left-8 top-11'>
         <View className='w-[60] justify-center items-center'>
-          <View className='w-[42] h-[42] rounded-full bg-[#FCFCFE] '>
+          <View className='w-[42] h-[42] rounded-full bg-[#FCFCFE] justify-center items-center'>
             {/* Image will appear here */}
           </View>
         </View>
