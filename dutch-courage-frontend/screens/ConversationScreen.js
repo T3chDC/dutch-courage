@@ -7,7 +7,7 @@ import {
   Alert,
   BackHandler,
 } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -30,6 +30,8 @@ const ConversationScreen = () => {
   const { conversationId, sender } = route.params
   // Redux Dispatch hook
   const dispatch = useDispatch()
+  // Scroll view ref
+  const scrollViewRef = useRef(null)
 
   // Redux State variables
   const { userInfo } = useSelector((state) => state.auth)
@@ -211,6 +213,11 @@ const ConversationScreen = () => {
             alignItems: 'center',
             width: '100%',
           }}
+          ref={scrollViewRef}
+          onContentSizeChange={() =>
+            scrollViewRef.current.scrollToEnd({ animated: true })
+          }
+
         >
           {conversation?.messages?.map((message) => (
             <View
@@ -272,6 +279,9 @@ const ConversationScreen = () => {
           ))}
         </ScrollView>
       </View>
+
+      {/* View to display the input field to send messages */}
+      
     </View>
   )
 }
