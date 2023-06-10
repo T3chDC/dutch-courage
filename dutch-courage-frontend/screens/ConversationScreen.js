@@ -1,5 +1,6 @@
 import {
   View,
+  ScrollView,
   Text,
   Image,
   TouchableOpacity,
@@ -13,6 +14,8 @@ import {
   getConversationById,
   resetGetConversationById,
   resetConversation,
+  updateConversationById,
+  resetUpdateConversationById,
 } from '../features/conversation/conversationSlice'
 import { BACKEND_URL } from '../config'
 import Toast from 'react-native-toast-message'
@@ -36,6 +39,10 @@ const ConversationScreen = () => {
     isGetConversationByIdSuccess,
     isGetConversationByIdError,
     getConversationByIdErrorMessage,
+    isUpdateConversationByIdLoading,
+    isUpdateConversationByIdSuccess,
+    isUpdateConversationByIdError,
+    updateConversationByIdErrorMessage,
   } = useSelector((state) => state.conversation)
 
   // Check if user is logged in
@@ -51,6 +58,33 @@ const ConversationScreen = () => {
       dispatch(getConversationById(conversationId))
     }
   }, [conversationId, dispatch])
+
+  // mark conversation as read
+  useEffect(() => {
+    if (
+      conversationId &&
+      isGetConversationByIdSuccess &&
+      conversation.unreadMessageCount > 0
+    ) {
+      dispatch(
+        updateConversationById({
+          conversationId,
+          data: {
+            unreadMessageCount: 0,
+          },
+        })
+      )
+    }
+  }, [conversationId, conversation, isGetConversationByIdSuccess, dispatch])
+
+  // if conversation is updated successfully fetch the updated conversation again
+  useEffect(() => {
+    if (isUpdateConversationByIdSuccess) {
+      dispatch(getConversationById(conversationId))
+      dispatch(resetUpdateConversationById())
+    }
+  }, [isUpdateConversationByIdSuccess, dispatch])
+
 
   // Show error message if there is any
   useEffect(() => {
@@ -124,6 +158,7 @@ const ConversationScreen = () => {
     return () => {
       dispatch(resetGetConversationById())
       dispatch(resetConversation())
+      dispatch(resetUpdateConversationById())
     }
   }, [dispatch])
 

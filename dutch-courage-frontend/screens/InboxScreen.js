@@ -60,7 +60,7 @@ const InboxScreen = () => {
     }
   }, [userInfo, navigation])
 
-  // Get all conversations of user
+  // Get all conversations of user when component mounts
   useEffect(() => {
     dispatch(getAllConversationsOfUser())
   }, [dispatch])
