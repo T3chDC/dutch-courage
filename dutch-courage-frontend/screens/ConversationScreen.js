@@ -1,6 +1,7 @@
 import {
   View,
   KeyboardAvoidingView,
+  Keyboard,
   ScrollView,
   Text,
   TextInput,
@@ -134,6 +135,18 @@ const ConversationScreen = () => {
 
     return () => backHandler.remove()
   }, [navigation])
+
+  // Scroll to bottom of messages when keyboard is open
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidShow', () =>
+      scrollViewRef.current.scrollToEnd({ animated: true })
+    )
+
+    // cleanup function
+    return () => {
+      Keyboard.removeAllListeners('keyboardDidShow')
+    }
+  }, [])
 
   //functin to format date and time
   const formatDate = (datetime) => {
