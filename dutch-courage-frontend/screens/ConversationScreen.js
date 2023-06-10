@@ -198,14 +198,25 @@ const ConversationScreen = () => {
         <View className='mt-[95] flex-1 h-[1] w-[400] bg-[#22A6B3]'></View>
       </View>
 
-      {/* Messages Section where the messages of the conversations will be displayed */}
-      <View className='flex flex-col justify-end items-center mt-[100] w-80'>
-        <View className='flex flex-col justify-end items-center w-80'>
+      {/* Scrollable view to display the messages */}
+      <View
+        className='flex flex-col justify-end items-center mt-[100] w-80' 
+      >
+        <ScrollView
+          // className='flex flex-col justify-end items-center w-80'
+          contentContainerStyle={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            width: '100%',
+          }}
+        >
           {conversation?.messages?.map((message) => (
             <View
               key={message._id}
               className='flex flex-col justify-center items-center w-80'
-            >
+            > 
               {/* flex row to display the time of the message sent */}
               <View
                 className={
@@ -259,7 +270,7 @@ const ConversationScreen = () => {
               </View>
             </View>
           ))}
-        </View>
+        </ScrollView>
       </View>
     </View>
   )
