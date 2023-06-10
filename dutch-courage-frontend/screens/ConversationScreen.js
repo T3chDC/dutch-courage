@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   getConversationById,
   resetGetConversationById,
+  getAllConversationsOfUser,
   resetConversation,
   updateConversationById,
   resetUpdateConversationById,
@@ -85,7 +86,6 @@ const ConversationScreen = () => {
     }
   }, [isUpdateConversationByIdSuccess, dispatch])
 
-
   // Show error message if there is any
   useEffect(() => {
     if (isGetConversationByIdError) {
@@ -102,6 +102,7 @@ const ConversationScreen = () => {
   // Functionality when user is trying togo back to profile screen
   useEffect(() => {
     const backAction = () => {
+      dispatch(getAllConversationsOfUser())
       navigation.goBack()
       return true
     }
@@ -166,7 +167,10 @@ const ConversationScreen = () => {
     <View className='bg-black flex-1 justify-start items-center relative'>
       <TouchableOpacity
         className='absolute top-12 left-4 flex-row items-center'
-        onPress={() => navigation.goBack()}
+        onPress={() => {
+          dispatch(getAllConversationsOfUser())
+          navigation.goBack()
+        }}
       >
         <Text className='text-white text-base top-[-1]'>{'<'}</Text>
       </TouchableOpacity>
