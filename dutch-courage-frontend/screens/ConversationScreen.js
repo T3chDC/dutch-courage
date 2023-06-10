@@ -2,12 +2,13 @@ import {
   View,
   ScrollView,
   Text,
+  TextInput,
   Image,
   TouchableOpacity,
   Alert,
   BackHandler,
 } from 'react-native'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -18,6 +19,11 @@ import {
   updateConversationById,
   resetUpdateConversationById,
 } from '../features/conversation/conversationSlice'
+import {
+  createMessage,
+  resetCreateMessage,
+  resetMessage,
+} from '../features/message/messageSlice'
 import { BACKEND_URL } from '../config'
 import Toast from 'react-native-toast-message'
 import SwipeButton from 'rn-swipe-button'
@@ -47,6 +53,17 @@ const ConversationScreen = () => {
     isUpdateConversationByIdError,
     updateConversationByIdErrorMessage,
   } = useSelector((state) => state.conversation)
+
+  const {
+    message,
+    isCreateMessageLoading,
+    isCreateMessageSuccess,
+    isCreateMessageError,
+    createMessageErrorMessage,
+  } = useSelector((state) => state.message)
+
+  //local State variables
+  const [messageText, setMessageText] = useState('')
 
   // Check if user is logged in
   useEffect(() => {
@@ -201,9 +218,7 @@ const ConversationScreen = () => {
       </View>
 
       {/* Scrollable view to display the messages */}
-      <View
-        className='flex flex-col justify-end items-center mt-[100] w-80' 
-      >
+      <View className='flex flex-col justify-end items-center mt-[100] w-80 h-[650] mb-6'>
         <ScrollView
           // className='flex flex-col justify-end items-center w-80'
           contentContainerStyle={{
@@ -217,13 +232,12 @@ const ConversationScreen = () => {
           onContentSizeChange={() =>
             scrollViewRef.current.scrollToEnd({ animated: true })
           }
-
         >
           {conversation?.messages?.map((message) => (
             <View
               key={message._id}
               className='flex flex-col justify-center items-center w-80'
-            > 
+            >
               {/* flex row to display the time of the message sent */}
               <View
                 className={
@@ -278,10 +292,22 @@ const ConversationScreen = () => {
             </View>
           ))}
         </ScrollView>
+
+        {/* View to display the input field to send messages */}
       </View>
 
       {/* View to display the input field to send messages */}
-      
+      <View className=' w-full flex flex-row justify-center items-center'>
+        <View className='flex flex-row justify-center items-center w-80'>
+          <TextInput
+            className='flex-1 text-white text-base bg-[#666666] rounded-xl px-4 py-2 w-[200] text-left'
+            placeholder='Type a message'
+            placeholderTextColor='#FFFFFF'
+            value={messageText}
+            onChangeText={(text) => setMessageText(text)}
+          />
+        </View>
+      </View>
     </View>
   )
 }
