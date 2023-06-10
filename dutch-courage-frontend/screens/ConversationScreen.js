@@ -26,6 +26,7 @@ import {
   resetCreateMessage,
   resetMessage,
 } from '../features/message/messageSlice'
+import { PlusIcon, ArrowUpIcon } from 'react-native-heroicons/solid'
 import { BACKEND_URL } from '../config'
 import Toast from 'react-native-toast-message'
 import SwipeButton from 'rn-swipe-button'
@@ -315,15 +316,32 @@ const ConversationScreen = () => {
 
       {/* View to display the input field to send messages */}
       <View className=' w-full flex flex-row justify-center items-center'>
-        <View className='flex flex-row justify-center items-center w-80'>
+        <View className='flex flex-row justify-center items-center w-96 relative'>
+          <TouchableOpacity className='flex flex-row justify-center items-center'>
+            <PlusIcon size={30} color={'#FFFFFF'} />
+          </TouchableOpacity>
           <TextInput
-            className='flex-1 text-white text-base bg-[#666666] rounded-xl px-4 py-2 w-[200] text-left'
-            placeholder='Type a message'
-            placeholderTextColor='#FFFFFF'
+            className='flex-1 text-white text-base bg-[#000000] rounded-xl py-2 pl-4 pr-10 w-[200] text-left border border-[#22A6B3]'
+            placeholder='Be Nice...'
+            placeholderTextColor='#A1A5AC'
             value={messageText}
-            onChangeText={(text) => setMessageText(text)}
+            onChangeText={(text) => { 
+              setMessageText(text)
+              if (text.length > 280) {
+                setMessageText(text.slice(0, 280))
+              }
+            }}
+            multiline={true}
+            
           />
+          <TouchableOpacity className='flex flex-row justify-center items-center absolute right-2'>
+            <ArrowUpIcon size={30} color={'#FFFFFF'} />
+          </TouchableOpacity>
         </View>
+      </View>
+      {/* View to display the length of text*/}
+      <View className='flex flex-row justify-end items-center w-96'>
+        <Text className='text-[#A1A5AC] text-xs'>{messageText.length}/280</Text>
       </View>
     </View>
   )
