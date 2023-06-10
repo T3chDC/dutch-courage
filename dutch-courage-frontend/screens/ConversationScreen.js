@@ -1,5 +1,6 @@
 import {
   View,
+  KeyboardAvoidingView,
   ScrollView,
   Text,
   TextInput,
@@ -218,7 +219,10 @@ const ConversationScreen = () => {
       </View>
 
       {/* Scrollable view to display the messages */}
-      <View className='flex flex-col justify-end items-center mt-[100] w-80 h-[650] mb-6'>
+      <KeyboardAvoidingView
+        behavior={'height'}
+        className='flex-1 flex-col justify-end items-center mt-[100] w-80 h-[650] mb-6'
+      >
         <ScrollView
           // className='flex flex-col justify-end items-center w-80'
           contentContainerStyle={{
@@ -294,7 +298,7 @@ const ConversationScreen = () => {
         </ScrollView>
 
         {/* View to display the input field to send messages */}
-      </View>
+      </KeyboardAvoidingView>
 
       {/* View to display the input field to send messages */}
       <View className=' w-full flex flex-row justify-center items-center'>
