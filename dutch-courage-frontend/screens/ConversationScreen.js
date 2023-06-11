@@ -29,6 +29,7 @@ import {
 import { PlusIcon, ArrowUpIcon } from 'react-native-heroicons/solid'
 import { BACKEND_URL } from '../config'
 import Toast from 'react-native-toast-message'
+import * as Progress from 'react-native-progress'
 import SwipeButton from 'rn-swipe-button'
 
 const ConversationScreen = () => {
@@ -67,6 +68,7 @@ const ConversationScreen = () => {
 
   //local State variables
   const [messageText, setMessageText] = useState('')
+  const [conversationMessages, setConversationMessages] = useState([])
 
   // Check if user is logged in
   useEffect(() => {
@@ -108,9 +110,12 @@ const ConversationScreen = () => {
     }
   }, [isUpdateConversationByIdSuccess, dispatch])
 
-  // Show error message if there is any
+  // Show error message if there is any or populate the conversation messages
   useEffect(() => {
-    if (isGetConversationByIdError) {
+    if (isGetConversationByIdSuccess) {
+      setConversationMessages(conversation.messages)
+      dispatch(resetGetConversationById())
+    } else if (isGetConversationByIdError) {
       Toast.show({
         type: 'error',
 
@@ -119,7 +124,12 @@ const ConversationScreen = () => {
       })
       dispatch(resetGetConversationById())
     }
-  }, [isGetConversationByIdError, getConversationByIdErrorMessage, dispatch])
+  }, [
+    isGetConversationByIdSuccess,
+    isGetConversationByIdError,
+    getConversationByIdErrorMessage,
+    dispatch,
+  ])
 
   // Functionality when user is trying togo back to profile screen
   useEffect(() => {
@@ -148,6 +158,28 @@ const ConversationScreen = () => {
       Keyboard.removeAllListeners('keyboardDidShow')
     }
   }, [])
+
+  // Refetch conversation when new message is created
+  useEffect(() => {
+    if (isCreateMessageSuccess) {
+      setConversationMessages([...conversationMessages, message])
+      // dispatch(getConversationById(conversationId))
+      dispatch(resetCreateMessage())
+      setMessageText('')
+    } else if (isCreateMessageError) {
+      Toast.show({
+        type: 'error',
+        text1: createMessageErrorMessage,
+        visibilityTime: 3000,
+      })
+      dispatch(resetCreateMessage())
+    }
+  }, [
+    isCreateMessageSuccess,
+    isCreateMessageError,
+    createMessageErrorMessage,
+    dispatch,
+  ])
 
   //functin to format date and time
   const formatDate = (datetime) => {
@@ -188,12 +220,29 @@ const ConversationScreen = () => {
     }
   }
 
+  // Function to create text message
+  const createTextMessage = () => {
+    if (messageText.trim() === '') {
+      return
+    }
+    dispatch(
+      createMessage({
+        conversationId,
+        sender: userInfo._id,
+        messageType: 'text',
+        message: messageText,
+      })
+    )
+  }
+
   // Clear redux state on unmount
   useEffect(() => {
     return () => {
       dispatch(resetGetConversationById())
       dispatch(resetConversation())
       dispatch(resetUpdateConversationById())
+      dispatch(resetCreateMessage())
+      dispatch(resetMessage())
     }
   }, [dispatch])
 
@@ -232,87 +281,105 @@ const ConversationScreen = () => {
         <View className='mt-[95] flex-1 h-[1] w-[400] bg-[#22A6B3]'></View>
       </View>
 
-      {/* Scrollable view to display the messages */}
-      <KeyboardAvoidingView
-        behavior={'height'}
-        className='flex-1 flex-col justify-end items-center mt-[100] w-80 h-[650] mb-6'
-      >
-        <ScrollView
-          // className='flex flex-col justify-end items-center w-80'
-          contentContainerStyle={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-            width: '100%',
-          }}
-          ref={scrollViewRef}
-          onContentSizeChange={() =>
-            scrollViewRef.current.scrollToEnd({ animated: true })
-          }
+      {isGetConversationByIdLoading ? (
+        <View className='flex-1 justify-center items-center mt-[15]'>
+          <Text className='text-[#22A6B3] text-2xl font-bold mb-4'>
+            Getting your messages ready...
+          </Text>
+          <Progress.CircleSnail
+            color={['#22A6B3', '#22A6B3', '#22A6B3']}
+            size={100}
+            thickness={5}
+            className='w-[100vw] flex-row justify-center items-center'
+          />
+        </View>
+      ) : conversation?.messages?.length === 0 ? (
+        <View className='mt-[100]'>
+          <Text className='text-white text-base'>
+            No messages found, Send a message to start conversation
+          </Text>
+        </View>
+      ) : (
+        <KeyboardAvoidingView
+          behavior={'height'}
+          className='flex-1 flex-col justify-end items-center mt-[100] w-80 h-[650] mb-6'
         >
-          {conversation?.messages?.map((message) => (
-            <View
-              key={message._id}
-              className='flex flex-col justify-center items-center w-80'
-            >
-              {/* flex row to display the time of the message sent */}
+          {/* Scrollable view to display the messages */}
+          <ScrollView
+            // className='flex flex-col justify-end items-center w-80'
+            contentContainerStyle={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              width: '100%',
+            }}
+            ref={scrollViewRef}
+            onContentSizeChange={() =>
+              scrollViewRef.current.scrollToEnd({ animated: true })
+            }
+          >
+            {conversationMessages?.map((message) => (
               <View
-                className={
-                  message.sender === userInfo._id
-                    ? 'flex flex-row justify-end items-center w-80'
-                    : 'flex flex-row justify-start items-center w-80'
-                }
+                key={message._id}
+                className='flex flex-col justify-center items-center w-80'
               >
-                <Text className='text-[#AFD0AE] text-xs'>
-                  {formatDate(message.createdAt)}
-                </Text>
-              </View>
-
-              {/* flex row to display the message sent */}
-              <View
-                className={
-                  message.sender === userInfo._id
-                    ? 'flex flex-row justify-end items-center w-80'
-                    : 'flex flex-row justify-start items-center w-80'
-                }
-              >
-                {/* Check if the message is an image */}
-                {message.messageType === 'image' ? (
-                  <View
-                    className={
-                      message.sender === userInfo._id
-                        ? 'flex flex-row justify-end items-center w-80'
-                        : 'flex flex-row justify-start items-center w-80'
-                    }
-                  >
-                    <Image
-                      className='w-[200] h-[200] rounded-xl'
-                      source={{
-                        uri: `${BACKEND_URL}/uploads/${message.messageImageUrl.slice(
-                          message.messageImageUrl.lastIndexOf('/') + 1
-                        )}`,
-                      }}
-                    />
-                  </View>
-                ) : (
-                  <Text
-                    className={
-                      message.sender === userInfo._id
-                        ? 'text-white text-base bg-[#22A6B3] rounded-xl px-4 py-2 w-[200] text-left'
-                        : 'text-white text-base bg-[#666666] rounded-xl px-4 py-2 w-[200] text-left'
-                    }
-                  >
-                    {message.message}
+                {/* flex row to display the time of the message sent */}
+                <View
+                  className={
+                    message.sender === userInfo._id
+                      ? 'flex flex-row justify-end items-center w-80'
+                      : 'flex flex-row justify-start items-center w-80'
+                  }
+                >
+                  <Text className='text-[#AFD0AE] text-xs'>
+                    {formatDate(message.createdAt)}
                   </Text>
-                )}
-              </View>
-            </View>
-          ))}
-        </ScrollView>
+                </View>
 
-        {/* View to display the input field to send messages */}
-      </KeyboardAvoidingView>
+                {/* flex row to display the message sent */}
+                <View
+                  className={
+                    message.sender === userInfo._id
+                      ? 'flex flex-row justify-end items-center w-80'
+                      : 'flex flex-row justify-start items-center w-80'
+                  }
+                >
+                  {/* Check if the message is an image */}
+                  {message.messageType === 'image' ? (
+                    <View
+                      className={
+                        message.sender === userInfo._id
+                          ? 'flex flex-row justify-end items-center w-80'
+                          : 'flex flex-row justify-start items-center w-80'
+                      }
+                    >
+                      <Image
+                        className='w-[200] h-[200] rounded-xl'
+                        source={{
+                          uri: `${BACKEND_URL}/uploads/${message.messageImageUrl.slice(
+                            message.messageImageUrl.lastIndexOf('/') + 1
+                          )}`,
+                        }}
+                      />
+                    </View>
+                  ) : (
+                    <Text
+                      className={
+                        message.sender === userInfo._id
+                          ? 'text-white text-base bg-[#22A6B3] rounded-xl px-4 py-2 w-[200] text-left'
+                          : 'text-white text-base bg-[#666666] rounded-xl px-4 py-2 w-[200] text-left'
+                      }
+                    >
+                      {message.message}
+                    </Text>
+                  )}
+                </View>
+              </View>
+            ))}
+          </ScrollView>
+        </KeyboardAvoidingView>
+      )}
 
       {/* View to display the input field to send messages */}
       <View className=' w-full flex flex-row justify-center items-center'>
@@ -325,16 +392,18 @@ const ConversationScreen = () => {
             placeholder='Be Nice...'
             placeholderTextColor='#A1A5AC'
             value={messageText}
-            onChangeText={(text) => { 
+            onChangeText={(text) => {
               setMessageText(text)
               if (text.length > 280) {
                 setMessageText(text.slice(0, 280))
               }
             }}
             multiline={true}
-            
           />
-          <TouchableOpacity className='flex flex-row justify-center items-center absolute right-2'>
+          <TouchableOpacity
+            className='flex flex-row justify-center items-center absolute right-2'
+            onPress={createTextMessage}
+          >
             <ArrowUpIcon size={30} color={'#FFFFFF'} />
           </TouchableOpacity>
         </View>

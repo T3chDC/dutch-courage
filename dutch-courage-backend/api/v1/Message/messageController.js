@@ -19,10 +19,7 @@ export const createMessage = catchAsync(async (req, res, next) => {
 
   if (messageCount >= 10) {
     return next(
-      new AppError(
-        'You have reached the maximum number of messages allowed per conversation',
-        429
-      )
+      new AppError('You can only send 10 messages per conversation', 429)
     )
   }
 
