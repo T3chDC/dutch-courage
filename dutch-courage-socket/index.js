@@ -22,7 +22,13 @@ const removeUser = (socketId) => {
   users = users.filter((user) => user.socketId !== socketId)
 }
 
+// Function to get user from users array
+const getUser = (userId) => {
+  return users.find((user) => user.userId === userId)
+}
+
 io.on('connection', (socket) => {
+  // When socket is connected
   console.log('A user connected')
   // Take userId and socketId from user on connection
   socket.on('addUser', (userId) => {
@@ -30,6 +36,19 @@ io.on('connection', (socket) => {
     io.emit('getUsers', users)
   })
 
+  // Send and get message
+  socket.on('sendMessage', ({ conversationId, senderId, receiverId, messageType, message, messageImageUrl }) => {
+    const reciever = getUser(receiverId)
+    io.to(reciever.socketId).emit('getMessage', {
+      conversationId,
+      senderId,
+      messageType,
+      message,
+      messageImageUrl,
+    })
+  })
+
+  // When socket is disconnected
   socket.on('disconnect', () => {
     console.log('A user disconnected!')
     // Remove user from users array on disconnect

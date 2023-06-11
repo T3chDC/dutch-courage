@@ -37,7 +37,7 @@ const ConversationScreen = () => {
   const navigation = useNavigation()
   const route = useRoute()
   // Route params from InboxScreen
-  const { conversationId, sender } = route.params
+  const { conversationId, sender, socket } = route.params
   // Redux Dispatch hook
   const dispatch = useDispatch()
   // Scroll view ref
@@ -69,6 +69,7 @@ const ConversationScreen = () => {
   //local State variables
   const [messageText, setMessageText] = useState('')
   const [conversationMessages, setConversationMessages] = useState([])
+  const [newArrivedMessage, setNewArrivedMessage] = useState(null)
 
   // Check if user is logged in
   useEffect(() => {
@@ -163,7 +164,15 @@ const ConversationScreen = () => {
   useEffect(() => {
     if (isCreateMessageSuccess) {
       setConversationMessages([...conversationMessages, message])
-      // dispatch(getConversationById(conversationId))
+      // Send message to socket
+      socket.current.emit('sendMessage', {
+        conversationId,
+        senderId: userInfo._id,
+        receiverId: sender._id,
+        messageType: message.messageType,
+        message: message.message,
+        messageImageUrl: message.messageImageUrl,
+      })
       dispatch(resetCreateMessage())
       setMessageText('')
     } else if (isCreateMessageError) {
@@ -234,6 +243,21 @@ const ConversationScreen = () => {
       })
     )
   }
+
+  // Update conversation messages when new message is received
+  useEffect(() => {
+    socket.current.on('getMessage', (data) => {
+      setNewArrivedMessage(data)
+    })
+  }, [conversationId, conversationMessages])
+
+  useEffect(() => {
+    if (newArrivedMessage) {
+      if (newArrivedMessage.conversationId === conversationId) {
+        setConversationMessages([...conversationMessages, newArrivedMessage])
+      }
+    }
+  }, [newArrivedMessage])
 
   // Clear redux state on unmount
   useEffect(() => {

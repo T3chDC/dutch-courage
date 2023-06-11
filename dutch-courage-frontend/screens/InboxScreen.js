@@ -164,6 +164,13 @@ const InboxScreen = () => {
     )
   }
 
+  // Update conversation list when a new conversation message is received
+  useEffect(() => {
+    socket.current.on('getMessage', (data) => {
+      dispatch(getAllConversationsOfUser())
+    })
+  }, [dispatch])
+
   // clear redux state on unmount
   useEffect(() => {
     return () => {
@@ -241,6 +248,7 @@ const InboxScreen = () => {
                 setSelectedConversations={setSelectedConversations}
                 isDeleteMode={isDeleteMode}
                 setIsDeleteMode={setIsDeleteMode}
+                socket={socket}
               />
             )
           )}

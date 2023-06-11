@@ -11,6 +11,7 @@ const Conversation = ({
   setSelectedConversations,
   isDeleteMode,
   setIsDeleteMode,
+  socket,
 }) => {
   // Navigation hook
   const navigation = useNavigation()
@@ -86,6 +87,7 @@ const Conversation = ({
       navigation.navigate('Conversation', {
         conversationId: conversation._id,
         sender,
+        socket,
       })
     }
   }
