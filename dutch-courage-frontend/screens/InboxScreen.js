@@ -6,7 +6,7 @@ import {
   Alert,
   BackHandler,
 } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { TrashIcon } from 'react-native-heroicons/outline'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
@@ -55,7 +55,12 @@ const InboxScreen = () => {
   const [selectedConversations, setSelectedConversations] = useState([])
   const [isDeleteMode, setIsDeleteMode] = useState(false)
   // Socket.io state
-  const [socket, setSocket] = useState(null)
+  const socket = useRef()
+
+  // Initialize socket once
+  useEffect(() => {
+    socket.current = io(SOCKET_URL)
+  }, [])
 
   // Check if user is logged in
   useEffect(() => {
@@ -64,10 +69,13 @@ const InboxScreen = () => {
     }
   }, [userInfo, navigation])
 
-  // Initialize socket.io
+  // Send userId to socket server on connection
   useEffect(() => {
-    setSocket(io(SOCKET_URL))
-  }, [])
+    socket.current.emit('addUser', userInfo._id)
+    socket.current.on('getUsers', (users) => {
+      console.log(users)
+    })
+  }, [userInfo])
 
   // Get all conversations of user when component mounts
   useEffect(() => {
@@ -95,6 +103,8 @@ const InboxScreen = () => {
         return true
       } else {
         navigation.goBack()
+        // disconnect socket on back press
+        socket.current.disconnect()
         return true
       }
     }
@@ -166,7 +176,11 @@ const InboxScreen = () => {
     <View className='bg-black flex-1 justify-start items-center relative'>
       <TouchableOpacity
         className='absolute top-10 left-4 flex-row items-center'
-        onPress={() => navigation.goBack()}
+        onPress={() => {
+          navigation.goBack()
+          // disconnect socket on back press
+          socket.current.disconnect()
+        }}
       >
         {/* <ChevronLeftIcon size={20} color='white' /> */}
         <Text className='text-white text-base top-[-1]'>{'< Back'}</Text>
@@ -213,7 +227,7 @@ const InboxScreen = () => {
         </View>
       ) : conversations.length === 0 ? (
         <View className='mt-[100]'>
-          <Text className='text-white text-base'>No messages</Text>
+          <Text className='text-white text-base'>No messages to show</Text>
         </View>
       ) : (
         <>
