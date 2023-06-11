@@ -22,6 +22,8 @@ import {
 import Conversation from '../components/Conversation'
 import * as Progress from 'react-native-progress'
 import Toast from 'react-native-toast-message'
+import { io } from 'socket.io-client'
+import { SOCKET_URL } from '../config'
 import SwipeButton from 'rn-swipe-button'
 
 const InboxScreen = () => {
@@ -52,6 +54,8 @@ const InboxScreen = () => {
   // local state variables
   const [selectedConversations, setSelectedConversations] = useState([])
   const [isDeleteMode, setIsDeleteMode] = useState(false)
+  // Socket.io state
+  const [socket, setSocket] = useState(null)
 
   // Check if user is logged in
   useEffect(() => {
@@ -59,6 +63,11 @@ const InboxScreen = () => {
       navigation.navigate('Login')
     }
   }, [userInfo, navigation])
+
+  // Initialize socket.io
+  useEffect(() => {
+    setSocket(io(SOCKET_URL))
+  }, [])
 
   // Get all conversations of user when component mounts
   useEffect(() => {
