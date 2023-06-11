@@ -22,8 +22,7 @@ import {
 import Conversation from '../components/Conversation'
 import * as Progress from 'react-native-progress'
 import Toast from 'react-native-toast-message'
-import { io } from 'socket.io-client'
-import { SOCKET_URL } from '../config'
+import socket from '../utils/socketInit'
 import SwipeButton from 'rn-swipe-button'
 
 const InboxScreen = () => {
@@ -54,13 +53,6 @@ const InboxScreen = () => {
   // local state variables
   const [selectedConversations, setSelectedConversations] = useState([])
   const [isDeleteMode, setIsDeleteMode] = useState(false)
-  // Socket.io state
-  const socket = useRef()
-
-  // Initialize socket once
-  useEffect(() => {
-    socket.current = io(SOCKET_URL)
-  }, [])
 
   // Check if user is logged in
   useEffect(() => {
@@ -71,8 +63,8 @@ const InboxScreen = () => {
 
   // Send userId to socket server on connection
   useEffect(() => {
-    socket.current.emit('addUser', userInfo._id)
-    socket.current.on('getUsers', (users) => {
+    socket.emit('addUser', userInfo._id)
+    socket.on('getUsers', (users) => {
       console.log(users)
     })
   }, [userInfo])
@@ -103,8 +95,6 @@ const InboxScreen = () => {
         return true
       } else {
         navigation.goBack()
-        // disconnect socket on back press
-        socket.current.disconnect()
         return true
       }
     }
@@ -166,7 +156,7 @@ const InboxScreen = () => {
 
   // Update conversation list when a new conversation message is received
   useEffect(() => {
-    socket.current.on('getMessage', (data) => {
+    socket.on('getMessage', (data) => {
       dispatch(getAllConversationsOfUser())
     })
   }, [dispatch])
@@ -185,8 +175,6 @@ const InboxScreen = () => {
         className='absolute top-10 left-4 flex-row items-center'
         onPress={() => {
           navigation.goBack()
-          // disconnect socket on back press
-          socket.current.disconnect()
         }}
       >
         {/* <ChevronLeftIcon size={20} color='white' /> */}
@@ -248,7 +236,7 @@ const InboxScreen = () => {
                 setSelectedConversations={setSelectedConversations}
                 isDeleteMode={isDeleteMode}
                 setIsDeleteMode={setIsDeleteMode}
-                socket={socket}
+                
               />
             )
           )}

@@ -30,6 +30,7 @@ import { PlusIcon, ArrowUpIcon } from 'react-native-heroicons/solid'
 import { BACKEND_URL } from '../config'
 import Toast from 'react-native-toast-message'
 import * as Progress from 'react-native-progress'
+import socket from '../utils/socketInit'
 import SwipeButton from 'rn-swipe-button'
 
 const ConversationScreen = () => {
@@ -37,7 +38,7 @@ const ConversationScreen = () => {
   const navigation = useNavigation()
   const route = useRoute()
   // Route params from InboxScreen
-  const { conversationId, sender, socket } = route.params
+  const { conversationId, sender} = route.params
   // Redux Dispatch hook
   const dispatch = useDispatch()
   // Scroll view ref
@@ -165,7 +166,7 @@ const ConversationScreen = () => {
     if (isCreateMessageSuccess) {
       setConversationMessages([...conversationMessages, message])
       // Send message to socket
-      socket.current.emit('sendMessage', {
+      socket.emit('sendMessage', {
         conversationId,
         senderId: userInfo._id,
         receiverId: sender._id,
@@ -246,7 +247,7 @@ const ConversationScreen = () => {
 
   // Update conversation messages when new message is received
   useEffect(() => {
-    socket.current.on('getMessage', (data) => {
+    socket.on('getMessage', (data) => {
       setNewArrivedMessage(data)
     })
   }, [conversationId, conversationMessages])
