@@ -173,6 +173,7 @@ const ConversationScreen = () => {
         messageType: message.messageType,
         message: message.message,
         messageImageUrl: message.messageImageUrl,
+        createdAt: message.createdAt,
       })
       dispatch(resetCreateMessage())
       setMessageText('')
@@ -345,9 +346,9 @@ const ConversationScreen = () => {
               scrollViewRef.current.scrollToEnd({ animated: true })
             }
           >
-            {conversationMessages?.map((message) => (
+            {conversationMessages?.map((message, idx) => (
               <View
-                key={message._id}
+                key={idx}
                 className='flex flex-col justify-center items-center'
               >
                 {/* flex row to display the time of the message sent */}
