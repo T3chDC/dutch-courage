@@ -38,7 +38,7 @@ const ConversationScreen = () => {
   const navigation = useNavigation()
   const route = useRoute()
   // Route params from InboxScreen
-  const { conversationId, sender} = route.params
+  const { conversationId, sender } = route.params
   // Redux Dispatch hook
   const dispatch = useDispatch()
   // Scroll view ref
@@ -307,17 +307,18 @@ const ConversationScreen = () => {
       </View>
 
       {isGetConversationByIdLoading ? (
-        <View className='flex-1 justify-center items-center mt-[15]'>
-          <Text className='text-[#22A6B3] text-2xl font-bold mb-4'>
-            Getting your messages ready...
-          </Text>
-          <Progress.CircleSnail
-            color={['#22A6B3', '#22A6B3', '#22A6B3']}
-            size={100}
-            thickness={5}
-            className='w-[100vw] flex-row justify-center items-center'
-          />
-        </View>
+        // <View className='flex-1 justify-center items-center mt-[15]'>
+        //   <Text className='text-[#22A6B3] text-2xl font-bold mb-4'>
+        //     Getting your messages ready...
+        //   </Text>
+        //   <Progress.CircleSnail
+        //     color={['#22A6B3', '#22A6B3', '#22A6B3']}
+        //     size={100}
+        //     thickness={5}
+        //     className='w-[100vw] flex-row justify-center items-center'
+        //   />
+        // </View>
+        <></>
       ) : conversation?.messages?.length === 0 ? (
         <View className='mt-[100]'>
           <Text className='text-white text-base'>
