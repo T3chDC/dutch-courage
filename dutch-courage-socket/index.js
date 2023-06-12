@@ -37,16 +37,28 @@ io.on('connection', (socket) => {
   })
 
   // Send and get message
-  socket.on('sendMessage', ({ conversationId, senderId, receiverId, messageType, message, messageImageUrl }) => {
-    const reciever = getUser(receiverId)
-    io.to(reciever.socketId).emit('getMessage', {
+  socket.on(
+    'sendMessage',
+    ({
       conversationId,
       senderId,
+      receiverId,
       messageType,
       message,
       messageImageUrl,
-    })
-  })
+      createdAt,
+    }) => {
+      const reciever = getUser(receiverId)
+      io.to(reciever.socketId).emit('getMessage', {
+        conversationId,
+        senderId,
+        messageType,
+        message,
+        messageImageUrl,
+        createdAt,
+      })
+    }
+  )
 
   // When socket is disconnected
   socket.on('disconnect', () => {
