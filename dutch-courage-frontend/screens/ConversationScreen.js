@@ -348,7 +348,7 @@ const ConversationScreen = () => {
             {conversationMessages?.map((message) => (
               <View
                 key={message._id}
-                className='flex flex-col justify-center items-center w-80'
+                className='flex flex-col justify-center items-center'
               >
                 {/* flex row to display the time of the message sent */}
                 <View
@@ -409,7 +409,7 @@ const ConversationScreen = () => {
 
       {/* View to display the input field to send messages */}
       <View className=' w-full flex flex-row justify-center items-center'>
-        <View className='flex flex-row justify-center items-center w-96 relative'>
+        <View className='flex flex-row justify-center items-center relative'>
           <TouchableOpacity className='flex flex-row justify-center items-center'>
             <PlusIcon size={30} color={'#FFFFFF'} />
           </TouchableOpacity>

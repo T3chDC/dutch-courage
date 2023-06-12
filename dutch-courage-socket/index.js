@@ -29,7 +29,7 @@ const getUser = (userId) => {
 
 io.on('connection', (socket) => {
   // When socket is connected
-  console.log('A user connected')
+  console.log('A user connected:', socket.id)
   // Take userId and socketId from user on connection
   socket.on('addUser', (userId) => {
     addUser(userId, socket.id)
