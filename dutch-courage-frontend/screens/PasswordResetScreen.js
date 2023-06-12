@@ -18,7 +18,7 @@ const PasswordResetScreen = () => {
   const route = useRoute()
 
   const { resetToken } = route.params
-  console.log(resetToken)
+  // console.log(resetToken)
 
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')

@@ -138,7 +138,7 @@ const PasswordResetCodeScreen = () => {
                 }
               }
               setOtpString(otp.join(''))
-              console.log(otpString.length, index)
+              // console.log(otpString.length, index)
             }}
             onKeyPress={(e) => {
               if (e.nativeEvent.key === 'Backspace') {
