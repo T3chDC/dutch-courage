@@ -37,6 +37,18 @@ const conversationSchema = new mongoose.Schema(
       default: 0,
     },
 
+    participantsMessageCount: {
+      type: Map,
+      of: Number,
+      default: {},
+    },
+
+    participantsLastMessageTime: {
+      type: Map,
+      of: Date,
+      default: {},
+    },
+
     deletedBy: {
       type: [mongoose.Schema.Types.ObjectId],
       default: [],
@@ -56,6 +68,17 @@ const conversationSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 )
+
+// Before creating a conversation, assign default values to the participantsMessageCount and participantsLastMessageTime fields
+conversationSchema.pre('save', function (next) {
+  if (this.isNew) {
+    this.participants.forEach((participant) => {
+      this.participantsMessageCount.set(participant, 0)
+      this.participantsLastMessageTime.set(participant, null)
+    })
+  }
+  next()
+})
 
 //Before finding a conversation, populate the participants field with the user data
 conversationSchema.pre(/^find/, function (next) {
