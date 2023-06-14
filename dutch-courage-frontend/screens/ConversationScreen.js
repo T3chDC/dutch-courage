@@ -26,7 +26,7 @@ import {
   resetCreateMessage,
   resetMessage,
 } from '../features/message/messageSlice'
-import { PlusIcon, ArrowUpIcon } from 'react-native-heroicons/solid'
+import { PlusIcon, PaperAirplaneIcon } from 'react-native-heroicons/solid'
 import { BACKEND_URL } from '../config'
 import Toast from 'react-native-toast-message'
 import * as Progress from 'react-native-progress'
@@ -70,6 +70,7 @@ const ConversationScreen = () => {
   //local State variables
   const [messageText, setMessageText] = useState('')
   const [conversationMessages, setConversationMessages] = useState([])
+  const [userMessageCount, setUserMessageCount] = useState(0)
   const [newArrivedMessage, setNewArrivedMessage] = useState(null)
 
   // Check if user is logged in
@@ -116,11 +117,11 @@ const ConversationScreen = () => {
   useEffect(() => {
     if (isGetConversationByIdSuccess) {
       setConversationMessages(conversation.messages)
+      setUserMessageCount(conversation.participantsMessageCount[userInfo._id])
       dispatch(resetGetConversationById())
     } else if (isGetConversationByIdError) {
       Toast.show({
         type: 'error',
-
         text1: getConversationByIdErrorMessage,
         visibilityTime: 3000,
       })
@@ -165,6 +166,7 @@ const ConversationScreen = () => {
   useEffect(() => {
     if (isCreateMessageSuccess) {
       setConversationMessages([...conversationMessages, message])
+      setUserMessageCount(userMessageCount + 1)
       // Send message to socket
       socket.emit('sendMessage', {
         conversationId,
@@ -298,8 +300,12 @@ const ConversationScreen = () => {
           </View>
         </View>
 
-        <View className='w-[220] justify-center items-left'>
+        <View className='w-[160] justify-center items-left'>
           <Text className='text-white'>{sender?.userName}</Text>
+        </View>
+
+        <View className='w-[150] justify-center items-center'>
+          <Text className='text-white text-xs'>{10 - userMessageCount}/10 messages left</Text>
         </View>
       </View>
 
@@ -431,7 +437,7 @@ const ConversationScreen = () => {
             className='flex flex-row justify-center items-center absolute right-2'
             onPress={createTextMessage}
           >
-            <ArrowUpIcon size={30} color={'#FFFFFF'} />
+            <PaperAirplaneIcon size={30} color={'#FFFFFF'} />
           </TouchableOpacity>
         </View>
       </View>
