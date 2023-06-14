@@ -361,8 +361,8 @@ const ConversationScreen = () => {
                 <View
                   className={
                     message.sender === userInfo._id
-                      ? 'flex flex-row justify-end items-center w-80'
-                      : 'flex flex-row justify-start items-center w-80'
+                      ? 'flex flex-row justify-end items-center w-80 mt-2'
+                      : 'flex flex-row justify-start items-center w-80 mt-2'
                   }
                 >
                   <Text className='text-[#AFD0AE] text-xs'>

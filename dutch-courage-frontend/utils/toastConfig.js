@@ -42,7 +42,7 @@ const ToastConfig = {
         borderTopRightRadius: 6,
         borderBottomRightRadius: 6,
       }}
-      text1NumberOfLines={3}
+      text1NumberOfLines={5}
       text1Style={{ fontSize: 14, color: 'white' }}
       text2NumberOfLines={3}
       text2Style={{ fontSize: 12, color: 'white' }}
