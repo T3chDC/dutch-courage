@@ -1,6 +1,7 @@
 import { View, Text, Image, TouchableOpacity, Alert } from 'react-native'
 import Modal from 'react-native-modal'
 import React, { useState } from 'react'
+import { BACKEND_URL } from '../config'
 import Swiper from 'react-native-swiper'
 
 const GalleryImageViewerModal = ({
@@ -44,7 +45,9 @@ const GalleryImageViewerModal = ({
           {(galleryImage1Url || selectedGalleryImage1) && (
             <View className='flex-1 justify-center items-center'>
               <Image
-                source={{ uri: selectedGalleryImage1 || galleryImage1Url }}
+                source={{ uri: selectedGalleryImage1 || `${BACKEND_URL}/uploads/${galleryImage1Url.slice(
+                  galleryImage1Url.lastIndexOf('/') + 1
+                )}` }}
                 style={{ width: 300, height: 300 }}
               />
 
@@ -99,7 +102,9 @@ const GalleryImageViewerModal = ({
           {(galleryImage2Url || selectedGalleryImage2) && (
             <View className='flex-1 justify-center items-center'>
               <Image
-                source={{ uri: selectedGalleryImage2 || galleryImage2Url }}
+                source={{ uri: selectedGalleryImage2 || `${BACKEND_URL}/uploads/${galleryImage2Url.slice(
+                  galleryImage2Url.lastIndexOf('/') + 1
+                )}` }}
                 style={{ width: 300, height: 300 }}
               />
 
@@ -155,7 +160,9 @@ const GalleryImageViewerModal = ({
           {(galleryImage3Url || selectedGalleryImage3) && (
             <View className='flex-1 justify-center items-center'>
               <Image
-                source={{ uri: selectedGalleryImage3 || galleryImage3Url }}
+                source={{ uri: selectedGalleryImage3 || `${BACKEND_URL}/uploads/${galleryImage3Url.slice(
+                  galleryImage3Url.lastIndexOf('/') + 1
+                )}` }}
                 style={{ width: 300, height: 300 }}
               />
 

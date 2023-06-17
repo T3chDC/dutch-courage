@@ -1,6 +1,7 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native'
 import Modal from 'react-native-modal'
 import React, { useState } from 'react'
+import { BACKEND_URL } from '../config'
 import ImagePickerModal from './ImagePickerModal'
 
 const ProfileImageViewerModal = ({
@@ -29,7 +30,9 @@ const ProfileImageViewerModal = ({
       <View className='flex-1 justify-center items-center'>
         {/* Image viw area */}
         <Image
-          source={{ uri: selectedProfileImage || imageUrl }}
+          source={{ uri: selectedProfileImage || `${BACKEND_URL}/uploads/${imageUrl.slice(
+            imageUrl.lastIndexOf('/') + 1
+          )}`}}
           style={{ width: 300, height: 300 }}
         />
         {/* Image Chooser Button */}

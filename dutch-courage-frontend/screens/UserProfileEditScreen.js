@@ -465,8 +465,6 @@ const UserProfileEditScreen = () => {
     }
   }, [dispatch])
 
-  console.log('Images for Delete: ', selectedImagesForDelete)
-
   return (
     <View className='bg-black flex-1 justify-start items-center relative'>
       {/* background cutoff image*/}
