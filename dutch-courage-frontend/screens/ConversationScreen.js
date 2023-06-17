@@ -415,8 +415,8 @@ const ConversationScreen = () => {
       )}
 
       {/* View to display the input field to send messages */}
-      <View className=' w-full flex flex-row justify-center items-center'>
-        <View className='flex flex-row justify-center items-center relative'>
+      <View className='w-full flex flex-row justify-center items-center'>
+        <View className='flex flex-row justify-center items-center relative w-[380]'>
           <TouchableOpacity className='flex flex-row justify-center items-center'>
             <PlusIcon size={30} color={'#FFFFFF'} />
           </TouchableOpacity>
@@ -442,7 +442,7 @@ const ConversationScreen = () => {
         </View>
       </View>
       {/* View to display the length of text*/}
-      <View className='flex flex-row justify-end items-center w-96'>
+      <View className='flex flex-row justify-end items-center w-[370]'>
         <Text className='text-[#A1A5AC] text-xs'>{messageText.length}/280</Text>
       </View>
     </View>

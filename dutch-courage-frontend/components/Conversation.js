@@ -144,9 +144,9 @@ const Conversation = ({
               </View>
               <View className='mt-1'>
                 <Text className='text-white text-xs'>
-                  {conversation.lastMessage.messageType === 'text'
+                  {conversation?.lastMessage?.messageType === 'text'
                     ? conversation.lastMessage.message
-                    : conversation.lastMessage.messageType === 'image'
+                    : conversation?.lastMessage?.messageType === 'image'
                     ? 'Image'
                     : 'New Message'}
                 </Text>
@@ -161,7 +161,7 @@ const Conversation = ({
                     : `text-xs text-right text-[#A1A5AC]`
                 }
               >
-                {formatDate(conversation.lastMessage.createdAt)}
+                {formatDate(conversation.lastMessage?.createdAt)}
               </Text>
             </View>
           </View>
