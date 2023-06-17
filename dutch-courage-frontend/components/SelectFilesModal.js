@@ -17,23 +17,26 @@ const SelectFilesModal = ({
       }}
 
     >
-      <View className="flex-1 justify-center items-center">
-        <View className="w-[100vw] h-[200] rounded-2xl flex-col justify-between items-center py-5 bg-gray-800">
+      <View className="flex-1 justify-end items-center">
+        <View className="w-[100vw] h-[220] rounded flex-col justify-between items-center py-5 bg-white">
             <TouchableOpacity
-                className="bg-[#22A6B3] rounded-full w-40 h-12 flex-row justify-center items-center"
+                className="bg-[#22A6B3] rounded-md w-80 h-12 flex-row justify-center items-center"
             >
-                <Text className="text-white">Take a picture</Text>
+                <Text className="text-white font-bold">Take a picture</Text>
             </TouchableOpacity>
+
             <TouchableOpacity
-                className="bg-[#22A6B3] rounded-full w-40 h-12 flex-row justify-center items-center"
+                className="bg-[#22A6B3] rounded-md w-80 h-12 flex-row justify-center items-center"
             >
-                <Text className="text-white">Take a picture</Text>
+                <Text className="text-white font-bold">Send from gallery</Text>
             </TouchableOpacity>
+
             <TouchableOpacity
-                className="bg-[#22A6B3] rounded-full w-40 h-12 flex-row justify-center items-center"
+                className="border-2 border-[#22A6B3] rounded-md w-80 h-12 flex-row justify-center items-center"
             >
-                <Text className="text-white">Take a picture</Text>
+                <Text className="text-[#22A6B3] font-bold">Cancel</Text>
             </TouchableOpacity>
+            
         </View>
       </View>
     </Modal>
