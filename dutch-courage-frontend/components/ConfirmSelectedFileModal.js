@@ -1,35 +1,53 @@
-import React from 'react'
-import Modal from 'react-native-modal'
-import { View, Text, TouchableOpacity, Image } from 'react-native'
-import * as ImagePicker from 'expo-image-picker'
+import React from "react";
+import Modal from "react-native-modal";
+import { View, Text, TouchableOpacity, Image } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 
 const ConfirmSelectedFileModal = ({
-    selectedImage,
-    setSelectedImage,
+  selectedImage,
+  setSelectedImage,
 
-    isConfirmSelectedFileModalVisible,
-    setIsConfirmSelectedFileModalVisible,
+  isConfirmSelectedFileModalVisible,
+  setIsConfirmSelectedFileModalVisible,
 }) => {
-
   return (
     <Modal
-        animationIn={'slideInUp'}
-        animationOut={'slideOutDown'}
-        isVisible={isConfirmSelectedFileModalVisible}
-        onBackdropPress={() => setIsConfirmSelectedFileModalVisible(false)}
-        onRequestClose={() => {
-            setIsConfirmSelectedFileModalVisible(false)
-        }}
-        avoidKeyboard={true}
+      animationIn={"slideInUp"}
+      animationOut={"slideOutDown"}
+      backdropOpacity={0.9}
+      isVisible={isConfirmSelectedFileModalVisible}
+      onBackdropPress={() => null}
+      onRequestClose={() => {
+        setIsConfirmSelectedFileModalVisible(false);
+      }}
+      avoidKeyboard={true}
     >
-        <View className='flex-1 justify-center items-center'>
-            <Image
-                source={{ uri: selectedImage }}
-                style={{ width: 300, height: 300 }}
-            />
-        </View>
-    </Modal>
-  )
-}
+      <View className="flex-1 justify-center items-center">
+        <Image
+          source={{ uri: selectedImage }}
+          style={{ width: 300, height: 300 }}
+        />
 
-export default ConfirmSelectedFileModal
+        <TouchableOpacity className="bg-[#22A6B3] w-60 mt-5 rounded-md justify-center items-center">
+          <Text
+            className="text-white p-3"
+            // onPress={() => }
+          >
+            Send
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity className="bg-[#22A6B3] w-60 mt-5 rounded-md justify-center items-center">
+          <Text
+            className="text-white p-3"
+            onPress={() => setIsConfirmSelectedFileModalVisible(false)}
+          >
+            Cancel
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </Modal>
+  );
+};
+
+export default ConfirmSelectedFileModal;
