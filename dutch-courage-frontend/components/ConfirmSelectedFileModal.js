@@ -37,13 +37,11 @@ const ConfirmSelectedFileModal = ({
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity className="bg-[#22A6B3] w-60 mt-5 rounded-md justify-center items-center">
-          <Text
-            className="text-white p-3"
-            onPress={() => setIsConfirmSelectedFileModalVisible(false)}
-          >
-            Cancel
-          </Text>
+        <TouchableOpacity
+          className="bg-[#22A6B3] w-60 mt-5 rounded-md justify-center items-center"
+          onPress={() => setIsConfirmSelectedFileModalVisible(false)}
+        >
+          <Text className="text-white p-3">Cancel</Text>
         </TouchableOpacity>
       </View>
     </Modal>

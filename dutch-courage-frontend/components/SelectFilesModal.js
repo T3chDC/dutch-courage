@@ -15,7 +15,6 @@ const SelectFilesModal = ({
   isConfirmSelectedFileModalVisible,
   setIsConfirmSelectedFileModalVisible,
 }) => {
-
   //Function to Open Camera
   const openCamera = async () => {
     let result = await ImagePicker.launchCameraAsync({
@@ -74,13 +73,11 @@ const SelectFilesModal = ({
             <Text className="text-white font-bold">Send from gallery</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity className="border-2 border-[#22A6B3] rounded-md w-80 h-12 flex-row justify-center items-center">
-            <Text
-              className="text-[#22A6B3] font-bold"
-              onPress={() => setIsSelectFileModalVisible(false)}
-            >
-              Cancel
-            </Text>
+          <TouchableOpacity
+            className="border-2 border-[#22A6B3] rounded-md w-80 h-12 flex-row justify-center items-center"
+            onPress={() => setIsSelectFileModalVisible(false)}
+          >
+            <Text className="text-[#22A6B3] font-bold">Cancel</Text>
           </TouchableOpacity>
         </View>
       </View>
