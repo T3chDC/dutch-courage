@@ -33,6 +33,7 @@ import * as Progress from "react-native-progress";
 import socket from "../utils/socketInit";
 import SwipeButton from "rn-swipe-button";
 import SelectFilesModal from "../components/SelectFilesModal";
+import ConfirmSelectedFileModal from "../components/ConfirmSelectedFileModal";
 
 const ConversationScreen = () => {
   // Navigation hook
@@ -49,6 +50,7 @@ const ConversationScreen = () => {
   const { userInfo } = useSelector((state) => state.auth);
 
   const [isSelectFileModalVisible, setIsSelectFileModalVisible] = useState(false);
+  const [confirmSelectedFileModalVisible, setConfirmSelectedFileModalVisible] = useState(false);
 
   const {
     conversation,
@@ -278,6 +280,8 @@ const ConversationScreen = () => {
     };
   }, [dispatch]);
 
+  console.log(selectedImage)
+
   return (
     <View className="bg-black flex-1 justify-start items-center relative">
       <TouchableOpacity
@@ -436,8 +440,21 @@ const ConversationScreen = () => {
           <SelectFilesModal
             isSelectFileModalVisible={isSelectFileModalVisible}
             setIsSelectFileModalVisible={setIsSelectFileModalVisible}
+
             selectedImage={selectedImage}
             setSelectedImage={setSelectedImage}
+
+            isConfirmSelectedFileModalVisible={confirmSelectedFileModalVisible}
+            setIsConfirmSelectedFileModalVisible={setConfirmSelectedFileModalVisible}
+          />
+
+          {/* Confirm Selected File Sending Modal */}
+          <ConfirmSelectedFileModal
+            selectedImage={selectedImage}
+            setSelectedImage={setSelectedImage}
+            
+            isConfirmSelectedFileModalVisible={confirmSelectedFileModalVisible}
+            setIsConfirmSelectedFileModalVisible={setConfirmSelectedFileModalVisible}
           />
 
           <TextInput

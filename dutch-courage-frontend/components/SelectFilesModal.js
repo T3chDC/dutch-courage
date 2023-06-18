@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Modal from "react-native-modal";
 import { View, Text, TouchableOpacity } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import ConfirmSelectedFileModal from "./ConfirmSelectedFileModal";
 
 const SelectFilesModal = ({
   isSelectFileModalVisible,
@@ -11,7 +12,10 @@ const SelectFilesModal = ({
   // setIsImageChooseModalVisible,
   selectedImage,
   setSelectedImage,
+  isConfirmSelectedFileModalVisible,
+  setIsConfirmSelectedFileModalVisible,
 }) => {
+
   //Function to Open Camera
   const openCamera = async () => {
     let result = await ImagePicker.launchCameraAsync({
@@ -24,6 +28,7 @@ const SelectFilesModal = ({
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri);
       setIsSelectFileModalVisible(false);
+      setIsConfirmSelectedFileModalVisible(true);
     }
   };
 
@@ -39,6 +44,7 @@ const SelectFilesModal = ({
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri);
       setIsSelectFileModalVisible(false);
+      setIsConfirmSelectedFileModalVisible(true);
     }
   };
 
@@ -77,6 +83,15 @@ const SelectFilesModal = ({
             </Text>
           </TouchableOpacity>
         </View>
+      </View>
+
+      <View>
+        <ConfirmSelectedFileModal
+          isConfirmSelectedFileModalVisible={isConfirmSelectedFileModalVisible}
+          setIsConfirmSelectedFileModalVisible={
+            setIsConfirmSelectedFileModalVisible
+          }
+        />
       </View>
     </Modal>
   );
