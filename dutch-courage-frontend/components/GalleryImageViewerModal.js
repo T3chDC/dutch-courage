@@ -21,6 +21,7 @@ const GalleryImageViewerModal = ({
   setSelectedGalleryImage3,
   setSelectedProfileImage,
   setSelectedImagesForDelete,
+  setGalleryImageCount,
 }) => {
   return (
     <Modal
@@ -45,9 +46,13 @@ const GalleryImageViewerModal = ({
           {(galleryImage1Url || selectedGalleryImage1) && (
             <View className='flex-1 justify-center items-center'>
               <Image
-                source={{ uri: selectedGalleryImage1 || `${BACKEND_URL}/uploads/${galleryImage1Url.slice(
-                  galleryImage1Url.lastIndexOf('/') + 1
-                )}` }}
+                source={{
+                  uri:
+                    selectedGalleryImage1 ||
+                    `${BACKEND_URL}/uploads/${galleryImage1Url.slice(
+                      galleryImage1Url.lastIndexOf('/') + 1
+                    )}`,
+                }}
                 style={{ width: 300, height: 300 }}
               />
 
@@ -85,6 +90,7 @@ const GalleryImageViewerModal = ({
                             ...prevState,
                             galleryImage1Url,
                           ])
+                          setGalleryImageCount((prevState) => prevState - 1)
                           setIsGalleryImageModalVisible(false)
                         },
                       },
@@ -102,9 +108,13 @@ const GalleryImageViewerModal = ({
           {(galleryImage2Url || selectedGalleryImage2) && (
             <View className='flex-1 justify-center items-center'>
               <Image
-                source={{ uri: selectedGalleryImage2 || `${BACKEND_URL}/uploads/${galleryImage2Url.slice(
-                  galleryImage2Url.lastIndexOf('/') + 1
-                )}` }}
+                source={{
+                  uri:
+                    selectedGalleryImage2 ||
+                    `${BACKEND_URL}/uploads/${galleryImage2Url.slice(
+                      galleryImage2Url.lastIndexOf('/') + 1
+                    )}`,
+                }}
                 style={{ width: 300, height: 300 }}
               />
 
@@ -143,6 +153,7 @@ const GalleryImageViewerModal = ({
                             ...prevState,
                             galleryImage2Url,
                           ])
+                          setGalleryImageCount((prevState) => prevState - 1)
                           setIsGalleryImageModalVisible(false)
                         },
                       },
@@ -160,9 +171,13 @@ const GalleryImageViewerModal = ({
           {(galleryImage3Url || selectedGalleryImage3) && (
             <View className='flex-1 justify-center items-center'>
               <Image
-                source={{ uri: selectedGalleryImage3 || `${BACKEND_URL}/uploads/${galleryImage3Url.slice(
-                  galleryImage3Url.lastIndexOf('/') + 1
-                )}` }}
+                source={{
+                  uri:
+                    selectedGalleryImage3 ||
+                    `${BACKEND_URL}/uploads/${galleryImage3Url.slice(
+                      galleryImage3Url.lastIndexOf('/') + 1
+                    )}`,
+                }}
                 style={{ width: 300, height: 300 }}
               />
 
@@ -200,6 +215,7 @@ const GalleryImageViewerModal = ({
                             ...prevState,
                             galleryImage3Url,
                           ])
+                          setGalleryImageCount((prevState) => prevState - 1)
                           setIsGalleryImageModalVisible(false)
                         },
                       },

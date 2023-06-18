@@ -7,6 +7,7 @@ const ImagePickerModal = ({
   isImageChooseModalVisible,
   setIsImageChooseModalVisible,
   setSelectedImage,
+  setGalleryImageCount,
 }) => {
   // Function to pick image from gallery
   const pickImage = async () => {
@@ -22,6 +23,7 @@ const ImagePickerModal = ({
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri)
       setIsImageChooseModalVisible(false)
+      setGalleryImageCount((prev) => prev + 1)
     }
   }
 
@@ -39,6 +41,7 @@ const ImagePickerModal = ({
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri)
       setIsImageChooseModalVisible(false)
+      setGalleryImageCount((prev) => prev + 1)
     }
   }
 
@@ -81,6 +84,11 @@ const ImagePickerModal = ({
       </View>
     </Modal>
   )
+}
+
+// Default props
+ImagePickerModal.defaultProps = {
+  setGalleryImageCount: () => null,
 }
 
 export default ImagePickerModal
