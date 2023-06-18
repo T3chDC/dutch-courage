@@ -73,7 +73,20 @@ const UserProfileEditScreen = () => {
   const [selectedGalleryImage1, setSelectedGalleryImage1] = useState(null)
   const [selectedGalleryImage2, setSelectedGalleryImage2] = useState(null)
   const [selectedGalleryImage3, setSelectedGalleryImage3] = useState(null)
+  const [galleryImageCount, setGalleryImageCount] = useState(
+    meUser?.galleryImage1Url &&
+      meUser?.galleryImage2Url &&
+      meUser?.galleryImage3Url
+      ? 3
+      : meUser?.galleryImage1Url && meUser?.galleryImage2Url
+      ? 2
+      : meUser?.galleryImage1Url
+      ? 1
+      : 0
+  )
   const [selectedImagesForDelete, setSelectedImagesForDelete] = useState([])
+
+  console.log('galleryImageCount ', galleryImageCount)
 
   // Modal State variables
   const [isProfileImageModalVisible, setIsProfileImageModalVisible] =
@@ -620,11 +633,12 @@ const UserProfileEditScreen = () => {
               setSelectedGalleryImage3={setSelectedGalleryImage3}
               setSelectedProfileImage={setSelectedProfileImage}
               setSelectedImagesForDelete={setSelectedImagesForDelete}
+              setGalleryImageCount={setGalleryImageCount}
             />
 
             <TouchableOpacity
               onPress={() => {
-                if (galleryImage3Url || selectedGalleryImage3) {
+                if (galleryImageCount >= 3) {
                   Toast.show({
                     type: 'info',
                     text1:
