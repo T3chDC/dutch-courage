@@ -71,6 +71,7 @@ const ConversationScreen = () => {
   } = useSelector((state) => state.message);
 
   //local State variables
+  const [selectedImage, setSelectedImage] = useState(null);
   const [messageText, setMessageText] = useState("");
   const [conversationMessages, setConversationMessages] = useState([]);
   const [userMessageCount, setUserMessageCount] = useState(0);
@@ -435,6 +436,7 @@ const ConversationScreen = () => {
           <SelectFilesModal
             isSelectFileModalVisible={isSelectFileModalVisible}
             setIsSelectFileModalVisible={setIsSelectFileModalVisible}
+            setSelectedImage={selectedImage}
           />
 
           <TextInput
