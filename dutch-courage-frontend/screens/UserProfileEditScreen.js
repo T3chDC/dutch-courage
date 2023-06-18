@@ -73,16 +73,13 @@ const UserProfileEditScreen = () => {
   const [selectedGalleryImage1, setSelectedGalleryImage1] = useState(null)
   const [selectedGalleryImage2, setSelectedGalleryImage2] = useState(null)
   const [selectedGalleryImage3, setSelectedGalleryImage3] = useState(null)
+  const [galleryImages, setGalleryImages] = useState([
+    meUser?.galleryImage1Url,
+    meUser?.galleryImage2Url,
+    meUser?.galleryImage3Url,
+  ])
   const [galleryImageCount, setGalleryImageCount] = useState(
-    meUser?.galleryImage1Url &&
-      meUser?.galleryImage2Url &&
-      meUser?.galleryImage3Url
-      ? 3
-      : meUser?.galleryImage1Url && meUser?.galleryImage2Url
-      ? 2
-      : meUser?.galleryImage1Url
-      ? 1
-      : 0
+    galleryImages.filter((image) => image !== '').length
   )
   const [selectedImagesForDelete, setSelectedImagesForDelete] = useState([])
 
@@ -666,6 +663,7 @@ const UserProfileEditScreen = () => {
                     : setSelectedGalleryImage2
                   : setSelectedGalleryImage1
               }
+              setGalleryImageCount={setGalleryImageCount}
             />
           </View>
 
