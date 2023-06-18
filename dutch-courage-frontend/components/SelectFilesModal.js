@@ -9,6 +9,7 @@ const SelectFilesModal = ({
 
   // isImageChooseModalVisible,
   // setIsImageChooseModalVisible,
+  selectedImage,
   setSelectedImage,
 }) => {
   //Function to Open Camera

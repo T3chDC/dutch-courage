@@ -436,7 +436,8 @@ const ConversationScreen = () => {
           <SelectFilesModal
             isSelectFileModalVisible={isSelectFileModalVisible}
             setIsSelectFileModalVisible={setIsSelectFileModalVisible}
-            setSelectedImage={selectedImage}
+            selectedImage={selectedImage}
+            setSelectedImage={setSelectedImage}
           />
 
           <TextInput
