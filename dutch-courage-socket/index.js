@@ -49,14 +49,16 @@ io.on('connection', (socket) => {
       createdAt,
     }) => {
       const reciever = getUser(receiverId)
-      io.to(reciever.socketId).emit('getMessage', {
-        conversationId,
-        senderId,
-        messageType,
-        message,
-        messageImageUrl,
-        createdAt,
-      })
+      if (reciever) {
+        io.to(reciever.socketId).emit('getMessage', {
+          conversationId,
+          senderId,
+          messageType,
+          message,
+          messageImageUrl,
+          createdAt,
+        })
+      }
     }
   )
 
