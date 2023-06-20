@@ -280,8 +280,6 @@ const ConversationScreen = () => {
     };
   }, [dispatch]);
 
-  console.log(selectedImage)
-
   return (
     <View className="bg-black flex-1 justify-start items-center relative">
       <TouchableOpacity
