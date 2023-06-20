@@ -14,8 +14,9 @@ const conversationDeleteCleanup = async (conversationId) => {
 
   messages.forEach((message) => {
     if (message.messageType === 'image') {
-      const extractedFileName = message.messageImageUrl.slice(
-        imageUrl.lastIndexOf('/') + 1
+      const messageImageUrl = message.messageImageUrl
+      const extractedFileName = messageImageUrl.slice(
+        messageImageUrl.lastIndexOf('/') + 1
       )
       deleteFile(`./uploads/${extractedFileName}`)
     }
