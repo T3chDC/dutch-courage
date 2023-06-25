@@ -1,7 +1,0 @@
-* How to send pics
-* Message Notifications
-* Remaining Msg counts, where to show it (Beside profile picture and name)
-* What should we do to the previous 10 messages (Will be there)
-
-
-** Spacing, Sending message arrow
