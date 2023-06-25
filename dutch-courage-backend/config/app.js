@@ -13,10 +13,18 @@ import cors from 'cors' //import cors for CROSS-ORIGIN-RESOURCE-SHARING
 
 import globalErrorHandler from '../api/v1/utils/errorController.js' //import global error handler
 import AppError from '../api/v1/utils/appError.js' //import appError for error report creation
+import cron from 'node-cron' //import cron for scheduling tasks
+import updateMessageCount from '../api/v1/utils/updateMessageCount.js' //import updateMessageCount for updating message count
 
 import v1Router from '../api/v1/common/v1Routes.js' //import v1Router from v1Routes.js
 
 const app = express() //create an instance of express
+
+// schedule tasks to be run on the server every 1 minute
+cron.schedule('*/1 * * * * ', async () => {
+  await updateMessageCount()
+  console.log('running a task every 1 minute')
+})
 
 app.use(cors()) //enable cors
 

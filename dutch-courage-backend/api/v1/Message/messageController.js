@@ -42,11 +42,12 @@ export const createMessage = catchAsync(async (req, res, next) => {
             429
           )
         )
-      } else if (timeDifference >= 45) {
-        // if the last message was sent more than 45 minutes ago, reset the message count to 0
-        conversation.participantsMessageCount.set(req.body.sender, 0)
-        await conversation.save()
       }
+      // } else if (timeDifference >= 45) {
+      //   // if the last message was sent more than 45 minutes ago, reset the message count to 0
+      //   conversation.participantsMessageCount.set(req.body.sender, 0)
+      //   await conversation.save()
+      // }
     }
   }
 

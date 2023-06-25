@@ -4,6 +4,7 @@ import catchAsync from '../utils/catchAsync.js'
 import AppError from '../utils/appError.js'
 import Conversation from './conversationModel.js'
 import Message from '../Message/messageModel.js'
+import conversationDeleteCleanup from '../utils/conversationDeleteCleanup.js'
 
 import { createOne, updateOne } from '../common/handlerFactory.js' //import generic handler
 
@@ -36,6 +37,7 @@ export const deleteConversation = catchAsync(async (req, res, next) => {
 
   //if the conversation has been deleted by both users, delete the conversation
   if (conversation.deletedBy.length === 2) {
+    await conversationDeleteCleanup(req.params.id)
     //delete all messages in the conversation
     await Message.deleteMany({ conversationId: req.params.id })
     await Conversation.findByIdAndDelete(req.params.id)
