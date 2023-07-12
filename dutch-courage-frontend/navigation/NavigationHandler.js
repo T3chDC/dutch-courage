@@ -16,6 +16,7 @@ import UserProfileScreen from '../screens/UserProfileScreen'
 import UserProfileEditScreen from '../screens/UserProfileEditScreen'
 import InboxScreen from '../screens/InboxScreen'
 import ConversationScreen from '../screens/ConversationScreen'
+import OtherUserProfileScreen from '../screens/OtherUserProfileScreen'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { getInitialState } from '../features/auth/authSlice'
@@ -107,6 +108,14 @@ const NavigationHandler = () => {
           <Stack.Screen
             name='UserProfileEdit'
             component={UserProfileEditScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          {/* Users Visit Someone else's Profile Screen */}
+          <Stack.Screen
+            name='OtherUserProfile'
+            component={OtherUserProfileScreen}
             options={{
               headerShown: false,
             }}
