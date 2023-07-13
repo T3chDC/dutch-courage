@@ -56,6 +56,9 @@ const OtherUserProfileScreen = () => {
   const [location, setLocation] = useState("");
   const [topInterests, setTopInterests] = useState([]);
 
+  const [report, setReport] = useState("");
+  const [reportCount, setReportCount] = useState(0);
+
   const [showLowerRatingModal, setShowLowerRatingModal] = useState(false);
 
   // Check if user is logged in
@@ -318,6 +321,11 @@ const OtherUserProfileScreen = () => {
           <LowerRatingModal
             modalVisible={showLowerRatingModal}
             setModalVisible={setShowLowerRatingModal}
+            report={report}
+            setReport={setReport}
+            reportCount={reportCount}
+            setReportCount={setReportCount}
+            
           />
 
           {/* Chat and User Profile Icons */}

@@ -3,8 +3,18 @@ import Modal from "react-native-modal";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CheckBox } from "@rneui/themed";
+import { TextInput } from "react-native-gesture-handler";
 
-const LowerRatingModal = ({ modalVisible, setModalVisible }) => {
+const LowerRatingModal = ({
+  modalVisible,
+  setModalVisible,
+
+  report,
+  setReport,
+  reportCount,
+  setReportCount,
+
+}) => {
   const [chekcTest, setCheckTest] = useState(false);
   return (
     <Modal
@@ -18,16 +28,16 @@ const LowerRatingModal = ({ modalVisible, setModalVisible }) => {
       // avoidKeyboard={true}
     >
       <View className="flex-1 justify-center items-center">
-        <View className="absolute w-[80vw] h-[30vh] rounded-2xl flex-row justify-center bg-[#3fe7f6]">
-          <View className="absolute w-[60vw] h-[6vh] flex-row justify-center items-center mt-5 rounded-2xl bg-white">
+        <View className="absolute w-[80vw] h-[40vh] rounded-2xl flex-row justify-center bg-[#3fe7f6]">
+          <View className="absolute w-[70vw] h-[6vh] flex-row justify-center items-center mt-5 rounded-2xl bg-white">
             <Text className="text-[#808080]">
               Please provide a reason for lower star rating
             </Text>
           </View>
         </View>
 
-        <View className="w-[60vw] h-[10vh] flex-row justify-start top-[-15]">
-          <View className="flex">
+        <View className="w-[60vw] h-[10vh] flex-row top-5">
+          <View className="left-[-5]">
             <CheckBox
               checked={chekcTest}
               checkedIcon="circle"
@@ -53,11 +63,12 @@ const LowerRatingModal = ({ modalVisible, setModalVisible }) => {
               textStyle={{ color: "#808080" }}
               containerStyle={{
                 backgroundColor: "transparent",
+                marginTop: -10,
               }}
             ></CheckBox>
           </View>
-        
-          <View className="">
+
+          <View className="left-[-5]">
             <CheckBox
               checked={chekcTest}
               checkedIcon="circle"
@@ -83,8 +94,36 @@ const LowerRatingModal = ({ modalVisible, setModalVisible }) => {
               textStyle={{ color: "#808080" }}
               containerStyle={{
                 backgroundColor: "transparent",
+                marginTop: -10,
               }}
             ></CheckBox>
+          </View>
+        </View>
+
+        <View className="rounded-2xl justify-end bottom-[-28]">
+          <View className="w-[70vw] h-[15vh] justify-center items-center mt-5 rounded-2xl bg-white">
+            <View>
+              <TextInput
+                placeholder=""
+                keyboardType="default"
+                className="text-[#808080]"
+                value={report}
+                onChangeText={(text) => {
+                  if (text.length <= 40) {
+                    setReport(text);
+                    setReportCount(text.length);
+                  }
+                }}
+                onEndEditing={() => {
+                  setModalVisible(false);
+                }}
+              ></TextInput>
+            </View>
+            <TouchableOpacity onPress={() => setModalVisible(false)}>
+              <View className="w-32 h-8 rounded-2xl bg-[#22A6B3] flex-row justify-center items-center">
+                <Text className="text-white font-bold">Submit</Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
