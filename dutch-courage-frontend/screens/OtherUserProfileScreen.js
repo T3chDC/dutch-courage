@@ -25,6 +25,7 @@ import * as Progress from "react-native-progress";
 import SwipeButton from "rn-swipe-button";
 import { logout } from "../features/auth/authSlice";
 import { BACKEND_URL } from "../config";
+import LowerRatingModal from "../components/LowerRatingModal";
 
 const OtherUserProfileScreen = () => {
   // Navigation hook
@@ -54,6 +55,8 @@ const OtherUserProfileScreen = () => {
   const [gender, setGender] = useState("");
   const [location, setLocation] = useState("");
   const [topInterests, setTopInterests] = useState([]);
+
+  const [showLowerRatingModal, setShowLowerRatingModal] = useState(false);
 
   // Check if user is logged in
   useEffect(() => {
@@ -285,7 +288,7 @@ const OtherUserProfileScreen = () => {
               onSwipeSuccess={() =>
                 Toast.show({
                   type: "success",
-                  text1: "You are now live!",
+                  text1: "You have sent a wave to this user!",
                   visibilityTime: 3000,
                 })
               }
@@ -301,6 +304,21 @@ const OtherUserProfileScreen = () => {
             <Text className="text-white text-xl">Slide to wave </Text>
             <HandRaisedIcon className="mt-5" color={"yellow"} />
           </View>
+
+          {/* Modal Showing Button */}
+          <View className="flex-row justify-center items-center mt-2">
+            <TouchableOpacity onPress={() => setShowLowerRatingModal(true)}>
+              <View className="w-32 h-8 rounded-full bg-[#22A6B3] flex-row justify-center items-center">
+                <Text className="text-white text-lg font-bold">Modal</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+
+          {/* Modal */}
+          <LowerRatingModal
+            modalVisible={showLowerRatingModal}
+            setModalVisible={setShowLowerRatingModal}
+          />
 
           {/* Chat and User Profile Icons */}
           <View className="absolute bottom-3 w-[100vw] flex-row justify-between items-center">
