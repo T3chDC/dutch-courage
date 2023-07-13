@@ -314,7 +314,7 @@ const OtherUserProfileScreen = () => {
             </TouchableOpacity>
           </View>
 
-          {/* Modal */}
+          {/* Lower Rating Modal */}
           <LowerRatingModal
             modalVisible={showLowerRatingModal}
             setModalVisible={setShowLowerRatingModal}
