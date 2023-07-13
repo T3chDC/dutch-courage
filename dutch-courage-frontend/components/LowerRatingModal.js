@@ -106,7 +106,7 @@ const LowerRatingModal = ({
               <TextInput
                 placeholder=""
                 keyboardType="default"
-                className="text-[#808080]"
+                className="text-[#808080] justify-start items-center border-b-2 border-[#999999] w-[50vw] h-[5vh]"
                 value={report}
                 onChangeText={(text) => {
                   if (text.length <= 40) {
@@ -120,7 +120,7 @@ const LowerRatingModal = ({
               ></TextInput>
             </View>
             <TouchableOpacity onPress={() => setModalVisible(false)}>
-              <View className="w-32 h-8 rounded-2xl bg-[#22A6B3] flex-row justify-center items-center">
+              <View className="w-32 h-8 rounded-xl bg-[#22A6B3] flex-row justify-center items-center top-3">
                 <Text className="text-white font-bold">Submit</Text>
               </View>
             </TouchableOpacity>
