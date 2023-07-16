@@ -229,6 +229,13 @@ export const googleSignIn = catchAsync(async (req, res, next) => {
 
   if (!user) {
     return next(new AppError('User with this email does not exist', 400))
+  } else if (user && user.loginType !== 'google') {
+    return next(
+      new AppError(
+        'User with this email already exists with another login type, please login using different method',
+        400
+      )
+    )
   } else {
     res.status(200).json({
       status: 'success',
@@ -262,6 +269,13 @@ export const facebookSignIn = catchAsync(async (req, res, next) => {
 
   if (!user) {
     return next(new AppError('User with this facebook id does not exist', 400))
+  } else if (user && user.loginType !== 'facebook') {
+    return next(
+      new AppError(
+        'User with this facebook id already exists with another login type, please login using different method',
+        400
+      )
+    )
   } else {
     res.status(200).json({
       status: 'success',
