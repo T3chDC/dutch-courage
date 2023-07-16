@@ -9,6 +9,7 @@ const initialState = {
   isLocationSuccess: false,
   isLocationError: false,
   locationErrorMessage: '',
+  isUserLive: false,
 
   nearbyUsers: [],
   isNearbyUsersLoading: false,
@@ -114,18 +115,21 @@ const locationSlice = createSlice({
         state.isLocationSuccess = false
         state.isLocationError = false
         state.locationErrorMessage = ''
+        state.isUserLive = false
       })
       .addCase(addUser.fulfilled, (state, action) => {
         state.isLocationLoading = false
         state.isLocationSuccess = true
         state.isLocationError = false
         state.nearbyUsers = action.payload
+        state.isUserLive = true
       })
       .addCase(addUser.rejected, (state, action) => {
         state.isLocationLoading = false
         state.isLocationSuccess = false
         state.isLocationError = true
         state.locationErrorMessage = action.payload
+        state.isUserLive = false
       })
       .addCase(removeUser.pending, (state) => {
         state.isLocationLoading = true
@@ -138,6 +142,7 @@ const locationSlice = createSlice({
         state.isLocationSuccess = true
         state.isLocationError = false
         state.nearbyUsers = []
+        state.isUserLive = false
       })
       .addCase(removeUser.rejected, (state, action) => {
         state.isLocationLoading = false
