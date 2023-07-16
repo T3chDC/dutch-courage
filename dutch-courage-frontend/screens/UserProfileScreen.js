@@ -288,6 +288,13 @@ const UserProfileScreen = () => {
             </TouchableOpacity>
           </View>
 
+          {/* Nearby Users */}
+          <View className='mt-3'>
+            <TouchableOpacity onPress={()=> navigation.navigate('NearbyUsers')}>
+              <Text className='text-[#22A6B3] text-lg font-bold'>5 Users Nearby</Text>
+            </TouchableOpacity>
+          </View>
+
           {/* Chat and User Profile Icons */}
           <View className="absolute bottom-3 w-[100vw] flex-row justify-between items-center">
             <View className="w-1/2 flex-row justify-center items-center">
