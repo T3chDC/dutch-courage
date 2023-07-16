@@ -11,15 +11,22 @@ const ImagePickerModal = ({
 }) => {
   // Function to pick image from gallery
   const pickImage = async () => {
+    try {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync()
+      if (status !== 'granted') {
+        alert('Sorry, we need camera roll permissions to make this work!')
+        return
+      }
+    } catch (err) {
+      console.log(err)
+    }
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 4],
       quality: 1,
     })
-
     // console.log(result)
-
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri)
       setIsImageChooseModalVisible(false)
@@ -29,6 +36,15 @@ const ImagePickerModal = ({
 
   // Function to take image from camera
   const takeImage = async () => {
+    try {
+      const { status } = await ImagePicker.requestCameraPermissionsAsync()
+      if (status !== 'granted') {
+        alert('Sorry, we need camera roll permissions to make this work!')
+        return
+      }
+    } catch (err) {
+      console.log(err)
+    }
     let result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
