@@ -9,6 +9,8 @@ const io = require('socket.io')(PORT, {
   },
 })
 
+console.log('Socket server is running on port', PORT)
+
 let users = []
 
 // Function to add user to users array
