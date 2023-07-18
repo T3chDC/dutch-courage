@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import * as Progress from "react-native-progress";
+import SwipeButton from "rn-swipe-button";
+import Toast from "react-native-toast-message";
 
 const UsersNearbyScreen = () => {
   const navigation = useNavigation();
@@ -45,13 +47,68 @@ const UsersNearbyScreen = () => {
         <Text className="text-white text-base top-[-1]">{"< Back"}</Text>
       </TouchableOpacity>
 
-      <View className="top-[50] flex-col justify-evenly items-center ">
+      <View className="top-[50] justify-evenly items-center ">
         <Image
           source={require("../assets/projectImages/TempLogo1.png")}
           className=""
         />
 
-        <Text className="text-white text-xl font-bold right-[120]">Around You</Text>
+        <Text className="text-white text-xl font-bold right-[120]">
+          Around You
+        </Text>
+
+        <View className="justify-start items-start w-[320] flex-row mt-3">
+          <Image
+            source={require("../assets/projectImages/avatarPlaceholder.png")}
+            className="w-[50] h-[50] rounded-full"
+            resizeMode="cover"
+          />
+
+          <View className="flex flex-row">
+            <View className="flex flex-col w-[220]">
+              <Text className="text-white text-xl left-5">User Name</Text>
+
+              <Text className="mt-1 text-[#808080] text-muted left-5">
+                My Hobbies, Mera Hobbies, Mein Hobbies
+              </Text>
+            </View>
+          </View>
+
+          <View className="right-[70px] flex flex-row">
+            {/* Star */}
+            <Image
+              source={require("../assets/projectImages/starFull.png")}
+              className="w-6 h-6 mx-1"
+            />
+            <Text className="text-white text-xl">2.5</Text>
+
+            {/* <Text className='text-white'>Block Block Block</Text> */}
+            <View className="bottom-[5] ml-2">
+              <SwipeButton
+                title="Block"
+                titleColor="white"
+                titleFontSize={15}
+                titleStyles={{}}
+                swipeSuccessThreshold={50}
+                height={22}
+                width={80}
+                onSwipeSuccess={() =>
+                  Toast.show({
+                    type: "success",
+                    text1: "You have successfully blocked the user",
+                    visibilityTime: 3000,
+                  })
+                }
+                thumbIconBackgroundColor="white"
+                thumbIconBorderColor="white"
+                railBackgroundColor="#FF7F50"
+                railBorderColor="#FF7F50"
+                railFillBackgroundColor="rgb(128, 128, 128)"
+                railFillBorderColor="#808080"
+              />
+            </View>
+          </View>
+        </View>
       </View>
     </View>
   );
