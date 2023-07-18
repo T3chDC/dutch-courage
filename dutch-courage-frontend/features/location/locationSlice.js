@@ -9,6 +9,7 @@ const initialState = {
   isLocationSuccess: false,
   isLocationError: false,
   locationErrorMessage: '',
+
   isUserLive: false,
 
   nearbyUsers: [],
@@ -45,11 +46,13 @@ export const addUser = createAsyncThunk(
   'location/addUser',
   async (userId, thunkAPI) => {
     try {
-      const location = thunkAPI.getState().location.ownLocation
-      if (!location) {
+      const detailedLocation = thunkAPI.getState().location.ownLocation
+      if (!detailedLocation) {
         return thunkAPI.rejectWithValue('Location is not available')
       }
-      return await locationService.addUser(userId, location)
+      const location = detailedLocation.coords
+      const token = thunkAPI.getState().auth.token
+      return await locationService.addUser(userId, location, token)
     } catch (err) {
       const message = err.message || err.toString()
       return thunkAPI.rejectWithValue(message)
@@ -62,7 +65,8 @@ export const removeUser = createAsyncThunk(
   'location/removeUser',
   async (userId, thunkAPI) => {
     try {
-      return await locationService.removeUser(userId)
+      const token = thunkAPI.getState().auth.token
+      return await locationService.removeUser(userId, token)
     } catch (err) {
       const message = err.message || err.toString()
       return thunkAPI.rejectWithValue(message)
@@ -76,14 +80,14 @@ const locationSlice = createSlice({
   initialState,
   reducers: {
     resetOwnLocation: (state) => {
-      state.ownLocation = null
+      // state.ownLocation = null
       state.isLocationLoading = false
       state.isLocationSuccess = false
       state.isLocationError = false
       state.locationErrorMessage = ''
     },
     resetNearbyUsers: (state) => {
-      state.nearbyUsers = []
+      // state.nearbyUsers = []
       state.isNearbyUsersLoading = false
       state.isNearbyUsersSuccess = false
       state.isNearbyUsersError = false
@@ -121,7 +125,10 @@ const locationSlice = createSlice({
         state.isLocationLoading = false
         state.isLocationSuccess = true
         state.isLocationError = false
-        state.nearbyUsers = action.payload
+        state.nearbyUsers =
+          action.payload.nearbyUsers.length == 0
+            ? []
+            : action.payload.nearbyUsers
         state.isUserLive = true
       })
       .addCase(addUser.rejected, (state, action) => {

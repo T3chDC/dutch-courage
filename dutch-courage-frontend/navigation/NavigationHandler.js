@@ -21,6 +21,7 @@ import OtherUserProfileScreen from '../screens/OtherUserProfileScreen'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { getInitialState } from '../features/auth/authSlice'
+import { addUser, getLocation } from '../features/location/locationSlice'
 
 const Stack = createNativeStackNavigator()
 
@@ -32,6 +33,38 @@ const NavigationHandler = () => {
   const dispatch = useDispatch()
 
   const { userInfo } = useSelector((state) => state.auth)
+
+  const {
+    isUserLive,
+    ownLocation,
+    isLocationSuccess,
+    isLocationError,
+    locationErrorMessage,
+  } = useSelector((state) => state.location)
+
+  // If user is live, then send location to server every 30 seconds
+  useEffect(() => {
+    if (isUserLive && ownLocation) {
+      const interval = setInterval(() => {
+        dispatch(getLocation())
+      }, 30000)
+      return () => clearInterval(interval)
+    }
+  }, [isUserLive, ownLocation])
+
+  useEffect(() => {
+    if (isLocationError) {
+      Toast.show({
+        type: 'error',
+        text1: locationErrorMessage,
+        visibilityTime: 3000,
+      })
+    } else if (isLocationSuccess) {
+      console.log('ownLocation', ownLocation)
+      //Add user to server
+      dispatch(addUser(userInfo._id))
+    }
+  }, [ownLocation, dispatch])
 
   useEffect(() => {
     dispatch(getInitialState())
@@ -86,7 +119,6 @@ const NavigationHandler = () => {
               headerShown: false,
             }}
           />
-          
 
           {/* Blank Profile Screen */}
           <Stack.Screen
@@ -147,7 +179,6 @@ const NavigationHandler = () => {
               headerShown: false,
             }}
           />
-
         </Stack.Navigator>
       </NavigationContainer>
       <StatusBar style='light' />

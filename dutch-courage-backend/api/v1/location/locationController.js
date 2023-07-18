@@ -1,6 +1,7 @@
 // This file contains the logic for manipulating the location of the live users.
 // Importing the liveUsers array from locationStorage.js
 import { liveUsers } from './locationStorage.js'
+import AppError from '../utils/appError.js'
 
 // @ desc This function is responsible for adding the user id and location to the liveUsers array.
 // @ route POST /api/v1/location/addUser
@@ -9,21 +10,27 @@ export const addUser = (req, res, next) => {
   const userId = req.body.userId
   const location = req.body.location
 
-  if (liveUsers.some((user) => user.userId === userId)) {
-    const index = liveUsers.findIndex((user) => user.userId === userId)
-    liveUsers[index].location = location
-  } else {
-    liveUsers.push({ userId, location })
+  try {
+    if (liveUsers.some((user) => user.userId === userId)) {
+      const index = liveUsers.findIndex((user) => user.userId === userId)
+      liveUsers[index].location = location
+    } else {
+      liveUsers.push({ userId, location })
+    }
+
+    const nearbyUsers = getNearbyUsers(userId, location)
+    console.log(userId)
+    console.log(nearbyUsers)
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        nearbyUsers,
+      },
+    })
+  } catch (err) {
+    return next(new AppError('Something went wrong', 500))
   }
-
-  const nearbyUsers = getNearbyUsers(userId, location)
-
-  res.status(200).json({
-    status: 'success',
-    data: {
-      nearbyUsers,
-    },
-  })
 }
 
 // @ desc This function is responsible for removing the user id and location from the liveUsers array.
@@ -31,14 +38,19 @@ export const addUser = (req, res, next) => {
 // @ access Private/regularUser
 export const removeUser = (req, res, next) => {
   const userId = req.body.userId
-  liveUsers.filter((user) => user.userId !== userId)
 
-  res.status(200).json({
-    status: 'success',
-    data: {
-      _id: req.body.userId,
-    },
-  })
+  try {
+    liveUsers.filter((user) => user.userId !== userId)
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        _id: req.body.userId,
+      },
+    })
+  } catch (err) {
+    return next(new AppError('Something went wrong', 500))
+  }
 }
 
 // Function to get nearby users

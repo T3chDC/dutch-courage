@@ -7,7 +7,7 @@ import { protect, restrictTo } from '../common/authController.js' //import Auth 
 
 const router = express.Router() //create router instance
 
-router.use(protect, restrictTo('regularUser')) //protect all routes after this middleware
+// router.use(protect, restrictTo('regularUser')) //protect all routes after this middleware
 router.route('/addUser').post(addUser) //route to add user to live users
 router.route('/removeUser').post(removeUser) //route to remove user from live users
 
