@@ -198,7 +198,7 @@ const InboxScreen = () => {
             </TouchableOpacity>
           </View>
         ) : (
-          <Text className='text-[#808080] text-base  absolute top-20 left-10'>
+          <Text className='text-[#808080] text-base absolute top-20 left-10'>
             Messages
           </Text>
         )}
