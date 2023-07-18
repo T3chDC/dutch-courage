@@ -57,7 +57,60 @@ const UsersNearbyScreen = () => {
           Around You
         </Text>
 
-        <View className="justify-start items-start w-[320] flex-row mt-3">
+        <View className="justify-start items-start w-[320] flex-row mt-4">
+          <Image
+            source={require("../assets/projectImages/avatarPlaceholder.png")}
+            className="w-[50] h-[50] rounded-full"
+            resizeMode="cover"
+          />
+
+          <View className="flex flex-row">
+            <View className="flex flex-col w-[220]">
+              <Text className="text-white text-xl left-5">User Name</Text>
+
+              <Text className="mt-1 text-[#808080] text-muted left-5">
+                My Hobbies, Mera Hobbies, Mein Hobbies
+              </Text>
+            </View>
+          </View>
+
+          <View className="right-[70px] flex flex-row">
+            {/* Star */}
+            <Image
+              source={require("../assets/projectImages/starFull.png")}
+              className="w-6 h-6 mx-1"
+            />
+            <Text className="text-white text-xl">2.5</Text>
+
+            {/* <Text className='text-white'>Block Block Block</Text> */}
+            <View className="bottom-[5] ml-2">
+              <SwipeButton
+                title="Block"
+                titleColor="white"
+                titleFontSize={15}
+                titleStyles={{}}
+                swipeSuccessThreshold={50}
+                height={22}
+                width={80}
+                onSwipeSuccess={() =>
+                  Toast.show({
+                    type: "success",
+                    text1: "You have successfully blocked the user",
+                    visibilityTime: 3000,
+                  })
+                }
+                thumbIconBackgroundColor="white"
+                thumbIconBorderColor="white"
+                railBackgroundColor="#FF7F50"
+                railBorderColor="#FF7F50"
+                railFillBackgroundColor="rgb(128, 128, 128)"
+                railFillBorderColor="#808080"
+              />
+            </View>
+          </View>
+        </View>
+
+        <View className="justify-start items-start w-[320] flex-row mt-4">
           <Image
             source={require("../assets/projectImages/avatarPlaceholder.png")}
             className="w-[50] h-[50] rounded-full"
