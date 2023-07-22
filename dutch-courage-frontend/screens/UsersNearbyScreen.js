@@ -25,8 +25,35 @@ const UsersNearbyScreen = () => {
   const dispatch = useDispatch();
 
   const { userInfo } = useSelector((state) => state.auth);
+  const {
+    ownLocation,
+    isLocationLoading,
+    isLocationSuccess,
+    isLocationError,
+    locationErrorMessage,
+    isUserLive,
+    nearbyUsers,
+    isNearbyUsersLoading,
+    isNearbyUsersSuccess,
+    isNearbyUsersError,
+    nearbyUsersErrorMessage,
+  } = useSelector((state) => state.location);
+
+  const {
+    meUser,
+    isMeGetLoading,
+    isMeGetSuccess,
+    isMeGetError,
+    meGetErrorMessage,
+  } = useSelector((state) => state.user);
 
   //Local state variables
+  const [imageUrl, setImageUrl] = useState("");
+  const [userName, setUserName] = useState("");
+  const [topInterests, setTopInterests] = useState([]);
+  const [rating, setRating] = useState(5);
+  const [location, setLocation] = useState("");
+
   const [report, setReport] = useState("");
   const [reportCount, setReportCount] = useState(0);
   const [showBlockModal, setShowBlockModal] = useState(false);
@@ -54,6 +81,51 @@ const UsersNearbyScreen = () => {
     return () => backHandler.remove();
   }, [navigation]);
 
+  //Exit App on Back Press
+  useEffect(() => {
+    const backAction = () => {
+      Alert.alert(
+        "Hold on!",
+        "Are you sure you want to exit the app?",
+        [
+          {
+            text: "Cancel",
+            onPress: () => null,
+            style: "cancel",
+          },
+          { text: "YES", onPress: () => BackHandler.exitApp() },
+        ],
+        { cancelable: false }
+      );
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+    return () => backHandler.remove();
+  }, [userInfo, dispatch, navigation]);
+
+  //Get User Info
+  useEffect(() => {
+    if (isMeGetError) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: meGetErrorMessage,
+        visibilityTime: 3000,
+      });
+    } else if (isMeGetSuccess) {
+      setImageUrl(meUser.imageUrl);
+      setUserName(meUser.userName);
+      setTopInterests(meUser.topInterests);
+      setRating(meUser.rating);
+      setLocation(meUser.location);
+    } else {
+      dispatch(getMeUser());
+    }
+  }, [isMeGetError, isMeGetSuccess, meGetErrorMessage, dispatch]);
+
   return (
     <View className="bg-black flex-1 justify-start items-center relative">
       <TouchableOpacity
@@ -76,122 +148,88 @@ const UsersNearbyScreen = () => {
           Around You
         </Text>
 
-        <View className="justify-start items-start w-[350] flex-row mt-4">
-          <Image
-            source={require("../assets/projectImages/avatarPlaceholder.png")}
-            className="w-[50] h-[50] rounded-full"
-            resizeMode="cover"
-          />
+        {nearbyUsers.length <= 0 ? (
+          <Text className="text-white text-xl font-bold mt-5">
+            No Users Nearby
+          </Text>
+        ) : (
+          <>
+            {nearbyUsers.map((nearbyUser) => (
+              <View
+                className="justify-start items-start w-[350] flex-row mt-4"
+                key={nearbyUser._id}
+              >
+                <Image
+                  source={require("../assets/projectImages/avatarPlaceholder.png")}
+                  className="w-[50] h-[50] rounded-full"
+                  resizeMode="cover"
+                />
 
-          <View className="flex flex-row">
-            <View className="flex flex-col w-[220]">
-              <Text className="text-white text-xl left-5">User Name</Text>
+                <View className="flex flex-row">
+                  <View className="flex flex-col w-[220]">
+                    <Text className="text-white text-xl left-5">
+                      {nearbyUser.userName}
+                    </Text>
 
-              <Text className="mt-1 text-[#808080] text-muted left-5">
-                My Hobbies, Mera Hobbies, Mein Hobbies
-              </Text>
-            </View>
-          </View>
+                    <Text className="mt-1 text-[#808080] text-muted left-5">
+                      {nearbyUser.topInterests[0]}
+                    </Text>
+                  </View>
+                </View>
 
-          <View className="right-[70px] flex flex-row">
-            {/* Star */}
-            <Image
-              source={require("../assets/projectImages/starFull.png")}
-              className="w-6 h-6 mx-1"
-            />
-            <Text className="text-white text-xl">2.5</Text>
+                <View className="right-[70px] flex flex-row">
+                  {/* Star */}
+                  <Image
+                    source={require("../assets/projectImages/starFull.png")}
+                    className="w-6 h-6 mx-1"
+                  />
+                  <Text className="text-white text-xl">
+                    {nearbyUser.rating}
+                  </Text>
 
-            {/* Block Button */}
-            <View className="bottom-[5] ml-2">
-              <SwipeButton
-                title="Block"
-                titleColor="white"
-                titleFontSize={15}
-                titleStyles={{}}
-                swipeSuccessThreshold={50}
-                height={22}
-                width={80}
-                onSwipeSuccess={() =>
-                  // Toast.show({
-                  //   type: "success",
-                  //   text1: "You have successfully blocked the user",
-                  //   visibilityTime: 3000,
-                  // })
-                  setShowBlockModal(true)
-                }
-                thumbIconBackgroundColor="white"
-                thumbIconBorderColor="white"
-                railBackgroundColor="#FF7F50"
-                railBorderColor="#FF7F50"
-                railFillBackgroundColor="rgb(128, 128, 128)"
-                railFillBorderColor="#808080"
-              />
-            </View>
+                  {/* Block Button */}
+                  <View className="bottom-[5] ml-2">
+                    <SwipeButton
+                      title="Block"
+                      titleColor="white"
+                      titleFontSize={15}
+                      titleStyles={{}}
+                      swipeSuccessThreshold={50}
+                      height={22}
+                      width={80}
+                      onSwipeSuccess={() =>
+                        // Toast.show({
+                        //   type: "success",
+                        //   text1: "You have successfully blocked the user",
+                        //   visibilityTime: 3000,
+                        // })
+                        setShowBlockModal(true)
+                      }
+                      thumbIconBackgroundColor="white"
+                      thumbIconBorderColor="white"
+                      railBackgroundColor="#FF7F50"
+                      railBorderColor="#FF7F50"
+                      railFillBackgroundColor="rgb(128, 128, 128)"
+                      railFillBorderColor="#808080"
+                    />
+                  </View>
 
-            {/* Block Modal */}
-            <BlockModal
-              modalVisible={showBlockModal}
-              setModalVisible={setShowBlockModal}
-              report={report}
-              setReport={setReport}
-              reportCount={reportCount}
-              setReportCount={setReportCount}
-            />
-          </View>
-        </View>
+                  {/* Block Modal */}
+                  <BlockModal
+                    modalVisible={showBlockModal}
+                    setModalVisible={setShowBlockModal}
+                    report={report}
+                    setReport={setReport}
+                    reportCount={reportCount}
+                    setReportCount={setReportCount}
+                  />
+                </View>
+              </View>
+            ))}
+          </>
+        )}
 
-        <View className="justify-start items-start w-[350] flex-row mt-4">
-          <Image
-            source={require("../assets/projectImages/avatarPlaceholder.png")}
-            className="w-[50] h-[50] rounded-full"
-            resizeMode="cover"
-          />
-
-          <View className="flex flex-row">
-            <View className="flex flex-col w-[220]">
-              <Text className="text-white text-xl left-5">User Name</Text>
-
-              <Text className="mt-1 text-[#808080] text-muted left-5">
-                My Hobbies, Mera Hobbies, Mein Hobbies
-              </Text>
-            </View>
-          </View>
-
-          <View className="right-[70px] flex flex-row">
-            {/* Star */}
-            <Image
-              source={require("../assets/projectImages/starFull.png")}
-              className="w-6 h-6 mx-1"
-            />
-            <Text className="text-white text-xl">2.5</Text>
-
-            {/* <Text className='text-white'>Block Block Block</Text> */}
-            <View className="bottom-[5] ml-2">
-              <SwipeButton
-                title="Block"
-                titleColor="white"
-                titleFontSize={15}
-                titleStyles={{}}
-                swipeSuccessThreshold={50}
-                height={22}
-                width={80}
-                onSwipeSuccess={() =>
-                  Toast.show({
-                    type: "success",
-                    text1: "You have successfully blocked the user",
-                    visibilityTime: 3000,
-                  })
-                }
-                thumbIconBackgroundColor="white"
-                thumbIconBorderColor="white"
-                railBackgroundColor="#FF7F50"
-                railBorderColor="#FF7F50"
-                railFillBackgroundColor="rgb(128, 128, 128)"
-                railFillBorderColor="#808080"
-              />
-            </View>
-          </View>
-        </View>
+        {/*  */}
       </View>
     </View>
   );
