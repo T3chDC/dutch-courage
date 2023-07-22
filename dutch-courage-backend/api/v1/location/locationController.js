@@ -2,11 +2,12 @@
 // Importing the liveUsers array from locationStorage.js
 import { liveUsers } from './locationStorage.js'
 import AppError from '../utils/appError.js'
+import User from '../user/userModel.js'
 
 // @ desc This function is responsible for adding the user id and location to the liveUsers array.
 // @ route POST /api/v1/location/addUser
 // @ access Private/regularUser
-export const addUser = (req, res, next) => {
+export const addUser = async (req, res, next) => {
   const userId = req.body.userId
   const location = req.body.location
 
@@ -18,15 +19,13 @@ export const addUser = (req, res, next) => {
       liveUsers.push({ userId, location })
     }
 
-    const nearbyUsers = getNearbyUsers(userId, location)
+    const nearbyUsers = await getNearbyUsers(userId, location)
     console.log(userId)
     console.log(nearbyUsers)
 
     res.status(200).json({
       status: 'success',
-      data: {
-        nearbyUsers,
-      },
+      data: nearbyUsers.length > 0 ? nearbyUsers : [],
     })
   } catch (err) {
     return next(new AppError('Something went wrong', 500))
@@ -54,11 +53,41 @@ export const removeUser = (req, res, next) => {
 }
 
 // Function to get nearby users
-const getNearbyUsers = (userId, location) => {
+const getNearbyUsers = async (userId, location) => {
   const nearbyUsers = liveUsers.filter((user) => {
     return user.userId !== userId && distance(location, user.location) <= 1
   })
-  return nearbyUsers
+  // Get the user details for the nearby users from DB
+  try {
+    return await getUserDetails(nearbyUsers)
+  } catch (err) {
+    return next(new AppError('Something went wrong', 500))
+  }
+  // nearbyUsers.forEach((user) => {
+  //   const userDetail = await User.findById(user.userId)
+  //   user.userName = userDetail.userName
+  //   user.imageUrl = userDetail.imageUrl
+  //   user.rating = userDetail.rating
+  //   user.topInterests = userDetail.topInterests.slice(0, 3)
+  // })
+  // return nearbyUsers
+}
+
+// Function to get user details
+const getUserDetails = async (nearbyUsers) => {
+  const nearbyUsersDetails = []
+  for (const user of nearbyUsers) {
+    const userDetail = await User.findById(user.userId)
+    nearbyUsersDetails.push({
+      _id: userDetail._id,
+      userName: userDetail.userName,
+      imageUrl: userDetail.imageUrl,
+      rating: userDetail.rating,
+      topInterests: userDetail.topInterests.slice(0, 3),
+      location: user.location,
+    })
+  }
+  return nearbyUsersDetails
 }
 
 // This function is responsible for calculating the distance between two locations.
