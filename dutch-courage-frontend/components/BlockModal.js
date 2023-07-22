@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { CheckBox } from "@rneui/themed";
 import { TextInput } from "react-native-gesture-handler";
 
-const LowerRatingModal = ({
+const BlockModal = ({
   modalVisible,
   setModalVisible,
 
@@ -13,9 +13,9 @@ const LowerRatingModal = ({
   setReport,
   reportCount,
   setReportCount,
-
 }) => {
   const [checkTest, setCheckTest] = useState(false);
+
   return (
     <Modal
       animationIn={"slideInUp"}
@@ -25,13 +25,12 @@ const LowerRatingModal = ({
       onRequestClose={() => {
         setModalVisible(false);
       }}
-      // avoidKeyboard={true}
     >
       <View className="flex-1 justify-center items-center">
         <View className="absolute w-[80vw] h-[40vh] rounded-2xl flex-row justify-center bg-[#3fe7f6]">
           <View className="absolute w-[70vw] h-[6vh] flex-row justify-center items-center mt-5 rounded-2xl bg-white">
             <Text className="text-[#808080]">
-              Please provide a reason for lower star rating
+              Please provide a reason for blocking user
             </Text>
           </View>
         </View>
@@ -130,5 +129,3 @@ const LowerRatingModal = ({
     </Modal>
   );
 };
-
-export default LowerRatingModal;

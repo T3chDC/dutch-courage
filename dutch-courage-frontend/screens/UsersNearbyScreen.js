@@ -5,12 +5,30 @@ import { useDispatch, useSelector } from "react-redux";
 import * as Progress from "react-native-progress";
 import SwipeButton from "rn-swipe-button";
 import Toast from "react-native-toast-message";
+import {
+  getMeUser,
+  resetMeUser,
+  resetMeGetUser,
+} from "../features/user/userSlice";
+import {
+  getLocation,
+  addUser,
+  resetOwnLocation,
+  resetNearbyUsers,
+} from "../features/location/locationSlice";
+import RatingStars from "../components/RatingStars";
+import { BACKEND_URL } from "../config";
 
 const UsersNearbyScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
   const { userInfo } = useSelector((state) => state.auth);
+
+  //Local state variables
+  const [report, setReport] = useState("");
+  const [reportCount, setReportCount] = useState(0);
+  const [showBlockModal, setShowBlockModal] = useState(false);
 
   // Check if user is logged in
   useEffect(() => {
@@ -57,7 +75,7 @@ const UsersNearbyScreen = () => {
           Around You
         </Text>
 
-        <View className="justify-start items-start w-[320] flex-row mt-4">
+        <View className="justify-start items-start w-[350] flex-row mt-4">
           <Image
             source={require("../assets/projectImages/avatarPlaceholder.png")}
             className="w-[50] h-[50] rounded-full"
@@ -110,7 +128,7 @@ const UsersNearbyScreen = () => {
           </View>
         </View>
 
-        <View className="justify-start items-start w-[320] flex-row mt-4">
+        <View className="justify-start items-start w-[350] flex-row mt-4">
           <Image
             source={require("../assets/projectImages/avatarPlaceholder.png")}
             className="w-[50] h-[50] rounded-full"
