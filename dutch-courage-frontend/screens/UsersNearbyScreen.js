@@ -172,7 +172,7 @@ const UsersNearbyScreen = () => {
                     </Text>
 
                     <Text className="mt-1 text-[#808080] text-muted left-5">
-                      {nearbyUser.topInterests[0]}
+                      {`${nearbyUser.topInterests[0]}, ${nearbyUser.topInterests[1]}, ${nearbyUser.topInterests[2]}`}
                     </Text>
                   </View>
                 </View>
