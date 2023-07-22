@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as Progress from "react-native-progress";
 import SwipeButton from "rn-swipe-button";
 import Toast from "react-native-toast-message";
+import BlockModal from "../components/BlockModal";
 import {
   getMeUser,
   resetMeUser,
@@ -100,7 +101,7 @@ const UsersNearbyScreen = () => {
             />
             <Text className="text-white text-xl">2.5</Text>
 
-            {/* <Text className='text-white'>Block Block Block</Text> */}
+            {/* Block Button */}
             <View className="bottom-[5] ml-2">
               <SwipeButton
                 title="Block"
@@ -111,11 +112,12 @@ const UsersNearbyScreen = () => {
                 height={22}
                 width={80}
                 onSwipeSuccess={() =>
-                  Toast.show({
-                    type: "success",
-                    text1: "You have successfully blocked the user",
-                    visibilityTime: 3000,
-                  })
+                  // Toast.show({
+                  //   type: "success",
+                  //   text1: "You have successfully blocked the user",
+                  //   visibilityTime: 3000,
+                  // })
+                  setShowBlockModal(true)
                 }
                 thumbIconBackgroundColor="white"
                 thumbIconBorderColor="white"
@@ -125,6 +127,16 @@ const UsersNearbyScreen = () => {
                 railFillBorderColor="#808080"
               />
             </View>
+
+            {/* Block Modal */}
+            <BlockModal
+              modalVisible={showBlockModal}
+              setModalVisible={setShowBlockModal}
+              report={report}
+              setReport={setReport}
+              reportCount={reportCount}
+              setReportCount={setReportCount}
+            />
           </View>
         </View>
 

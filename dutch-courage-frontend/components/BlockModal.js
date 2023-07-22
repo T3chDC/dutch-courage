@@ -129,3 +129,5 @@ const BlockModal = ({
     </Modal>
   );
 };
+
+export default BlockModal;
