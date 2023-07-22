@@ -342,7 +342,7 @@ const UserProfileScreen = () => {
               <TouchableOpacity
                 onPress={() => navigation.navigate("NearbyUsers")}
               >
-                {nearbyUsers.length >= 0 ? (
+                {nearbyUsers.length <= 0 ? (
                   <Text className="text-[#22A6B3] text-lg font-bold">
                     No Users Nearby
                   </Text>
