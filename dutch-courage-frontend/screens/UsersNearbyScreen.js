@@ -143,8 +143,8 @@ const UsersNearbyScreen = () => {
         <View className="flex flex-row">
           <MapView
             initialRegion={{
-              latitude: 37.78825,
-              longitude: -122.4324,
+              latitude: 23.7941139,
+              longitude: 90.4038988,
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
@@ -154,7 +154,7 @@ const UsersNearbyScreen = () => {
             }}
           >
             <Marker
-              coordinate={{ latitude: 37.78825, longitude: -122.4324 }}
+              coordinate={{ latitude: 23.7941139, longitude: 90.4038988 }}
               title={"Name"}
             ></Marker>
           </MapView>
