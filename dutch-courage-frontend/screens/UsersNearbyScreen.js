@@ -19,6 +19,7 @@ import {
 } from "../features/location/locationSlice";
 import RatingStars from "../components/RatingStars";
 import { BACKEND_URL } from "../config";
+import MapView, { Marker } from "react-native-maps";
 
 const UsersNearbyScreen = () => {
   const navigation = useNavigation();
@@ -138,96 +139,111 @@ const UsersNearbyScreen = () => {
         <Text className="text-white text-base top-[-1]">{"< Back"}</Text>
       </TouchableOpacity>
 
-      <View className="top-[50] justify-evenly items-center ">
-        <Image
-          source={require("../assets/projectImages/TempLogo1.png")}
-          className=""
-        />
+      <View className="top-[8vh] justify-evenly items-center">
+        <View className="flex flex-row">
+          <MapView
+            initialRegion={{
+              latitude: 37.78825,
+              longitude: -122.4324,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+            style={{
+              width: 400,
+              height: 500,
+            }}
+          >
+            <Marker
+              coordinate={{ latitude: 37.78825, longitude: -122.4324 }}
+              title={"Name"}
+            ></Marker>
+          </MapView>
+        </View>
 
-        <Text className="text-white text-xl font-bold right-[120]">
-          Around You
-        </Text>
+        <View className="mt-5">
+          <Text className="text-white text-xl font-bold">Around You</Text>
 
-        {nearbyUsers.length <= 0 ? (
-          <Text className="text-white text-xl font-bold mt-5">
-            No Users Nearby
-          </Text>
-        ) : (
-          <>
-            {nearbyUsers.map((nearbyUser) => (
-              <View
-                className="justify-start items-start w-[350] flex-row mt-4"
-                key={nearbyUser._id}
-              >
-                <Image
-                  source={require("../assets/projectImages/avatarPlaceholder.png")}
-                  className="w-[50] h-[50] rounded-full"
-                  resizeMode="cover"
-                />
-
-                <View className="flex flex-row">
-                  <View className="flex flex-col w-[220]">
-                    <Text className="text-white text-xl left-5">
-                      {nearbyUser.userName}
-                    </Text>
-
-                    <Text className="mt-1 text-[#808080] text-muted left-5">
-                      {`${nearbyUser.topInterests[0]}, ${nearbyUser.topInterests[1]}, ${nearbyUser.topInterests[2]}`}
-                    </Text>
-                  </View>
-                </View>
-
-                <View className="right-[70px] flex flex-row">
-                  {/* Star */}
+          {nearbyUsers.length <= 0 ? (
+            <Text className="text-white text-xl font-bold mt-5">
+              No Users Nearby
+            </Text>
+          ) : (
+            <>
+              {nearbyUsers.map((nearbyUser) => (
+                <View
+                  className="justify-start items-start w-[350] flex-row mt-4"
+                  key={nearbyUser._id}
+                >
                   <Image
-                    source={require("../assets/projectImages/starFull.png")}
-                    className="w-6 h-6 mx-1"
+                    source={require("../assets/projectImages/avatarPlaceholder.png")}
+                    className="w-[50] h-[50] rounded-full"
+                    resizeMode="cover"
                   />
-                  <Text className="text-white text-xl">
-                    {nearbyUser.rating}
-                  </Text>
 
-                  {/* Block Button */}
-                  <View className="bottom-[5] ml-2">
-                    <SwipeButton
-                      title="Block"
-                      titleColor="white"
-                      titleFontSize={15}
-                      titleStyles={{}}
-                      swipeSuccessThreshold={50}
-                      height={22}
-                      width={80}
-                      onSwipeSuccess={() =>
-                        // Toast.show({
-                        //   type: "success",
-                        //   text1: "You have successfully blocked the user",
-                        //   visibilityTime: 3000,
-                        // })
-                        setShowBlockModal(true)
-                      }
-                      thumbIconBackgroundColor="white"
-                      thumbIconBorderColor="white"
-                      railBackgroundColor="#FF7F50"
-                      railBorderColor="#FF7F50"
-                      railFillBackgroundColor="rgb(128, 128, 128)"
-                      railFillBorderColor="#808080"
+                  <View className="flex flex-row">
+                    <View className="flex flex-col w-[220]">
+                      <Text className="text-white text-xl left-5">
+                        {nearbyUser.userName}
+                      </Text>
+
+                      <Text className="mt-1 text-[#808080] text-muted left-5">
+                        {`${nearbyUser.topInterests[0]}, ${nearbyUser.topInterests[1]}, ${nearbyUser.topInterests[2]}`}
+                      </Text>
+                    </View>
+                  </View>
+
+                  <View className="right-[70px] flex flex-row">
+                    {/* Star */}
+                    <Image
+                      source={require("../assets/projectImages/starFull.png")}
+                      className="w-6 h-6 mx-1"
+                    />
+                    <Text className="text-white text-xl">
+                      {nearbyUser.rating}
+                    </Text>
+
+                    {/* Block Button */}
+                    <View className="bottom-[5] ml-2">
+                      <SwipeButton
+                        title="Block"
+                        titleColor="white"
+                        titleFontSize={15}
+                        titleStyles={{}}
+                        swipeSuccessThreshold={50}
+                        height={22}
+                        width={80}
+                        onSwipeSuccess={() =>
+                          // Toast.show({
+                          //   type: "success",
+                          //   text1: "You have successfully blocked the user",
+                          //   visibilityTime: 3000,
+                          // })
+                          setShowBlockModal(true)
+                        }
+                        thumbIconBackgroundColor="white"
+                        thumbIconBorderColor="white"
+                        railBackgroundColor="#FF7F50"
+                        railBorderColor="#FF7F50"
+                        railFillBackgroundColor="rgb(128, 128, 128)"
+                        railFillBorderColor="#808080"
+                      />
+                    </View>
+
+                    {/* Block Modal */}
+                    <BlockModal
+                      modalVisible={showBlockModal}
+                      setModalVisible={setShowBlockModal}
+                      report={report}
+                      setReport={setReport}
+                      reportCount={reportCount}
+                      setReportCount={setReportCount}
                     />
                   </View>
-
-                  {/* Block Modal */}
-                  <BlockModal
-                    modalVisible={showBlockModal}
-                    setModalVisible={setShowBlockModal}
-                    report={report}
-                    setReport={setReport}
-                    reportCount={reportCount}
-                    setReportCount={setReportCount}
-                  />
                 </View>
-              </View>
-            ))}
-          </>
-        )}
+              ))}
+            </>
+          )}
+        </View>
 
         {/*  */}
       </View>
