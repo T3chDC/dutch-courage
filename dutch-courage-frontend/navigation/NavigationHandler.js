@@ -16,6 +16,7 @@ import UserProfileScreen from '../screens/UserProfileScreen'
 import UserProfileEditScreen from '../screens/UserProfileEditScreen'
 import UsersNearbyScreen from '../screens/UsersNearbyScreen'
 import InboxScreen from '../screens/InboxScreen'
+import LocationFinderScreen from '../screens/LocationFinderScreen'
 import ConversationScreen from '../screens/ConversationScreen'
 import OtherUserProfileScreen from '../screens/OtherUserProfileScreen'
 import { useDispatch, useSelector } from 'react-redux'
@@ -149,6 +150,14 @@ const NavigationHandler = () => {
           <Stack.Screen
             name='NearbyUsers'
             component={UsersNearbyScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          {/* Location Finder Screen */}
+          <Stack.Screen
+            name='LocationFinder'
+            component={LocationFinderScreen}
             options={{
               headerShown: false,
             }}
