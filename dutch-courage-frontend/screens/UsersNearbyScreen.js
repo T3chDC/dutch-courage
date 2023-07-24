@@ -155,7 +155,6 @@ const UsersNearbyScreen = () => {
           >
             <Marker
               coordinate={{ latitude: 23.7941139, longitude: 90.4038988 }}
-              title={"Name"}
             ></Marker>
           </MapView>
         </View>
