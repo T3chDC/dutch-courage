@@ -70,6 +70,7 @@ const UserProfileScreen = () => {
   const [gender, setGender] = useState('')
   const [location, setLocation] = useState('')
   const [topInterests, setTopInterests] = useState([])
+  const [isLive, setIsLive] = useState(false)
 
   // Check if user is logged in
   useEffect(() => {
@@ -102,6 +103,15 @@ const UserProfileScreen = () => {
     )
     return () => backHandler.remove()
   }, [userInfo, dispatch, navigation])
+
+  // update user live status
+  useEffect(() => {
+    if (isUserLive) {
+      setIsLive(true)
+    } else {
+      setIsLive(false)
+    }
+  }, [isUserLive])
 
   // Get user info
   useEffect(() => {
@@ -147,6 +157,15 @@ const UserProfileScreen = () => {
     Toast.show({
       type: 'success',
       text1: 'You are now live!',
+      visibilityTime: 3000,
+    })
+  }
+
+  // Function to handle going offline
+  const handleGoOffline = () => {
+    Toast.show({
+      type: 'success',
+      text1: 'You are now Offline!',
       visibilityTime: 3000,
     })
   }
@@ -309,19 +328,37 @@ const UserProfileScreen = () => {
 
           {/* Swipable Button */}
           <View className='mt-2 w-[100vw] flex-row justify-center items-center'>
-            <SwipeButton
-              title='Swipe to go Live'
-              swipeSuccessThreshold={70}
-              height={45}
-              width={300}
-              onSwipeSuccess={handleGoLive}
-              thumbIconBackgroundColor='#655A5A'
-              thumbIconBorderColor='#655A5A'
-              railBackgroundColor='#D9D9D9'
-              railBorderColor='#D9D9D9'
-              railFillBackgroundColor='rgba(34, 166, 179, 0.5)'
-              railFillBorderColor='#22A6B3'
-            />
+            {!isLive ? (
+              <SwipeButton
+                title='Swipe right to Go live'
+                swipeSuccessThreshold={70}
+                height={45}
+                width={300}
+                shouldResetAfterSuccess
+                onSwipeSuccess={handleGoLive}
+                thumbIconBackgroundColor='#655A5A'
+                thumbIconBorderColor='#655A5A'
+                railBackgroundColor='#D9D9D9'
+                railBorderColor='#D9D9D9'
+                railFillBackgroundColor='rgba(34, 166, 179, 0.5)'
+                railFillBorderColor='#22A6B3'
+              />
+            ) : (
+              <SwipeButton
+                title='Swipe right to Go Offline'
+                swipeSuccessThreshold={70}
+                height={45}
+                width={300}
+                shouldResetAfterSuccess
+                onSwipeSuccess={handleGoOffline}
+                thumbIconBackgroundColor='#655A5A'
+                thumbIconBorderColor='#655A5A'
+                railBackgroundColor='#D9D9D9'
+                railBorderColor='#D9D9D9'
+                railFillBackgroundColor='rgba(34, 166, 179, 0.5)'
+                railFillBorderColor='#22A6B3'
+              />
+            )}
           </View>
 
           {/* Logout button */}
