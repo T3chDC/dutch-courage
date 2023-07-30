@@ -87,3 +87,26 @@ export const deleteMe = catchAsync(async (req, res, next) => {
     data: null,
   })
 })
+
+// @desc    Block another user
+// @route   PATCH /api/v1/users/blockUser
+// @access  Private/regularUser
+export const blockUser = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.user._id)
+
+  if (!user) {
+    return next(new AppError('No user found with that ID', 404))
+  }
+
+  if (user.blockedUsers.includes(req.body.userId)) {
+    return next(new AppError('User already blocked', 400))
+  }
+
+  user.blockedUsers.push(req.body.userId)
+  await user.save()
+
+  res.status(200).json({
+    status: 'success',
+    data: user,
+  })
+})

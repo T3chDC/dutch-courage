@@ -334,7 +334,8 @@ const UserProfileScreen = () => {
                 swipeSuccessThreshold={70}
                 height={45}
                 width={300}
-                shouldResetAfterSuccess
+                // shouldResetAfterSuccess
+                disableResetOnTap
                 onSwipeSuccess={handleGoLive}
                 thumbIconBackgroundColor='#655A5A'
                 thumbIconBorderColor='#655A5A'
@@ -345,11 +346,12 @@ const UserProfileScreen = () => {
               />
             ) : (
               <SwipeButton
-                title='Swipe right to Go Offline'
+                title={`Live @ Place name`}
                 swipeSuccessThreshold={70}
                 height={45}
                 width={300}
-                shouldResetAfterSuccess
+                disableResetOnTap
+                // shouldResetAfterSuccess
                 onSwipeSuccess={handleGoOffline}
                 thumbIconBackgroundColor='#655A5A'
                 thumbIconBorderColor='#655A5A'

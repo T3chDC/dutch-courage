@@ -10,6 +10,7 @@ import {
   getMe,
   updateMe,
   deleteMe,
+  blockUser,
 } from './userController.js' //import User controller
 
 import {
@@ -42,6 +43,7 @@ router.route('/resetPassword').post(resetPassword) //route to handle forgot pass
 router.route('/getMe').get(protect, restrictTo('regularUser'), getMe, getUser) //route to get profile information
 router.route('/updateMe').patch(protect, restrictTo('regularUser'), updateMe) //route to handle profile information update by user
 router.route('/deleteMe').delete(protect, restrictTo('regularUser'), deleteMe) //route to handle profile deletion by user
+router.route('/blockUser').patch(protect, restrictTo('regularUser'), blockUser) //route to handle profile deletion by user
 
 //base CRUD functionality for admin only
 router
