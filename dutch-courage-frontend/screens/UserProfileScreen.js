@@ -169,6 +169,19 @@ const UserProfileScreen = () => {
     }
   }, [ownLocation, dispatch]);
 
+  // Rerender on nearby users change
+  useEffect(() => {
+    if (isNearbyUsersError) {
+      Toast.show({
+        type: "error",
+        text1: nearbyUsersErrorMessage,
+        visibilityTime: 3000,
+      });
+    } else if (isNearbyUsersSuccess) {
+      console.log("nearbyUsers", nearbyUsers);
+    }
+  }, [nearbyUsers, dispatch]);
+
   // Reset user profile get status on unmount
   useEffect(() => {
     return () => {
