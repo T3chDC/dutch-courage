@@ -52,7 +52,7 @@ router
   .post(protect, restrictTo('adminUser'), createUser)
 router
   .route('/:id')
-  .get(protect, restrictTo('adminUser'), getUser)
+  .get(protect, restrictTo('adminUser', 'regularUser'), getUser)
   .patch(protect, restrictTo('adminUser'), updateUser)
   .put(protect, restrictTo('adminUser'), updateUser)
   .delete(protect, restrictTo('adminUser'), deleteUser)

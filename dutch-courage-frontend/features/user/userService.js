@@ -15,6 +15,16 @@ const getMeUser = async (token) => {
   return response.data.data
 }
 
+// Get info about a user by id
+const getOtherUser = async (token, id) => {
+  const response = await axios.get(API_URL + `/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  return response.data.data
+}
+
 //update info about logged in user
 const updateMeUser = async (token, data) => {
   const response = await axios.patch(API_URL + '/updateMe', data, {
@@ -32,6 +42,7 @@ const updateMeUser = async (token, data) => {
 
 const userService = {
   getMeUser,
+  getOtherUser,
   updateMeUser,
 }
 

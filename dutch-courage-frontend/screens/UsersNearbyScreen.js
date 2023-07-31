@@ -233,11 +233,23 @@ const UsersNearbyScreen = () => {
                       className='justify-start items-start w-[350] flex-row mt-4'
                       key={nearbyUser._id}
                     >
-                      <Image
-                        source={require('../assets/projectImages/avatarPlaceholder.png')}
-                        className='w-[50] h-[50] rounded-full'
-                        resizeMode='cover'
-                      />
+                      <TouchableOpacity
+                        onPress={() => {
+                          navigation.navigate('OtherUserProfile', {
+                            userId: nearbyUser._id,
+                          })
+                        }}
+                      >
+                        <Image
+                          source={{
+                            uri: `${BACKEND_URL}/uploads/${nearbyUser.imageUrl.slice(
+                              nearbyUser.imageUrl.lastIndexOf('/') + 1
+                            )}`,
+                          }}
+                          className='w-[50] h-[50] rounded-full'
+                          resizeMode='cover'
+                        />
+                      </TouchableOpacity>
 
                       <View className='flex flex-row'>
                         <View className='flex flex-col w-[220]'>
