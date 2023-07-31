@@ -49,6 +49,18 @@ const conversationSchema = new mongoose.Schema(
       default: {},
     },
 
+    acceptedBy: {
+      type: [mongoose.Schema.Types.ObjectId],
+      default: [],
+      ref: 'User',
+      validate: {
+        validator: function (val) {
+          return val.length <= 2
+        },
+        message: 'there can be at most two acceptedBy users',
+      },
+    },
+
     deletedBy: {
       type: [mongoose.Schema.Types.ObjectId],
       default: [],

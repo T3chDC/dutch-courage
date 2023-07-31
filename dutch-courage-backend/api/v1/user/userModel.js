@@ -188,6 +188,11 @@ const userSchema = new mongoose.Schema(
       type: [mongoose.Schema.Types.ObjectId],
       default: [],
     },
+
+    blockedByReasons: {
+      type: [String],
+      default: [],
+    },
   },
   {
     timestamps: true,

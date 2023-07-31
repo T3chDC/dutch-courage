@@ -1,4 +1,11 @@
-import { View, Text, Image, TouchableOpacity, BackHandler } from 'react-native'
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  BackHandler,
+  ScrollView,
+} from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
@@ -173,7 +180,7 @@ const UsersNearbyScreen = () => {
             // onRegionChange={(region) => setUserLocationRegion(region)}
             style={{
               width: 400,
-              height: 500,
+              height: 400,
             }}
           >
             <Marker
@@ -197,9 +204,21 @@ const UsersNearbyScreen = () => {
           </MapView>
         </View>
 
-        <View className='mt-5'>
-          <Text className='text-white text-xl font-bold'>Around You</Text>
+        <View className='flex flex-row justify-start mt-2'>
+          <View className='flex flex-col w-[350]'>
+            <Text className='text-white text-xl left-0'>Around You</Text>
+          </View>
+        </View>
 
+        <ScrollView
+          contentContainerStyle={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            width: '100%',
+          }}
+        >
           {nearbyUsers.length <= 0 ? (
             <Text className='text-white text-xl font-bold mt-5'>
               No Users Nearby
@@ -284,7 +303,7 @@ const UsersNearbyScreen = () => {
               )}
             </>
           )}
-        </View>
+        </ScrollView>
 
         {/*  */}
       </View>

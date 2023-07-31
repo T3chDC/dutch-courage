@@ -93,9 +93,19 @@ export const deleteMe = catchAsync(async (req, res, next) => {
 // @access  Private/regularUser
 export const blockUser = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.user._id)
+  const userToBeBlocked = await User.findById(req.body.userId)
 
   if (!user) {
     return next(new AppError('No user found with that ID', 404))
+  }
+
+  if (!userToBeBlocked) {
+    return next(
+      new AppError(
+        'The user to be blocked could not be found with that ID',
+        404
+      )
+    )
   }
 
   if (user.blockedUsers.includes(req.body.userId)) {
@@ -103,7 +113,11 @@ export const blockUser = catchAsync(async (req, res, next) => {
   }
 
   user.blockedUsers.push(req.body.userId)
+  userToBeBlocked.blockedByReasons.includes(req.body.reason)
+    ? null
+    : userToBeBlocked.blockedByReasons.push(req.body.reason)
   await user.save()
+  await userToBeBlocked.save()
 
   res.status(200).json({
     status: 'success',
