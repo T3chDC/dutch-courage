@@ -6,12 +6,68 @@ import Conversation from './conversationModel.js'
 import Message from '../Message/messageModel.js'
 import conversationDeleteCleanup from '../utils/conversationDeleteCleanup.js'
 
-import { createOne, updateOne } from '../common/handlerFactory.js' //import generic handler
+import { updateOne } from '../common/handlerFactory.js' //import generic handler
 
 // @desc    Create conversation
 // @route   POST /api/v1/connversations
 // @access  Private/regularUser
-export const createConversation = createOne(Conversation)
+export const createConversation = catchAsync(async (req, res, next) => {
+  // check if the conversation already exists
+  const conversation = await Conversation.findOne({
+    $or: [
+      {
+        participants: [req.body.participants[1], req.body.participants[0]],
+      },
+      {
+        participants: [req.body.participants[0], req.body.participants[1]],
+      },
+    ],
+  })
+
+  console.log(conversation)
+
+  if (conversation) {
+    // Check if the conversation has been accepted by both users
+    if (conversation.acceptedBy.length === 2) {
+      return next(
+        new AppError(
+          `Conversation already exists, please use the chat section to send messages`,
+          400
+        )
+      )
+    } else if (conversation.acceptedBy.length === 1) {
+      // Check if the user is the one who has accepted the conversation
+      if (conversation.acceptedBy[0].toString() === req.user._id.toString()) {
+        return next(
+          new AppError(
+            `The other user has not responded to your request yet, please wait for them to respond`,
+            400
+          )
+        )
+      }
+    }
+  }
+
+  // create a new conversation
+  const newConversation = await Conversation.create({
+    participants: req.body.participants,
+    acceptedBy: req.body.acceptedBy,
+  })
+
+  if (!newConversation) {
+    return next(
+      new AppError(
+        `Could not create conversation with participants ${req.body.participants}`,
+        400
+      )
+    )
+  }
+
+  res.status(201).json({
+    status: 'success',
+    data: newConversation,
+  })
+})
 
 // @desc    Delete a specific conversation
 // @route   DELETE /api/v1/connversations/:id

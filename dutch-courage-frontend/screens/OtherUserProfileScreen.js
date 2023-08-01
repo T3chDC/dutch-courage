@@ -12,6 +12,16 @@ import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import { getOtherUser, resetOtherUser } from '../features/user/userSlice'
+import {
+  createConversation,
+  resetCreateConversation,
+  resetConversation,
+} from '../features/conversation/conversationSlice'
+import {
+  createMessage,
+  resetCreateMessage,
+  resetMessage,
+} from '../features/message/messageSlice'
 import RatingStars from '../components/RatingStars'
 import Toast from 'react-native-toast-message'
 import * as Progress from 'react-native-progress'
@@ -38,6 +48,22 @@ const OtherUserProfileScreen = ({ route }) => {
     isOtherGetError,
     otherGetErrorMessage,
   } = useSelector((state) => state.user)
+
+  const {
+    conversation,
+    isCreateConversationLoading,
+    isCreateConversationSuccess,
+    isCreateConversationError,
+    createConversationErrorMessage,
+  } = useSelector((state) => state.conversation)
+
+  const {
+    message,
+    isCreateMessageLoading,
+    isCreateMessageSuccess,
+    isCreateMessageError,
+    createMessageErrorMessage,
+  } = useSelector((state) => state.message)
 
   // Local State variables
   const [rating, setRating] = useState(5)
@@ -110,6 +136,65 @@ const OtherUserProfileScreen = ({ route }) => {
 
     return () => backHandler.remove()
   }, [navigation])
+
+  // function to create a conversation on swipe
+  const handleSwipe = () => {
+    dispatch(
+      createConversation({
+        participants: [userInfo._id, userId],
+        acceptedBy: [userInfo._id],
+      })
+    )
+  }
+
+  // if the conversation is created successfully, create a message
+  useEffect(() => {
+    if (isCreateConversationError) {
+      Toast.show({
+        type: 'error',
+        text1: createConversationErrorMessage,
+        visibilityTime: 3000,
+      })
+    } else if (isCreateConversationSuccess) {
+      dispatch(
+        createMessage({
+          conversationId: conversation._id,
+          sender: userInfo._id,
+          messageType: 'text',
+          message: `You have a notificaiton from ${userInfo.userName}`,
+        })
+      )
+    }
+  }, [
+    dispatch,
+    isCreateConversationError,
+    isCreateConversationSuccess,
+    createConversationErrorMessage,
+    conversation,
+    userInfo,
+  ])
+
+  // if the message is created successfully, toast a success message
+  useEffect(() => {
+    if (isCreateMessageError) {
+      Toast.show({
+        type: 'error',
+        text1: createMessageErrorMessage,
+        visibilityTime: 3000,
+      })
+    } else if (isCreateMessageSuccess) {
+      Toast.show({
+        type: 'success',
+        text1: `Your wave was sent to ${userName}`,
+        visibilityTime: 3000,
+      })
+    }
+  }, [
+    dispatch,
+    isCreateMessageError,
+    isCreateMessageSuccess,
+    createMessageErrorMessage,
+  ])
 
   return (
     <View className='bg-black flex-1 justify-start items-center relative'>
@@ -250,13 +335,7 @@ const OtherUserProfileScreen = ({ route }) => {
               swipeSuccessThreshold={70}
               height={45}
               width={300}
-              onSwipeSuccess={() =>
-                Toast.show({
-                  type: 'success',
-                  text1: 'You have sent a wave to this user!',
-                  visibilityTime: 3000,
-                })
-              }
+              onSwipeSuccess={() => handleSwipe()}
               thumbIconBackgroundColor='#655A5A'
               thumbIconBorderColor='#655A5A'
               railBackgroundColor='#D9D9D9'

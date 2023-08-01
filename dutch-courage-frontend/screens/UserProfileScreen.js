@@ -372,13 +372,13 @@ const UserProfileScreen = () => {
           </View>
 
           {/* Logout button */}
-          <View className='flex-row justify-center items-center mt-2'>
+          {/* <View className='flex-row justify-center items-center mt-2'>
             <TouchableOpacity onPress={() => handleLogout()}>
               <View className='w-32 h-8 rounded-full bg-[#22A6B3] flex-row justify-center items-center'>
                 <Text className='text-white text-lg font-bold'>Logout</Text>
               </View>
             </TouchableOpacity>
-          </View>
+          </View> */}
 
           {/* Other User Profile Visit Screen */}
           {/* <View className="flex-row justify-center items-center mt-2">
@@ -392,19 +392,6 @@ const UserProfileScreen = () => {
               </View>
             </TouchableOpacity>
           </View> */}
-
-          {/* Location Finder Screen */}
-          {/* <View className="flex-row justify-center items-center mt-2">
-              <TouchableOpacity
-                onPress={() => navigation.navigate("LocationFinder")}
-              >
-                <View className="w-32 h-8 rounded-full bg-[#22A6B3] flex-row justify-center items-center">
-                  <Text className="text-white text-lg font-bold">
-                    Location Finder
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </View> */}
 
           {/* Nearby Users */}
           {isUserLive && (
@@ -424,6 +411,19 @@ const UserProfileScreen = () => {
               </TouchableOpacity>
             </View>
           )}
+
+          {/* Location Finder Screen */}
+          <View className='flex-row justify-center items-center mt-2'>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('LocationFinder')}
+            >
+              <View className='w-32 h-8 rounded-full bg-[#22A6B3] flex-row justify-center items-center'>
+                <Text className='text-white text-lg font-bold'>
+                  Location Finder
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
 
           {/* Chat and User Profile Icons */}
           <View className='absolute bottom-3 w-[100vw] flex-row justify-between items-center'>
