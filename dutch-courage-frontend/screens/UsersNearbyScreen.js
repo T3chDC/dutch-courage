@@ -62,8 +62,8 @@ const UsersNearbyScreen = () => {
   const [rating, setRating] = useState(5)
   const [location, setLocation] = useState('')
 
-  const [report, setReport] = useState('')
-  const [reportCount, setReportCount] = useState(0)
+  // const [report, setReport] = useState('')
+  // const [reportCount, setReportCount] = useState(0)
   const [showBlockModal, setShowBlockModal] = useState(false)
 
   // User location related states
@@ -103,7 +103,6 @@ const UsersNearbyScreen = () => {
   // function to handle to go back
   useEffect(() => {
     const backAction = () => {
-      dispatch(getAllConversationsOfUser())
       navigation.goBack()
       return true
     }
@@ -115,31 +114,6 @@ const UsersNearbyScreen = () => {
 
     return () => backHandler.remove()
   }, [navigation])
-
-  //Exit App on Back Press
-  useEffect(() => {
-    const backAction = () => {
-      Alert.alert(
-        'Hold on!',
-        'Are you sure you want to exit the app?',
-        [
-          {
-            text: 'Cancel',
-            onPress: () => null,
-            style: 'cancel',
-          },
-          { text: 'YES', onPress: () => BackHandler.exitApp() },
-        ],
-        { cancelable: false }
-      )
-      return true
-    }
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      backAction
-    )
-    return () => backHandler.remove()
-  }, [userInfo, dispatch, navigation])
 
   //Get User Info
   useEffect(() => {
@@ -160,6 +134,13 @@ const UsersNearbyScreen = () => {
       dispatch(getMeUser())
     }
   }, [isMeGetError, isMeGetSuccess, meGetErrorMessage, dispatch])
+
+  // Function to Update meUser state on modal close
+  const updateMeUserBlockList = () => {
+    dispatch(resetMeUser())
+    dispatch(getMeUser())
+    setShowBlockModal(false)
+  }
 
   return (
     <View className='bg-black flex-1 justify-start items-center relative'>
@@ -228,7 +209,7 @@ const UsersNearbyScreen = () => {
               {nearbyUsers.map(
                 (nearbyUser) =>
                   // Check if nearby user is in the blockedUsers list of meUser
-                  !meUser.blockedUsers.includes(nearbyUser._id) && (
+                  !meUser?.blockedUsers.includes(nearbyUser._id) && (
                     <View
                       className='justify-start items-start w-[350] flex-row mt-4'
                       key={nearbyUser._id}
@@ -279,8 +260,8 @@ const UsersNearbyScreen = () => {
                             title='Block'
                             titleColor='white'
                             titleFontSize={15}
-                            titleStyles={{}}
                             swipeSuccessThreshold={50}
+                            shouldResetAfterSuccess={true}
                             height={22}
                             width={80}
                             onSwipeSuccess={() =>
@@ -303,11 +284,12 @@ const UsersNearbyScreen = () => {
                         {/* Block Modal */}
                         <BlockModal
                           modalVisible={showBlockModal}
-                          setModalVisible={setShowBlockModal}
-                          report={report}
-                          setReport={setReport}
-                          reportCount={reportCount}
-                          setReportCount={setReportCount}
+                          setModalVisible={updateMeUserBlockList}
+                          // report={report}
+                          // setReport={setReport}
+                          userToBeBlocked={nearbyUser}
+                          // reportCount={reportCount}
+                          // setReportCount={setReportCount}
                         />
                       </View>
                     </View>

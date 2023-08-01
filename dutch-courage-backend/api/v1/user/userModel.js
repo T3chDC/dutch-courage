@@ -189,7 +189,17 @@ const userSchema = new mongoose.Schema(
       default: [],
     },
 
+    blockedByUsers: {
+      type: [mongoose.Schema.Types.ObjectId],
+      default: [],
+    },
+
     blockedByReasons: {
+      type: [String],
+      default: [],
+    },
+
+    otherBlockReasons: {
       type: [String],
       default: [],
     },

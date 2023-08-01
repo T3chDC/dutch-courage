@@ -113,9 +113,29 @@ export const blockUser = catchAsync(async (req, res, next) => {
   }
 
   user.blockedUsers.push(req.body.userId)
+
+  if (!req.body.reason) {
+    return next(new AppError('Please provide a reason for blocking', 400))
+  }
+
+  userToBeBlocked.blockedByUsers.push(req.user._id)
+
+  if (req.body.reason === 'other') {
+    if (!req.body.otherReason) {
+      return next(
+        new AppError('Please provide description of reason for blocking', 400)
+      )
+    }
+  }
+
+  if (req.body.otherReason) {
+    userToBeBlocked.otherBlockReasons.push(req.body.otherReason)
+  }
+
   userToBeBlocked.blockedByReasons.includes(req.body.reason)
     ? null
     : userToBeBlocked.blockedByReasons.push(req.body.reason)
+
   await user.save()
   await userToBeBlocked.save()
 
