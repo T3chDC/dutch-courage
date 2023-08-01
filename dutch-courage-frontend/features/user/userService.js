@@ -40,10 +40,21 @@ const updateMeUser = async (token, data) => {
   return response.data.data
 }
 
+// Block another user with reason
+const blockUser = async (token, data) => {
+  const response = await axios.post(API_URL + '/blockUser', data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  return response.data.data
+}
+
 const userService = {
   getMeUser,
   getOtherUser,
   updateMeUser,
+  blockUser,
 }
 
 export default userService

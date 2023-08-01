@@ -17,6 +17,10 @@ const initialState = {
   isOtherGetSuccess: false,
   isOtherGetLoading: false,
   otherGetErrorMessage: '',
+  isBlockUserError: false,
+  isBlockUserSuccess: false,
+  isBlockUserLoading: false,
+  blockUserErrorMessage: '',
 }
 
 //get info about logged in user
@@ -70,6 +74,23 @@ export const updateMeUser = createAsyncThunk(
   }
 )
 
+// Block another user with reason
+export const blockUser = createAsyncThunk(
+  'user/blockUser',
+  async (data, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.userInfo.token
+      return await userService.blockUser(token, data)
+    } catch (err) {
+      const message =
+        (err.response && err.response.data && err.response.data.message) ||
+        err.message ||
+        err.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
 export const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -99,6 +120,12 @@ export const userSlice = createSlice({
       state.isMeUpdateSuccess = false
       state.isMeUpdateLoading = false
       state.meUpdateErrorMessage = ''
+    },
+    resetBlockUser: (state) => {
+      state.isBlockUserError = false
+      state.isBlockUserSuccess = false
+      state.isBlockUserLoading = false
+      state.blockUserErrorMessage = ''
     },
   },
   extraReducers: (builder) => {
@@ -156,6 +183,23 @@ export const userSlice = createSlice({
         state.isMeUpdateLoading = false
         state.isMeUpdateError = true
         state.meUpdateErrorMessage = action.payload
+      })
+      .addCase(blockUser.pending, (state) => {
+        state.isBlockUserLoading = true
+        state.isBlockUserError = false
+        state.isBlockUserSuccess = false
+        state.blockUserErrorMessage = ''
+      })
+      .addCase(blockUser.fulfilled, (state, action) => {
+        state.isBlockUserLoading = false
+        state.isBlockUserSuccess = true
+        state.isBlockUserError = false
+        state.blockUserErrorMessage = ''
+      })
+      .addCase(blockUser.rejected, (state, action) => {
+        state.isBlockUserLoading = false
+        state.isBlockUserError = true
+        state.blockUserErrorMessage = action.payload
       })
   },
 })

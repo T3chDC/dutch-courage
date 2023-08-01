@@ -110,7 +110,6 @@ const BlockModal = ({
                     : ''
                 }
                 keyboardType='default'
-                editable={blockReason === 'Other' ? true : false}
                 className='text-[#808080] justify-start items-center border-b-2 border-[#999999] w-[50vw] h-[5vh]'
                 onChangeText={(text) => setOtherReason(text)}
               ></TextInput>
