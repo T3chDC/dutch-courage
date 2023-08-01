@@ -2,8 +2,11 @@ import { View, Text, TouchableOpacity, Alert } from 'react-native'
 import Modal from 'react-native-modal'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { blockUser, resetBlockUser } from '../features/user/userSlice'
 import { CheckBox } from '@rneui/themed'
 import { TextInput } from 'react-native-gesture-handler'
+import Toast from 'react-native-toast-message'
+import ToastConfig from '../utils/toastConfig'
 
 const BlockModal = ({
   modalVisible,
@@ -14,6 +17,67 @@ const BlockModal = ({
   // reportCount,
   // setReportCount,
 }) => {
+  // Redux dispatch
+  const dispatch = useDispatch()
+
+  // Redux state variables
+  const {
+    isBlockUserLoading,
+    isBlockUserSuccess,
+    isBlockUserError,
+    blockUserErrorMessage,
+  } = useSelector((state) => state.user)
+
+  // Function to handle block user
+  const handleBlockUser = () => {
+    if (blockReason === 'Other' && otherReason === '') {
+      Toast.show({
+        type: 'error',
+        text1: 'Please provide a description of reason for blocking user',
+        visibilityTime: 3000,
+        autoHide: true,
+      })
+    } else if (blockReason === '') {
+      Toast.show({
+        type: 'error',
+        text1: 'Please provide a reason for blocking user',
+        visibilityTime: 3000,
+        autoHide: true,
+      })
+    } else {
+      dispatch(
+        blockUser({
+          userId: userToBeBlocked._id,
+          reason: blockReason,
+          otherReason: otherReason,
+        })
+      )
+    }
+  }
+
+  // Show toast message if block user is successful or show error message if block user fails
+  useEffect(() => {
+    if (isBlockUserSuccess) {
+      Toast.show({
+        type: 'success',
+        text1: 'User blocked successfully',
+        visibilityTime: 3000,
+        autoHide: true,
+      })
+      setModalVisible(false)
+      dispatch(resetBlockUser())
+    } else if (isBlockUserError) {
+      Toast.show({
+        type: 'error',
+        text1: blockUserErrorMessage,
+        visibilityTime: 3000,
+        autoHide: true,
+      })
+      dispatch(resetBlockUser())
+    }
+  }, [isBlockUserSuccess, isBlockUserError])
+
+  // Local state variables
   const [blockReason, setBlockReason] = useState('')
   const [otherReason, setOtherReason] = useState('')
 
@@ -105,16 +169,14 @@ const BlockModal = ({
             <View>
               <TextInput
                 placeholder={
-                  blockReason === 'Other'
-                    ? 'Please specify other reason'
-                    : ''
+                  blockReason === 'Other' ? 'Please specify other reason' : ''
                 }
                 keyboardType='default'
                 className='text-[#808080] justify-start items-center border-b-2 border-[#999999] w-[50vw] h-[5vh]'
                 onChangeText={(text) => setOtherReason(text)}
               ></TextInput>
             </View>
-            <TouchableOpacity onPress={() => setModalVisible(false)}>
+            <TouchableOpacity onPress={() => handleBlockUser()}>
               <View className='w-32 h-8 rounded-xl bg-[#22A6B3] flex-row justify-center items-center top-3'>
                 <Text className='text-white font-bold'>Submit</Text>
               </View>
@@ -122,6 +184,7 @@ const BlockModal = ({
           </View>
         </View>
       </View>
+      <Toast config={ToastConfig} />
     </Modal>
   )
 }

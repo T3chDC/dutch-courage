@@ -115,42 +115,42 @@ const locationSlice = createSlice({
         state.locationErrorMessage = action.payload
       })
       .addCase(addUser.pending, (state) => {
-        state.isLocationLoading = true
-        state.isLocationSuccess = false
-        state.isLocationError = false
-        state.locationErrorMessage = ''
+        state.isNearbyUsersLoading = true
+        state.isNearbyUsersSuccess = false
+        state.isNearbyUsersError = false
+        state.nearbyUsersErrorMessage = ''
       })
       .addCase(addUser.fulfilled, (state, action) => {
-        state.isLocationLoading = false
-        state.isLocationSuccess = true
-        state.isLocationError = false
+        state.isNearbyUsersLoading = false
+        state.isNearbyUsersSuccess = true
+        state.isNearbyUsersError = false
         state.nearbyUsers = action.payload.length > 0 ? action.payload : []
         state.isUserLive = true
       })
       .addCase(addUser.rejected, (state, action) => {
-        state.isLocationLoading = false
-        state.isLocationSuccess = false
-        state.isLocationError = true
-        state.locationErrorMessage = action.payload
+        state.isNearbyUsersLoading = false
+        state.isNearbyUsersSuccess = false
+        state.isNearbyUsersError = true
+        state.nearbyUsersErrorMessage = action.payload
       })
       .addCase(removeUser.pending, (state) => {
-        state.isLocationLoading = true
-        state.isLocationSuccess = false
-        state.isLocationError = false
-        state.locationErrorMessage = ''
+        state.isNearbyUsersLoading = true
+        state.isNearbyUsersSuccess = false
+        state.isNearbyUsersError = false
+        state.nearbyUsersErrorMessage = ''
       })
       .addCase(removeUser.fulfilled, (state, action) => {
-        state.isLocationLoading = false
-        state.isLocationSuccess = true
-        state.isLocationError = false
+        state.isNearbyUsersLoading = false
+        state.isNearbyUsersSuccess = true
+        state.isNearbyUsersError = false
         state.nearbyUsers = []
         state.isUserLive = false
       })
       .addCase(removeUser.rejected, (state, action) => {
-        state.isLocationLoading = false
-        state.isLocationSuccess = false
-        state.isLocationError = true
-        state.locationErrorMessage = action.payload
+        state.isNearbyUsersLoading = false
+        state.isNearbyUsersSuccess = false
+        state.isNearbyUsersError = true
+        state.nearbyUsersErrorMessage = action.payload
       })
   },
 })

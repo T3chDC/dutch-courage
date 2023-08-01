@@ -209,6 +209,7 @@ export const {
   resetMeGetUser,
   resetOtherUser,
   resetMeUpdateUser,
+  resetBlockUser,
 } = userSlice.actions
 
 export default userSlice.reducer

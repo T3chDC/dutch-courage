@@ -209,13 +209,20 @@ const UsersNearbyScreen = () => {
               {nearbyUsers.map(
                 (nearbyUser) =>
                   // Check if nearby user is in the blockedUsers list of meUser
-                  !meUser?.blockedUsers.includes(nearbyUser._id) && (
+                  !meUser?.blockedUsers.includes(nearbyUser._id) &&
+                  !meUser?.blockedByUsers.includes(nearbyUser._id) && (
                     <View
                       className='justify-start items-start w-[350] flex-row mt-4'
                       key={nearbyUser._id}
                     >
                       <TouchableOpacity
                         onPress={() => {
+                          if (
+                            meUser?.blockedUsers.includes(nearbyUser._id) ||
+                            meUser?.blockedByUsers.includes(nearbyUser._id)
+                          ) {
+                            return
+                          }
                           navigation.navigate('OtherUserProfile', {
                             userId: nearbyUser._id,
                           })

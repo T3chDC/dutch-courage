@@ -71,6 +71,7 @@ const UserProfileScreen = () => {
   const [location, setLocation] = useState('')
   const [topInterests, setTopInterests] = useState([])
   const [isLive, setIsLive] = useState(false)
+  const [nearbyUsersCount, setNearbyUsersCount] = useState(0)
 
   // Check if user is logged in
   useEffect(() => {
@@ -194,9 +195,16 @@ const UserProfileScreen = () => {
         visibilityTime: 3000,
       })
     } else if (isNearbyUsersSuccess) {
-      console.log('nearbyUsers', nearbyUsers)
+      // Check which nearby users are not blocked
+      const filteredNearbyUsers = nearbyUsers.filter(
+        (user) =>
+          !meUser?.blockedUsers.includes(user._id) &&
+          !meUser?.blockedByUsers.includes(user._id)
+      )
+      // Set nearby users count
+      setNearbyUsersCount(filteredNearbyUsers.length)
     }
-  }, [nearbyUsers, dispatch])
+  }, [nearbyUsers, ownLocation, dispatch])
 
   // Reset user profile get status on unmount
   useEffect(() => {
@@ -404,13 +412,13 @@ const UserProfileScreen = () => {
               <TouchableOpacity
                 onPress={() => navigation.navigate('NearbyUsers')}
               >
-                {nearbyUsers.length <= 0 ? (
+                {nearbyUsersCount <= 0 ? (
                   <Text className='text-[#22A6B3] text-lg font-bold'>
                     No Users Nearby
                   </Text>
                 ) : (
                   <Text className='text-[#22A6B3] text-lg font-bold'>
-                    {nearbyUsers.length} Users Nearby
+                    {nearbyUsersCount} Users Nearby
                   </Text>
                 )}
               </TouchableOpacity>

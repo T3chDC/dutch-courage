@@ -42,7 +42,7 @@ const updateMeUser = async (token, data) => {
 
 // Block another user with reason
 const blockUser = async (token, data) => {
-  const response = await axios.post(API_URL + '/blockUser', data, {
+  const response = await axios.patch(API_URL + '/blockUser', data, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
