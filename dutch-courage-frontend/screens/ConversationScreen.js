@@ -50,6 +50,8 @@ const ConversationScreen = () => {
   // Redux State variables
   const { userInfo } = useSelector((state) => state.auth)
 
+  const { meUser } = useSelector((state) => state.user)
+
   const [isSelectFileModalVisible, setIsSelectFileModalVisible] =
     useState(false)
   const [confirmSelectedFileModalVisible, setConfirmSelectedFileModalVisible] =
@@ -456,8 +458,11 @@ const ConversationScreen = () => {
                           ? 'text-white text-base bg-[#22A6B3] rounded-xl px-4 py-2 w-[200] text-left'
                           : 'text-white text-base bg-[#666666] rounded-xl px-4 py-2 w-[200] text-left'
                       }
-                    >
-                      {message.message}
+                      >
+                        {message.sender === userInfo._id && message.message.startsWith(
+                          'You have a notificaiton from'
+                        ) ? 'You sent a wave to this user' : message.message}
+                      
                     </Text>
                   )}
                 </View>
