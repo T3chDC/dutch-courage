@@ -126,7 +126,7 @@ const Conversation = ({
             ) : (
               <Image
                 source={{
-                  uri: `${BACKEND_URL}/uploads/${sender.imageUrl.slice(
+                  uri: `${BACKEND_URL}/uploads/${sender.imageUrl?.slice(
                     sender.imageUrl.lastIndexOf('/') + 1
                   )}`,
                 }}
@@ -144,10 +144,19 @@ const Conversation = ({
               </View>
               <View className='mt-1'>
                 <Text className='text-white text-xs'>
-                  {conversation?.lastMessage?.messageType === 'text'
+                  {conversation?.lastMessage?.messageType === 'text' &&
+                  conversation.lastMessage.message.startsWith(
+                    'You have a notification from'
+                  ) &&
+                  conversation.lastMessage.sender === loggedInUser._id
+                    ? 'You sent a wave to this user'
+                    : conversation?.lastMessage?.messageType === 'text' 
+                      // !conversation.lastMessage.message.startsWith(
+                      //   'You have a notification from'
+                      // )
                     ? conversation.lastMessage.message
                     : conversation?.lastMessage?.messageType === 'image'
-                    ? 'Image'
+                    ? 'New Image'
                     : 'New Message'}
                 </Text>
               </View>

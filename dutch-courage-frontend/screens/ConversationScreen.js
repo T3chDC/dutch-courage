@@ -460,7 +460,7 @@ const ConversationScreen = () => {
                       }
                       >
                         {message.sender === userInfo._id && message.message.startsWith(
-                          'You have a notificaiton from'
+                          'You have a notification from'
                         ) ? 'You sent a wave to this user' : message.message}
                       
                     </Text>

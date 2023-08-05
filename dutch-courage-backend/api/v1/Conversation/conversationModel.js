@@ -99,7 +99,7 @@ conversationSchema.pre(/^find/, function (next) {
     select: 'userName imageUrl',
   }).populate({
     path: 'lastMessage',
-    select: 'messageType message messageImageUrl createdAt',
+    select: 'messageType message messageImageUrl createdAt sender',
   })
   next()
 })

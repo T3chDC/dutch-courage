@@ -161,7 +161,7 @@ const OtherUserProfileScreen = ({ route }) => {
           conversationId: conversation._id,
           sender: userInfo._id,
           messageType: 'text',
-          message: `You have a notificaiton from ${userInfo.userName}`,
+          message: `You have a notification from ${userInfo.userName}`,
         })
       )
     }
