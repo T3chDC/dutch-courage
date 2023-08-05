@@ -352,14 +352,22 @@ const ConversationScreen = () => {
       <View className='flex flex-row absolute items-left left-8 top-11'>
         <View className='w-[60] justify-center items-center'>
           <View className='w-[40] h-[40] rounded-full bg-[#FCFCFE] justify-center items-center'>
-            <Image
-              className='w-[40] h-[40] rounded-full'
-              source={{
-                uri: `${BACKEND_URL}/uploads/${sender?.imageUrl.slice(
-                  sender?.imageUrl.lastIndexOf('/') + 1
-                )}`,
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('OtherUserProfile', {
+                  userId: sender?._id,
+                })
               }}
-            />
+            >
+              <Image
+                className='w-[40] h-[40] rounded-full'
+                source={{
+                  uri: `${BACKEND_URL}/uploads/${sender?.imageUrl.slice(
+                    sender?.imageUrl.lastIndexOf('/') + 1
+                  )}`,
+                }}
+              />
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -509,6 +517,16 @@ const ConversationScreen = () => {
                   Disconnect
                 </Text>
               </TouchableOpacity>
+            </View>
+          </View>
+        ) : conversation?.acceptedBy?.includes(userInfo._id) &&
+          conversation?.acceptedBy?.length === 1 ? (
+          <View className='absolute bottom-10 flex flex-row justify-center items-center w-full'>
+            <View className='flex flex-row justify-center items-center relative w-[380]'>
+              {/* Show that the other user has not accepted the conversation request */}
+              <Text className='text-white text-base'>
+                Please wait for the other user to accept the request...
+              </Text>
             </View>
           </View>
         ) : (
