@@ -327,6 +327,16 @@ const ConversationScreen = () => {
     }
   }, [dispatch])
 
+  // Function to accept text request
+  const acceptTextRequestHandler = () => {
+    console.log('acceptTextRequestHandler')
+  }
+
+  // Function to decline text request
+  const declineTextRequestHandler = () => {
+    console.log('declineTextRequestHandler')
+  }
+
   return (
     <View className='bg-black flex-1 justify-start items-center relative'>
       <TouchableOpacity
@@ -458,11 +468,11 @@ const ConversationScreen = () => {
                           ? 'text-white text-base bg-[#22A6B3] rounded-xl px-4 py-2 w-[200] text-left'
                           : 'text-white text-base bg-[#666666] rounded-xl px-4 py-2 w-[200] text-left'
                       }
-                      >
-                        {message.sender === userInfo._id && message.message.startsWith(
-                          'You have a notification from'
-                        ) ? 'You sent a wave to this user' : message.message}
-                      
+                    >
+                      {message.sender === userInfo._id &&
+                      message.message.startsWith('You have a notification from')
+                        ? 'You sent a wave to this user'
+                        : message.message}
                     </Text>
                   )}
                 </View>
@@ -472,67 +482,106 @@ const ConversationScreen = () => {
         </KeyboardAvoidingView>
       )}
 
-      {/* View to display the input field to send messages */}
-      <View className='w-full flex flex-row justify-center items-center'>
-        <View className='flex flex-row justify-center items-center relative w-[380]'>
-          <TouchableOpacity
-            className='flex flex-row justify-center items-center'
-            onPress={() => {
-              setIsSelectFileModalVisible(true)
-            }}
-          >
-            <PlusIcon size={30} color={'#FFFFFF'} />
-          </TouchableOpacity>
+      {/* View to display the input field to send messages or accept or disconnect to the text request */}
+      {
+        // Check if logged in user is in the acceptedBy array of converstion
+        !conversation?.acceptedBy?.includes(userInfo._id) ? (
+          <View className='absolute bottom-5 flex flex-row justify-center items-center w-full'>
+            <View className='flex flex-row justify-evenly items-center w-[380]'>
+              <TouchableOpacity
+                className='flex flex-row justify-center items-center w-[150] h-[50] rounded-xl bg-[#22A6B3]'
+                onPress={() => {
+                  acceptTextRequestHandler()
+                }}
+              >
+                <Text className='text-white text-base font-semibold'>
+                  Connect
+                </Text>
+              </TouchableOpacity>
 
-          {/* Files Select Modal */}
-          <SelectFilesModal
-            isSelectFileModalVisible={isSelectFileModalVisible}
-            setIsSelectFileModalVisible={setIsSelectFileModalVisible}
-            selectedImage={selectedImage}
-            setSelectedImage={setSelectedImage}
-            isConfirmSelectedFileModalVisible={confirmSelectedFileModalVisible}
-            setIsConfirmSelectedFileModalVisible={
-              setConfirmSelectedFileModalVisible
-            }
-          />
+              <TouchableOpacity
+                className='flex flex-row justify-center items-center w-[150] h-[50] rounded-xl bg-[#ffffff]'
+                onPress={() => {
+                  declineTextRequestHandler()
+                }}
+              >
+                <Text className='text-[#22A6B3] text-base font-semibold'>
+                  Disconnect
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        ) : (
+          <View className='w-full flex flex-row justify-center items-center'>
+            <View className='flex flex-row justify-center items-center relative w-[380]'>
+              <TouchableOpacity
+                className='flex flex-row justify-center items-center'
+                onPress={() => {
+                  setIsSelectFileModalVisible(true)
+                }}
+              >
+                <PlusIcon size={30} color={'#FFFFFF'} />
+              </TouchableOpacity>
 
-          {/* Confirm Selected File Sending Modal */}
-          <ConfirmSelectedFileModal
-            selectedImage={selectedImage}
-            setSelectedImage={setSelectedImage}
-            isConfirmSelectedFileModalVisible={confirmSelectedFileModalVisible}
-            setIsConfirmSelectedFileModalVisible={
-              setConfirmSelectedFileModalVisible
-            }
-            createImageMessage={createImageMessage}
-          />
+              {/* Files Select Modal */}
+              <SelectFilesModal
+                isSelectFileModalVisible={isSelectFileModalVisible}
+                setIsSelectFileModalVisible={setIsSelectFileModalVisible}
+                selectedImage={selectedImage}
+                setSelectedImage={setSelectedImage}
+                isConfirmSelectedFileModalVisible={
+                  confirmSelectedFileModalVisible
+                }
+                setIsConfirmSelectedFileModalVisible={
+                  setConfirmSelectedFileModalVisible
+                }
+              />
 
-          <TextInput
-            className='flex-1 text-white text-base bg-[#000000] rounded-xl py-2 pl-4 pr-10 w-[200] text-left border border-[#22A6B3]'
-            placeholder='Be Nice...'
-            placeholderTextColor='#A1A5AC'
-            value={messageText}
-            onChangeText={(text) => {
-              setMessageText(text)
-              if (text.length > 280) {
-                setMessageText(text.slice(0, 280))
-              }
-            }}
-            multiline={true}
-          />
-          <TouchableOpacity
-            className='flex flex-row justify-center items-center absolute right-2'
-            onPress={createTextMessage}
-          >
-            <PaperAirplaneIcon size={30} color={'#FFFFFF'} />
-          </TouchableOpacity>
-        </View>
-      </View>
+              {/* Confirm Selected File Sending Modal */}
+              <ConfirmSelectedFileModal
+                selectedImage={selectedImage}
+                setSelectedImage={setSelectedImage}
+                isConfirmSelectedFileModalVisible={
+                  confirmSelectedFileModalVisible
+                }
+                setIsConfirmSelectedFileModalVisible={
+                  setConfirmSelectedFileModalVisible
+                }
+                createImageMessage={createImageMessage}
+              />
+
+              <TextInput
+                className='flex-1 text-white text-base bg-[#000000] rounded-xl py-2 pl-4 pr-10 w-[200] text-left border border-[#22A6B3]'
+                placeholder='Be Nice...'
+                placeholderTextColor='#A1A5AC'
+                value={messageText}
+                onChangeText={(text) => {
+                  setMessageText(text)
+                  if (text.length > 280) {
+                    setMessageText(text.slice(0, 280))
+                  }
+                }}
+                multiline={true}
+              />
+              <TouchableOpacity
+                className='flex flex-row justify-center items-center absolute right-2'
+                onPress={createTextMessage}
+              >
+                <PaperAirplaneIcon size={30} color={'#FFFFFF'} />
+              </TouchableOpacity>
+            </View>
+          </View>
+        )
+      }
 
       {/* View to display the length of text*/}
-      <View className='flex flex-row justify-end items-center w-[370]'>
-        <Text className='text-[#A1A5AC] text-xs'>{messageText.length}/280</Text>
-      </View>
+      {conversation?.acceptedBy?.includes(userInfo._id) && (
+        <View className='flex flex-row justify-end items-center w-[370]'>
+          <Text className='text-[#A1A5AC] text-xs'>
+            {messageText.length}/280
+          </Text>
+        </View>
+      )}
     </View>
   )
 }
