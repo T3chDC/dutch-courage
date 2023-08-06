@@ -347,20 +347,29 @@ const ConversationScreen = () => {
 
   // Function to decline text request
   const declineTextRequestHandler = () => {
-    dispatch(
-      deleteConversationById({
-        conversationId,
-      })
-    )
+    dispatch(deleteConversationById(conversationId))
   }
 
   // If conversation is deleted navigate back to inbox screen
   useEffect(() => {
     if (isDeleteConversationByIdSuccess) {
+      dispatch(resetDeleteConversationById())
+      dispatch(getAllConversationsOfUser())
+      Toast.show({
+        type: 'success',
+        text1: 'Conversation will not be continued with this user',
+        visibilityTime: 4000,
+      })
       navigation.navigate('UserInbox')
+    } else if (isDeleteConversationByIdError) {
+      Toast.show({
+        type: 'error',
+        text1: deleteConversationByIdErrorMessage,
+        visibilityTime: 4000,
+      })
       dispatch(resetDeleteConversationById())
     }
-  }, [isDeleteConversationByIdSuccess, dispatch])
+  }, [isDeleteConversationByIdSuccess, isDeleteConversationByIdError, dispatch])
 
   return (
     <View className='bg-black flex-1 justify-start items-center relative'>
