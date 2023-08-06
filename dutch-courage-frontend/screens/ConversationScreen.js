@@ -329,7 +329,14 @@ const ConversationScreen = () => {
 
   // Function to accept text request
   const acceptTextRequestHandler = () => {
-    console.log('acceptTextRequestHandler')
+    dispatch(
+      updateConversationById({
+        conversationId,
+        data: {
+          acceptedBy: [...conversation.acceptedBy, userInfo._id],
+        },
+      })
+    )
   }
 
   // Function to decline text request
