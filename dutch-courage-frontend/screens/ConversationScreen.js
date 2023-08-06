@@ -20,6 +20,8 @@ import {
   resetConversation,
   updateConversationById,
   resetUpdateConversationById,
+  deleteConversationById,
+  resetDeleteConversationById,
 } from '../features/conversation/conversationSlice'
 import {
   createMessage,
@@ -67,6 +69,10 @@ const ConversationScreen = () => {
     isUpdateConversationByIdSuccess,
     isUpdateConversationByIdError,
     updateConversationByIdErrorMessage,
+    isDeleteConversationByIdLoading,
+    isDeleteConversationByIdSuccess,
+    isDeleteConversationByIdError,
+    deleteConversationByIdErrorMessage,
   } = useSelector((state) => state.conversation)
 
   const {
@@ -341,8 +347,20 @@ const ConversationScreen = () => {
 
   // Function to decline text request
   const declineTextRequestHandler = () => {
-    console.log('declineTextRequestHandler')
+    dispatch(
+      deleteConversationById({
+        conversationId,
+      })
+    )
   }
+
+  // If conversation is deleted navigate back to inbox screen
+  useEffect(() => {
+    if (isDeleteConversationByIdSuccess) {
+      navigation.navigate('UserInbox')
+      dispatch(resetDeleteConversationById())
+    }
+  }, [isDeleteConversationByIdSuccess, dispatch])
 
   return (
     <View className='bg-black flex-1 justify-start items-center relative'>
