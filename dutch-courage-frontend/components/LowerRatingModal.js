@@ -15,7 +15,8 @@ const LowerRatingModal = ({
   setReportCount,
 
 }) => {
-  const [checkTest, setCheckTest] = useState(false);
+  const [lowerStarReason, setLowerStarReason] = useState('');
+  const [otherReason, setOtherReason] = useState("");
   return (
     <Modal
       animationIn={"slideInUp"}
@@ -39,12 +40,12 @@ const LowerRatingModal = ({
         <View className="w-[60vw] h-[10vh] flex-row top-5">
           <View className="left-[-5]">
             <CheckBox
-              checked={checkTest}
+              checked={lowerStarReason === "Underage" ? true : false}
               checkedIcon="circle"
               checkedColor="#808080"
               uncheckedIcon="circle"
               uncheckedColor="white"
-              onPress={() => setCheckTest(!checkTest)}
+              onPress={() => setLowerStarReason('Underage')}
               title="Underage"
               textStyle={{ color: "#808080" }}
               containerStyle={{
@@ -53,12 +54,12 @@ const LowerRatingModal = ({
             ></CheckBox>
 
             <CheckBox
-              checked={checkTest}
+              checked={lowerStarReason === "Spam" ? true : false}
               checkedIcon="circle"
               checkedColor="#808080"
               uncheckedIcon="circle"
               uncheckedColor="white"
-              onPress={() => setCheckTest(!checkTest)}
+              onPress={() => setLowerStarReason('Spam')}
               title="Spam"
               textStyle={{ color: "#808080" }}
               containerStyle={{
@@ -70,12 +71,12 @@ const LowerRatingModal = ({
 
           <View className="left-[-5]">
             <CheckBox
-              checked={checkTest}
+              checked={lowerStarReason === "Soliciting" ? true : false}
               checkedIcon="circle"
               checkedColor="#808080"
               uncheckedIcon="circle"
               uncheckedColor="white"
-              onPress={() => setCheckTest(!checkTest)}
+              onPress={() => setLowerStarReason('Soliciting')}
               title="Soliciting"
               textStyle={{ color: "#808080" }}
               containerStyle={{
@@ -84,12 +85,12 @@ const LowerRatingModal = ({
             ></CheckBox>
 
             <CheckBox
-              checked={checkTest}
+              checked={lowerStarReason === "Other" ? true : false}
               checkedIcon="circle"
               checkedColor="#808080"
               uncheckedIcon="circle"
               uncheckedColor="white"
-              onPress={() => setCheckTest(!checkTest)}
+              onPress={() => setLowerStarReason('Other')}
               title="Other"
               textStyle={{ color: "#808080" }}
               containerStyle={{
@@ -104,7 +105,9 @@ const LowerRatingModal = ({
           <View className="w-[70vw] h-[15vh] justify-center items-center mt-5 rounded-2xl bg-white">
             <View>
               <TextInput
-                placeholder=""
+                placeholder={
+                  lowerStarReason === "Other" ? "Please specify a reason for lower star" : ""
+                }
                 keyboardType="default"
                 className="text-[#808080] justify-start items-center border-b-2 border-[#999999] w-[50vw] h-[5vh]"
                 value={report}
