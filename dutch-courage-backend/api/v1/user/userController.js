@@ -144,3 +144,56 @@ export const blockUser = catchAsync(async (req, res, next) => {
     data: user,
   })
 })
+
+// @desc    Rate another user
+// @route   PATCH /api/v1/users/rateUser
+// @access  Private/regularUser
+export const rateUser = catchAsync(async (req, res, next) => {
+  const userToBeRated = await User.findById(req.body.userId)
+  const userRating = req.body.rating
+  const reason = req.body.reason
+  const otherReason = req.body.otherReason
+
+  if (!userToBeRated) {
+    return next(
+      new AppError('The user to be rated could not be found with that ID', 404)
+    )
+  }
+
+  if (userRating > 2) {
+    const prevRatingSum = userToBeRated.ratingCount * userToBeRated.rating
+    userToBeRated.ratingCount += 1
+    userToBeRated.rating =
+      (prevRatingSum + userRating) / userToBeRated.ratingCount
+  } else {
+    if (!reason) {
+      return next(
+        new AppError('Please provide a reason for rating this user low', 400)
+      )
+    }
+    const prevRatingSum = userToBeRated.ratingCount * userToBeRated.rating
+    userToBeRated.ratingCount += 1
+    userToBeRated.rating =
+      (prevRatingSum + userRating) / userToBeRated.ratingCount
+    if (reason === 'other') {
+      if (!req.body.otherReason) {
+        return next(
+          new AppError(
+            'Please provide description of reason for rating this user low',
+            400
+          )
+        )
+      } else {
+        userToBeRated.otherLowerRatingReasons.push(otherReason)
+      }
+    }
+    userToBeRated.lowerRatingReasons.push(reason)
+  }
+
+  await userToBeRated.save()
+
+  res.status(200).json({
+    status: 'success',
+    data: userToBeRated,
+  })
+})

@@ -11,6 +11,7 @@ import {
   updateMe,
   deleteMe,
   blockUser,
+  rateUser
 } from './userController.js' //import User controller
 
 import {
@@ -44,6 +45,7 @@ router.route('/getMe').get(protect, restrictTo('regularUser'), getMe, getUser) /
 router.route('/updateMe').patch(protect, restrictTo('regularUser'), updateMe) //route to handle profile information update by user
 router.route('/deleteMe').delete(protect, restrictTo('regularUser'), deleteMe) //route to handle profile deletion by user
 router.route('/blockUser').patch(protect, restrictTo('regularUser'), blockUser) //route to handle profile deletion by user
+router.route('/rateUser').patch(protect, restrictTo('regularUser'), rateUser) //route to handle profile deletion by user
 
 //base CRUD functionality for admin only
 router
@@ -53,7 +55,7 @@ router
 router
   .route('/:id')
   .get(protect, restrictTo('adminUser', 'regularUser'), getUser)
-  .patch(protect, restrictTo('adminUser'), updateUser)
+  .patch(protect, restrictTo('adminUser', 'regularUser'), updateUser)
   .put(protect, restrictTo('adminUser'), updateUser)
   .delete(protect, restrictTo('adminUser'), deleteUser)
 
