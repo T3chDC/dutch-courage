@@ -203,6 +203,16 @@ const userSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
+
+    lowerRatingReasons: {
+      type: [String],
+      default: [],
+    },
+
+    otherBlockReasons: {
+      type: [String],
+      default: [],
+    },
   },
   {
     timestamps: true,
