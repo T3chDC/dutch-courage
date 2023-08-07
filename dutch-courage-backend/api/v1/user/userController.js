@@ -160,6 +160,11 @@ export const rateUser = catchAsync(async (req, res, next) => {
     )
   }
 
+  // If the user who is rating is already in ratedByUsers array, return error
+  if (userToBeRated.ratedByUsers.includes(req.user._id)) {
+    return next(new AppError('You already rated this user', 400))
+  }
+
   if (userRating > 2) {
     const prevRatingSum = userToBeRated.ratingCount * userToBeRated.rating
     userToBeRated.ratingCount += 1
@@ -189,6 +194,8 @@ export const rateUser = catchAsync(async (req, res, next) => {
     }
     userToBeRated.lowerRatingReasons.push(reason)
   }
+
+  userToBeRated.ratedByUsers.push(req.user._id)
 
   await userToBeRated.save()
 

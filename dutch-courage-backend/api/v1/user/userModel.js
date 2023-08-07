@@ -163,6 +163,11 @@ const userSchema = new mongoose.Schema(
       min: 1,
     },
 
+    ratedByUsers: {
+      type: [mongoose.Schema.Types.ObjectId],
+      default: [],
+    },
+
     //These are the fields that needs clarificaiton
 
     location: {
