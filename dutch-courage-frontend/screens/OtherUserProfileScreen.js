@@ -22,7 +22,7 @@ import {
   resetCreateMessage,
   resetMessage,
 } from '../features/message/messageSlice'
-import RatingStars from '../components/RatingStars'
+import TouchableRatingStars from '../components/TouchableRatingStars'
 import Toast from 'react-native-toast-message'
 import * as Progress from 'react-native-progress'
 import SwipeButton from 'rn-swipe-button'
@@ -196,6 +196,21 @@ const OtherUserProfileScreen = ({ route }) => {
     createMessageErrorMessage,
   ])
 
+  // function to handle rate user
+  const rateUser = (userRated) => {
+    if (userRated < 3) {
+      setShowLowerRatingModal(true)
+    } else {
+      console.log('User rated ' + userRated)
+      // dispatch(
+      //   rateOtherUser({
+      //     userId,
+      //     rating,
+      //   })
+      // )
+    }
+  }
+
   return (
     <View className='bg-black flex-1 justify-start items-center relative'>
       {/* background cutoff image*/}
@@ -225,7 +240,7 @@ const OtherUserProfileScreen = ({ route }) => {
         <>
           {/* rating stars based on rating values */}
           <View className='mt-[-240] w-[100vw] flex-row justify-center items-center'>
-            <RatingStars rating={rating} />
+            <TouchableRatingStars rating={rating} rateUser={rateUser} />
           </View>
 
           {/* profile image */}
