@@ -209,7 +209,7 @@ const userSchema = new mongoose.Schema(
       default: [],
     },
 
-    otherBlockReasons: {
+    otherLowerRatingReasons: {
       type: [String],
       default: [],
     },

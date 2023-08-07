@@ -169,9 +169,33 @@ const UsersNearbyScreen = () => {
                 latitude: ownLocation.coords.latitude,
                 longitude: ownLocation.coords.longitude,
               }}
-              pinColor='blue'
+              // pinColor='blue'
               title='You are here'
-            ></Marker>
+            >
+              {/* Show user profile picture in map marker with a border around */}
+              <View
+                style={{
+                  height: 50,
+                  width: 50,
+                  borderRadius: 25,
+                  borderWidth: 3,
+                  borderColor: 'blue',
+                  overflow: 'hidden',
+                }}
+              >
+                <Image
+                  source={{
+                    uri: `${BACKEND_URL}/uploads/${userInfo.imageUrl.slice(
+                      userInfo.imageUrl.lastIndexOf('/') + 1
+                    )}`,
+                  }}
+                  style={{
+                    height: 50,
+                    width: 50,
+                  }}
+                />
+              </View>
+            </Marker>
             {nearbyUsers.map((nearbyUser) => (
               <Marker
                 key={nearbyUser._id}
@@ -180,7 +204,30 @@ const UsersNearbyScreen = () => {
                   longitude: nearbyUser.location.longitude,
                 }}
                 title={nearbyUser.userName}
-              ></Marker>
+              >
+                <View
+                  style={{
+                    height: 50,
+                    width: 50,
+                    borderRadius: 25,
+                    borderWidth: 3,
+                    borderColor: 'red',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <Image
+                    source={{
+                      uri: `${BACKEND_URL}/uploads/${nearbyUser.imageUrl.slice(
+                        nearbyUser.imageUrl.lastIndexOf('/') + 1
+                      )}`,
+                    }}
+                    style={{
+                      height: 50,
+                      width: 50,
+                    }}
+                  />
+                </View>
+              </Marker>
             ))}
           </MapView>
         </View>
