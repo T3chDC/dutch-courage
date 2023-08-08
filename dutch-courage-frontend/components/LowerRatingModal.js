@@ -5,19 +5,55 @@ import { useDispatch, useSelector } from "react-redux";
 import { CheckBox } from "@rneui/themed";
 import { TextInput } from "react-native-gesture-handler";
 import { rateUser, resetRateUser } from "../features/user/userSlice";
+import { Toast } from "react-native-toast-message/lib/src/Toast";
 
 const LowerRatingModal = ({
   modalVisible,
   setModalVisible,
-
-  report,
-  setReport,
-  reportCount,
-  setReportCount,
+  rating,
+  setRating,
 
 }) => {
-  const [lowerStarReason, setLowerStarReason] = useState('');
+  const dispatch = useDispatch();
+
+  const [lowerStarReason, setLowerStarReason] = useState("");
   const [otherReason, setOtherReason] = useState("");
+
+  const {
+    isRateUserLoading,
+    isRateUserSuccess,
+    isRateUserError,
+    rateUserErrorMessage,
+  } = useSelector((state) => state.user);
+
+  // Function to handle rate user
+  const handleRateUser = () => {
+    if (lowerStarReason === 'Other' && otherReason === '') {
+      Toast.show({
+        type: 'error',
+        text1: 'Please provide a description for lower star rating',
+        visibilityTime: 3000,
+        autoHide: true,
+      })
+    } else if (lowerStarReason === '') {
+      Toast.show({
+        type: 'error',
+        text1: 'Please provide a reason for lower star rating',
+        visibilityTime: 3000,
+        autoHide: true,
+      })
+    } else {
+      dispatch(
+        rateUser({
+          userId,
+          rating,
+          reason: lowerStarReason,
+          otherReason: otherReason,
+        })
+      )
+    }
+  }
+
   return (
     <Modal
       animationIn={"slideInUp"}
@@ -46,7 +82,7 @@ const LowerRatingModal = ({
               checkedColor="#808080"
               uncheckedIcon="circle"
               uncheckedColor="white"
-              onPress={() => setLowerStarReason('Underage')}
+              onPress={() => setLowerStarReason("Underage")}
               title="Underage"
               textStyle={{ color: "#808080" }}
               containerStyle={{
@@ -60,7 +96,7 @@ const LowerRatingModal = ({
               checkedColor="#808080"
               uncheckedIcon="circle"
               uncheckedColor="white"
-              onPress={() => setLowerStarReason('Spam')}
+              onPress={() => setLowerStarReason("Spam")}
               title="Spam"
               textStyle={{ color: "#808080" }}
               containerStyle={{
@@ -77,7 +113,7 @@ const LowerRatingModal = ({
               checkedColor="#808080"
               uncheckedIcon="circle"
               uncheckedColor="white"
-              onPress={() => setLowerStarReason('Soliciting')}
+              onPress={() => setLowerStarReason("Soliciting")}
               title="Soliciting"
               textStyle={{ color: "#808080" }}
               containerStyle={{
@@ -91,7 +127,7 @@ const LowerRatingModal = ({
               checkedColor="#808080"
               uncheckedIcon="circle"
               uncheckedColor="white"
-              onPress={() => setLowerStarReason('Other')}
+              onPress={() => setLowerStarReason("Other")}
               title="Other"
               textStyle={{ color: "#808080" }}
               containerStyle={{
@@ -107,15 +143,17 @@ const LowerRatingModal = ({
             <View>
               <TextInput
                 placeholder={
-                  lowerStarReason === "Other" ? "Please specify a reason for lower star" : ""
+                  lowerStarReason === "Other"
+                    ? "Please specify a reason for lower star rating"
+                    : ""
                 }
                 keyboardType="default"
                 className="text-[#808080] justify-start items-center border-b-2 border-[#999999] w-[50vw] h-[5vh]"
-                value={report}
+                value={otherReason}
                 onChangeText={(text) => {
                   if (text.length <= 40) {
-                    setReport(text);
-                    setReportCount(text.length);
+                    setOtherReason(text);
+                    // setOtherReasonCount(text.length);
                   }
                 }}
                 onEndEditing={() => {
@@ -123,7 +161,7 @@ const LowerRatingModal = ({
                 }}
               ></TextInput>
             </View>
-            <TouchableOpacity onPress={() => setModalVisible(false)}>
+            <TouchableOpacity onPress={() => handleRateUser()}>
               <View className="w-32 h-8 rounded-xl bg-[#22A6B3] flex-row justify-center items-center top-3">
                 <Text className="text-white font-bold">Submit</Text>
               </View>
