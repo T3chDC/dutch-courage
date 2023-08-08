@@ -210,7 +210,7 @@ const OtherUserProfileScreen = ({ route }) => {
     if (isRateUserSuccess) {
       Toast.show({
         type: 'success',
-        text1: 'You have successfully rated this user',
+        text1: 'Your rating was submitted successfully',
         visibilityTime: 3000,
         autoHide: true,
       })
@@ -416,7 +416,8 @@ const OtherUserProfileScreen = ({ route }) => {
             // reportCount={reportCount}
             // setReportCount={setReportCount}
             rating={otherUserRatingValue}
-            setRating={setRating}
+              setRating={setRating}
+              userId={userId}
           />
 
           {/* Chat and User Profile Icons */}
