@@ -2,7 +2,7 @@ import { View, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { rateUser, resetRateUser } from '../features/user/userSlice'
 
-const TouchableRatingStars = ({ rating, rateUser }) => {
+const TouchableRatingStars = ({ rating, rateUser, userRated }) => {
   return (
     <View className='flex-row justify-center items-center'>
       <View className='flex-row justify-center items-center'>

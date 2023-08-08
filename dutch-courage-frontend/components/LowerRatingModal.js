@@ -33,14 +33,14 @@ const LowerRatingModal = ({
     if (lowerStarReason === 'Other' && otherReason === '') {
       Toast.show({
         type: 'error',
-        text1: 'Please provide a description for lower star rating',
+        text1: 'Please provide a reason for lower rating',
         visibilityTime: 3000,
         autoHide: true,
       })
     } else if (lowerStarReason === '') {
       Toast.show({
         type: 'error',
-        text1: 'Please provide a reason for lower star rating',
+        text1: 'Please provide a reason for lower rating',
         visibilityTime: 3000,
         autoHide: true,
       })
@@ -146,7 +146,7 @@ const LowerRatingModal = ({
               <TextInput
                 placeholder={
                   lowerStarReason === "Other"
-                    ? "Please specify a reason for lower star rating"
+                    ? "Please specify a reason for lower rating"
                     : ""
                 }
                 keyboardType="default"

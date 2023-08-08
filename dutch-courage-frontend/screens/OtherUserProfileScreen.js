@@ -231,13 +231,13 @@ const OtherUserProfileScreen = ({ route }) => {
     if (userRated < 3) {
       setShowLowerRatingModal(true);
     } else {
-      // console.log('User rated ' + userRated)
       dispatch(
         rateUser({
           userId,
           rating,
         })
       );
+      console.log('User rated ' + userRated)
     }
   };
 
@@ -270,7 +270,7 @@ const OtherUserProfileScreen = ({ route }) => {
         <>
           {/* rating stars based on rating values */}
           <View className="mt-[-240] w-[100vw] flex-row justify-center items-center">
-            <TouchableRatingStars rating={rating} rateUser={rateOtherUser} />
+            <TouchableRatingStars rating={rating} rateUser={rateOtherUser} userRated={rateUser} />
           </View>
 
           {/* profile image */}
