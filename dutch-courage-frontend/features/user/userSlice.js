@@ -21,6 +21,11 @@ const initialState = {
   isBlockUserSuccess: false,
   isBlockUserLoading: false,
   blockUserErrorMessage: '',
+
+  isRateUserError: false,
+  isRateUserSuccess: false,
+  isRateUserLoading: false,
+  rateUserErrorMessage: '',
 }
 
 //get info about logged in user
@@ -91,6 +96,23 @@ export const blockUser = createAsyncThunk(
   }
 )
 
+// Rate another user with reason
+export const rateUser = createAsyncThunk(
+  'user/rateUser',
+  async (data, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.userInfo.token
+      return await userService.rateUser(token, data)
+    } catch (err) {
+      const message =
+        (err.response && err.response.data && err.response.data.message) ||
+        err.message ||
+        err.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
 export const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -126,6 +148,12 @@ export const userSlice = createSlice({
       state.isBlockUserSuccess = false
       state.isBlockUserLoading = false
       state.blockUserErrorMessage = ''
+    },
+    resetRateUser: (state) => {
+      state.isRateUserError = false
+      state.isRateUserSuccess = false
+      state.isRateUserLoading = false
+      state.rateUserErrorMessage = ''
     },
   },
   extraReducers: (builder) => {
@@ -201,6 +229,24 @@ export const userSlice = createSlice({
         state.isBlockUserError = true
         state.blockUserErrorMessage = action.payload
       })
+      .addCase(rateUser.pending, (state) => {
+        state.isRateUserLoading = true
+        state.isRateUserError = false
+        state.isRateUserSuccess = false
+        state.rateUserErrorMessage = ''
+      })
+      .addCase(rateUser.fulfilled, (state, action) => {
+        state.isRateUserLoading = false
+        state.isRateUserSuccess = true
+        state.isRateUserError = false
+        state.rateUserErrorMessage = ''
+      })
+      .addCase(rateUser.rejected, (state, action) => {
+        state.isRateUserLoading = false
+        state.isRateUserSuccess = false
+        state.isRateUserError = true
+        state.rateUserErrorMessage = action.payload
+      })
   },
 })
 
@@ -210,6 +256,7 @@ export const {
   resetOtherUser,
   resetMeUpdateUser,
   resetBlockUser,
+  resetRateUser,
 } = userSlice.actions
 
 export default userSlice.reducer
