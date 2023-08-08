@@ -18,15 +18,9 @@ const LowerRatingModal = ({
   // const { userId } = route.params; 
 
   const { userInfo } = useSelector((state) => state.auth);
+  
   const [lowerStarReason, setLowerStarReason] = useState("");
   const [otherReason, setOtherReason] = useState("");
-
-  const {
-    isRateUserLoading,
-    isRateUserSuccess,
-    isRateUserError,
-    rateUserErrorMessage,
-  } = useSelector((state) => state.user);
 
   // Function to handle rate user
   const handleRateUser = () => {

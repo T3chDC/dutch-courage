@@ -237,7 +237,7 @@ const OtherUserProfileScreen = ({ route }) => {
           rating,
         })
       );
-      console.log('User rated ' + userRated)
+      // console.log('User rated ' + userRated)
     }
   };
 
