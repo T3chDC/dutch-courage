@@ -2,11 +2,20 @@ import { View, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { rateUser, resetRateUser } from '../features/user/userSlice'
 
-const TouchableRatingStars = ({ rating, rateUser, userRated }) => {
+const TouchableRatingStars = ({
+  rating,
+  rateUser,
+  setOtherUserRatingValue,
+}) => {
   return (
     <View className='flex-row justify-center items-center'>
       <View className='flex-row justify-center items-center'>
-        <TouchableOpacity onPress={() => rateUser(1)}>
+        <TouchableOpacity
+          onPress={() => {
+            rateUser(1)
+            setOtherUserRatingValue(1)
+          }}
+        >
           <Image
             source={
               rating >= 1
@@ -19,7 +28,12 @@ const TouchableRatingStars = ({ rating, rateUser, userRated }) => {
           />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => rateUser(2)}>
+        <TouchableOpacity
+          onPress={() => {
+            rateUser(2)
+            setOtherUserRatingValue(2)
+          }}
+        >
           <Image
             source={
               rating >= 2

@@ -11,8 +11,6 @@ const LowerRatingModal = ({
   modalVisible,
   setModalVisible,
   rating,
-  setRating,
-
 }) => {
   const dispatch = useDispatch();
   // const { userId } = route.params; 
