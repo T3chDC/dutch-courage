@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CheckBox } from "@rneui/themed";
 import { TextInput } from "react-native-gesture-handler";
+import { rateUser, resetRateUser } from "../features/user/userSlice";
 
 const LowerRatingModal = ({
   modalVisible,

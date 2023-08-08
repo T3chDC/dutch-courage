@@ -29,6 +29,7 @@ import SwipeButton from 'rn-swipe-button'
 import { logout } from '../features/auth/authSlice'
 import { BACKEND_URL } from '../config'
 import LowerRatingModal from '../components/LowerRatingModal'
+import { rateUser, resetRateUser } from '../features/user/userSlice'
 
 const OtherUserProfileScreen = ({ route }) => {
   // Navigation hook
@@ -47,6 +48,11 @@ const OtherUserProfileScreen = ({ route }) => {
     isOtherGetSuccess,
     isOtherGetError,
     otherGetErrorMessage,
+
+    isRateUserLoading,
+    isRateUserSuccess,
+    isRateUserError,
+    rateUserErrorMessage,
   } = useSelector((state) => state.user)
 
   const {
@@ -64,6 +70,7 @@ const OtherUserProfileScreen = ({ route }) => {
     isCreateMessageError,
     createMessageErrorMessage,
   } = useSelector((state) => state.message)
+
 
   // Local State variables
   const [rating, setRating] = useState(5)
