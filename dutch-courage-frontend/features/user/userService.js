@@ -50,6 +50,16 @@ const blockUser = async (token, data) => {
   return response.data.data
 }
 
+// Rate user with reason
+const rateUser = async (token, data) => {
+  const response = await axios.patch(API_URL + '/rateUser', data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  return response.data.data
+}
+
 const userService = {
   getMeUser,
   getOtherUser,
