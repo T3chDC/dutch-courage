@@ -87,8 +87,8 @@ const OtherUserProfileScreen = ({ route }) => {
   const [location, setLocation] = useState("");
   const [topInterests, setTopInterests] = useState([]);
 
-  const [report, setReport] = useState("");
-  const [reportCount, setReportCount] = useState(0);
+  // const [report, setReport] = useState("");
+  // const [reportCount, setReportCount] = useState(0);
 
   const [showLowerRatingModal, setShowLowerRatingModal] = useState(false);
 
@@ -227,13 +227,13 @@ const OtherUserProfileScreen = ({ route }) => {
   }, [isRateUserSuccess, isRateUserError])
 
   // function to handle rate user
-  const rateUser = (userRated) => {
+  const rateOtherUser = (userRated) => {
     if (userRated < 3) {
       setShowLowerRatingModal(true);
     } else {
       // console.log('User rated ' + userRated)
       dispatch(
-        rateOtherUser({
+        rateUser({
           userId,
           rating,
         })
@@ -270,7 +270,7 @@ const OtherUserProfileScreen = ({ route }) => {
         <>
           {/* rating stars based on rating values */}
           <View className="mt-[-240] w-[100vw] flex-row justify-center items-center">
-            <TouchableRatingStars rating={rating} rateUser={rateUser} />
+            <TouchableRatingStars rating={rating} rateUser={rateOtherUser} />
           </View>
 
           {/* profile image */}
@@ -407,10 +407,12 @@ const OtherUserProfileScreen = ({ route }) => {
           <LowerRatingModal
             modalVisible={showLowerRatingModal}
             setModalVisible={setShowLowerRatingModal}
-            report={report}
-            setReport={setReport}
-            reportCount={reportCount}
-            setReportCount={setReportCount}
+            // report={report}
+            // setReport={setReport}
+            // reportCount={reportCount}
+            // setReportCount={setReportCount}
+            rating={rating}
+            setRating={setRating}
           />
 
           {/* Chat and User Profile Icons */}

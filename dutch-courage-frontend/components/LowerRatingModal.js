@@ -15,7 +15,9 @@ const LowerRatingModal = ({
 
 }) => {
   const dispatch = useDispatch();
+  // const { userId } = route.params; 
 
+  const { userInfo } = useSelector((state) => state.auth);
   const [lowerStarReason, setLowerStarReason] = useState("");
   const [otherReason, setOtherReason] = useState("");
 
@@ -45,7 +47,7 @@ const LowerRatingModal = ({
     } else {
       dispatch(
         rateUser({
-          userId,
+          userId: userInfo._id,
           rating,
           reason: lowerStarReason,
           otherReason: otherReason,

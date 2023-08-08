@@ -65,6 +65,7 @@ const userService = {
   getOtherUser,
   updateMeUser,
   blockUser,
+  rateUser,
 }
 
 export default userService
