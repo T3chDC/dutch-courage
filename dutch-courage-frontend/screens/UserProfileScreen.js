@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Alert,
   BackHandler,
+  Switch,
 } from 'react-native'
 import { UserIcon, ChatBubbleLeftRightIcon } from 'react-native-heroicons/solid'
 import React, { useEffect, useState } from 'react'
@@ -18,13 +19,14 @@ import {
 import {
   getLocation,
   addUser,
+  removeUser,
   resetOwnLocation,
   resetNearbyUsers,
 } from '../features/location/locationSlice'
 import RatingStars from '../components/RatingStars'
 import Toast from 'react-native-toast-message'
 import * as Progress from 'react-native-progress'
-import SwipeButton from 'rn-swipe-button'
+// import SwipeButton from 'rn-swipe-button'
 import { logout } from '../features/auth/authSlice'
 import { BACKEND_URL } from '../config'
 
@@ -56,6 +58,10 @@ const UserProfileScreen = () => {
     isNearbyUsersSuccess,
     isNearbyUsersError,
     nearbyUsersErrorMessage,
+    isRemoveUserLoading,
+    isRemoveUserSuccess,
+    isRemoveUserError,
+    removeUserErrorMessage,
   } = useSelector((state) => state.location)
 
   // Local State variables
@@ -164,12 +170,32 @@ const UserProfileScreen = () => {
 
   // Function to handle going offline
   const handleGoOffline = () => {
-    Toast.show({
-      type: 'success',
-      text1: 'You are now Offline!',
-      visibilityTime: 3000,
-    })
+    // Remove user from server
+    dispatch(removeUser(userInfo._id))
   }
+
+  // Look for remove user error
+  useEffect(() => {
+    if (isRemoveUserError) {
+      Toast.show({
+        type: 'error',
+        text1: removeUserErrorMessage,
+        visibilityTime: 3000,
+      })
+    } else if (isRemoveUserSuccess) {
+      // Reset location state
+      dispatch(resetOwnLocation())
+      // Reset nearby users state
+      dispatch(resetNearbyUsers())
+      // Show toast
+      Toast.show({
+        type: 'success',
+        text1: 'You are now Offline!',
+        visibilityTime: 3000,
+      })
+    }
+  }, [isRemoveUserError, isRemoveUserSuccess, removeUserErrorMessage, dispatch])
+      
 
   // Add user to server on location success
   useEffect(() => {
@@ -336,39 +362,24 @@ const UserProfileScreen = () => {
 
           {/* Swipable Button */}
           <View className='mt-2 w-[100vw] flex-row justify-center items-center'>
-            {/* {!isLive ? (
-              <SwipeButton
-                title='Swipe right to Go live'
-                swipeSuccessThreshold={70}
-                height={45}
-                width={300}
-                // shouldResetAfterSuccess
-                disableResetOnTap
-                onSwipeSuccess={handleGoLive}
-                thumbIconBackgroundColor='#655A5A'
-                thumbIconBorderColor='#655A5A'
-                railBackgroundColor='#D9D9D9'
-                railBorderColor='#D9D9D9'
-                railFillBackgroundColor='rgba(34, 166, 179, 0.5)'
-                railFillBorderColor='#22A6B3'
+            {/* Switch to go live or go offline */}
+            <View className='flex-row justify-center items-center'>
+              <Switch
+                value={isLive}
+                  onValueChange={() => {
+                    if (isLive) {
+                      handleGoOffline()
+                    } else {
+                      handleGoLive()
+                    }
+                  }
+                }
+                trackColor={{ false: '#767577', true: '#22A6B3' }}
+                thumbColor={isLive ? '#fff' : '#fff'}
+                ios_backgroundColor='#3e3e3e'
+                className='mr-2'
               />
-            ) : (
-              <SwipeButton
-                title={`Live @ Place name`}
-                swipeSuccessThreshold={70}
-                height={45}
-                width={300}
-                disableResetOnTap
-                // shouldResetAfterSuccess
-                onSwipeSuccess={handleGoOffline}
-                thumbIconBackgroundColor='#655A5A'
-                thumbIconBorderColor='#655A5A'
-                railBackgroundColor='#D9D9D9'
-                railBorderColor='#D9D9D9'
-                railFillBackgroundColor='rgba(34, 166, 179, 0.5)'
-                railFillBorderColor='#22A6B3'
-              />
-            )} */}
+            </View>
           </View>
 
           {/* Logout button */}

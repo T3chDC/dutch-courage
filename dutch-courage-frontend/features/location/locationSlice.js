@@ -17,6 +17,11 @@ const initialState = {
   isNearbyUsersSuccess: false,
   isNearbyUsersError: false,
   nearbyUsersErrorMessage: '',
+
+  isRemoveUserLoading: false,
+  isRemoveUserSuccess: false,
+  isRemoveUserError: false,
+  removeUserErrorMessage: '',
 }
 
 // This function is responsible for getting the location of the user
@@ -80,14 +85,14 @@ const locationSlice = createSlice({
   initialState,
   reducers: {
     resetOwnLocation: (state) => {
-      // state.ownLocation = null
+      state.ownLocation = null
       state.isLocationLoading = false
       state.isLocationSuccess = false
       state.isLocationError = false
       state.locationErrorMessage = ''
     },
     resetNearbyUsers: (state) => {
-      // state.nearbyUsers = []
+      state.nearbyUsers = []
       state.isNearbyUsersLoading = false
       state.isNearbyUsersSuccess = false
       state.isNearbyUsersError = false
@@ -134,23 +139,23 @@ const locationSlice = createSlice({
         state.nearbyUsersErrorMessage = action.payload
       })
       .addCase(removeUser.pending, (state) => {
-        state.isNearbyUsersLoading = true
-        state.isNearbyUsersSuccess = false
-        state.isNearbyUsersError = false
-        state.nearbyUsersErrorMessage = ''
+        state.isRemoveUserLoading = true
+        state.isRemoveUserSuccess = false
+        state.isRemoveUserError = false
+        state.removeUserErrorMessage = ''
       })
       .addCase(removeUser.fulfilled, (state, action) => {
-        state.isNearbyUsersLoading = false
-        state.isNearbyUsersSuccess = true
-        state.isNearbyUsersError = false
+        state.isRemoveUserLoading = false
+        state.isRemoveUserSuccess = true
+        state.isRemoveUserError = false
         state.nearbyUsers = []
         state.isUserLive = false
       })
       .addCase(removeUser.rejected, (state, action) => {
-        state.isNearbyUsersLoading = false
-        state.isNearbyUsersSuccess = false
-        state.isNearbyUsersError = true
-        state.nearbyUsersErrorMessage = action.payload
+        state.isRemoveUserLoading = false
+        state.isRemoveUserSuccess = false
+        state.isRemoveUserError = true
+        state.removeUserErrorMessage = action.payload
       })
   },
 })
