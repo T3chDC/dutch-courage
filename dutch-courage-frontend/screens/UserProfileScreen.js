@@ -336,7 +336,7 @@ const UserProfileScreen = () => {
 
           {/* Swipable Button */}
           <View className='mt-2 w-[100vw] flex-row justify-center items-center'>
-            {!isLive ? (
+            {/* {!isLive ? (
               <SwipeButton
                 title='Swipe right to Go live'
                 swipeSuccessThreshold={70}
@@ -368,7 +368,7 @@ const UserProfileScreen = () => {
                 railFillBackgroundColor='rgba(34, 166, 179, 0.5)'
                 railFillBorderColor='#22A6B3'
               />
-            )}
+            )} */}
           </View>
 
           {/* Logout button */}
