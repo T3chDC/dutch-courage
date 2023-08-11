@@ -25,7 +25,6 @@ import {
 import TouchableRatingStars from '../components/TouchableRatingStars'
 import Toast from 'react-native-toast-message'
 import * as Progress from 'react-native-progress'
-import SwipeButton from 'rn-swipe-button'
 import { logout } from '../features/auth/authSlice'
 import { BACKEND_URL } from '../config'
 import LowerRatingModal from '../components/LowerRatingModal'
@@ -379,7 +378,7 @@ const OtherUserProfileScreen = ({ route }) => {
 
           {/* Swipable Button */}
           <View className='mt-5 w-[100vw] flex-row justify-center items-center'>
-            <SwipeButton
+            {/* <SwipeButton
               title={`@${location}`}
               swipeSuccessThreshold={70}
               height={45}
@@ -391,7 +390,7 @@ const OtherUserProfileScreen = ({ route }) => {
               railBorderColor='#D9D9D9'
               railFillBackgroundColor='rgba(34, 166, 179, 0.5)'
               railFillBorderColor='#22A6B3'
-            />
+            /> */}
           </View>
           <View className='flex-row justify-center items-center mt-2'>
             <Text className='text-white text-xl'>Slide to wave </Text>
@@ -416,8 +415,8 @@ const OtherUserProfileScreen = ({ route }) => {
             // reportCount={reportCount}
             // setReportCount={setReportCount}
             rating={otherUserRatingValue}
-              setRating={setRating}
-              userId={userId}
+            setRating={setRating}
+            userId={userId}
           />
 
           {/* Chat and User Profile Icons */}

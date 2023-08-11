@@ -5,8 +5,8 @@ import {
   TouchableOpacity,
   Alert,
   BackHandler,
-  Switch,
 } from 'react-native'
+import Toggle from '../utils/ToggleSwitch'
 import { UserIcon, ChatBubbleLeftRightIcon } from 'react-native-heroicons/solid'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
@@ -195,7 +195,6 @@ const UserProfileScreen = () => {
       })
     }
   }, [isRemoveUserError, isRemoveUserSuccess, removeUserErrorMessage, dispatch])
-      
 
   // Add user to server on location success
   useEffect(() => {
@@ -361,23 +360,35 @@ const UserProfileScreen = () => {
           </View>
 
           {/* Swipable Button */}
-          <View className='mt-2 w-[100vw] flex-row justify-center items-center'>
+          <View className='mt-5 w-[100vw] flex-row justify-center items-center'>
             {/* Switch to go live or go offline */}
             <View className='flex-row justify-center items-center'>
-              <Switch
-                value={isLive}
-                  onValueChange={() => {
-                    if (isLive) {
-                      handleGoOffline()
-                    } else {
-                      handleGoLive()
-                    }
+              <Toggle
+                text={{
+                  on: '@PLace Name',
+                  off: 'Go Live!',
+                  activeTextColor: 'white',
+                  inactiveTextColor: '#655A5A',
+                }}
+                textStyle={{ fontWeight: 'bold', fontSize: 18, }}
+                color={{
+                  indicator: isUserLive ? '#FFFFFF' : '#655A5A',
+                  active: '#22A6B3',
+                  inactive: '#D9D9D9',
+                  activeBorder: '#41B4A4',
+                  inactiveBorder: '#E9E9E9',
+                }}
+                active={isUserLive}
+                disabled={false}
+                width={200}
+                radius={25}
+                onValueChange={() => {
+                  if (isUserLive) {
+                    handleGoOffline()
+                  } else {
+                    handleGoLive()
                   }
-                }
-                trackColor={{ false: '#767577', true: '#22A6B3' }}
-                thumbColor={isLive ? '#fff' : '#fff'}
-                ios_backgroundColor='#3e3e3e'
-                className='mr-2'
+                }}
               />
             </View>
           </View>

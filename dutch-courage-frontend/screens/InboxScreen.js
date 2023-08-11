@@ -23,7 +23,6 @@ import Conversation from '../components/Conversation'
 import * as Progress from 'react-native-progress'
 import Toast from 'react-native-toast-message'
 import socket from '../utils/socketInit'
-import SwipeButton from 'rn-swipe-button'
 
 const InboxScreen = () => {
   // Navigation hook
