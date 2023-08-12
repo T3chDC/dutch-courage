@@ -382,6 +382,7 @@ const UserProfileScreen = () => {
                 disabled={false}
                 width={200}
                 radius={25}
+                willBehaveLikeSwitch={false}
                 onValueChange={() => {
                   if (isUserLive) {
                     handleGoOffline()
