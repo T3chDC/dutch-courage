@@ -6,6 +6,7 @@ import {
   BackHandler,
   ScrollView,
 } from 'react-native'
+import ToggleSwitch from '../components/ToggleSwitch'
 import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
@@ -308,23 +309,35 @@ const UsersNearbyScreen = () => {
                         </Text>
 
                         {/* Block Button */}
-                        <View className='bottom-[5] ml-2'>
-                          {/* <SwipeButton
-                            title="Block"
-                            titleColor="white"
-                            titleFontSize={15}
-                            swipeSuccessThreshold={50}
-                            shouldResetAfterSuccess={true}
-                            height={22}
-                            width={80}
-                            onSwipeSuccess={() => setShowBlockModal(true)}
-                            thumbIconBackgroundColor="white"
-                            thumbIconBorderColor="white"
-                            railBackgroundColor="#FF7F50"
-                            railBorderColor="#FF7F50"
-                            railFillBackgroundColor="rgb(128, 128, 128)"
-                            railFillBorderColor="#808080"
-                          /> */}
+                        <View className='bottom-[0] ml-2'>
+                          <ToggleSwitch
+                            text={{
+                              on: '',
+                              off: 'Block',
+                              activeTextColor: 'white',
+                              inactiveTextColor: 'white',
+                            }}
+                            textStyle={{
+                              fontWeight: 'bold',
+                              fontSize: 12,
+                              marginLeft: -15,
+                            }}
+                            color={{
+                              indicator: '#FFFFFF',
+                              active: '#655A5A',
+                              inactive: '#F28447',
+                              activeBorder: '#655A5A',
+                              inactiveBorder: '#F28447',
+                            }}
+                            active={showBlockModal}
+                            disabled={false}
+                            width={60}
+                            radius={13}
+                            willBehaveLikeSwitch={true}
+                            onValueChange={() => {
+                              setShowBlockModal(true)
+                            }}
+                          />
                         </View>
 
                         {/* Block Modal */}

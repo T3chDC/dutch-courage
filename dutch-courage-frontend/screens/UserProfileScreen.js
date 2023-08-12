@@ -370,7 +370,12 @@ const UserProfileScreen = () => {
                   activeTextColor: 'white',
                   inactiveTextColor: '#655A5A',
                 }}
-                textStyle={{ fontWeight: 'bold', fontSize: 18 }}
+                textStyle={{
+                  fontWeight: 'bold',
+                  fontSize: 18,
+                  marginLeft: isUserLive ? 0 : -58,
+                  marginRight: isUserLive ? -50 : 0,
+                }}
                 color={{
                   indicator: isUserLive ? '#FFFFFF' : '#655A5A',
                   active: '#22A6B3',
