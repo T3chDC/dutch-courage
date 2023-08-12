@@ -6,7 +6,7 @@ import {
   Alert,
   BackHandler,
 } from 'react-native'
-import Toggle from '../utils/ToggleSwitch'
+import ToggleSwitch from '../components/ToggleSwitch'
 import { UserIcon, ChatBubbleLeftRightIcon } from 'react-native-heroicons/solid'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
@@ -363,14 +363,14 @@ const UserProfileScreen = () => {
           <View className='mt-5 w-[100vw] flex-row justify-center items-center'>
             {/* Switch to go live or go offline */}
             <View className='flex-row justify-center items-center'>
-              <Toggle
+              <ToggleSwitch
                 text={{
                   on: '@PLace Name',
                   off: 'Go Live!',
                   activeTextColor: 'white',
                   inactiveTextColor: '#655A5A',
                 }}
-                textStyle={{ fontWeight: 'bold', fontSize: 18, }}
+                textStyle={{ fontWeight: 'bold', fontSize: 18 }}
                 color={{
                   indicator: isUserLive ? '#FFFFFF' : '#655A5A',
                   active: '#22A6B3',
