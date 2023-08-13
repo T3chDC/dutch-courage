@@ -3,6 +3,7 @@
 import { liveUsers } from './locationStorage.js'
 import AppError from '../utils/appError.js'
 import User from '../user/userModel.js'
+import axios from 'axios'
 
 // @ desc This function is responsible for adding the user id and location to the liveUsers array.
 // @ route POST /api/v1/location/addUser
@@ -10,18 +11,29 @@ import User from '../user/userModel.js'
 export const addUser = async (req, res, next) => {
   const userId = req.body.userId
   const location = req.body.location
+  // get location description from google maps geocoding api
+  const locationDescription = await axios.get(
+    `https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.latitude},${location.longitude}&key=${process.env.GOOGLE_API_KEY}`
+  )
+
+  console.log(locationDescription.data.results[0].formatted_address)
 
   try {
     if (liveUsers.some((user) => user.userId === userId)) {
       const index = liveUsers.findIndex((user) => user.userId === userId)
       liveUsers[index].location = location
+      liveUsers[index].locationDescription =
+        locationDescription.data.results[0].formatted_address
     } else {
-      liveUsers.push({ userId, location })
+      liveUsers.push({
+        userId,
+        location,
+        locationDescription:
+          locationDescription.data.results[0].formatted_address,
+      })
     }
 
     const nearbyUsers = await getNearbyUsers(userId, location)
-    console.log(userId)
-    console.log(nearbyUsers)
 
     res.status(200).json({
       status: 'success',
@@ -85,6 +97,7 @@ const getUserDetails = async (nearbyUsers) => {
       rating: userDetail.rating,
       topInterests: userDetail.topInterests.slice(0, 3),
       location: user.location,
+      locationDescription: user.locationDescription,
     })
   }
   return nearbyUsersDetails

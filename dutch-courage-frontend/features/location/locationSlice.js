@@ -1,7 +1,9 @@
 // // This file is responsible for handling the state of the location data
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { GOOGLE_API_KEY } from '../../config'
 import * as Location from 'expo-location'
 import locationService from './locationService'
+import axios from 'axios'
 
 const initialState = {
   ownLocation: null,
@@ -37,8 +39,19 @@ export const getLocation = createAsyncThunk(
       }
 
       const location = await Location.getCurrentPositionAsync({})
+      const locationDetails = await axios.get(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.coords.latitude},${location.coords.longitude}&key=${GOOGLE_API_KEY}`
+      )
 
-      return location
+      const locationDescription =
+        locationDetails.data.results[0].formatted_address
+
+      const detailedLocation = {
+        ...location,
+        locationDescription,
+      }
+
+      return detailedLocation
     } catch (err) {
       const message = err.message || err.toString()
       return thunkAPI.rejectWithValue(message)

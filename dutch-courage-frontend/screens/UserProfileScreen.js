@@ -365,14 +365,16 @@ const UserProfileScreen = () => {
             <View className='flex-row justify-center items-center'>
               <ToggleSwitch
                 text={{
-                  on: '@PLace Name',
+                  on: ownLocation
+                      ? `@${ownLocation.locationDescription.split(',')[0]}`
+                    : '@Swipe to go offline',
                   off: 'Go Live!',
                   activeTextColor: 'white',
                   inactiveTextColor: '#655A5A',
                 }}
                 textStyle={{
                   fontWeight: 'bold',
-                  fontSize: 18,
+                  fontSize: 16,
                   marginLeft: isUserLive ? 0 : -58,
                   marginRight: isUserLive ? -50 : 0,
                 }}
