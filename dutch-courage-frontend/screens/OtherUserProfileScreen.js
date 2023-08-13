@@ -22,6 +22,7 @@ import {
   resetCreateMessage,
   resetMessage,
 } from '../features/message/messageSlice'
+import ToggleSwitch from '../components/ToggleSwitch'
 import TouchableRatingStars from '../components/TouchableRatingStars'
 import Toast from 'react-native-toast-message'
 import * as Progress from 'react-native-progress'
@@ -82,6 +83,7 @@ const OtherUserProfileScreen = ({ route }) => {
   const [gender, setGender] = useState('')
   const [location, setLocation] = useState('')
   const [topInterests, setTopInterests] = useState([])
+  const [isSwitchOn, setIsSwitchOn] = useState(false)
 
   // Staste for rating of other users
   const [otherUserRatingValue, setOtherUserRatingValue] = useState(0)
@@ -378,6 +380,40 @@ const OtherUserProfileScreen = ({ route }) => {
 
           {/* Swipable Button */}
           <View className='mt-5 w-[100vw] flex-row justify-center items-center'>
+            <ToggleSwitch
+              text={{
+                on: '@PLace Name',
+                off: '@PLace Name',
+                activeTextColor: 'white',
+                inactiveTextColor: '#655A5A',
+              }}
+              textStyle={{
+                fontWeight: 'bold',
+                fontSize: 18,
+                marginLeft: isSwitchOn ? 0 : -50,
+                marginRight: isSwitchOn ? -50 : 0,
+              }}
+              color={{
+                indicator: isSwitchOn ? '#FFFFFF' : '#655A5A',
+                active: '#22A6B3',
+                inactive: '#D9D9D9',
+                activeBorder: '#41B4A4',
+                inactiveBorder: '#E9E9E9',
+              }}
+              active={isSwitchOn}
+              disabled={false}
+              width={200}
+              radius={25}
+              willBehaveLikeSwitch={false}
+              onValueChange={() => {
+                if (isSwitchOn) {
+                  setIsSwitchOn(!isSwitchOn)
+                  return
+                }
+                handleSwipe()
+                setIsSwitchOn(!isSwitchOn)
+              }}
+            />
             {/* <SwipeButton
               title={`@${location}`}
               swipeSuccessThreshold={70}
