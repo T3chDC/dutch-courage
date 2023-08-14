@@ -26,8 +26,8 @@ import {
   resetOwnLocation,
   resetNearbyUsers,
 } from '../features/location/locationSlice'
-
-import { BACKEND_URL } from '../config'
+import axios from 'axios'
+import { BACKEND_URL, GOOGLE_API_KEY } from '../config'
 import MapView, { Marker } from 'react-native-maps'
 
 const LocationFinderScreen = () => {
@@ -51,16 +51,17 @@ const LocationFinderScreen = () => {
     nearbyUsersErrorMessage,
   } = useSelector((state) => state.location)
 
-  const {
-    meUser,
-    isMeGetLoading,
-    isMeGetSuccess,
-    isMeGetError,
-    meGetErrorMessage,
-  } = useSelector((state) => state.user)
+  // const {
+  //   meUser,
+  //   isMeGetLoading,
+  //   isMeGetSuccess,
+  //   isMeGetError,
+  //   meGetErrorMessage,
+  // } = useSelector((state) => state.user)
 
   //Local state variables
-  const [location, setLocation] = useState('')
+  const [searchText, setSearchText] = useState('')
+  const [nearbyLocations, setNearbyLocations] = useState([])
 
   // Check if user is logged in
   useEffect(() => {
@@ -84,22 +85,6 @@ const LocationFinderScreen = () => {
     return () => backHandler.remove()
   }, [navigation])
 
-  //Get User Info
-  useEffect(() => {
-    if (isMeGetError) {
-      Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2: meGetErrorMessage,
-        visibilityTime: 3000,
-      })
-    } else if (isMeGetSuccess) {
-      setLocation(meUser.location)
-    } else {
-      dispatch(getMeUser())
-    }
-  }, [isMeGetError, isMeGetSuccess, meGetErrorMessage, dispatch])
-
   // Scroll to bottom of the screen when keyboard is open
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', () =>
@@ -111,6 +96,47 @@ const LocationFinderScreen = () => {
       Keyboard.removeAllListeners('keyboardDidShow')
     }
   }, [])
+
+  // update nearbylocation using google places api
+  useEffect(() => {
+    if (ownLocation) {
+      const initialKeyword = 'restaurant, food, cafe, bar, point_of_interest'
+      const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${ownLocation.coords.latitude},${ownLocation.coords.longitude}&radius=200&keyword=${initialKeyword}&key=${GOOGLE_API_KEY}`
+      axios
+        .get(url)
+        .then((res) => {
+          setNearbyLocations(res.data.results)
+        })
+        .catch((err) => {
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: 'Could not fetch nearby locations',
+          })
+          console.log(err)
+        })
+    }
+  }, [ownLocation])
+
+  // change nearbylocation based on search text
+  useEffect(() => {
+    if (searchText) {
+      const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${ownLocation.coords.latitude},${ownLocation.coords.longitude}&radius=200&keyword=${searchText}&key=${GOOGLE_API_KEY}`
+      axios
+        .get(url)
+        .then((res) => {
+          setNearbyLocations(res.data.results)
+        })
+        .catch((err) => {
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: 'Could not fetch nearby locations',
+          })
+          console.log(err)
+        })
+    }
+  }, [searchText])
 
   return (
     <View className='bg-black flex-1 justify-start items-center relative'>
@@ -157,9 +183,9 @@ const LocationFinderScreen = () => {
           >
             <View className='flex flex-row'>
               <MapView
-                initialRegion={{
-                  latitude: 23.7941139,
-                  longitude: 90.4038988,
+                region={{
+                  latitude: ownLocation.coords.latitude,
+                  longitude: ownLocation.coords.longitude,
                   latitudeDelta: 0.0922,
                   longitudeDelta: 0.0421,
                 }}
@@ -169,8 +195,34 @@ const LocationFinderScreen = () => {
                 }}
               >
                 <Marker
-                  coordinate={{ latitude: 23.7941139, longitude: 90.4038988 }}
-                ></Marker>
+                  coordinate={{
+                    latitude: ownLocation.coords.latitude,
+                    longitude: ownLocation.coords.longitude,
+                  }}
+                >
+                  <View
+                    style={{
+                      height: 50,
+                      width: 50,
+                      borderRadius: 25,
+                      borderWidth: 3,
+                      borderColor: 'blue',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <Image
+                      source={{
+                        uri: `${BACKEND_URL}/uploads/${userInfo.imageUrl.slice(
+                          userInfo.imageUrl.lastIndexOf('/') + 1
+                        )}`,
+                      }}
+                      style={{
+                        height: 50,
+                        width: 50,
+                      }}
+                    />
+                  </View>
+                </Marker>
               </MapView>
             </View>
 
@@ -185,6 +237,10 @@ const LocationFinderScreen = () => {
                   placeholder='&nbsp; Find Me'
                   placeholderTextColor='#808080'
                   keyboardType='default'
+                  value={searchText}
+                  onChange={(e) => {
+                    setSearchText(e.nativeEvent.text)
+                  }}
                   className='text-white text-base w-[320] h-10 flex-row mt-5 border-2 rounded-xl border-[#22A6B3] px-10'
                 />
                 <TouchableOpacity className='bottom-8 left-2 w-[20]'>
@@ -194,55 +250,19 @@ const LocationFinderScreen = () => {
 
               {/* Locations */}
               <View className=''>
-                <View className='left-[15vw]'>
-                  <Text className='text-white text-base font-bold'>
-                    Jax Bar
-                  </Text>
-                  <Text className='text-white text-sm'>
-                    5-7 Brunswick Rd, Gloucester
-                  </Text>
-                </View>
-                <View className='flex flex-row left-12 mt-[15] h-[1] w-[400] bg-[#22A6B3]'></View>
-
-                <View className='left-[15vw] mt-5'>
-                  <Text className='text-white text-base font-bold'>
-                    Jax Bar
-                  </Text>
-                  <Text className='text-white text-sm'>
-                    5-7 Brunswick Rd, Gloucester
-                  </Text>
-                </View>
-                <View className='flex flex-row left-12 mt-[15] h-[1] w-[400] bg-[#22A6B3]'></View>
-
-                <View className='left-[15vw] mt-5'>
-                  <Text className='text-white text-base font-bold'>
-                    Jax Bar
-                  </Text>
-                  <Text className='text-white text-sm'>
-                    5-7 Brunswick Rd, Gloucester
-                  </Text>
-                </View>
-                <View className='flex flex-row left-12 mt-[15] h-[1] w-[400] bg-[#22A6B3]'></View>
-
-                <View className='left-[15vw] mt-5'>
-                  <Text className='text-white text-base font-bold'>
-                    Jax Bar
-                  </Text>
-                  <Text className='text-white text-sm'>
-                    5-7 Brunswick Rd, Gloucester
-                  </Text>
-                </View>
-                <View className='flex flex-row left-12 mt-[15] h-[1] w-[400] bg-[#22A6B3]'></View>
-
-                <View className='left-[15vw] mt-5'>
-                  <Text className='text-white text-base font-bold'>
-                    Jax Bar
-                  </Text>
-                  <Text className='text-white text-sm'>
-                    5-7 Brunswick Rd, Gloucester
-                  </Text>
-                </View>
-                <View className='flex flex-row left-12 mt-[15] h-[1] w-[400] bg-[#22A6B3]'></View>
+                {nearbyLocations.map((location) => (
+                  <>
+                    <View className='left-[15vw] mt-5'>
+                      <Text className='text-white text-base font-bold'>
+                        {location.name}
+                      </Text>
+                      <Text className='text-white text-sm'>
+                        {location.vicinity}
+                      </Text>
+                    </View>
+                    <View className='flex flex-row left-12 mt-[15] h-[1] w-[400] bg-[#22A6B3]'></View>
+                  </>
+                ))}
               </View>
             </View>
           </ScrollView>

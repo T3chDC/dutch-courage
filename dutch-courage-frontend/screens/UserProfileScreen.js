@@ -205,7 +205,7 @@ const UserProfileScreen = () => {
         visibilityTime: 3000,
       })
     } else if (isLocationSuccess) {
-      console.log('ownLocation', ownLocation)
+      // console.log('ownLocation', ownLocation)
       //Add user to server
       dispatch(addUser(userInfo._id))
     }
