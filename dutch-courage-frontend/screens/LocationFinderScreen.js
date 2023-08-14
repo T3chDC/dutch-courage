@@ -205,7 +205,12 @@ const LocationFinderScreen = () => {
         >
           <ScrollView
             // className='flex flex-col justify-end items-center w-80'
-
+            contentContainerStyle={{
+              flexGrow: 1,
+              minHeight: 1000,
+              justifyContent: 'flex-start',
+              alignItems: 'flex-start',
+            }}
             ref={scrollViewRef}
             // onContentSizeChange={() => {
             //   if (nearbyLocations.length <= 3) {
@@ -282,9 +287,9 @@ const LocationFinderScreen = () => {
 
               {/* Locations */}
               <View className=''>
-                {nearbyLocations.map((location) => (
+                {nearbyLocations.map((location, idx) => (
                   <>
-                    <View className='left-[15vw] mt-5'>
+                    <View key={idx} className='left-[15vw] mt-5'>
                       <Text className='text-white text-base font-bold'>
                         {location.name}
                       </Text>
