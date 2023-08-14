@@ -87,13 +87,27 @@ const LocationFinderScreen = () => {
 
   // Scroll to bottom of the screen when keyboard is open
   useEffect(() => {
-    Keyboard.addListener('keyboardDidShow', () =>
-      scrollViewRef.current.scrollToEnd({ animated: true })
-    )
+    Keyboard.addListener('keyboardDidShow', () => {
+      // Scroll to top of the screen
+      scrollViewRef.current.scrollTo({ x: 0, y: 400, animated: true })
+    })
 
     // cleanup function
     return () => {
       Keyboard.removeAllListeners('keyboardDidShow')
+    }
+  }, [])
+
+  // scroll to top of the screen when keyboard is closed
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidHide', () => {
+      // Scroll to top of the screen
+      scrollViewRef.current.scrollTo({ x: 0, y: 0, animated: true })
+    })
+
+    // cleanup function
+    return () => {
+      Keyboard.removeAllListeners('keyboardDidHide')
     }
   }, [])
 
@@ -122,6 +136,22 @@ const LocationFinderScreen = () => {
   useEffect(() => {
     if (searchText) {
       const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${ownLocation.coords.latitude},${ownLocation.coords.longitude}&radius=200&keyword=${searchText}&key=${GOOGLE_API_KEY}`
+      axios
+        .get(url)
+        .then((res) => {
+          setNearbyLocations(res.data.results)
+        })
+        .catch((err) => {
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: 'Could not fetch nearby locations',
+          })
+          console.log(err)
+        })
+    } else {
+      const initialKeyword = 'restaurant, food, cafe, bar, point_of_interest'
+      const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${ownLocation.coords.latitude},${ownLocation.coords.longitude}&radius=200&keyword=${initialKeyword}&key=${GOOGLE_API_KEY}`
       axios
         .get(url)
         .then((res) => {
@@ -177,9 +207,11 @@ const LocationFinderScreen = () => {
             // className='flex flex-col justify-end items-center w-80'
 
             ref={scrollViewRef}
-            onContentSizeChange={() =>
-              scrollViewRef.current.scrollToEnd({ animated: true })
-            }
+            // onContentSizeChange={() => {
+            //   if (nearbyLocations.length <= 3) {
+            //     scrollViewRef.current.scrollTo({ x: 0, y: 200, animated: true })
+            //   }
+            // }}
           >
             <View className='flex flex-row'>
               <MapView
