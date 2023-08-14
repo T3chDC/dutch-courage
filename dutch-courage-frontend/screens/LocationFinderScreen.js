@@ -72,7 +72,6 @@ const LocationFinderScreen = () => {
   // function to handle to go back
   useEffect(() => {
     const backAction = () => {
-      dispatch(getAllConversationsOfUser())
       navigation.goBack()
       return true
     }
@@ -84,31 +83,6 @@ const LocationFinderScreen = () => {
 
     return () => backHandler.remove()
   }, [navigation])
-
-  //Exit App on Back Press
-  useEffect(() => {
-    const backAction = () => {
-      Alert.alert(
-        'Hold on!',
-        'Are you sure you want to exit the app?',
-        [
-          {
-            text: 'Cancel',
-            onPress: () => null,
-            style: 'cancel',
-          },
-          { text: 'YES', onPress: () => BackHandler.exitApp() },
-        ],
-        { cancelable: false }
-      )
-      return true
-    }
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      backAction
-    )
-    return () => backHandler.remove()
-  }, [userInfo, dispatch, navigation])
 
   //Get User Info
   useEffect(() => {
@@ -191,7 +165,7 @@ const LocationFinderScreen = () => {
                 }}
                 style={{
                   width: 400,
-                  height: 450,
+                  height: 400,
                 }}
               >
                 <Marker
@@ -221,6 +195,36 @@ const LocationFinderScreen = () => {
               {/* Locations */}
               <View className=''>
                 <View className='left-[15vw]'>
+                  <Text className='text-white text-base font-bold'>
+                    Jax Bar
+                  </Text>
+                  <Text className='text-white text-sm'>
+                    5-7 Brunswick Rd, Gloucester
+                  </Text>
+                </View>
+                <View className='flex flex-row left-12 mt-[15] h-[1] w-[400] bg-[#22A6B3]'></View>
+
+                <View className='left-[15vw] mt-5'>
+                  <Text className='text-white text-base font-bold'>
+                    Jax Bar
+                  </Text>
+                  <Text className='text-white text-sm'>
+                    5-7 Brunswick Rd, Gloucester
+                  </Text>
+                </View>
+                <View className='flex flex-row left-12 mt-[15] h-[1] w-[400] bg-[#22A6B3]'></View>
+
+                <View className='left-[15vw] mt-5'>
+                  <Text className='text-white text-base font-bold'>
+                    Jax Bar
+                  </Text>
+                  <Text className='text-white text-sm'>
+                    5-7 Brunswick Rd, Gloucester
+                  </Text>
+                </View>
+                <View className='flex flex-row left-12 mt-[15] h-[1] w-[400] bg-[#22A6B3]'></View>
+
+                <View className='left-[15vw] mt-5'>
                   <Text className='text-white text-base font-bold'>
                     Jax Bar
                   </Text>
