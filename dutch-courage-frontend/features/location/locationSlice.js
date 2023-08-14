@@ -91,7 +91,7 @@ export const updateUserLocationDescription = createAsyncThunk(
   'location/updateUserLocationDescription',
   async (locationDescription, thunkAPI) => {
     try {
-      const userId = thunkAPI.getState().auth.userId
+      const userId = thunkAPI.getState().auth.userInfo._id
       const token = thunkAPI.getState().auth.token
       return await locationService.updateUserLocationDescription(
         userId,

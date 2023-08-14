@@ -272,6 +272,8 @@ const UsersNearbyScreen = () => {
                           }
                           navigation.navigate('OtherUserProfile', {
                             userId: nearbyUser._id,
+                            locationDescription:
+                              nearbyUser.locationDescription.split(',')[0],
                           })
                         }}
                       >

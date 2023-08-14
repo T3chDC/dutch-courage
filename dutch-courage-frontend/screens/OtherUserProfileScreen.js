@@ -38,7 +38,7 @@ const OtherUserProfileScreen = ({ route }) => {
   const dispatch = useDispatch()
 
   // Route params
-  const { userId } = route.params
+  const { userId, locationDescription } = route.params
 
   // Redux State variables
   const { userInfo } = useSelector((state) => state.auth)
@@ -382,8 +382,12 @@ const OtherUserProfileScreen = ({ route }) => {
           <View className='mt-5 w-[100vw] flex-row justify-center items-center'>
             <ToggleSwitch
               text={{
-                on: '@PLace Name',
-                off: '@PLace Name',
+                on: locationDescription
+                  ? `@${locationDescription}`
+                  : 'User is not live',
+                off: locationDescription
+                  ? `@${locationDescription}`
+                  : 'User is not live',
                 activeTextColor: 'white',
                 inactiveTextColor: '#655A5A',
               }}

@@ -16,8 +16,6 @@ export const addUser = async (req, res, next) => {
     `https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.latitude},${location.longitude}&key=${process.env.GOOGLE_API_KEY}`
   )
 
-  
-
   try {
     if (liveUsers.some((user) => user.userId === userId)) {
       const index = liveUsers.findIndex((user) => user.userId === userId)
@@ -51,19 +49,27 @@ export const updateUserLocationDescription = async (req, res, next) => {
   const userId = req.body.userId
   const locationDescription = req.body.locationDescription
 
+  console.log(userId)
+
   try {
     if (liveUsers.some((user) => user.userId === userId)) {
       const index = liveUsers.findIndex((user) => user.userId === userId)
       liveUsers[index].locationDescription = locationDescription
+    } else {
+      return next(new AppError('User not found', 404))
     }
+    console.log(liveUsers)
+
+    const index = liveUsers.findIndex((user) => user.userId === userId)
 
     res.status(200).json({
       status: 'success',
       data: {
-        locationDescription: locationDescription,
+        locationDescription: liveUsers[index].locationDescription,
       },
     })
   } catch (err) {
+    console.log(err)
     return next(new AppError('Something went wrong', 500))
   }
 }

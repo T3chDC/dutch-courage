@@ -2,3 +2,4 @@
 
 // Storing the user ids and locations of the live users
 export const liveUsers = []
+
