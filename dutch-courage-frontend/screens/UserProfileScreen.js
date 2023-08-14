@@ -366,7 +366,7 @@ const UserProfileScreen = () => {
               <ToggleSwitch
                 text={{
                   on: ownLocation
-                      ? `@${ownLocation.locationDescription.split(',')[0]}`
+                    ? `@${ownLocation.locationDescription.split(',')[0]}`
                     : '@Swipe to go offline',
                   off: 'Go Live!',
                   activeTextColor: 'white',
@@ -390,6 +390,13 @@ const UserProfileScreen = () => {
                 width={200}
                 radius={25}
                 willBehaveLikeSwitch={false}
+                onTouch={() => {
+                  if (isUserLive) {
+                    navigation.navigate('LocationFinder')
+                  } else {
+                    return
+                  }
+                }}
                 onValueChange={() => {
                   if (isUserLive) {
                     handleGoOffline()
@@ -443,7 +450,7 @@ const UserProfileScreen = () => {
           )}
 
           {/* Location Finder Screen */}
-          <View className='flex-row justify-center items-center mt-2'>
+          {/* <View className='flex-row justify-center items-center mt-2'>
             <TouchableOpacity
               onPress={() => navigation.navigate('LocationFinder')}
             >
@@ -453,7 +460,7 @@ const UserProfileScreen = () => {
                 </Text>
               </View>
             </TouchableOpacity>
-          </View>
+          </View> */}
 
           {/* Chat and User Profile Icons */}
           <View className='absolute bottom-3 w-[100vw] flex-row justify-between items-center'>

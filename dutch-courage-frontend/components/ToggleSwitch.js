@@ -102,12 +102,15 @@ class ToggleSwitch extends React.Component {
       textStyle = {},
       disabled = false,
       willBehaveLikeSwitch = false,
+      onTouch = null,
     } = this.props
     const { isActive } = this.state
 
     return (
       <TouchableOpacity
-        onPress={willBehaveLikeSwitch ? this.toggleSwitch : null}
+        onPress={
+          willBehaveLikeSwitch ? this.toggleSwitch : onTouch ? onTouch : null
+        }
         activeOpacity={1}
         ref={this.setTouchableRef}
         disabled={disabled}
