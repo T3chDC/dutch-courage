@@ -16,7 +16,7 @@ export const addUser = async (req, res, next) => {
     `https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.latitude},${location.longitude}&key=${process.env.GOOGLE_API_KEY}`
   )
 
-  console.log(locationDescription.data.results[0].formatted_address)
+  
 
   try {
     if (liveUsers.some((user) => user.userId === userId)) {
@@ -38,6 +38,30 @@ export const addUser = async (req, res, next) => {
     res.status(200).json({
       status: 'success',
       data: nearbyUsers.length > 0 ? nearbyUsers : [],
+    })
+  } catch (err) {
+    return next(new AppError('Something went wrong', 500))
+  }
+}
+
+// @ desc This function is responsible for updating the user locationDescription in the liveUsers array.
+// @ route POST /api/v1/location/updateUserLocationDescription
+// @ access Private/regularUser
+export const updateUserLocationDescription = async (req, res, next) => {
+  const userId = req.body.userId
+  const locationDescription = req.body.locationDescription
+
+  try {
+    if (liveUsers.some((user) => user.userId === userId)) {
+      const index = liveUsers.findIndex((user) => user.userId === userId)
+      liveUsers[index].locationDescription = locationDescription
+    }
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        locationDescription: locationDescription,
+      },
     })
   } catch (err) {
     return next(new AppError('Something went wrong', 500))

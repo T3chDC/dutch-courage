@@ -21,10 +21,8 @@ import {
   resetMeGetUser,
 } from '../features/user/userSlice'
 import {
-  getLocation,
-  addUser,
-  resetOwnLocation,
-  resetNearbyUsers,
+  updateUserLocationDescription,
+  resetUpdateUserLocationDescription,
 } from '../features/location/locationSlice'
 import axios from 'axios'
 import { BACKEND_URL, GOOGLE_API_KEY } from '../config'
@@ -39,16 +37,10 @@ const LocationFinderScreen = () => {
   const { userInfo } = useSelector((state) => state.auth)
   const {
     ownLocation,
-    isLocationLoading,
-    isLocationSuccess,
-    isLocationError,
-    locationErrorMessage,
-    isUserLive,
-    nearbyUsers,
-    isNearbyUsersLoading,
-    isNearbyUsersSuccess,
-    isNearbyUsersError,
-    nearbyUsersErrorMessage,
+    isUpdateUserLocationDescriptionLoading,
+    isUpdateUserLocationDescriptionSuccess,
+    isUpdateUserLocationDescriptionError,
+    updateUserLocationDescriptionErrorMessage,
   } = useSelector((state) => state.location)
 
   // const {
@@ -167,6 +159,26 @@ const LocationFinderScreen = () => {
         })
     }
   }, [searchText])
+
+  // Check if user location description is updated
+  useEffect(() => {
+    if (isUpdateUserLocationDescriptionSuccess) {
+      Toast.show({
+        type: 'success',
+        text1: 'Success',
+        text2: 'Your location is updated',
+      })
+      dispatch(resetUpdateUserLocationDescription())
+      navigation.goBack()
+    } else if (isUpdateUserLocationDescriptionError) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: updateUserLocationDescriptionErrorMessage,
+      })
+      dispatch(resetUpdateUserLocationDescription())
+    }
+  }, [isUpdateUserLocationDescriptionSuccess, dispatch, navigation])
 
   return (
     <View className='bg-black flex-1 justify-start items-center relative'>
@@ -288,8 +300,13 @@ const LocationFinderScreen = () => {
               {/* Locations */}
               <View className=''>
                 {nearbyLocations.map((location, idx) => (
-                  <>
-                    <View key={idx} className='left-[15vw] mt-5'>
+                  <TouchableOpacity
+                    key={idx}
+                    onPress={() => {
+                      dispatch(updateUserLocationDescription(location.name))
+                    }}
+                  >
+                    <View className='left-[15vw] mt-5'>
                       <Text className='text-white text-base font-bold'>
                         {location.name}
                       </Text>
@@ -298,7 +315,7 @@ const LocationFinderScreen = () => {
                       </Text>
                     </View>
                     <View className='flex flex-row left-12 mt-[15] h-[1] w-[400] bg-[#22A6B3]'></View>
-                  </>
+                  </TouchableOpacity>
                 ))}
               </View>
             </View>

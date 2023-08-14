@@ -20,6 +20,11 @@ const initialState = {
   isNearbyUsersError: false,
   nearbyUsersErrorMessage: '',
 
+  isUpdateUserLocationDescriptionLoading: false,
+  isUpdateUserLocationDescriptionSuccess: false,
+  isUpdateUserLocationDescriptionError: false,
+  updateUserLocationDescriptionErrorMessage: '',
+
   isRemoveUserLoading: false,
   isRemoveUserSuccess: false,
   isRemoveUserError: false,
@@ -38,13 +43,16 @@ export const getLocation = createAsyncThunk(
         )
       }
 
+      const previousLocation = thunkAPI.getState().location.ownLocation
+
       const location = await Location.getCurrentPositionAsync({})
       const locationDetails = await axios.get(
         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.coords.latitude},${location.coords.longitude}&key=${GOOGLE_API_KEY}`
       )
 
-      const locationDescription =
-        locationDetails.data.results[0].formatted_address
+      const locationDescription = previousLocation
+        ? previousLocation.locationDescription
+        : locationDetails.data.results[0].formatted_address
 
       const detailedLocation = {
         ...location,
@@ -71,6 +79,25 @@ export const addUser = createAsyncThunk(
       const location = detailedLocation.coords
       const token = thunkAPI.getState().auth.token
       return await locationService.addUser(userId, location, token)
+    } catch (err) {
+      const message = err.message || err.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+// This function is responsible for updating the user's location description
+export const updateUserLocationDescription = createAsyncThunk(
+  'location/updateUserLocationDescription',
+  async (locationDescription, thunkAPI) => {
+    try {
+      const userId = thunkAPI.getState().auth.userId
+      const token = thunkAPI.getState().auth.token
+      return await locationService.updateUserLocationDescription(
+        userId,
+        locationDescription,
+        token
+      )
     } catch (err) {
       const message = err.message || err.toString()
       return thunkAPI.rejectWithValue(message)
@@ -110,6 +137,12 @@ const locationSlice = createSlice({
       state.isNearbyUsersSuccess = false
       state.isNearbyUsersError = false
       state.nearbyUsersErrorMessage = ''
+    },
+    resetUpdateUserLocationDescription: (state) => {
+      state.isUpdateUserLocationDescriptionLoading = false
+      state.isUpdateUserLocationDescriptionSuccess = false
+      state.isUpdateUserLocationDescriptionError = false
+      state.updateUserLocationDescriptionErrorMessage = ''
     },
   },
   extraReducers: (builder) => {
@@ -151,6 +184,25 @@ const locationSlice = createSlice({
         state.isNearbyUsersError = true
         state.nearbyUsersErrorMessage = action.payload
       })
+      .addCase(updateUserLocationDescription.pending, (state) => {
+        state.isUpdateUserLocationDescriptionLoading = true
+        state.isUpdateUserLocationDescriptionSuccess = false
+        state.isUpdateUserLocationDescriptionError = false
+        state.updateUserLocationDescriptionErrorMessage = ''
+      })
+      .addCase(updateUserLocationDescription.fulfilled, (state, action) => {
+        state.isUpdateUserLocationDescriptionLoading = false
+        state.isUpdateUserLocationDescriptionSuccess = true
+        state.isUpdateUserLocationDescriptionError = false
+        state.ownLocation.locationDescription =
+          action.payload.locationDescription
+      })
+      .addCase(updateUserLocationDescription.rejected, (state, action) => {
+        state.isUpdateUserLocationDescriptionLoading = false
+        state.isUpdateUserLocationDescriptionSuccess = false
+        state.isUpdateUserLocationDescriptionError = true
+        state.updateUserLocationDescriptionErrorMessage = action.payload
+      })
       .addCase(removeUser.pending, (state) => {
         state.isRemoveUserLoading = true
         state.isRemoveUserSuccess = false
@@ -173,6 +225,10 @@ const locationSlice = createSlice({
   },
 })
 
-export const { resetOwnLocation, resetNearbyUsers } = locationSlice.actions
+export const {
+  resetOwnLocation,
+  resetNearbyUsers,
+  resetUpdateUserLocationDescription,
+} = locationSlice.actions
 
 export default locationSlice.reducer
