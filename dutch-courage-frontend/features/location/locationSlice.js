@@ -7,6 +7,7 @@ import axios from 'axios'
 
 const initialState = {
   ownLocation: null,
+  isLocationDefinedByUser: false,
   isLocationLoading: false,
   isLocationSuccess: false,
   isLocationError: false,
@@ -44,15 +45,20 @@ export const getLocation = createAsyncThunk(
       }
 
       const previousLocation = thunkAPI.getState().location.ownLocation
+      const isLocationSetByUser =
+        thunkAPI.getState().location.isLocationDefinedByUser
 
       const location = await Location.getCurrentPositionAsync({})
       const locationDetails = await axios.get(
         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.coords.latitude},${location.coords.longitude}&key=${GOOGLE_API_KEY}`
       )
 
-      const locationDescription = previousLocation
-        ? previousLocation.locationDescription
-        : locationDetails.data.results[0].formatted_address
+      const locationDescription =
+        isLocationSetByUser ||
+        (previousLocation &&
+          previousLocation.locationDescription === locationDescription)
+          ? previousLocation.locationDescription
+          : locationDetails.data.results[0].formatted_address
 
       const detailedLocation = {
         ...location,
@@ -194,6 +200,7 @@ const locationSlice = createSlice({
         state.isUpdateUserLocationDescriptionLoading = false
         state.isUpdateUserLocationDescriptionSuccess = true
         state.isUpdateUserLocationDescriptionError = false
+        state.isLocationDefinedByUser = true
         state.ownLocation.locationDescription =
           action.payload.locationDescription
       })

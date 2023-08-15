@@ -1,9 +1,11 @@
 // This file contains the logic for manipulating the location of the live users.
 // Importing the liveUsers array from locationStorage.js
-import { liveUsers } from './locationStorage.js'
+// import { liveUsers } from './locationStorage.js'
 import AppError from '../utils/appError.js'
 import User from '../user/userModel.js'
 import axios from 'axios'
+
+let liveUsers = []
 
 // @ desc This function is responsible for adding the user id and location to the liveUsers array.
 // @ route POST /api/v1/location/addUser
@@ -20,8 +22,8 @@ export const addUser = async (req, res, next) => {
     if (liveUsers.some((user) => user.userId === userId)) {
       const index = liveUsers.findIndex((user) => user.userId === userId)
       liveUsers[index].location = location
-      liveUsers[index].locationDescription =
-        locationDescription.data.results[0].formatted_address
+      // liveUsers[index].locationDescription =
+      //   locationDescription.data.results[0].formatted_address
     } else {
       liveUsers.push({
         userId,
@@ -31,6 +33,9 @@ export const addUser = async (req, res, next) => {
       })
     }
 
+    console.log(liveUsers)
+    console.log('from add')
+
     const nearbyUsers = await getNearbyUsers(userId, location)
 
     res.status(200).json({
@@ -38,6 +43,7 @@ export const addUser = async (req, res, next) => {
       data: nearbyUsers.length > 0 ? nearbyUsers : [],
     })
   } catch (err) {
+    console.log(err)
     return next(new AppError('Something went wrong', 500))
   }
 }
@@ -59,6 +65,7 @@ export const updateUserLocationDescription = async (req, res, next) => {
       return next(new AppError('User not found', 404))
     }
     console.log(liveUsers)
+    console.log('from update')
 
     const index = liveUsers.findIndex((user) => user.userId === userId)
 
@@ -81,7 +88,10 @@ export const removeUser = (req, res, next) => {
   const userId = req.body.userId
 
   try {
-    liveUsers.filter((user) => user.userId !== userId)
+    liveUsers = liveUsers.filter((user) => user.userId !== userId)
+
+    console.log(liveUsers)
+    console.log('from remove')
 
     res.status(200).json({
       status: 'success',
@@ -90,6 +100,7 @@ export const removeUser = (req, res, next) => {
       },
     })
   } catch (err) {
+    console.log(err)
     return next(new AppError('Something went wrong', 500))
   }
 }
