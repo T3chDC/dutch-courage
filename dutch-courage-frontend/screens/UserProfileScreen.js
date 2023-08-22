@@ -465,23 +465,6 @@ const UserProfileScreen = () => {
 
           {/* Chat and User Profile Icons */}
           <BottomDrawer />
-          {/* <View className='absolute bottom-3 w-[100vw] flex-row justify-between items-center'>
-            <View className='w-1/2 flex-row justify-center items-center'>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('UserInbox')}
-              >
-                <ChatBubbleLeftRightIcon size={40} color={'white'} />
-              </TouchableOpacity>
-            </View>
-
-            <View className='w-1/2 flex-row justify-center items-center'>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('UserProfileEdit')}
-              >
-                <UserIcon size={40} color={'white'} />
-              </TouchableOpacity>
-            </View>
-          </View> */}
         </>
       )}
     </View>
