@@ -24,6 +24,7 @@ import {
   resetNearbyUsers,
 } from '../features/location/locationSlice'
 import RatingStars from '../components/RatingStars'
+import BottomDrawer from '../components/BottomDrawer'
 import Toast from 'react-native-toast-message'
 import * as Progress from 'react-native-progress'
 // import SwipeButton from 'rn-swipe-button'
@@ -463,7 +464,8 @@ const UserProfileScreen = () => {
           </View> */}
 
           {/* Chat and User Profile Icons */}
-          <View className='absolute bottom-3 w-[100vw] flex-row justify-between items-center'>
+          <BottomDrawer />
+          {/* <View className='absolute bottom-3 w-[100vw] flex-row justify-between items-center'>
             <View className='w-1/2 flex-row justify-center items-center'>
               <TouchableOpacity
                 onPress={() => navigation.navigate('UserInbox')}
@@ -479,7 +481,7 @@ const UserProfileScreen = () => {
                 <UserIcon size={40} color={'white'} />
               </TouchableOpacity>
             </View>
-          </View>
+          </View> */}
         </>
       )}
     </View>

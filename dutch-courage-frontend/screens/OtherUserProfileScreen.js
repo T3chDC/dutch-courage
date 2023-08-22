@@ -29,6 +29,7 @@ import * as Progress from 'react-native-progress'
 import { logout } from '../features/auth/authSlice'
 import { BACKEND_URL } from '../config'
 import LowerRatingModal from '../components/LowerRatingModal'
+import BottomDrawer from '../components/BottomDrawer'
 import { rateUser, resetRateUser } from '../features/user/userSlice'
 import socket from '../utils/socketInit'
 
@@ -474,7 +475,8 @@ const OtherUserProfileScreen = ({ route }) => {
           />
 
           {/* Chat and User Profile Icons */}
-          <View className='absolute bottom-3 w-[100vw] flex-row justify-between items-center'>
+          <BottomDrawer />
+          {/* <View className='absolute bottom-3 w-[100vw] flex-row justify-between items-center'>
             <View className='w-1/2 flex-row justify-center items-center'>
               <TouchableOpacity
                 onPress={() => navigation.navigate('UserInbox')}
@@ -490,7 +492,7 @@ const OtherUserProfileScreen = ({ route }) => {
                 <UserIcon size={40} color={'white'} />
               </TouchableOpacity>
             </View>
-          </View>
+          </View> */}
         </>
       )}
     </View>
