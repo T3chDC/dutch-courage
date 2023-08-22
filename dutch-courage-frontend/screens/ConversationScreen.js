@@ -626,7 +626,7 @@ const ConversationScreen = () => {
       }
 
       {/* View to display the length of text*/}
-      {conversation?.acceptedBy?.includes(userInfo._id) && (
+      {conversation?.acceptedBy?.length == 2 && (
         <View className='flex flex-row justify-end items-center w-[370]'>
           <Text className='text-[#A1A5AC] text-xs'>
             {messageText.length}/280
