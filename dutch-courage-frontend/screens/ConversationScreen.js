@@ -154,7 +154,7 @@ const ConversationScreen = () => {
   useEffect(() => {
     const backAction = () => {
       dispatch(getAllConversationsOfUser())
-      navigation.goBack()
+      navigation.navigate('UserInbox')
       return true
     }
 
@@ -376,7 +376,7 @@ const ConversationScreen = () => {
         className='absolute top-12 left-4 flex-row items-center'
         onPress={() => {
           dispatch(getAllConversationsOfUser())
-          navigation.goBack()
+          navigation.navigate('UserInbox')
         }}
       >
         <Text className='text-white text-base top-[-1]'>{'<'}</Text>
@@ -385,22 +385,22 @@ const ConversationScreen = () => {
       <View className='flex flex-row absolute items-left left-8 top-11'>
         <View className='w-[60] justify-center items-center'>
           <View className='w-[40] h-[40] rounded-full bg-[#FCFCFE] justify-center items-center'>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => {
                 navigation.navigate('OtherUserProfile', {
                   userId: sender?._id,
                 })
               }}
-            >
-              <Image
-                className='w-[40] h-[40] rounded-full'
-                source={{
-                  uri: `${BACKEND_URL}/uploads/${sender?.imageUrl.slice(
-                    sender?.imageUrl.lastIndexOf('/') + 1
-                  )}`,
-                }}
-              />
-            </TouchableOpacity>
+            > */}
+            <Image
+              className='w-[40] h-[40] rounded-full'
+              source={{
+                uri: `${BACKEND_URL}/uploads/${sender?.imageUrl.slice(
+                  sender?.imageUrl.lastIndexOf('/') + 1
+                )}`,
+              }}
+            />
+            {/* </TouchableOpacity> */}
           </View>
         </View>
 

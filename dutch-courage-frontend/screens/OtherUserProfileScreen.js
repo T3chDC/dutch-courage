@@ -131,6 +131,8 @@ const OtherUserProfileScreen = ({ route }) => {
       dispatch(resetOtherUser())
       dispatch(resetCreateConversation())
       dispatch(resetConversation())
+      dispatch(resetCreateMessage())
+      dispatch(resetMessage())
     }
   }, [dispatch])
 
@@ -182,7 +184,7 @@ const OtherUserProfileScreen = ({ route }) => {
     isCreateConversationError,
     isCreateConversationSuccess,
     createConversationErrorMessage,
-    conversation,
+    // conversation,
     userInfo,
   ])
 

@@ -93,7 +93,7 @@ const InboxScreen = () => {
         setSelectedConversations([])
         return true
       } else {
-        navigation.goBack()
+        navigation.navigate('UserProfile')
         return true
       }
     }
@@ -173,7 +173,7 @@ const InboxScreen = () => {
       <TouchableOpacity
         className='absolute top-10 left-4 flex-row items-center'
         onPress={() => {
-          navigation.goBack()
+          navigation.navigate('UserProfile')
         }}
       >
         {/* <ChevronLeftIcon size={20} color='white' /> */}
