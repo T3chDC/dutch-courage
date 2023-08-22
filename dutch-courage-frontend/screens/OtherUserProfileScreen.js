@@ -129,6 +129,8 @@ const OtherUserProfileScreen = ({ route }) => {
   useEffect(() => {
     return () => {
       dispatch(resetOtherUser())
+      dispatch(resetCreateConversation())
+      dispatch(resetConversation())
     }
   }, [dispatch])
 
