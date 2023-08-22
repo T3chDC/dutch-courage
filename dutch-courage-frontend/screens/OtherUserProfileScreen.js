@@ -30,6 +30,7 @@ import { logout } from '../features/auth/authSlice'
 import { BACKEND_URL } from '../config'
 import LowerRatingModal from '../components/LowerRatingModal'
 import { rateUser, resetRateUser } from '../features/user/userSlice'
+import socket from '../utils/socketInit'
 
 const OtherUserProfileScreen = ({ route }) => {
   // Navigation hook
@@ -197,6 +198,15 @@ const OtherUserProfileScreen = ({ route }) => {
         visibilityTime: 3000,
       })
     } else if (isCreateMessageSuccess) {
+      socket.emit('sendMessage', {
+        conversationId: conversation._id,
+        senderId: userInfo._id,
+        receiverId: userId,
+        messageType: message.messageType,
+        message: message.message,
+        messageImageUrl: message.messageImageUrl,
+        createdAt: message.createdAt,
+      })
       Toast.show({
         type: 'success',
         text1: `Your wave was sent to ${userName}`,
