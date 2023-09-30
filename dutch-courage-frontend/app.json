@@ -26,7 +26,12 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.tanzeemrahat.dutchcouragefrontend"
+      "package": "com.tanzeemrahat.dutchcouragefrontend",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBUdvJx-4tLkS6X8fuOiJnTHFyQ7oc77QM"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"

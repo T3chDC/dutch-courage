@@ -26,7 +26,7 @@ import {
 } from '../features/location/locationSlice'
 import RatingStars from '../components/RatingStars'
 import { BACKEND_URL } from '../config'
-import MapView, { Marker } from 'react-native-maps'
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 
 const UsersNearbyScreen = () => {
   const navigation = useNavigation()
@@ -163,6 +163,7 @@ const UsersNearbyScreen = () => {
               width: 400,
               height: 400,
             }}
+            provider={PROVIDER_GOOGLE}
           >
             <Marker
               coordinate={{
