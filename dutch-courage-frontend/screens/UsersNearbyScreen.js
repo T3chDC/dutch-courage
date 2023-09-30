@@ -291,7 +291,9 @@ const UsersNearbyScreen = () => {
                       <View className='flex flex-row'>
                         <View className='flex flex-col w-[220]'>
                           <Text className='text-white text-xl left-5'>
-                            {nearbyUser.userName}
+                            {nearbyUser.userName.length > 10
+                              ? `${nearbyUser.userName.slice(0, 10)}...`
+                              : `${nearbyUser.userName}`}
                           </Text>
 
                           <Text className='mt-1 text-[#808080] text-muted left-5'>

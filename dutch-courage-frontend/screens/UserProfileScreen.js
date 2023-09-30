@@ -366,9 +366,15 @@ const UserProfileScreen = () => {
             <View className='flex-row justify-center items-center'>
               <ToggleSwitch
                 text={{
-                  on: ownLocation
-                    ? `@${ownLocation.locationDescription.split(',')[0]}`
-                    : '@Swipe to go offline',
+                  on:
+                    ownLocation && ownLocation.locationDescription.length > 17
+                      ? `@${ownLocation.locationDescription
+                          .split(',')[0]
+                          .slice(0, 16)}...`
+                      : ownLocation &&
+                        ownLocation.locationDescription.length <= 17
+                      ? `@${ownLocation.locationDescription.split(',')[0]}`
+                      : '@Swipe to go offline',
                   off: 'Go Live!',
                   activeTextColor: 'white',
                   inactiveTextColor: '#655A5A',
