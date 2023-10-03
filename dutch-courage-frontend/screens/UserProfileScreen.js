@@ -374,7 +374,7 @@ const UserProfileScreen = () => {
                       : ownLocation &&
                         ownLocation.locationDescription.length <= 17
                       ? `@${ownLocation.locationDescription.split(',')[0]}`
-                      : '@Swipe to go offline',
+                      : 'Fetching Your Location...',
                   off: 'Go Live!',
                   activeTextColor: 'white',
                   inactiveTextColor: '#655A5A',
