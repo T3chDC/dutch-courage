@@ -453,13 +453,13 @@ const OtherUserProfileScreen = ({ route }) => {
           </View>
 
           {/* Modal Showing Button */}
-          <View className='flex-row justify-center items-center mt-2'>
+          {/* <View className='flex-row justify-center items-center mt-2'>
             <TouchableOpacity onPress={() => setShowLowerRatingModal(true)}>
               <View className='w-32 h-8 rounded-full bg-[#22A6B3] flex-row justify-center items-center'>
                 <Text className='text-white text-lg font-bold'>Modal</Text>
               </View>
             </TouchableOpacity>
-          </View>
+          </View> */}
 
           {/* Lower Rating Modal */}
           <LowerRatingModal
