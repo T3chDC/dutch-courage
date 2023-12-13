@@ -24,7 +24,7 @@ import { logout } from '../features/auth/authSlice'
 import * as Progress from 'react-native-progress'
 import LocationPickerModal from '../components/LocationPickerModal'
 // import InterestPickerModal from '../components/InterestPickerModal'
-// import GenderPickerModal from '../components/GenderPickerModal'
+import GenderPickerModal from '../components/GenderPickerModal'
 import AgeRangePickerModal from '../components/AgeRangePickerModal'
 import MantraModal from '../components/MantraModal'
 import InterestPickerModal from '../components/InterestPickerModal'
@@ -94,7 +94,7 @@ const UserProfileEditScreen = () => {
     useState(false)
   const [isInterestModalVisible, setIsInterestModalVisible] = useState(false)
   const [isLocationModalVisible, setIsLocationModalVisible] = useState(false)
-  // const [isGenderModalVisible, setIsGenderModalVisible] = useState(false)
+  const [isGenderModalVisible, setIsGenderModalVisible] = useState(false)
   const [isAgeRangeModalVisible, setIsAgeRangeModalVisible] = useState(false)
   const [isMantraModalVisible, setIsMantraModalVisible] = useState(false)
 
@@ -721,7 +721,7 @@ const UserProfileEditScreen = () => {
 
           {/* Gender */}
           <View>
-            {/* <TouchableOpacity onPress={() => setIsGenderModalVisible(true)}> */}
+            <TouchableOpacity onPress={() => setIsGenderModalVisible(true)}>
             <TextInput
               placeholder='Gender'
               keyboardType='default'
@@ -729,15 +729,15 @@ const UserProfileEditScreen = () => {
               value={gender}
               editable={false}
             />
-            {/* </TouchableOpacity> */}
+            </TouchableOpacity>
           </View>
 
           {/* Gender picker modal */}
-          {/* <GenderPickerModal
+          <GenderPickerModal
             isGenderModalVisible={isGenderModalVisible}
             setIsGenderModalVisible={setIsGenderModalVisible}
             setGender={setGender}
-          /> */}
+          />
 
           {/* Location label */}
           <View className='flex-row mt-3 justify-center items-center mb-[-5] z-10'>
