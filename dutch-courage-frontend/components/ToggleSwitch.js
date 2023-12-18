@@ -51,7 +51,9 @@ class ToggleSwitch extends React.Component {
         isActive: active,
       },
       () => {
-        this.props.onValueChange(active)
+        if (this.props.onToggle) {
+          this.props.onToggle(active)
+        }
       }
     )
   }

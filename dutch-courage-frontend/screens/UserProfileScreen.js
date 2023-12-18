@@ -404,11 +404,11 @@ const UserProfileScreen = () => {
                     return
                   }
                 }}
-                onValueChange={() => {
-                  if (isUserLive) {
-                    handleGoOffline()
-                  } else {
+                onToggle={(isOn) => {
+                  if (isOn) {
                     handleGoLive()
+                  } else {
+                    handleGoOffline()
                   }
                 }}
               />
