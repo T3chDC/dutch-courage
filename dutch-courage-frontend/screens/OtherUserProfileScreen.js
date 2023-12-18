@@ -424,13 +424,21 @@ const OtherUserProfileScreen = ({ route }) => {
               width={200}
               radius={25}
               willBehaveLikeSwitch={false}
-              onValueChange={() => {
-                if (isSwitchOn) {
-                  setIsSwitchOn(!isSwitchOn)
-                  return
+              // onValueChange={() => {
+              //   if (isSwitchOn) {
+              //     setIsSwitchOn(!isSwitchOn)
+              //     return
+              //   }
+              //   handleSwipe()
+              //   setIsSwitchOn(!isSwitchOn)
+              // }}
+              onToggle={(isOn) => {
+                if (isOn) {
+                  setIsSwitchOn(true)
+                  handleSwipe()
+                } else {
+                  setIsSwitchOn(false)
                 }
-                handleSwipe()
-                setIsSwitchOn(!isSwitchOn)
               }}
             />
             {/* <SwipeButton
