@@ -260,7 +260,7 @@ const UsersNearbyScreen = () => {
                   !meUser?.blockedUsers.includes(nearbyUser._id) &&
                   !meUser?.blockedByUsers.includes(nearbyUser._id) && (
                     <View
-                      className='justify-start items-start w-[350] flex-row mt-4'
+                      className='justify-start items-start w-[370] flex-row mt-4'
                       key={nearbyUser._id}
                     >
                       <TouchableOpacity
@@ -314,7 +314,7 @@ const UsersNearbyScreen = () => {
                         </Text>
 
                         {/* Block Button */}
-                        <View className='bottom-[0] ml-2'>
+                        <View className='bottom-[0] ml-2 '>
                           <ToggleSwitch
                             text={{
                               on: '',
