@@ -208,7 +208,7 @@ const UserProfileScreen = () => {
     } else if (isLocationSuccess) {
       // console.log('ownLocation', ownLocation)
       //Add user to server
-      dispatch(addUser(userInfo._id))
+      // dispatch(addUser(userInfo._id))
     }
   }, [ownLocation, dispatch])
 
