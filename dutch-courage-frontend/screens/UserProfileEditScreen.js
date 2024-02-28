@@ -629,6 +629,7 @@ const UserProfileEditScreen = () => {
               setSelectedGalleryImage2={setSelectedGalleryImage2}
               selectedGalleryImage3={selectedGalleryImage3}
               setSelectedGalleryImage3={setSelectedGalleryImage3}
+              profileImageUrl={imageUrl || selectedProfileImage}
               setSelectedProfileImage={setSelectedProfileImage}
               setSelectedImagesForDelete={setSelectedImagesForDelete}
               setGalleryImageCount={setGalleryImageCount}
@@ -723,13 +724,13 @@ const UserProfileEditScreen = () => {
           {/* Gender */}
           <View>
             <TouchableOpacity onPress={() => setIsGenderModalVisible(true)}>
-            <TextInput
-              placeholder='Gender'
-              keyboardType='default'
-              className='bg-black w-80 h-10 flex-row justify-start items-center border-b-2 border-[#22A6B3] text-white text-sm px-1'
-              value={gender}
-              editable={false}
-            />
+              <TextInput
+                placeholder='Gender'
+                keyboardType='default'
+                className='bg-black w-80 h-10 flex-row justify-start items-center border-b-2 border-[#22A6B3] text-white text-sm px-1'
+                value={gender}
+                editable={false}
+              />
             </TouchableOpacity>
           </View>
 
