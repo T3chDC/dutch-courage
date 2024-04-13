@@ -56,8 +56,9 @@ const BottomDrawer = () => {
   useEffect(() => {
     socket.on('getMessage', (data) => {
       dispatch(getAllConversationsOfUser())
+      setUnreadMessageCount(unreadMessageCount + 1)
     })
-  }, [dispatch])
+  }, [dispatch, unreadMessageCount])
 
   // Get all conversations of user when component mounts
   useEffect(() => {
