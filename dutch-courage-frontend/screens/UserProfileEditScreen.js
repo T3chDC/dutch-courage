@@ -110,7 +110,7 @@ const UserProfileEditScreen = () => {
   const backAction = () => {
     Alert.alert(
       'Hold on!',
-      'The changes you made will be automatically saved when you leave this screen. Are you sure you want to exit the profile editing screen?',
+      'The changes you made will be lost when you leave this screen. Are you sure you want to exit the profile editing screen?',
       [
         {
           text: 'Keep Editing',
@@ -118,7 +118,7 @@ const UserProfileEditScreen = () => {
           style: 'cancel',
         },
         {
-          text: 'Cancel Changes',
+          text: 'Yes',
           onPress: () => {
             navigation.goBack()
             dispatch(resetMeUpdateUser())
