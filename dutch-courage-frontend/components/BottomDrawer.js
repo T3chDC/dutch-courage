@@ -8,6 +8,7 @@ import {
   resetGetAllConversationsOfUser,
 } from '../features/conversation/conversationSlice'
 import { useNavigation } from '@react-navigation/native'
+import notificationSound from '../assets/notification.mp3'
 
 const BottomDrawer = () => {
   // Redux Dispatch hook
@@ -38,7 +39,10 @@ const BottomDrawer = () => {
     } else if (isGetAllConversationsOfUserSuccess) {
       let count = 0
       conversations.forEach((conversation) => {
-        if (conversation?.unreadMessageCount > 0 && conversation?.lastMessage.sender !== userInfo._id) {
+        if (
+          conversation?.unreadMessageCount > 0 &&
+          conversation?.lastMessage.sender !== userInfo._id
+        ) {
           count += conversation.unreadMessageCount
         }
       })
@@ -56,6 +60,9 @@ const BottomDrawer = () => {
   useEffect(() => {
     socket.on('getMessage', (data) => {
       dispatch(getAllConversationsOfUser())
+      // Play notificaiton sound of the device
+      // const sound = new Audio(notificationSound)
+      // sound.play()
       setUnreadMessageCount(unreadMessageCount + 1)
     })
   }, [dispatch, unreadMessageCount])
