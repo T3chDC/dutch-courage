@@ -124,12 +124,12 @@ const UserProfileEditScreen = () => {
             dispatch(resetMeUpdateUser())
           },
         },
-        {
-          text: 'Save Changes',
-          onPress: () => {
-            updateUserHandler()
-          },
-        },
+        // {
+        //   text: 'Save Changes',
+        //   onPress: () => {
+        //     updateUserHandler()
+        //   },
+        // },
       ],
       { cancelable: false }
     )
@@ -818,6 +818,14 @@ const UserProfileEditScreen = () => {
               }
             </Text>
           </View>
+
+          {/* Update Button */}
+          <TouchableOpacity
+            onPress={() => updateUserHandler()}
+            className='bg-[#22A6B3] w-80 h-10 flex-row justify-center items-center mt-5 rounded-md'
+          >
+            <Text className='text-white text-lg font-bold'>Save Changes</Text>
+          </TouchableOpacity>
 
           {/* Mantra modifier modal */}
           <MantraModal
