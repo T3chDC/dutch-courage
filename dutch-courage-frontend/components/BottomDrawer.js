@@ -9,6 +9,7 @@ import {
 } from '../features/conversation/conversationSlice'
 import { useNavigation } from '@react-navigation/native'
 import notificationSound from '../assets/notification.mp3'
+import { Audio } from 'expo-av'
 
 const BottomDrawer = () => {
   // Redux Dispatch hook
@@ -57,12 +58,17 @@ const BottomDrawer = () => {
     dispatch,
   ])
 
+  // Function to play sound
+  const playSound = async () => {
+    const { sound } = await Audio.Sound.createAsync(notificationSound)
+    await sound.playAsync()
+  }
+
   useEffect(() => {
     socket.on('getMessage', (data) => {
       dispatch(getAllConversationsOfUser())
       // Play notificaiton sound of the device
-      // const sound = new Audio(notificationSound)
-      // sound.play()
+      playSound()
       setUnreadMessageCount(unreadMessageCount + 1)
     })
   }, [dispatch, unreadMessageCount])
