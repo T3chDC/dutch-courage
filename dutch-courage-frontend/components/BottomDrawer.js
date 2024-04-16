@@ -7,6 +7,7 @@ import {
   getAllConversationsOfUser,
   resetGetAllConversationsOfUser,
 } from '../features/conversation/conversationSlice'
+import { addExpoPushToken } from '../features/auth/authSlice'
 import { useNavigation } from '@react-navigation/native'
 import notificationSound from '../assets/notification.mp3'
 import { Audio } from 'expo-av'
@@ -94,7 +95,11 @@ const BottomDrawer = () => {
 
   useEffect(() => {
     registerForPushNotificationsAsync()
-      .then((token) => setExpoPushToken(token ?? ''))
+      .then((token) => {
+        setExpoPushToken(token ?? '')
+        // Save the push token to the user's document in the database
+        dispatch(addExpoPushToken(token))
+      })
       .catch((error) => setExpoPushToken(`${error}`))
   }, [])
 
@@ -128,15 +133,15 @@ const BottomDrawer = () => {
   ])
 
   // Function to play sound
-  // const playSound = async () => {
-  //   const { sound } = await Audio.Sound.createAsync(notificationSound)
-  //   await sound.playAsync()
-  // }
+  const playSound = async () => {
+    const { sound } = await Audio.Sound.createAsync(notificationSound)
+    await sound.playAsync()
+  }
 
   // Function to send push notoification
   const sendPushNotification = async () => {
     const message = {
-      to: userInfo.pushToken,
+      to: userInfo.expoPushToken,
       sound: 'default',
       title: 'You have a new message',
       body: 'Please check your inbox',
@@ -157,8 +162,8 @@ const BottomDrawer = () => {
     socket.on('getMessage', (data) => {
       dispatch(getAllConversationsOfUser())
       // Play notificaiton sound of the device
-      // playSound()
-      sendPushNotification()
+      playSound()
+      // sendPushNotification()
       setUnreadMessageCount(unreadMessageCount + 1)
     })
   }, [dispatch, unreadMessageCount])

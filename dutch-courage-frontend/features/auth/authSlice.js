@@ -147,6 +147,26 @@ export const changeNewUser = createAsyncThunk(
   }
 )
 
+// Add expo push token to userInfo
+export const addExpoPushToken = createAsyncThunk(
+  'auth/addExpoPushToken',
+  async (expoPushToken, thunkAPI) => {
+    console.log(expoPushToken)
+    try {
+      await SecureStore.setItemAsync(
+        'DCUserInfo',
+        JSON.stringify({ ...thunkAPI.getState().auth.userInfo, expoPushToken })
+      )
+    } catch (err) {
+      const message =
+        (err.response && err.response.data && err.response.data.message) ||
+        err.message ||
+        err.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
 //logout user asynchronously by removing user from storage
 export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
   try {
