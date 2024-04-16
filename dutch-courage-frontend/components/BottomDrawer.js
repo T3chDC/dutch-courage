@@ -141,7 +141,7 @@ const BottomDrawer = () => {
   // Function to send push notoification
   const sendPushNotification = async () => {
     const message = {
-      to: userInfo.expoPushToken,
+      to: expoPushToken,
       sound: 'default',
       title: 'You have a new message',
       body: 'Please check your inbox',
