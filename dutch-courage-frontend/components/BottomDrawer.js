@@ -14,6 +14,7 @@ import { Audio } from 'expo-av'
 import * as Device from 'expo-device'
 import * as Notifications from 'expo-notifications'
 import Constants from 'expo-constants'
+import { Platform } from 'react-native'
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -93,12 +94,14 @@ const BottomDrawer = () => {
 
   const [expoPushToken, setExpoPushToken] = useState('')
 
+  console.log(expoPushToken)
+
   useEffect(() => {
     registerForPushNotificationsAsync()
       .then((token) => {
         setExpoPushToken(token ?? '')
         // Save the push token to the user's document in the database
-        dispatch(addExpoPushToken(token))
+        // dispatch(addExpoPushToken(token))
       })
       .catch((error) => setExpoPushToken(`${error}`))
   }, [])
@@ -162,8 +165,8 @@ const BottomDrawer = () => {
     socket.on('getMessage', (data) => {
       dispatch(getAllConversationsOfUser())
       // Play notificaiton sound of the device
-      playSound()
-      // sendPushNotification()
+      // playSound()
+      sendPushNotification()
       setUnreadMessageCount(unreadMessageCount + 1)
     })
   }, [dispatch, unreadMessageCount])
