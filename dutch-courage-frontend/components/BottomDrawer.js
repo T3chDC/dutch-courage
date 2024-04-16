@@ -59,16 +59,16 @@ const BottomDrawer = () => {
   ])
 
   // Function to play sound
-  const playSound = async () => {
-    const { sound } = await Audio.Sound.createAsync(notificationSound)
-    await sound.playAsync()
-  }
+  // const playSound = async () => {
+  //   const { sound } = await Audio.Sound.createAsync(notificationSound)
+  //   await sound.playAsync()
+  // }
 
   useEffect(() => {
     socket.on('getMessage', (data) => {
       dispatch(getAllConversationsOfUser())
       // Play notificaiton sound of the device
-      playSound()
+      // playSound()
       setUnreadMessageCount(unreadMessageCount + 1)
     })
   }, [dispatch, unreadMessageCount])
