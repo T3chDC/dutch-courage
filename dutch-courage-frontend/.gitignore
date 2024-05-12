@@ -29,6 +29,7 @@ node_modules/
 
 # misc
 .DS_Store
+google-services.json
 .env
 .env.local
 .env.development.local
