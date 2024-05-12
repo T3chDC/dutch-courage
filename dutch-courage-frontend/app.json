@@ -30,8 +30,8 @@
           "apiKey": "AIzaSyBUdvJx-4tLkS6X8fuOiJnTHFyQ7oc77QM"
         }
       },
-      "useClearTextTraffic": true,
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "useClearTextTraffic": true
     },
     "web": {
       "favicon": "./assets/favicon.png"

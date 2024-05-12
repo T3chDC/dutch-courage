@@ -30,6 +30,7 @@ node_modules/
 # misc
 .DS_Store
 google-services.json
+dutch-courage-395806-firebase-adminsdk-pijzg-833fccf833.json
 .env
 .env.local
 .env.development.local
