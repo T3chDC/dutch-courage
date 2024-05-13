@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import { UserIcon, ChatBubbleLeftRightIcon } from 'react-native-heroicons/solid'
+import { UserIcon, ChatBubbleLeftRightIcon, Cog6ToothIcon } from 'react-native-heroicons/solid'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import socket from '../utils/socketInit'
@@ -177,7 +177,7 @@ const BottomDrawer = () => {
   return (
     <>
       <View className='absolute bottom-3 w-[100vw] flex-row justify-between items-center'>
-        <View className='w-1/2 flex-row justify-center items-center'>
+        <View className='w-1/3 flex-row justify-center items-center'>
           <TouchableOpacity onPress={() => navigation.navigate('UserInbox')}>
             <ChatBubbleLeftRightIcon size={40} color={'white'} />
             {unreadMessageCount > 0 && (
@@ -190,11 +190,19 @@ const BottomDrawer = () => {
           </TouchableOpacity>
         </View>
 
-        <View className='w-1/2 flex-row justify-center items-center'>
+        <View className='w-1/3 flex-row justify-center items-center'>
           <TouchableOpacity
             onPress={() => navigation.navigate('UserProfileEdit')}
           >
             <UserIcon size={40} color={'white'} />
+          </TouchableOpacity>
+        </View>
+
+        <View className='w-1/3 flex-row justify-center items-center'>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Settings')}
+          >
+            <Cog6ToothIcon size={40} color={'white'} />
           </TouchableOpacity>
         </View>
       </View>
