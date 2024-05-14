@@ -14,7 +14,14 @@ import * as Progress from "react-native-progress";
 import { logout } from "../features/auth/authSlice";
 import { resetMeUser } from "../features/user/userSlice";
 import { getAllConversationsOfUser } from "../features/conversation/conversationSlice";
-import { ExclamationTriangleIcon } from "react-native-heroicons/solid";
+import { NoSymbolIcon } from "react-native-heroicons/solid";
+import {
+  MinusCircleIcon,
+  ExclamationTriangleIcon,
+  UserPlusIcon,
+  ExclamationCircleIcon,
+  ShieldCheckIcon,
+} from "react-native-heroicons/outline";
 
 const SettingsScreen = () => {
   // Navigation Hook
@@ -54,53 +61,182 @@ const SettingsScreen = () => {
   };
 
   return (
-    <View className="bg-black flex-1 justify-start items-center relative">
-      <TouchableOpacity
-        className="absolute top-10 left-4 flex-row items-center"
-        onPress={() => {
-          navigation.navigate("UserProfile");
-        }}
-      >
-        {/* <ChevronLeftIcon size={20} color='white' /> */}
-        <Text className="text-white text-base top-[-1]">{"< Back"}</Text>
-      </TouchableOpacity>
+    <View className="bg-black flex-1">
+      <View className="flex-row items-center">
+        <TouchableOpacity
+          className="mt-10 ml-4 items-center"
+          onPress={() => {
+            navigation.navigate("UserProfile");
+          }}
+        >
+          <Text className="text-white text-base">{"< Back"}</Text>
+        </TouchableOpacity>
 
-      <View className="top-9">
-        <Text className="text-white font-medium text-2xl">
-          Settings & Privacy
-        </Text>
+        <View className="flex-1 mt-10 items-center">
+          <Text className="text-white font-medium text-2xl">
+            Settings & Privacy
+          </Text>
+        </View>
       </View>
 
       {/* Settings Contents */}
-      <View className="flex-row items-center justify-evenly relative">
-        <View className="flex-row items-center justify-evenly relative">
-          {/* <View className="flex-row items-center justify-evenly relative"> */}
-          <Text className="text-[#808080] text-base absolute top-[50] left-5">
-            Account
-          </Text>
+      <View className="flex-col items-start justify-start mt-5 ml-5">
+        <View className="flex-row items-center justify-start">
+          <Text className="text-[#808080] text-base">Account</Text>
+        </View>
 
-          {/* <Text className='text-white relative top-20'>Logout</Text> */}
+        {/* Logout Option */}
+        <View className="flex-row items-center justify-between mt-5">
+          <View className="flex-row items-center">
+            <ExclamationTriangleIcon size={18} color={"white"} />
+          </View>
+          <View className="flex-row items-center">
+            <TouchableOpacity onPress={() => handleLogout()}>
+              <Text className="text-[#808080] text-white text-lg left-3">
+                Logout
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Account Deactivation Option */}
+        <View className="flex-row items-center justify-between mt-5">
+          <View className=" flex-row items-center">
+            <MinusCircleIcon size={20} color={"red"} />
+          </View>
+          <View className="flex-row items-center">
+            <TouchableOpacity
+              onPress={() => {
+                Alert.alert(
+                  "Account Deactivation",
+                  "Are you sure you want to deactivate your account?",
+                  [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("Cancel Pressed"),
+                      style: "cancel",
+                    },
+                    {
+                      text: "Deactivate",
+                      onPress: () => {
+                        dispatch(logout());
+                        dispatch(resetMeUser());
+                        navigation.navigate("Login");
+                      },
+                    },
+                  ]
+                );
+              }}
+            >
+              <Text className="text-[#ff0000] text-lg left-3">
+                Deactivate Account
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-      {/* </View> */}
 
-      <View className="flex-row items-center justify-between absolute top-[100] mt-2 left-5">
-        <View className=" flex-row items-center">
-          <ExclamationTriangleIcon size={20} color={"white"} />
+      {/* Line Gap */}
+      <View className="border-b-2 border-[#808080] mt-5 ml-5 mr-5"></View>
+
+      {/* User Interaction Section */}
+      <View className="flex-col items-start justify-start mt-5 ml-5">
+        <View className="flex-row items-center justify-start">
+          <Text className="text-[#808080] text-base">Interact With Others</Text>
         </View>
-        <View className="flex-row items-center ">
-          <TouchableOpacity onPress={() => handleLogout()}>
-            <Text className="text-[#808080] text-white text-lg left-3">
-              Logout
-            </Text>
-          </TouchableOpacity>
+
+        {/* Blocked User Option */}
+        <View className="flex-row items-center justify-between mt-5">
+          <View className="flex-row items-center">
+            <NoSymbolIcon size={18} color={"white"} />
+          </View>
+          <View className="flex-row items-center">
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("BlockedUsers");
+              }}
+            >
+              <Text className="text-[#808080] text-white text-lg left-3">
+                Blocked Users
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Invite Friends */}
+        <View className="flex-row items-center justify-between mt-5">
+          <View className="flex-row items-center">
+            <UserPlusIcon size={18} color={"white"} />
+          </View>
+          <View className="flex-row items-center">
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("BlockedUsers");
+              }}
+            >
+              <Text className="text-[#808080] text-white text-lg left-3">
+                Invite Friends
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-      {/* <View className="flex-row">
-        <TouchableOpacity>
-          <Text className="text-white"> Logout </Text>
-        </TouchableOpacity>
-      </View> */}
+
+      {/* Line Gap */}
+      <View className="border-b-2 border-[#808080] mt-5 ml-5 mr-5"></View>
+
+      {/* App Information Section */}
+      <View className="flex-col items-start justify-start mt-5 ml-5">
+        <View className="flex-row items-center justify-start">
+          <Text className="text-[#808080] text-base">App Info</Text>
+        </View>
+
+        {/* Privacy Policy */}
+        <View className="flex-row items-center justify-between mt-5">
+          <View className="flex-row items-center">
+            <ShieldCheckIcon size={18} color={"white"} />
+          </View>
+          <View className="flex-row items-center">
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("BlockedUsers");
+              }}
+            >
+              <Text className="text-[#808080] text-white text-lg left-3">
+                Privacy Policy
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* About Us */}
+        <View className="flex-row items-center justify-between mt-5">
+          <View className="flex-row items-center">
+            <ExclamationCircleIcon size={18} color={"white"} />
+          </View>
+          <View className="flex-row items-center">
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("BlockedUsers");
+              }}
+            >
+              <Text className="text-[#808080] text-white text-lg left-3">
+                About Us
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Version */}
+        <View className="flex-row items-center justify-between mt-5">
+          <View className="flex-row items-center">
+            <Text className="text-[#808080] text-lg">Version</Text>
+          </View>
+          <View className="flex-row items-center">
+            <Text className="text-[#808080] text-lg">1.0.0</Text>
+          </View>
+        </View>
+      </View>
     </View>
   );
 };
