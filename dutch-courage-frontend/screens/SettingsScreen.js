@@ -109,7 +109,7 @@ const SettingsScreen = () => {
               onPress={() => {
                 Alert.alert(
                   "Account Deactivation",
-                  "Are you sure you want to deactivate your account?",
+                  "Are you sure you want to deactivate your account? This action is irreversible",
                   [
                     {
                       text: "Cancel",
