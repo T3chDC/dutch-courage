@@ -5,94 +5,94 @@ import {
   Image,
   Alert,
   BackHandler,
-} from "react-native";
-import React, { useEffect, useState } from "react";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { useDispatch, useSelector } from "react-redux";
-import ToggleSwitch from "../components/ToggleSwitch";
-import * as Progress from "react-native-progress";
-import { logout } from "../features/auth/authSlice";
-import { resetMeUser } from "../features/user/userSlice";
-import { getAllConversationsOfUser } from "../features/conversation/conversationSlice";
-import { NoSymbolIcon } from "react-native-heroicons/solid";
+} from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { useNavigation, useRoute } from '@react-navigation/native'
+import { useDispatch, useSelector } from 'react-redux'
+import ToggleSwitch from '../components/ToggleSwitch'
+import * as Progress from 'react-native-progress'
+import { logout } from '../features/auth/authSlice'
+import { resetMeUser } from '../features/user/userSlice'
+import { getAllConversationsOfUser } from '../features/conversation/conversationSlice'
+import { NoSymbolIcon } from 'react-native-heroicons/solid'
 import {
   MinusCircleIcon,
   ExclamationTriangleIcon,
   UserPlusIcon,
   ExclamationCircleIcon,
   ShieldCheckIcon,
-} from "react-native-heroicons/outline";
+} from 'react-native-heroicons/outline'
 
 const SettingsScreen = () => {
   // Navigation Hook
-  const navigation = useNavigation();
-  const route = useRoute();
-  const dispatch = useDispatch();
+  const navigation = useNavigation()
+  const route = useRoute()
+  const dispatch = useDispatch()
 
   // Redux State variables
-  const { userInfo } = useSelector((state) => state.auth);
+  const { userInfo } = useSelector((state) => state.auth)
 
   // UseEffect to check if the user is login or not
   useEffect(() => {
     if (!userInfo) {
-      navigation.navigate("Login");
+      navigation.navigate('Login')
     }
-  }, [userInfo, navigation]);
+  }, [userInfo, navigation])
 
   // UseEffect when user tries to go back to profile screen
   useEffect(() => {
     const backAction = () => {
-      navigation.navigate("UserProfile");
-      return true;
-    };
+      navigation.navigate('UserProfile')
+      return true
+    }
 
     const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
+      'hardwareBackPress',
       backAction
-    );
+    )
 
-    return () => backHandler.remove();
-  }, [navigation]);
+    return () => backHandler.remove()
+  }, [navigation])
 
   const handleLogout = () => {
-    dispatch(logout());
-    dispatch(resetMeUser());
-    navigation.navigate("Login");
-  };
+    dispatch(logout())
+    dispatch(resetMeUser())
+    navigation.navigate('Login')
+  }
 
   return (
-    <View className="bg-black flex-1">
-      <View className="flex-row items-center">
+    <View className='bg-black flex-1'>
+      <View className='flex-row items-center'>
         <TouchableOpacity
-          className="mt-10 ml-4 items-center"
+          className='mt-10 ml-4 items-center'
           onPress={() => {
-            navigation.navigate("UserProfile");
+            navigation.navigate('UserProfile')
           }}
         >
-          <Text className="text-white text-base">{"< Back"}</Text>
+          <Text className='text-white text-base'>{'< Back'}</Text>
         </TouchableOpacity>
 
-        <View className="flex-1 mt-10 items-center">
-          <Text className="text-white font-medium text-2xl">
+        <View className='flex-1 mt-10 items-center'>
+          <Text className='text-white font-medium text-2xl'>
             Settings & Privacy
           </Text>
         </View>
       </View>
 
       {/* Settings Contents */}
-      <View className="flex-col items-start justify-start mt-5 ml-5">
-        <View className="flex-row items-center justify-start">
-          <Text className="text-[#808080] text-base">Account</Text>
+      <View className='flex-col items-start justify-start mt-5 ml-5'>
+        <View className='flex-row items-center justify-start'>
+          <Text className='text-[#808080] text-base'>Account</Text>
         </View>
 
         {/* Logout Option */}
-        <View className="flex-row items-center justify-between mt-5">
-          <View className="flex-row items-center">
-            <ExclamationTriangleIcon size={18} color={"white"} />
+        <View className='flex-row items-center justify-between mt-5'>
+          <View className='flex-row items-center'>
+            <ExclamationTriangleIcon size={18} color={'white'} />
           </View>
-          <View className="flex-row items-center">
+          <View className='flex-row items-center'>
             <TouchableOpacity onPress={() => handleLogout()}>
-              <Text className="text-[#808080] text-white text-lg left-3">
+              <Text className='text-[#808080] text-white text-lg left-3'>
                 Logout
               </Text>
             </TouchableOpacity>
@@ -100,35 +100,35 @@ const SettingsScreen = () => {
         </View>
 
         {/* Account Deactivation Option */}
-        <View className="flex-row items-center justify-between mt-5">
-          <View className=" flex-row items-center">
-            <MinusCircleIcon size={20} color={"red"} />
+        <View className='flex-row items-center justify-between mt-5'>
+          <View className=' flex-row items-center'>
+            <MinusCircleIcon size={20} color={'red'} />
           </View>
-          <View className="flex-row items-center">
+          <View className='flex-row items-center'>
             <TouchableOpacity
               onPress={() => {
                 Alert.alert(
-                  "Account Deactivation",
-                  "Are you sure you want to deactivate your account? This action is irreversible",
+                  'Account Deactivation',
+                  'Are you sure you want to deactivate your account? This action is irreversible',
                   [
                     {
-                      text: "Cancel",
-                      onPress: () => console.log("Cancel Pressed"),
-                      style: "cancel",
+                      text: 'Cancel',
+                      onPress: () => console.log('Cancel Pressed'),
+                      style: 'cancel',
                     },
                     {
-                      text: "Deactivate",
+                      text: 'Deactivate',
                       onPress: () => {
-                        dispatch(logout());
-                        dispatch(resetMeUser());
-                        navigation.navigate("Login");
+                        dispatch(logout())
+                        dispatch(resetMeUser())
+                        navigation.navigate('Login')
                       },
                     },
                   ]
-                );
+                )
               }}
             >
-              <Text className="text-[#ff0000] text-lg left-3">
+              <Text className='text-[#ff0000] text-lg left-3'>
                 Deactivate Account
               </Text>
             </TouchableOpacity>
@@ -137,26 +137,26 @@ const SettingsScreen = () => {
       </View>
 
       {/* Line Gap */}
-      <View className="border-b-2 border-[#808080] mt-5 ml-5 mr-5"></View>
+      <View className='border-b-2 border-[#808080] mt-5 ml-5 mr-5'></View>
 
       {/* User Interaction Section */}
-      <View className="flex-col items-start justify-start mt-5 ml-5">
-        <View className="flex-row items-center justify-start">
-          <Text className="text-[#808080] text-base">Interact With Others</Text>
+      <View className='flex-col items-start justify-start mt-5 ml-5'>
+        <View className='flex-row items-center justify-start'>
+          <Text className='text-[#808080] text-base'>Interact With Others</Text>
         </View>
 
         {/* Blocked User Option */}
-        <View className="flex-row items-center justify-between mt-5">
-          <View className="flex-row items-center">
-            <NoSymbolIcon size={18} color={"white"} />
+        <View className='flex-row items-center justify-between mt-5'>
+          <View className='flex-row items-center'>
+            <NoSymbolIcon size={18} color={'white'} />
           </View>
-          <View className="flex-row items-center">
+          <View className='flex-row items-center'>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("BlockedUsers");
+                // navigation.navigate("BlockedUsers");
               }}
             >
-              <Text className="text-[#808080] text-white text-lg left-3">
+              <Text className='text-[#808080] text-white text-lg left-3'>
                 Blocked Users
               </Text>
             </TouchableOpacity>
@@ -164,17 +164,17 @@ const SettingsScreen = () => {
         </View>
 
         {/* Invite Friends */}
-        <View className="flex-row items-center justify-between mt-5">
-          <View className="flex-row items-center">
-            <UserPlusIcon size={18} color={"white"} />
+        <View className='flex-row items-center justify-between mt-5'>
+          <View className='flex-row items-center'>
+            <UserPlusIcon size={18} color={'white'} />
           </View>
-          <View className="flex-row items-center">
+          <View className='flex-row items-center'>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("BlockedUsers");
+                // navigation.navigate("BlockedUsers");
               }}
             >
-              <Text className="text-[#808080] text-white text-lg left-3">
+              <Text className='text-[#808080] text-white text-lg left-3'>
                 Invite Friends
               </Text>
             </TouchableOpacity>
@@ -183,26 +183,26 @@ const SettingsScreen = () => {
       </View>
 
       {/* Line Gap */}
-      <View className="border-b-2 border-[#808080] mt-5 ml-5 mr-5"></View>
+      <View className='border-b-2 border-[#808080] mt-5 ml-5 mr-5'></View>
 
       {/* App Information Section */}
-      <View className="flex-col items-start justify-start mt-5 ml-5">
-        <View className="flex-row items-center justify-start">
-          <Text className="text-[#808080] text-base">App Info</Text>
+      <View className='flex-col items-start justify-start mt-5 ml-5'>
+        <View className='flex-row items-center justify-start'>
+          <Text className='text-[#808080] text-base'>App Info</Text>
         </View>
 
         {/* Privacy Policy */}
-        <View className="flex-row items-center justify-between mt-5">
-          <View className="flex-row items-center">
-            <ShieldCheckIcon size={18} color={"white"} />
+        <View className='flex-row items-center justify-between mt-5'>
+          <View className='flex-row items-center'>
+            <ShieldCheckIcon size={18} color={'white'} />
           </View>
-          <View className="flex-row items-center">
+          <View className='flex-row items-center'>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("BlockedUsers");
+                // navigation.navigate("BlockedUsers");
               }}
             >
-              <Text className="text-[#808080] text-white text-lg left-3">
+              <Text className='text-[#808080] text-white text-lg left-3'>
                 Privacy Policy
               </Text>
             </TouchableOpacity>
@@ -210,17 +210,17 @@ const SettingsScreen = () => {
         </View>
 
         {/* About Us */}
-        <View className="flex-row items-center justify-between mt-5">
-          <View className="flex-row items-center">
-            <ExclamationCircleIcon size={18} color={"white"} />
+        <View className='flex-row items-center justify-between mt-5'>
+          <View className='flex-row items-center'>
+            <ExclamationCircleIcon size={18} color={'white'} />
           </View>
-          <View className="flex-row items-center">
+          <View className='flex-row items-center'>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("BlockedUsers");
+                // navigation.navigate("BlockedUsers");
               }}
             >
-              <Text className="text-[#808080] text-white text-lg left-3">
+              <Text className='text-[#808080] text-white text-lg left-3'>
                 About Us
               </Text>
             </TouchableOpacity>
@@ -228,17 +228,17 @@ const SettingsScreen = () => {
         </View>
 
         {/* Version */}
-        <View className="flex-row items-center justify-between mt-5">
-          <View className="flex-row items-center">
-            <Text className="text-[#808080] text-lg">Version</Text>
+        <View className='flex-row items-center justify-between mt-5'>
+          <View className='flex-row items-center'>
+            <Text className='text-[#808080] text-lg'>Version</Text>
           </View>
-          <View className="flex-row items-center">
-            <Text className="text-[#808080] text-lg">1.0.0</Text>
+          <View className='flex-row items-center'>
+            <Text className='text-[#808080] text-lg'>1.0.0</Text>
           </View>
         </View>
       </View>
     </View>
-  );
-};
+  )
+}
 
-export default SettingsScreen;
+export default SettingsScreen
