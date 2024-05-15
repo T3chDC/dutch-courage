@@ -11,7 +11,7 @@ import {
   updateMe,
   deleteMe,
   blockUser,
-  rateUser
+  rateUser,
 } from './userController.js' //import User controller
 
 import {
@@ -57,6 +57,6 @@ router
   .get(protect, restrictTo('adminUser', 'regularUser'), getUser)
   .patch(protect, restrictTo('adminUser', 'regularUser'), updateUser)
   .put(protect, restrictTo('adminUser'), updateUser)
-  .delete(protect, restrictTo('adminUser'), deleteUser)
+  .delete(protect, deleteUser)
 
 export default router
