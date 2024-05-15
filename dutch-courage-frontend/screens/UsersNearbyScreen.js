@@ -33,6 +33,7 @@ const UsersNearbyScreen = () => {
   const dispatch = useDispatch()
 
   const { userInfo } = useSelector((state) => state.auth)
+
   const {
     ownLocation,
     isLocationLoading,
@@ -61,6 +62,41 @@ const UsersNearbyScreen = () => {
   const [topInterests, setTopInterests] = useState([])
   const [rating, setRating] = useState(5)
   const [location, setLocation] = useState('')
+
+  const [sortedNearbyUsers, setSortedNearbyUsers] = useState([])
+
+  // Sort the nearby users based on interests matching. If the user has at least one matching interest, show them
+  useEffect(() => {
+    if (isNearbyUsersSuccess) {
+      const sortedUsers = nearbyUsers.filter((nearbyUser) => {
+        let count = 0
+        nearbyUser.topInterests.forEach((interest) => {
+          if (topInterests.includes(interest)) {
+            count++
+          }
+        })
+        return count > 0
+      })
+
+      // Sort the users based on the number of matching interests
+      sortedUsers.sort((a, b) => {
+        let countA = 0
+        let countB = 0
+        a.topInterests.forEach((interest) => {
+          if (topInterests.includes(interest)) {
+            countA++
+          }
+        })
+        b.topInterests.forEach((interest) => {
+          if (topInterests.includes(interest)) {
+            countB++
+          }
+        })
+        return countB - countA
+      })
+      setSortedNearbyUsers(sortedUsers)
+    }
+  }, [isNearbyUsersSuccess, nearbyUsers])
 
   // const [report, setReport] = useState('')
   // const [reportCount, setReportCount] = useState(0)
@@ -197,7 +233,7 @@ const UsersNearbyScreen = () => {
                 />
               </View>
             </Marker>
-            {nearbyUsers.map((nearbyUser) => (
+            {sortedNearbyUsers.map((nearbyUser) => (
               <Marker
                 key={nearbyUser._id}
                 coordinate={{
@@ -248,13 +284,13 @@ const UsersNearbyScreen = () => {
             width: '100%',
           }}
         >
-          {nearbyUsers.length <= 0 ? (
+          {sortedNearbyUsers.length <= 0 ? (
             <Text className='text-white text-xl font-bold mt-5'>
               No Users Nearby
             </Text>
           ) : (
             <>
-              {nearbyUsers.map(
+              {sortedNearbyUsers.map(
                 (nearbyUser) =>
                   // Check if nearby user is in the blockedUsers list of meUser
                   !meUser?.blockedUsers.includes(nearbyUser._id) &&
