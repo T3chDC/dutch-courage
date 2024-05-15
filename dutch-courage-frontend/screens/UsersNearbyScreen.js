@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   BackHandler,
   ScrollView,
+  Dimensions,
 } from 'react-native'
 import ToggleSwitch from '../components/ToggleSwitch'
 import React, { useState, useEffect } from 'react'
@@ -62,6 +63,8 @@ const UsersNearbyScreen = () => {
   const [topInterests, setTopInterests] = useState([])
   const [rating, setRating] = useState(5)
   const [location, setLocation] = useState('')
+
+  const [zoomLevel, setZoomLevel] = useState(0)
 
   const [sortedNearbyUsers, setSortedNearbyUsers] = useState([])
 
@@ -194,68 +197,46 @@ const UsersNearbyScreen = () => {
         <View className='flex flex-row'>
           <MapView
             region={userLocationRegion}
-            // onRegionChange={(region) => setUserLocationRegion(region)}
+            onRegionChange={(region) =>
+              setZoomLevel(
+                Math.log2(
+                  360 *
+                    (Dimensions.get('window').width /
+                      256 /
+                      region.longitudeDelta)
+                ) + 1
+              )
+            }
             style={{
               width: 400,
               height: 400,
             }}
             provider={PROVIDER_GOOGLE}
           >
-            <Marker
-              coordinate={{
-                latitude: ownLocation.coords.latitude,
-                longitude: ownLocation.coords.longitude,
-              }}
-              // pinColor='blue'
-              title='You are here'
-            >
-              {/* Show user profile picture in map marker with a border around */}
-              <View
-                style={{
-                  height: 50,
-                  width: 50,
-                  borderRadius: 25,
-                  borderWidth: 3,
-                  borderColor: 'blue',
-                  overflow: 'hidden',
-                }}
-              >
-                <Image
-                  source={{
-                    uri: `${BACKEND_URL}/uploads/${userInfo.imageUrl.slice(
-                      userInfo.imageUrl.lastIndexOf('/') + 1
-                    )}`,
-                  }}
-                  style={{
-                    height: 50,
-                    width: 50,
-                  }}
-                />
-              </View>
-            </Marker>
-            {sortedNearbyUsers.map((nearbyUser) => (
+            {zoomLevel > 16 ? (
               <Marker
-                key={nearbyUser._id}
                 coordinate={{
-                  latitude: nearbyUser.location.latitude,
-                  longitude: nearbyUser.location.longitude,
+                  latitude: ownLocation.coords.latitude,
+                  longitude: ownLocation.coords.longitude,
                 }}
-                title={nearbyUser.userName}
+                // pinColor='blue'
+                title='You are here'
               >
+                {/* Show user profile picture in map marker with a border around it */}
                 <View
                   style={{
                     height: 50,
                     width: 50,
                     borderRadius: 25,
                     borderWidth: 3,
-                    borderColor: 'red',
+                    borderColor: 'blue',
                     overflow: 'hidden',
                   }}
                 >
                   <Image
                     source={{
-                      uri: `${BACKEND_URL}/uploads/${nearbyUser.imageUrl.slice(
-                        nearbyUser.imageUrl.lastIndexOf('/') + 1
+                      uri: `${BACKEND_URL}/uploads/${userInfo.imageUrl.slice(
+                        userInfo.imageUrl.lastIndexOf('/') + 1
                       )}`,
                     }}
                     style={{
@@ -265,6 +246,62 @@ const UsersNearbyScreen = () => {
                   />
                 </View>
               </Marker>
+            ) : (
+              <Marker
+                coordinate={{
+                  latitude: ownLocation.coords.latitude,
+                  longitude: ownLocation.coords.longitude,
+                }}
+                pinColor='blue'
+                title='You are here'
+              ></Marker>
+            )}
+
+            {sortedNearbyUsers.map((nearbyUser) => (
+              <>
+                {zoomLevel > 16 ? (
+                  <Marker
+                    key={nearbyUser._id}
+                    coordinate={{
+                      latitude: nearbyUser.location.latitude,
+                      longitude: nearbyUser.location.longitude,
+                    }}
+                    title={nearbyUser.userName}
+                  >
+                    <View
+                      style={{
+                        height: 50,
+                        width: 50,
+                        borderRadius: 25,
+                        borderWidth: 3,
+                        borderColor: 'red',
+                        overflow: 'hidden',
+                      }}
+                    >
+                      <Image
+                        source={{
+                          uri: `${BACKEND_URL}/uploads/${nearbyUser.imageUrl.slice(
+                            nearbyUser.imageUrl.lastIndexOf('/') + 1
+                          )}`,
+                        }}
+                        style={{
+                          height: 50,
+                          width: 50,
+                        }}
+                      />
+                    </View>
+                  </Marker>
+                ) : (
+                  <Marker
+                    coordinate={{
+                      latitude: nearbyUser.location.latitude,
+                      longitude: nearbyUser.location.longitude,
+                    }}
+                    pinColor='red'
+                    title='You are here'
+                  ></Marker>
+                )}
+              </>
             ))}
           </MapView>
         </View>
