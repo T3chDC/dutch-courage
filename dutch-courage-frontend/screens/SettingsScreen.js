@@ -42,23 +42,20 @@ const SettingsScreen = () => {
   }, [userInfo, navigation])
 
   // Delete User Account
-  const handleDeleteAccount = () => {
-    axios
-      .delete(BACKEND_URL + `/api/v1/users/${userInfo._id}`, {
-        headers: {
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Access Denied!')
+  const handleDeleteAccount = async () => {
+    try {
+      const response = await axios.delete(
+        `${BACKEND_URL}/api/v1/users/${userInfo._id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${userInfo.token}`,
+          },
         }
-        // navigation.navigate("Login");
-      })
-      .catch((error) => {
-        console.error('Error:', error)
-      })
-    handleLogout()
+      )
+      handleLogout()
+    } catch (error) {
+      console.error('Error:', error)
+    }
   }
 
   // UseEffect when user tries to go back to profile screen
@@ -130,7 +127,7 @@ const SettingsScreen = () => {
             <TouchableOpacity
               onPress={() => {
                 Alert.alert(
-                  'Account Deactivation',
+                  'Account Deletion',
                   'Are you sure you want to delete your account? This action is irreversible!',
                   [
                     {
@@ -139,7 +136,7 @@ const SettingsScreen = () => {
                       style: 'cancel',
                     },
                     {
-                      text: 'Deactivate',
+                      text: 'Delete',
                       onPress: () => handleDeleteAccount(),
                       // onPress: async () => {
                       //   try {
