@@ -308,9 +308,9 @@ const SignUpScreen = () => {
           <View className='flex-row space-x-0 mt-2 items-center justify-center'>
             <CheckBox
               checked={agreedChecked}
-              iconType='material-community'
-              checkedIcon='checkbox-outline'
-              uncheckedIcon={'checkbox-blank-outline'}
+              // iconType='material-community'
+              // checkedIcon='checkbox-outline'
+              // uncheckedIcon={'checkbox-blank-outline'}
               onPress={() => setAgreedChecked(!agreedChecked)}
               containerStyle={{
                 backgroundColor: 'transparent',

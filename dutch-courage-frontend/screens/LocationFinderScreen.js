@@ -248,8 +248,10 @@ const LocationFinderScreen = () => {
                     latitude: ownLocation.coords.latitude,
                     longitude: ownLocation.coords.longitude,
                   }}
+                  pinColor='blue'
+                  title='You are here'
                 >
-                  <View
+                  {/* <View
                     style={{
                       height: 50,
                       width: 50,
@@ -270,7 +272,7 @@ const LocationFinderScreen = () => {
                         width: 50,
                       }}
                     />
-                  </View>
+                  </View> */}
                 </Marker>
               </MapView>
             </View>
