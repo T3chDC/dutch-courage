@@ -66,40 +66,35 @@ const UsersNearbyScreen = () => {
 
   const [zoomLevel, setZoomLevel] = useState(0)
 
-  const [sortedNearbyUsers, setSortedNearbyUsers] = useState([])
+  const [sortedNearbyUsers, setSortedNearbyUsers] = useState(nearbyUsers)
 
   // Sort the nearby users based on interests matching. If the user has at least one matching interest, show them
   useEffect(() => {
     if (isNearbyUsersSuccess) {
-      const sortedUsers = nearbyUsers.filter((nearbyUser) => {
-        let count = 0
-        nearbyUser.topInterests.forEach((interest) => {
-          if (topInterests.includes(interest)) {
-            count++
-          }
-        })
-        return count > 0
+      // If there is a user with no matching interests, do not show them
+      const sortedUsers = nearbyUsers.filter((user) => {
+        return (
+          user.topInterests.some((interest) =>
+            topInterests.includes(interest)
+          ) && user._id !== meUser._id
+        )
       })
 
       // Sort the users based on the number of matching interests
       sortedUsers.sort((a, b) => {
-        let countA = 0
-        let countB = 0
-        a.topInterests.forEach((interest) => {
-          if (topInterests.includes(interest)) {
-            countA++
-          }
-        })
-        b.topInterests.forEach((interest) => {
-          if (topInterests.includes(interest)) {
-            countB++
-          }
-        })
-        return countB - countA
+        const aMatchingInterests = a.topInterests.filter((interest) =>
+          topInterests.includes(interest)
+        ).length
+        const bMatchingInterests = b.topInterests.filter((interest) =>
+          topInterests.includes(interest)
+        ).length
+
+        return bMatchingInterests - aMatchingInterests
       })
+
       setSortedNearbyUsers(sortedUsers)
     }
-  }, [isNearbyUsersSuccess, nearbyUsers])
+  }, [isNearbyUsersSuccess, nearbyUsers, topInterests])
 
   // const [report, setReport] = useState('')
   // const [reportCount, setReportCount] = useState(0)
