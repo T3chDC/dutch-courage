@@ -1,5 +1,9 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import { UserIcon, ChatBubbleLeftRightIcon, Cog6ToothIcon } from 'react-native-heroicons/solid'
+import {
+  UserIcon,
+  ChatBubbleLeftRightIcon,
+  Cog6ToothIcon,
+} from 'react-native-heroicons/solid'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import socket from '../utils/socketInit'
@@ -167,7 +171,7 @@ const BottomDrawer = () => {
       sendPushNotification()
       setUnreadMessageCount(unreadMessageCount + 1)
     })
-  }, [dispatch, unreadMessageCount])
+  }, [dispatch, unreadMessageCount, socket])
 
   // Get all conversations of user when component mounts
   useEffect(() => {
@@ -199,9 +203,7 @@ const BottomDrawer = () => {
         </View>
 
         <View className='w-1/3 flex-row justify-center items-center'>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Settings')}
-          >
+          <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
             <Cog6ToothIcon size={40} color={'white'} />
           </TouchableOpacity>
         </View>
