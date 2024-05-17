@@ -318,7 +318,9 @@ const UsersNearbyScreen = () => {
         >
           {sortedNearbyUsers.length <= 0 ? (
             <Text className='text-white text-xl font-bold mt-5'>
-              No Users Nearby
+              {nearbyUsers.length - sortedNearbyUsers.length > 0
+                ? 'No users with matching interests found'
+                : 'No users found nearby'}
             </Text>
           ) : (
             <>
