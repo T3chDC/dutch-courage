@@ -28,55 +28,55 @@ Notifications.setNotificationHandler({
   }),
 })
 
-function handleRegistrationError(errorMessage) {
-  alert(errorMessage)
-  throw new Error(errorMessage)
-}
+// function handleRegistrationError(errorMessage) {
+//   alert(errorMessage)
+//   throw new Error(errorMessage)
+// }
 
-async function registerForPushNotificationsAsync() {
-  if (Platform.OS === 'android') {
-    Notifications.setNotificationChannelAsync('default', {
-      name: 'default',
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: '#FF231F7C',
-    })
-  }
+// async function registerForPushNotificationsAsync() {
+//   if (Platform.OS === 'android') {
+//     Notifications.setNotificationChannelAsync('default', {
+//       name: 'default',
+//       importance: Notifications.AndroidImportance.MAX,
+//       vibrationPattern: [0, 250, 250, 250],
+//       lightColor: '#FF231F7C',
+//     })
+//   }
 
-  if (Device.isDevice) {
-    const { status: existingStatus } = await Notifications.getPermissionsAsync()
-    let finalStatus = existingStatus
-    if (existingStatus !== 'granted') {
-      const { status } = await Notifications.requestPermissionsAsync()
-      finalStatus = status
-    }
-    if (finalStatus !== 'granted') {
-      handleRegistrationError(
-        'Permission not granted to get push token for push notification!'
-      )
-      return
-    }
-    const projectId =
-      Constants?.expoConfig?.extra?.eas?.projectId ??
-      Constants?.easConfig?.projectId
-    if (!projectId) {
-      handleRegistrationError('Project ID not found')
-    }
-    try {
-      const pushTokenString = (
-        await Notifications.getExpoPushTokenAsync({
-          projectId,
-        })
-      ).data
-      console.log(pushTokenString)
-      return pushTokenString
-    } catch (e) {
-      handleRegistrationError(`${e}`)
-    }
-  } else {
-    handleRegistrationError('Must use physical device for push notifications')
-  }
-}
+//   if (Device.isDevice) {
+//     const { status: existingStatus } = await Notifications.getPermissionsAsync()
+//     let finalStatus = existingStatus
+//     if (existingStatus !== 'granted') {
+//       const { status } = await Notifications.requestPermissionsAsync()
+//       finalStatus = status
+//     }
+//     if (finalStatus !== 'granted') {
+//       handleRegistrationError(
+//         'Permission not granted to get push token for push notification!'
+//       )
+//       return
+//     }
+//     const projectId =
+//       Constants?.expoConfig?.extra?.eas?.projectId ??
+//       Constants?.easConfig?.projectId
+//     if (!projectId) {
+//       handleRegistrationError('Project ID not found')
+//     }
+//     try {
+//       const pushTokenString = (
+//         await Notifications.getExpoPushTokenAsync({
+//           projectId,
+//         })
+//       ).data
+//       console.log(pushTokenString)
+//       return pushTokenString
+//     } catch (e) {
+//       handleRegistrationError(`${e}`)
+//     }
+//   } else {
+//     handleRegistrationError('Must use physical device for push notifications')
+//   }
+// }
 
 const BottomDrawer = () => {
   // Redux Dispatch hook
@@ -96,17 +96,17 @@ const BottomDrawer = () => {
     getAllConversationsOfUserErrorMessage,
   } = useSelector((state) => state.conversation)
 
-  const [expoPushToken, setExpoPushToken] = useState('')
+  // const [expoPushToken, setExpoPushToken] = useState('')
 
-  useEffect(() => {
-    registerForPushNotificationsAsync()
-      .then((token) => {
-        setExpoPushToken(token ?? '')
-        // Save the push token to the user's document in the database
-        // dispatch(addExpoPushToken(token))
-      })
-      .catch((error) => setExpoPushToken(`${error}`))
-  }, [])
+  // useEffect(() => {
+  //   registerForPushNotificationsAsync()
+  //     .then((token) => {
+  //       setExpoPushToken(token ?? '')
+  //       // Save the push token to the user's document in the database
+  //       // dispatch(addExpoPushToken(token))
+  //     })
+  //     .catch((error) => setExpoPushToken(`${error}`))
+  // }, [])
 
   useEffect(() => {
     if (isGetAllConversationsOfUserError) {
@@ -144,34 +144,59 @@ const BottomDrawer = () => {
   }
 
   // Function to send push notoification
-  const sendPushNotification = async () => {
-    const message = {
-      to: expoPushToken,
-      sound: 'default',
-      title: 'You have a new message',
-      body: 'Please check your inbox',
-    }
+  // const sendPushNotification = async () => {
+  //   const message = {
+  //     to: expoPushToken,
+  //     sound: 'default',
+  //     title: 'You have a new message',
+  //     body: 'Please check your inbox',
+  //   }
 
-    await fetch('https://exp.host/--/api/v2/push/send', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Accept-encoding': 'gzip, deflate',
-        'Content-Type': 'application/json',
+  //   await fetch('https://exp.host/--/api/v2/push/send', {
+  //     method: 'POST',
+  //     headers: {
+  //       Accept: 'application/json',
+  //       'Accept-encoding': 'gzip, deflate',
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify(message),
+  //   })
+  // }
+
+  // Functin to handle local notification
+  const sendPushNotification = async () => {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: 'You have a new message',
+        body: 'Please check your inbox',
+        sound: 'default',
       },
-      body: JSON.stringify(message),
+      trigger: null,
     })
   }
 
+  // useEffect(() => {
+  //   socket.on('getMessage', (data) => {
+  //     dispatch(getAllConversationsOfUser())
+  //     // Play notificaiton sound of the device
+  //     // playSound()
+  //     sendPushNotification()
+  //     setUnreadMessageCount(unreadMessageCount + 1)
+  //   })
+  // }, [dispatch, unreadMessageCount])
+
+  // On socket event getMessage, get all conversations of user amd play notification sound. Make sure only one listener is attached to the event
   useEffect(() => {
     socket.on('getMessage', (data) => {
       dispatch(getAllConversationsOfUser())
-      // Play notificaiton sound of the device
-      // playSound()
+      playSound()
       sendPushNotification()
       setUnreadMessageCount(unreadMessageCount + 1)
     })
-  }, [dispatch, unreadMessageCount, socket])
+    return () => {
+      socket.off('getMessage')
+    }
+  }, [dispatch, unreadMessageCount])
 
   // Get all conversations of user when component mounts
   useEffect(() => {
