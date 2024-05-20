@@ -171,7 +171,7 @@ const BottomDrawer = () => {
       sendPushNotification()
       setUnreadMessageCount(unreadMessageCount + 1)
     })
-  }, [dispatch, unreadMessageCount])
+  }, [dispatch, unreadMessageCount, socket])
 
   // Get all conversations of user when component mounts
   useEffect(() => {
