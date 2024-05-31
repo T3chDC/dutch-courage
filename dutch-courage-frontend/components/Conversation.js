@@ -16,9 +16,7 @@ const Conversation = ({
   const navigation = useNavigation()
 
   // sender is the other user
-  const sender = conversation.participants.find(
-    (participant) => participant._id !== loggedInUser._id
-  )
+  const [sender, setSender] = useState({})
 
   //state variable to check if this conversation is selected
   const [isSelected, setIsSelected] = useState(false)
@@ -29,6 +27,14 @@ const Conversation = ({
       setIsSelected(false)
     }
   }, [isDeleteMode])
+
+  // Get the other user in the conversation
+  useEffect(() => {
+    const otherUser = conversation.participants.find(
+      (participant) => participant._id !== loggedInUser._id
+    )
+    setSender(otherUser)
+  }, [conversation])
 
   //functin to format date and time
   const formatDate = (datetime) => {
