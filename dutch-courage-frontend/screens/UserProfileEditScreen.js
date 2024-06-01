@@ -122,6 +122,11 @@ const UserProfileEditScreen = () => {
           onPress: () => {
             navigation.goBack()
             dispatch(resetMeUpdateUser())
+            // Reset the selected images
+            setSelectedProfileImage(null)
+            setSelectedGalleryImage1(null)
+            setSelectedGalleryImage2(null)
+            setSelectedGalleryImage3(null)
           },
         },
         // {
@@ -270,6 +275,14 @@ const UserProfileEditScreen = () => {
 
     // delete all selected images from server storage
     await deleteImagesHandler()
+
+    // reset the selected images for deletion
+    setSelectedImagesForDelete([])
+    // reset the selected images
+    setSelectedProfileImage(null)
+    setSelectedGalleryImage1(null)
+    setSelectedGalleryImage2(null)
+    setSelectedGalleryImage3(null)
   }
 
   //Function to handle profile Image Upload
