@@ -84,7 +84,7 @@ const UserProfileEditScreen = () => {
   )
   const [selectedImagesForDelete, setSelectedImagesForDelete] = useState([])
 
-  console.log('galleryImageCount ', galleryImageCount)
+  // console.log('galleryImageCount ', galleryImageCount)
 
   // Modal State variables
   const [isProfileImageModalVisible, setIsProfileImageModalVisible] =
