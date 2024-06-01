@@ -20,10 +20,16 @@ const GalleryImageViewerModal = ({
   selectedGalleryImage3,
   setSelectedGalleryImage3,
   profileImageUrl,
+  selectedProfileImage,
   setSelectedProfileImage,
   setSelectedImagesForDelete,
   setGalleryImageCount,
 }) => {
+  console.log('galleryImage1Url:', galleryImage1Url)
+  console.log('selectedGalleryImage1:', selectedGalleryImage1)
+  console.log('profileImageUrl:', profileImageUrl)
+  console.log('selectedProfileImage:', selectedProfileImage)
+
   return (
     <Modal
       animationIn={'slideInUp'}
@@ -60,10 +66,12 @@ const GalleryImageViewerModal = ({
               {/* Image Choose as profile picture Button */}
               <TouchableOpacity
                 onPress={() => {
+                  // Exchange the profile image with the selected image
                   galleryImage1Url
                     ? setSelectedProfileImage(galleryImage1Url)
                     : setSelectedProfileImage(selectedGalleryImage1)
                   setGalleryImage1Url(profileImageUrl)
+                  setSelectedGalleryImage1(profileImageUrl)
                   setIsGalleryImageModalVisible(false)
                 }}
                 className='bg-[#22A6B3] rounded-full w-60 h-12 flex-row justify-center items-center mt-10'

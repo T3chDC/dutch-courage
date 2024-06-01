@@ -630,6 +630,7 @@ const UserProfileEditScreen = () => {
               selectedGalleryImage3={selectedGalleryImage3}
               setSelectedGalleryImage3={setSelectedGalleryImage3}
               profileImageUrl={imageUrl || selectedProfileImage}
+              selectedProfileImage={selectedProfileImage}
               setSelectedProfileImage={setSelectedProfileImage}
               setSelectedImagesForDelete={setSelectedImagesForDelete}
               setGalleryImageCount={setGalleryImageCount}
