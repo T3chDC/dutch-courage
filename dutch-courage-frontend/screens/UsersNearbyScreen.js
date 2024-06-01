@@ -253,7 +253,7 @@ const UsersNearbyScreen = () => {
             )}
 
             {sortedNearbyUsers.map((nearbyUser) => (
-              <>
+              <View key={nearbyUser._id}>
                 {zoomLevel > 16 ? (
                   <Marker
                     key={nearbyUser._id}
@@ -296,7 +296,7 @@ const UsersNearbyScreen = () => {
                     title='You are here'
                   ></Marker>
                 )}
-              </>
+              </View>
             ))}
           </MapView>
         </View>
