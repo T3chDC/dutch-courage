@@ -70,7 +70,6 @@ const GalleryImageViewerModal = ({
                   galleryImage1Url
                     ? setSelectedProfileImage(galleryImage1Url)
                     : setSelectedProfileImage(selectedGalleryImage1)
-                  setSelectedGalleryImage1(profileImageUrl)
                   setIsGalleryImageModalVisible(false)
                 }}
                 className='bg-[#22A6B3] rounded-full w-60 h-12 flex-row justify-center items-center mt-10'
@@ -134,7 +133,6 @@ const GalleryImageViewerModal = ({
                   galleryImage2Url
                     ? setSelectedProfileImage(galleryImage2Url)
                     : setSelectedProfileImage(selectedGalleryImage2)
-                  setSelectedGalleryImage2(profileImageUrl)
                   setIsGalleryImageModalVisible(false)
                 }}
                 className='bg-[#22A6B3] rounded-full w-60 h-12 flex-row justify-center items-center mt-10'
@@ -197,7 +195,6 @@ const GalleryImageViewerModal = ({
                   galleryImage3Url
                     ? setSelectedProfileImage(galleryImage3Url)
                     : setSelectedProfileImage(selectedGalleryImage3)
-                  setSelectedGalleryImage3(profileImageUrl)
                   setIsGalleryImageModalVisible(false)
                 }}
                 className='bg-[#22A6B3] rounded-full w-60 h-12 flex-row justify-center items-center mt-10'
