@@ -99,6 +99,19 @@ const UserProfileEditScreen = () => {
   const [isAgeRangeModalVisible, setIsAgeRangeModalVisible] = useState(false)
   const [isMantraModalVisible, setIsMantraModalVisible] = useState(false)
 
+  const [
+    profileImgSwitchedWithGalleryImg1,
+    setProfileImgSwitchedWithGalleryImg1,
+  ] = useState(false)
+  const [
+    profileImgSwitchedWithGalleryImg2,
+    setProfileImgSwitchedWithGalleryImg2,
+  ] = useState(false)
+  const [
+    profileImgSwitchedWithGalleryImg3,
+    setProfileImgSwitchedWithGalleryImg3,
+  ] = useState(false)
+
   // Check if user is logged in
   useEffect(() => {
     if (!userInfo) {
@@ -179,6 +192,82 @@ const UserProfileEditScreen = () => {
       navigation.goBack()
     }
   }, [isMeUpdateError, isMeUpdateSuccess])
+
+  const switchProfileImageWithGalleryImage = async (galleryImage) => {
+    if (galleryImage === 'galleryImage1') {
+      setProfileImgSwitchedWithGalleryImg1(true)
+      setProfileImgSwitchedWithGalleryImg2(false)
+      setProfileImgSwitchedWithGalleryImg3(false)
+
+      const { galleryImageUrl1 } = await uploadImages()
+
+      dispatch(
+        updateMeUser({
+          userName,
+          imageUrl: selectedGalleryImage1 ? galleryImageUrl1 : galleryImage1Url,
+          mantra,
+          ageRange,
+          gender,
+          location,
+          topInterests,
+          galleryImage1Url: selectedProfileImage
+            ? selectedProfileImage
+            : imageUrl,
+          galleryImage2Url: galleryImage2Url,
+          galleryImage3Url: galleryImage3Url,
+        })
+      )
+      dispatch(getMeUser())
+    } else if (galleryImage === 'galleryImage2') {
+      setProfileImgSwitchedWithGalleryImg2(true)
+      setProfileImgSwitchedWithGalleryImg1(false)
+      setProfileImgSwitchedWithGalleryImg3(false)
+
+      const { galleryImageUrl2 } = await uploadImages()
+
+      dispatch(
+        updateMeUser({
+          userName,
+          imageUrl: selectedGalleryImage2 ? galleryImageUrl2 : galleryImage2Url,
+          mantra,
+          ageRange,
+          gender,
+          location,
+          topInterests,
+          galleryImage1Url: galleryImage1Url,
+          galleryImage2Url: selectedProfileImage
+            ? selectedProfileImage
+            : imageUrl,
+          galleryImage3Url: galleryImage3Url,
+        })
+      )
+      dispatch(getMeUser())
+    } else if (galleryImage === 'galleryImage3') {
+      setProfileImgSwitchedWithGalleryImg3(true)
+      setProfileImgSwitchedWithGalleryImg1(false)
+      setProfileImgSwitchedWithGalleryImg2(false)
+
+      const { galleryImageUrl3 } = await uploadImages()
+
+      dispatch(
+        updateMeUser({
+          userName,
+          imageUrl: selectedGalleryImage3 ? galleryImageUrl3 : galleryImage3Url,
+          mantra,
+          ageRange,
+          gender,
+          location,
+          topInterests,
+          galleryImage1Url: galleryImage1Url,
+          galleryImage2Url: galleryImage2Url,
+          galleryImage3Url: selectedProfileImage
+            ? selectedProfileImage
+            : imageUrl,
+        })
+      )
+      dispatch(getMeUser())
+    }
+  }
 
   // Upload all images to server storage and get the urls
   const uploadImages = async () => {
@@ -647,6 +736,9 @@ const UserProfileEditScreen = () => {
               setSelectedProfileImage={setSelectedProfileImage}
               setSelectedImagesForDelete={setSelectedImagesForDelete}
               setGalleryImageCount={setGalleryImageCount}
+              switchProfileImageWithGalleryImage={
+                switchProfileImageWithGalleryImage
+              }
             />
 
             <TouchableOpacity

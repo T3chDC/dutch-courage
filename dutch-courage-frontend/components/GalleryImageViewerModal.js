@@ -24,11 +24,12 @@ const GalleryImageViewerModal = ({
   setSelectedProfileImage,
   setSelectedImagesForDelete,
   setGalleryImageCount,
+  switchProfileImageWithGalleryImage,
 }) => {
-  console.log('galleryImage1Url:', galleryImage1Url)
-  console.log('selectedGalleryImage1:', selectedGalleryImage1)
-  console.log('profileImageUrl:', profileImageUrl)
-  console.log('selectedProfileImage:', selectedProfileImage)
+  // console.log('galleryImage1Url:', galleryImage1Url)
+  // console.log('selectedGalleryImage1:', selectedGalleryImage1)
+  // console.log('profileImageUrl:', profileImageUrl)
+  // console.log('selectedProfileImage:', selectedProfileImage)
 
   return (
     <Modal
@@ -67,9 +68,7 @@ const GalleryImageViewerModal = ({
               <TouchableOpacity
                 onPress={() => {
                   // Exchange the profile image with the selected image
-                  galleryImage1Url
-                    ? setSelectedProfileImage(galleryImage1Url)
-                    : setSelectedProfileImage(selectedGalleryImage1)
+                  switchProfileImageWithGalleryImage('galleryImage1')
                   setIsGalleryImageModalVisible(false)
                 }}
                 className='bg-[#22A6B3] rounded-full w-60 h-12 flex-row justify-center items-center mt-10'
@@ -130,9 +129,7 @@ const GalleryImageViewerModal = ({
 
               <TouchableOpacity
                 onPress={() => {
-                  galleryImage2Url
-                    ? setSelectedProfileImage(galleryImage2Url)
-                    : setSelectedProfileImage(selectedGalleryImage2)
+                  switchProfileImageWithGalleryImage('galleryImage2')
                   setIsGalleryImageModalVisible(false)
                 }}
                 className='bg-[#22A6B3] rounded-full w-60 h-12 flex-row justify-center items-center mt-10'
@@ -192,9 +189,7 @@ const GalleryImageViewerModal = ({
               {/* Image Choose as profile picture Button */}
               <TouchableOpacity
                 onPress={() => {
-                  galleryImage3Url
-                    ? setSelectedProfileImage(galleryImage3Url)
-                    : setSelectedProfileImage(selectedGalleryImage3)
+                  switchProfileImageWithGalleryImage('galleryImage3')
                   setIsGalleryImageModalVisible(false)
                 }}
                 className='bg-[#22A6B3] rounded-full w-60 h-12 flex-row justify-center items-center mt-10'
