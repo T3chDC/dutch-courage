@@ -7,14 +7,11 @@ const socket = io(SOCKET_URL)
 
 // Close socket connection when app is closed
 AppState.addEventListener('change', (state) => {
-    if (state === 'background') {
-        socket.disconnect()
-    }
-    else {
-        socket.connect()
-    }
+  if (state === 'background') {
+    socket.disconnect()
+  } else {
+    socket.connect()
+  }
 })
-
-
 
 export default socket

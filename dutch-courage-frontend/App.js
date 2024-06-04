@@ -6,12 +6,12 @@ import React, { useEffect } from 'react'
 
 export default function App() {
   // Initialize socket connection
-  useEffect(() => {
-    socket.connect()
-    return () => {
-      socket.disconnect()
-    }
-  }, [])
+  // useEffect(() => {
+  //   socket.connect()
+  //   return () => {
+  //     socket.disconnect()
+  //   }
+  // }, [])
 
   return (
     <>
