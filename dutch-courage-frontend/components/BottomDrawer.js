@@ -99,12 +99,12 @@ const BottomDrawer = () => {
   const [expoPushToken, setExpoPushToken] = useState('')
 
   // Send userId to socket server on connection
-  useEffect(() => {
-    socket.emit('addUser', userInfo._id)
-    socket.on('getUsers', (users) => {
-      console.log(users)
-    })
-  }, [userInfo])
+  // useEffect(() => {
+  //   socket.emit('addUser', userInfo._id)
+  //   socket.on('getUsers', (users) => {
+  //     console.log(users)
+  //   })
+  // }, [userInfo])
 
   useEffect(() => {
     registerForPushNotificationsAsync()

@@ -61,12 +61,12 @@ const InboxScreen = () => {
   }, [userInfo, navigation])
 
   // Send userId to socket server on connection
-  useEffect(() => {
-    socket.emit('addUser', userInfo._id)
-    // socket.on('getUsers', (users) => {
-    //   console.log(users)
-    // })
-  }, [userInfo])
+  // useEffect(() => {
+  //   socket.emit('addUser', userInfo._id)
+  //   // socket.on('getUsers', (users) => {
+  //   //   console.log(users)
+  //   // })
+  // }, [userInfo])
 
   // Get all conversations of user when component mounts
   useEffect(() => {
