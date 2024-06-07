@@ -30,6 +30,7 @@ import * as Progress from 'react-native-progress'
 // import SwipeButton from 'rn-swipe-button'
 import { logout } from '../features/auth/authSlice'
 import { BACKEND_URL } from '../config'
+import socket from '../utils/socketInit'
 
 const UserProfileScreen = () => {
   // Navigation hook
@@ -162,6 +163,10 @@ const UserProfileScreen = () => {
     }
     // Get user location
     dispatch(getLocation())
+    userInfo && socket.emit('addUser', userInfo._id)
+    socket.on('getUsers', (users) => {
+      console.log(users)
+    })
     Toast.show({
       type: 'success',
       text1: 'You are now live!',

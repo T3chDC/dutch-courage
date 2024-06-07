@@ -50,10 +50,14 @@ const NavigationHandler = () => {
     if (isUserLive && ownLocation) {
       const interval = setInterval(() => {
         dispatch(getLocation())
+        userInfo && socket.emit('addUser', userInfo._id)
+        socket.on('getUsers', (users) => {
+          console.log(users)
+        })
       }, 30000)
       return () => clearInterval(interval)
     }
-  }, [isUserLive, ownLocation])
+  }, [isUserLive, ownLocation, userInfo])
 
   useEffect(() => {
     if (isLocationError) {
