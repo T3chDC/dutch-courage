@@ -262,7 +262,7 @@ const SettingsScreen = () => {
             <Text className='text-[#808080] text-lg'>Version</Text>
           </View>
           <View className='flex-row items-center'>
-            <Text className='text-[#808080] text-lg'> 5.0.5</Text>
+            <Text className='text-[#808080] text-lg'> 7.a.0</Text>
           </View>
         </View>
       </View>

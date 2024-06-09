@@ -334,6 +334,7 @@ const UsersNearbyScreen = () => {
                       key={nearbyUser._id}
                     >
                       <TouchableOpacity
+                        className='flex flex-row'
                         onPress={() => {
                           if (
                             meUser?.blockedUsers.includes(nearbyUser._id) ||
@@ -357,21 +358,20 @@ const UsersNearbyScreen = () => {
                           className='w-[50] h-[50] rounded-full'
                           resizeMode='cover'
                         />
-                      </TouchableOpacity>
+                        <View className='flex flex-row'>
+                          <View className='flex flex-col w-[220]'>
+                            <Text className='text-white text-xl left-5'>
+                              {nearbyUser.userName.length > 10
+                                ? `${nearbyUser.userName.slice(0, 10)}...`
+                                : `${nearbyUser.userName}`}
+                            </Text>
 
-                      <View className='flex flex-row'>
-                        <View className='flex flex-col w-[220]'>
-                          <Text className='text-white text-xl left-5'>
-                            {nearbyUser.userName.length > 10
-                              ? `${nearbyUser.userName.slice(0, 10)}...`
-                              : `${nearbyUser.userName}`}
-                          </Text>
-
-                          <Text className='mt-1 text-[#808080] text-muted left-5'>
-                            {`${nearbyUser.topInterests[0]}, ${nearbyUser.topInterests[1]}, ${nearbyUser.topInterests[2]}`}
-                          </Text>
+                            <Text className='mt-1 text-[#808080] text-muted left-5'>
+                              {`${nearbyUser.topInterests[0]}, ${nearbyUser.topInterests[1]}, ${nearbyUser.topInterests[2]}`}
+                            </Text>
+                          </View>
                         </View>
-                      </View>
+                      </TouchableOpacity>
 
                       <View className='right-[70px] flex flex-row'>
                         {/* Star */}
