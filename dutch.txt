@@ -1,0 +1,4 @@
+** Account Gallery Picture Cycling issue
+** Notification issue persists along with Notification sound
+** Client wants to send a wave again in an already existing conversation
+** If Hobbies didnt match, the number of the users are showing but at the NearbyUsers screen, no users are shown.
