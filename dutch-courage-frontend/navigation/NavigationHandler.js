@@ -78,17 +78,17 @@ const NavigationHandler = () => {
   }, [])
 
   // Send userId to socket server on connection every second
-  useEffect(() => {
-    if (userInfo) {
-      const interval = setInterval(() => {
-        userInfo && socket.emit('addUser', userInfo._id)
-        socket.on('getUsers', (users) => {
-          console.log(users)
-        })
-      }, 1000)
-      return () => clearInterval(interval)
-    }
-  }, [userInfo])
+  // useEffect(() => {
+  //   if (userInfo) {
+  //     const interval = setInterval(() => {
+  //       userInfo && socket.emit('addUser', userInfo._id)
+  //       socket.on('getUsers', (users) => {
+  //         console.log(users)
+  //       })
+  //     }, 1000)
+  //     return () => clearInterval(interval)
+  //   }
+  // }, [userInfo])
 
   return (
     <>
