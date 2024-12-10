@@ -2,12 +2,12 @@ import { initializeApp } from 'firebase/app'
 import { getFirestore } from 'firebase/firestore'
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyAmbnMr8--sHqNA3uZS9PQ6NcgBXkNPUoU',
-  authDomain: 'dutch-courag-chat.firebaseapp.com',
-  projectId: 'dutch-courag-chat',
-  storageBucket: 'dutch-courag-chat.firebasestorage.app',
-  messagingSenderId: '225687881217',
-  appId: '1:225687881217:web:d620d07179213e4867e200',
+  apiKey: 'AIzaSyBm1fVRK_4TF2x6EYmh62nmu0AmP3GWpqQ',
+  authDomain: 'dutch-courage-chat.firebaseapp.com',
+  projectId: 'dutch-courage-chat',
+  storageBucket: 'dutch-courage-chat.firebasestorage.app',
+  messagingSenderId: '352326670573',
+  appId: '1:352326670573:web:3233b780c6c6b67d1554e4',
 }
 
 // Initialize Firebase
