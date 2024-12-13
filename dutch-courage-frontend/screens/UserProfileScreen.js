@@ -163,10 +163,10 @@ const UserProfileScreen = () => {
     }
     // Get user location
     dispatch(getLocation())
-    userInfo && socket.emit('addUser', userInfo._id)
-    socket.on('getUsers', (users) => {
-      console.log(users)
-    })
+    // userInfo && socket.emit('addUser', userInfo._id)
+    // socket.on('getUsers', (users) => {
+    //   console.log(users)
+    // })
     Toast.show({
       type: 'success',
       text1: 'You are now live!',

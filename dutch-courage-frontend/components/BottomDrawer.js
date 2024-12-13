@@ -19,6 +19,8 @@ import * as Device from 'expo-device'
 import * as Notifications from 'expo-notifications'
 import Constants from 'expo-constants'
 import { Platform } from 'react-native'
+import { collection, query, where, onSnapshot } from 'firebase/firestore'
+import { firestore } from '../firebaseConfig' // Adjust the path as needed
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -116,34 +118,63 @@ const BottomDrawer = () => {
       .catch((error) => setExpoPushToken(`${error}`))
   }, [])
 
+  // useEffect(() => {
+  //   if (isGetAllConversationsOfUserError) {
+  //     // Toast.show({
+  //     //   type: 'error',
+  //     //   text1: getAllConversationsOfUserErrorMessage,
+  //     //   visibilityTime: 3000,
+  //     // })
+  //     dispatch(resetGetAllConversationsOfUser())
+  //   } else if (isGetAllConversationsOfUserSuccess) {
+  //     let count = 0
+  //     conversations.forEach((conversation) => {
+  //       if (
+  //         conversation?.unreadMessageCount > 0 &&
+  //         conversation?.lastMessage.sender !== userInfo._id
+  //       ) {
+  //         count += conversation.unreadMessageCount
+  //       }
+  //     })
+  //     setUnreadMessageCount(count)
+  //     dispatch(resetGetAllConversationsOfUser())
+  //   }
+  // }, [
+  //   isGetAllConversationsOfUserError,
+  //   getAllConversationsOfUserErrorMessage,
+  //   isGetAllConversationsOfUserSuccess,
+  //   conversations,
+  //   dispatch,
+  // ])
+
   useEffect(() => {
-    if (isGetAllConversationsOfUserError) {
-      // Toast.show({
-      //   type: 'error',
-      //   text1: getAllConversationsOfUserErrorMessage,
-      //   visibilityTime: 3000,
-      // })
-      dispatch(resetGetAllConversationsOfUser())
-    } else if (isGetAllConversationsOfUserSuccess) {
-      let count = 0
-      conversations.forEach((conversation) => {
-        if (
-          conversation?.unreadMessageCount > 0 &&
-          conversation?.lastMessage.sender !== userInfo._id
-        ) {
-          count += conversation.unreadMessageCount
-        }
+    if (userInfo) {
+      const messagesQuery = query(
+        collection(firestore, 'messages'),
+        where('recipientId', '==', userInfo._id) // Adjust based on your Firestore schema
+      )
+
+      const unsubscribe = onSnapshot(messagesQuery, (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          if (change.type === 'added') {
+            const newMessage = change.doc.data()
+
+            // Play notification sound
+            // playSound();
+
+            // Send push notification
+            sendPushNotification()
+
+            // Increment unread message count
+            setUnreadMessageCount((prev) => prev + 1)
+          }
+        })
       })
-      setUnreadMessageCount(count)
-      dispatch(resetGetAllConversationsOfUser())
+
+      // Cleanup listener on unmount
+      return () => unsubscribe()
     }
-  }, [
-    isGetAllConversationsOfUserError,
-    getAllConversationsOfUserErrorMessage,
-    isGetAllConversationsOfUserSuccess,
-    conversations,
-    dispatch,
-  ])
+  }, [userInfo])
 
   // Function to play sound
   const playSound = async () => {
@@ -152,12 +183,12 @@ const BottomDrawer = () => {
   }
 
   // Function to send push notoification
-  const sendPushNotification = async () => {
+  const sendPushNotification = async (newMessage) => {
     const message = {
       to: expoPushToken,
       sound: 'default',
-      title: 'You have a new message',
-      body: 'Please check your inbox',
+      title: `New message from ${newMessage.senderName}`,
+      body: newMessage.text, // Adjust based on your message schema
     }
 
     await fetch('https://exp.host/--/api/v2/push/send', {
@@ -194,21 +225,36 @@ const BottomDrawer = () => {
   // }, [dispatch, unreadMessageCount])
 
   // On socket event getMessage, get all conversations of user amd play notification sound. Make sure only one listener is attached to the event
-  useEffect(() => {
-    socket.on('getMessage', (data) => {
-      dispatch(getAllConversationsOfUser())
-      sendPushNotification()
-      setUnreadMessageCount(unreadMessageCount + 1)
-    })
-    return () => {
-      socket.off('getMessage')
-    }
-  }, [dispatch, unreadMessageCount])
+  // useEffect(() => {
+  //   socket.on('getMessage', (data) => {
+  //     dispatch(getAllConversationsOfUser())
+  //     sendPushNotification()
+  //     setUnreadMessageCount(unreadMessageCount + 1)
+  //   })
+  //   return () => {
+  //     socket.off('getMessage')
+  //   }
+  // }, [dispatch, unreadMessageCount])
 
   // Get all conversations of user when component mounts
   useEffect(() => {
-    dispatch(getAllConversationsOfUser())
-  }, [dispatch])
+    if (userInfo) {
+      const conversationsQuery = query(
+        collection(firestore, 'conversations'),
+        where('participants', 'array-contains', userInfo._id)
+      )
+
+      const unsubscribe = onSnapshot(conversationsQuery, (snapshot) => {
+        const conversationsData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+        // Use conversationsData to update state if needed
+      })
+
+      return () => unsubscribe()
+    }
+  }, [userInfo])
 
   return (
     <>
