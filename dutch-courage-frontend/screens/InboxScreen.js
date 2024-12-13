@@ -24,6 +24,16 @@ import * as Progress from 'react-native-progress'
 import Toast from 'react-native-toast-message'
 import socket from '../utils/socketInit'
 
+import {
+  collection,
+  query,
+  where,
+  onSnapshot,
+  doc,
+  deleteDoc,
+} from 'firebase/firestore'
+import { firestore } from '../firebaseConfig' // Adjust based on your Firebase config file path
+
 const InboxScreen = () => {
   // Navigation hook
   const navigation = useNavigation()
@@ -34,7 +44,7 @@ const InboxScreen = () => {
   const { userInfo } = useSelector((state) => state.auth)
 
   const {
-    conversations,
+    // conversations,
     isGetAllConversationsOfUserLoading,
     isGetAllConversationsOfUserSuccess,
     isGetAllConversationsOfUserError,
@@ -50,6 +60,7 @@ const InboxScreen = () => {
   } = useSelector((state) => state.conversation)
 
   // local state variables
+  const [conversations, setConversations] = useState([])
   const [selectedConversations, setSelectedConversations] = useState([])
   const [isDeleteMode, setIsDeleteMode] = useState(false)
 
@@ -69,21 +80,43 @@ const InboxScreen = () => {
   // }, [userInfo])
 
   // Get all conversations of user when component mounts
+  // useEffect(() => {
+  //   dispatch(getAllConversationsOfUser())
+  // }, [dispatch])
+
+  // Fetch and listen to conversations in real-time
   useEffect(() => {
-    dispatch(getAllConversationsOfUser())
-  }, [dispatch])
+    if (userInfo) {
+      const conversationsQuery = query(
+        collection(firestore, 'conversations'),
+        where('participants', 'array-contains', userInfo._id)
+      )
+
+      const unsubscribe = onSnapshot(conversationsQuery, (snapshot) => {
+        const conversationsData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+        // Update state directly
+        setConversations(conversationsData)
+      })
+
+      // Cleanup listener on unmount
+      return () => unsubscribe()
+    }
+  }, [userInfo])
 
   // Handle get all conversations of user error
-  useEffect(() => {
-    if (isGetAllConversationsOfUserError) {
-      Toast.show({
-        type: 'error',
-        text1: getAllConversationsOfUserErrorMessage,
-        visibilityTime: 3000,
-      })
-      dispatch(resetGetAllConversationsOfUser())
-    }
-  }, [isGetAllConversationsOfUserError, getAllConversationsOfUserErrorMessage])
+  // useEffect(() => {
+  //   if (isGetAllConversationsOfUserError) {
+  //     Toast.show({
+  //       type: 'error',
+  //       text1: getAllConversationsOfUserErrorMessage,
+  //       visibilityTime: 3000,
+  //     })
+  //     dispatch(resetGetAllConversationsOfUser())
+  //   }
+  // }, [isGetAllConversationsOfUserError, getAllConversationsOfUserErrorMessage])
 
   // function to handle back press of hardware
   useEffect(() => {
@@ -107,28 +140,53 @@ const InboxScreen = () => {
   }, [isDeleteMode, navigation, selectedConversations])
 
   // Handle delete conversations which are selected
-  useEffect(() => {
-    if (isDeleteConversationsSuccess) {
-      Toast.show({
-        type: 'success',
-        text1: 'Conversations deleted successfully',
-        visibilityTime: 3000,
-      })
-      dispatch(resetDeleteConversations())
-      dispatch(getAllConversationsOfUser())
-      setIsDeleteMode(false)
-      setSelectedConversations([])
-    } else if (isDeleteConversationsError) {
-      Toast.show({
-        type: 'error',
-        text1: deleteConversationsErrorMessage,
-        visibilityTime: 3000,
-      })
-      dispatch(resetDeleteConversations())
-    }
-  }, [isDeleteConversationsSuccess, isDeleteConversationsError, dispatch])
+  // useEffect(() => {
+  //   if (isDeleteConversationsSuccess) {
+  //     Toast.show({
+  //       type: 'success',
+  //       text1: 'Conversations deleted successfully',
+  //       visibilityTime: 3000,
+  //     })
+  //     dispatch(resetDeleteConversations())
+  //     dispatch(getAllConversationsOfUser())
+  //     setIsDeleteMode(false)
+  //     setSelectedConversations([])
+  //   } else if (isDeleteConversationsError) {
+  //     Toast.show({
+  //       type: 'error',
+  //       text1: deleteConversationsErrorMessage,
+  //       visibilityTime: 3000,
+  //     })
+  //     dispatch(resetDeleteConversations())
+  //   }
+  // }, [isDeleteConversationsSuccess, isDeleteConversationsError, dispatch])
 
   // function to delete selected conversations
+  // const deleteSelectedConversations = () => {
+  //   Alert.alert(
+  //     'Delete Conversations',
+  //     'Are you sure you want to delete the selected conversations?',
+  //     [
+  //       {
+  //         text: 'Cancel',
+  //         onPress: () => null,
+  //         style: 'cancel',
+  //       },
+  //       {
+  //         text: 'Delete',
+  //         onPress: () => {
+  //           dispatch(
+  //             deleteConversations({
+  //               conversationIds: selectedConversations,
+  //             })
+  //           )
+  //         },
+  //       },
+  //     ]
+  //   )
+  // }
+
+  // Function to delete selected conversations
   const deleteSelectedConversations = () => {
     Alert.alert(
       'Delete Conversations',
@@ -141,12 +199,27 @@ const InboxScreen = () => {
         },
         {
           text: 'Delete',
-          onPress: () => {
-            dispatch(
-              deleteConversations({
-                conversationIds: selectedConversations,
+          onPress: async () => {
+            try {
+              await Promise.all(
+                selectedConversations.map((conversationId) =>
+                  deleteDoc(doc(firestore, 'conversations', conversationId))
+                )
+              )
+              Toast.show({
+                type: 'success',
+                text1: 'Conversations deleted successfully',
+                visibilityTime: 3000,
               })
-            )
+              setIsDeleteMode(false)
+              setSelectedConversations([])
+            } catch (error) {
+              Toast.show({
+                type: 'error',
+                text1: 'Error deleting conversations. Please try again.',
+                visibilityTime: 3000,
+              })
+            }
           },
         },
       ]
@@ -154,11 +227,11 @@ const InboxScreen = () => {
   }
 
   // Update conversation list when a new conversation message is received
-  useEffect(() => {
-    socket.on('getMessage', (data) => {
-      dispatch(getAllConversationsOfUser())
-    })
-  }, [dispatch])
+  // useEffect(() => {
+  //   socket.on('getMessage', (data) => {
+  //     dispatch(getAllConversationsOfUser())
+  //   })
+  // }, [dispatch])
 
   // clear redux state on unmount
   useEffect(() => {
