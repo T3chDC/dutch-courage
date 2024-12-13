@@ -33,6 +33,9 @@ import BottomDrawer from '../components/BottomDrawer'
 import { rateUser, resetRateUser } from '../features/user/userSlice'
 import socket from '../utils/socketInit'
 
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
+import { firestore } from '../firebaseConfig'
+
 const OtherUserProfileScreen = ({ route }) => {
   // Navigation hook
   const navigation = useNavigation()
@@ -153,73 +156,97 @@ const OtherUserProfileScreen = ({ route }) => {
     return () => backHandler.remove()
   }, [navigation])
 
+  // Function to create a conversation with a message in firestore
+  const createConversationAndMessage = async () => {
+    try {
+      const conversationRef = await addDoc(
+        collection(firestore, 'conversations'),
+        {
+          participants: [userInfo._id, userId],
+          acceptedBy: [userInfo._id],
+          createdAt: serverTimestamp(),
+        }
+      )
+
+      await addDoc(collection(firestore, 'messages'), {
+        conversationId: conversationRef.id,
+        sender: userInfo._id,
+        messageType: 'text',
+        message: `You have a notification from ${userInfo.userName}`,
+        createdAt: serverTimestamp(),
+      })
+    } catch (error) {
+      console.error('Error adding document: ', error)
+      Toast.show({
+        type: 'error',
+        text1: 'Error creating conversation',
+        visibilityTime: 3000,
+      })
+    }
+  }
+
   // function to create a conversation on swipe
   const handleSwipe = () => {
-    dispatch(
-      createConversation({
-        participants: [userInfo._id, userId],
-        acceptedBy: [userInfo._id],
-      })
-    )
+    createConversationAndMessage()
   }
 
   // if the conversation is created successfully, create a message
-  useEffect(() => {
-    if (isCreateConversationError) {
-      Toast.show({
-        type: 'error',
-        text1: createConversationErrorMessage,
-        visibilityTime: 3000,
-      })
-    } else if (isCreateConversationSuccess) {
-      dispatch(
-        createMessage({
-          conversationId: conversation._id,
-          sender: userInfo._id,
-          messageType: 'text',
-          message: `You have a notification from ${userInfo.userName}`,
-        })
-      )
-    }
-  }, [
-    dispatch,
-    isCreateConversationError,
-    isCreateConversationSuccess,
-    createConversationErrorMessage,
-    // conversation,
-    userInfo,
-  ])
+  // useEffect(() => {
+  //   if (isCreateConversationError) {
+  //     Toast.show({
+  //       type: 'error',
+  //       text1: createConversationErrorMessage,
+  //       visibilityTime: 3000,
+  //     })
+  //   } else if (isCreateConversationSuccess) {
+  //     dispatch(
+  //       createMessage({
+  //         conversationId: conversation._id,
+  //         sender: userInfo._id,
+  //         messageType: 'text',
+  //         message: `You have a notification from ${userInfo.userName}`,
+  //       })
+  //     )
+  //   }
+  // }, [
+  //   dispatch,
+  //   isCreateConversationError,
+  //   isCreateConversationSuccess,
+  //   createConversationErrorMessage,
+  //   // conversation,
+  //   userInfo,
+  // ])
 
   // if the message is created successfully, toast a success message
-  useEffect(() => {
-    if (isCreateMessageError) {
-      Toast.show({
-        type: 'error',
-        text1: createMessageErrorMessage,
-        visibilityTime: 3000,
-      })
-    } else if (isCreateMessageSuccess) {
-      socket.emit('sendMessage', {
-        conversationId: conversation._id,
-        senderId: userInfo._id,
-        receiverId: userId,
-        messageType: message.messageType,
-        message: message.message,
-        messageImageUrl: message.messageImageUrl,
-        createdAt: message.createdAt,
-      })
-      Toast.show({
-        type: 'success',
-        text1: `Your wave was sent to ${userName}`,
-        visibilityTime: 3000,
-      })
-    }
-  }, [
-    dispatch,
-    isCreateMessageError,
-    isCreateMessageSuccess,
-    createMessageErrorMessage,
-  ])
+  // useEffect(() => {
+  //   if (isCreateMessageError) {
+  //     Toast.show({
+  //       type: 'error',
+  //       text1: createMessageErrorMessage,
+  //       visibilityTime: 3000,
+  //     })
+  //   } else if (isCreateMessageSuccess) {
+  //     socket.emit('sendMessage', {
+  //       conversationId: conversation._id,
+  //       senderId: userInfo._id,
+  //       receiverId: userId,
+  //       messageType: message.messageType,
+  //       message: message.message,
+  //       messageImageUrl: message.messageImageUrl,
+  //       createdAt: message.createdAt,
+  //     })
+  //     Toast.show({
+  //       type: 'success',
+  //       text1: `Your wave was sent to ${userName}`,
+  //       visibilityTime: 3000,
+  //     })
+  //   }
+  // }, [
+  //   dispatch,
+  //   isCreateMessageError,
+  //   isCreateMessageSuccess,
+  //   createMessageErrorMessage,
+  // ])
 
   // show toast message if star rating is successful or show error message if star rating fails
   useEffect(() => {
