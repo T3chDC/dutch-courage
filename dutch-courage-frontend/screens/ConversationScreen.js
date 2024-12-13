@@ -37,6 +37,22 @@ import SelectFilesModal from '../components/SelectFilesModal'
 import ConfirmSelectedFileModal from '../components/ConfirmSelectedFileModal'
 import axios from 'axios'
 
+import {
+  collection,
+  doc,
+  addDoc,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  query,
+  where,
+  orderBy,
+  updateDoc,
+  deleteDoc,
+  serverTimestamp,
+} from 'firebase/firestore'
+import { firestore } from '../firebaseConfig' // Assuming Firebase is configured here
+
 const ConversationScreen = () => {
   // Navigation hook
   const navigation = useNavigation()
@@ -51,7 +67,7 @@ const ConversationScreen = () => {
   // Redux State variables
   const { userInfo } = useSelector((state) => state.auth)
 
-  const { meUser } = useSelector((state) => state.user)
+  // const { meUser } = useSelector((state) => state.user)
 
   const [isSelectFileModalVisible, setIsSelectFileModalVisible] =
     useState(false)
@@ -96,12 +112,55 @@ const ConversationScreen = () => {
     }
   }, [userInfo, navigation])
 
+  const fetchConversationById = async (conversationId) => {
+    try {
+      const conversationRef = doc(firestore, 'conversations', conversationId)
+      const conversationSnap = await getDoc(conversationRef)
+
+      if (conversationSnap.exists()) {
+        const data = conversationSnap.data()
+        const messagesQuery = query(
+          collection(firestore, 'messages'),
+          where('conversationId', '==', conversationId),
+          orderBy('createdAt', 'asc')
+        )
+        const messagesSnap = await getDocs(messagesQuery)
+
+        const messages = messagesSnap.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+        return { ...data, messages }
+      } else {
+        throw new Error('Conversation not found')
+      }
+    } catch (error) {
+      console.error('Error fetching conversation:', error)
+      throw error
+    }
+  }
+
   // Get conversation by id
   useEffect(() => {
     if (conversationId) {
-      dispatch(getConversationById(conversationId))
+      fetchConversationById(conversationId)
     }
-  }, [conversationId, dispatch])
+  }, [conversationId])
+
+  const markConversationAsRead = async () => {
+    try {
+      if (conversationId && conversation.unreadMessageCount > 0) {
+        const conversationRef = doc(firestore, 'conversations', conversationId)
+
+        await updateDoc(conversationRef, {
+          unreadMessageCount: 0,
+          [`participantsMessageCount.${userInfo._id}`]: 0, // Reset message count for this user
+        })
+      }
+    } catch (error) {
+      console.error('Error marking conversation as read:', error)
+    }
+  }
 
   // mark conversation as read
   useEffect(() => {
@@ -110,50 +169,43 @@ const ConversationScreen = () => {
       isGetConversationByIdSuccess &&
       conversation.unreadMessageCount > 0
     ) {
-      dispatch(
-        updateConversationById({
-          conversationId,
-          data: {
-            unreadMessageCount: 0,
-          },
-        })
-      )
+      markConversationAsRead()
     }
-  }, [conversationId, conversation, isGetConversationByIdSuccess, dispatch])
+  }, [conversationId, conversation, isGetConversationByIdSuccess])
 
   // if conversation is updated successfully fetch the updated conversation again
   useEffect(() => {
     if (isUpdateConversationByIdSuccess) {
-      dispatch(getConversationById(conversationId))
+      fetchConversationById(conversationId)
       dispatch(resetUpdateConversationById())
     }
   }, [isUpdateConversationByIdSuccess, dispatch])
 
   // Show error message if there is any or populate the conversation messages
-  useEffect(() => {
-    if (isGetConversationByIdSuccess) {
-      setConversationMessages(conversation.messages)
-      setUserMessageCount(conversation.participantsMessageCount[userInfo._id])
-      dispatch(resetGetConversationById())
-    } else if (isGetConversationByIdError) {
-      Toast.show({
-        type: 'error',
-        text1: getConversationByIdErrorMessage,
-        visibilityTime: 3000,
-      })
-      dispatch(resetGetConversationById())
-    }
-  }, [
-    isGetConversationByIdSuccess,
-    isGetConversationByIdError,
-    getConversationByIdErrorMessage,
-    dispatch,
-  ])
+  // useEffect(() => {
+  //   if (isGetConversationByIdSuccess) {
+  //     setConversationMessages(conversation.messages)
+  //     setUserMessageCount(conversation.participantsMessageCount[userInfo._id])
+  //     dispatch(resetGetConversationById())
+  //   } else if (isGetConversationByIdError) {
+  //     Toast.show({
+  //       type: 'error',
+  //       text1: getConversationByIdErrorMessage,
+  //       visibilityTime: 3000,
+  //     })
+  //     dispatch(resetGetConversationById())
+  //   }
+  // }, [
+  //   isGetConversationByIdSuccess,
+  //   isGetConversationByIdError,
+  //   getConversationByIdErrorMessage,
+  //   dispatch,
+  // ])
 
   // Functionality when user is trying togo back to profile screen
   useEffect(() => {
     const backAction = () => {
-      dispatch(getAllConversationsOfUser())
+      // dispatch(getAllConversationsOfUser())
       navigation.navigate('UserInbox')
       return true
     }
@@ -179,36 +231,56 @@ const ConversationScreen = () => {
   }, [])
 
   // Refetch conversation when new message is created
+  // useEffect(() => {
+  //   if (isCreateMessageSuccess) {
+  //     setConversationMessages([...conversationMessages, message])
+  //     setUserMessageCount(userMessageCount + 1)
+  //     // Send message to socket
+  //     socket.emit('sendMessage', {
+  //       conversationId,
+  //       senderId: userInfo._id,
+  //       receiverId: sender._id,
+  //       messageType: message.messageType,
+  //       message: message.message,
+  //       messageImageUrl: message.messageImageUrl,
+  //       createdAt: message.createdAt,
+  //     })
+  //     dispatch(resetCreateMessage())
+  //     setMessageText('')
+  //   } else if (isCreateMessageError) {
+  //     Toast.show({
+  //       type: 'error',
+  //       text1: createMessageErrorMessage,
+  //       visibilityTime: 4000,
+  //     })
+  //     dispatch(resetCreateMessage())
+  //   }
+  // }, [
+  //   isCreateMessageSuccess,
+  //   isCreateMessageError,
+  //   createMessageErrorMessage,
+  //   dispatch,
+  // ])
+
   useEffect(() => {
-    if (isCreateMessageSuccess) {
-      setConversationMessages([...conversationMessages, message])
-      setUserMessageCount(userMessageCount + 1)
-      // Send message to socket
-      socket.emit('sendMessage', {
-        conversationId,
-        senderId: userInfo._id,
-        receiverId: sender._id,
-        messageType: message.messageType,
-        message: message.message,
-        messageImageUrl: message.messageImageUrl,
-        createdAt: message.createdAt,
+    if (conversationId) {
+      const messagesQuery = query(
+        collection(firestore, 'messages'),
+        where('conversationId', '==', conversationId),
+        orderBy('createdAt', 'asc')
+      )
+
+      const unsubscribe = onSnapshot(messagesQuery, (snapshot) => {
+        const newMessages = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+        setConversationMessages(newMessages)
       })
-      dispatch(resetCreateMessage())
-      setMessageText('')
-    } else if (isCreateMessageError) {
-      Toast.show({
-        type: 'error',
-        text1: createMessageErrorMessage,
-        visibilityTime: 4000,
-      })
-      dispatch(resetCreateMessage())
+
+      return () => unsubscribe()
     }
-  }, [
-    isCreateMessageSuccess,
-    isCreateMessageError,
-    createMessageErrorMessage,
-    dispatch,
-  ])
+  }, [conversationId])
 
   //functin to format date and time
   const formatDate = (datetime) => {
@@ -276,50 +348,89 @@ const ConversationScreen = () => {
   }
 
   // Function to create text message
-  const createTextMessage = () => {
-    if (messageText.trim() === '') {
-      return
-    }
-    dispatch(
-      createMessage({
+  // const createTextMessage = () => {
+  //   if (messageText.trim() === '') {
+  //     return
+  //   }
+  //   dispatch(
+  //     createMessage({
+  //       conversationId,
+  //       sender: userInfo._id,
+  //       messageType: 'text',
+  //       message: messageText,
+  //     })
+  //   )
+  // }
+
+  const createTextMessage = async () => {
+    if (messageText.trim() === '') return
+
+    try {
+      const messageData = {
         conversationId,
         sender: userInfo._id,
         messageType: 'text',
         message: messageText,
-      })
-    )
+        createdAt: serverTimestamp(),
+      }
+
+      await addDoc(collection(firestore, 'messages'), messageData)
+
+      setMessageText('')
+    } catch (error) {
+      console.error('Error creating message:', error)
+    }
   }
 
   // Function to create image message
+  // const createImageMessage = async () => {
+  //   if (!selectedImage) {
+  //     return
+  //   }
+  //   const messageImageUrl = await messageImageUploadHandler()
+  //   dispatch(
+  //     createMessage({
+  //       conversationId,
+  //       sender: userInfo._id,
+  //       messageType: 'image',
+  //       messageImageUrl,
+  //     })
+  //   )
+  // }
+
   const createImageMessage = async () => {
-    if (!selectedImage) {
-      return
-    }
-    const messageImageUrl = await messageImageUploadHandler()
-    dispatch(
-      createMessage({
+    if (!selectedImage) return
+
+    try {
+      const messageImageUrl = await messageImageUploadHandler()
+      const messageData = {
         conversationId,
         sender: userInfo._id,
         messageType: 'image',
         messageImageUrl,
-      })
-    )
+        createdAt: serverTimestamp(),
+      }
+
+      await addDoc(collection(firestore, 'messages'), messageData)
+    } catch (error) {
+      console.error('Error creating image message:', error)
+    }
   }
 
   // Update conversation messages when new message is received
-  useEffect(() => {
-    socket.on('getMessage', (data) => {
-      setNewArrivedMessage(data)
-    })
-  }, [conversationId, conversationMessages])
+  // useEffect(() => {
+  //   socket.on('getMessage', (data) => {
+  //     setNewArrivedMessage(data)
+  //   })
+  // }, [conversationId, conversationMessages])
 
-  useEffect(() => {
-    if (newArrivedMessage) {
-      if (newArrivedMessage.conversationId === conversationId) {
-        setConversationMessages([...conversationMessages, newArrivedMessage])
-      }
-    }
-  }, [newArrivedMessage])
+  // useEffect(() => {
+  //   if (newArrivedMessage) {
+  //     if (newArrivedMessage.conversationId === conversationId) {
+  //       setConversationMessages([...conversationMessages, newArrivedMessage])
+  //     }
+  //   }
+  // }, [newArrivedMessage])
 
   // Clear redux state on unmount
   useEffect(() => {
@@ -333,49 +444,78 @@ const ConversationScreen = () => {
   }, [dispatch])
 
   // Function to accept text request
-  const acceptTextRequestHandler = () => {
-    dispatch(
-      updateConversationById({
-        conversationId,
-        data: {
-          acceptedBy: [...conversation.acceptedBy, userInfo._id],
-        },
+  // const acceptTextRequestHandler = () => {
+  //   dispatch(
+  //     updateConversationById({
+  //       conversationId,
+  //       data: {
+  //         acceptedBy: [...conversation.acceptedBy, userInfo._id],
+  //       },
+  //     })
+  //   )
+  // }
+
+  const acceptTextRequestHandler = async () => {
+    try {
+      const conversationRef = doc(firestore, 'conversations', conversationId)
+      await updateDoc(conversationRef, {
+        acceptedBy: [...conversation.acceptedBy, userInfo._id],
       })
-    )
+    } catch (error) {
+      console.error('Error accepting request:', error)
+    }
   }
 
   // Function to decline text request
-  const declineTextRequestHandler = () => {
-    dispatch(deleteConversationById(conversationId))
-  }
-
-  // If conversation is deleted navigate back to inbox screen
-  useEffect(() => {
-    if (isDeleteConversationByIdSuccess) {
-      dispatch(resetDeleteConversationById())
-      dispatch(getAllConversationsOfUser())
+  // const declineTextRequestHandler = () => {
+  //   dispatch(deleteConversationById(conversationId))
+  // }
+  const declineTextRequestHandler = async () => {
+    try {
+      await deleteDoc(doc(firestore, 'conversations', conversationId))
       Toast.show({
         type: 'success',
         text1: 'Conversation will not be continued with this user',
         visibilityTime: 4000,
       })
       navigation.navigate('UserInbox')
-    } else if (isDeleteConversationByIdError) {
+    } catch (error) {
+      console.error('Error declining request:', error)
       Toast.show({
         type: 'error',
-        text1: deleteConversationByIdErrorMessage,
+        text1: 'Error declining request',
         visibilityTime: 4000,
       })
-      dispatch(resetDeleteConversationById())
     }
-  }, [isDeleteConversationByIdSuccess, isDeleteConversationByIdError, dispatch])
+  }
+
+  // If conversation is deleted navigate back to inbox screen
+  // useEffect(() => {
+  //   if (isDeleteConversationByIdSuccess) {
+  //     dispatch(resetDeleteConversationById())
+  //     // dispatch(getAllConversationsOfUser())
+  //     Toast.show({
+  //       type: 'success',
+  //       text1: 'Conversation will not be continued with this user',
+  //       visibilityTime: 4000,
+  //     })
+  //     navigation.navigate('UserInbox')
+  //   } else if (isDeleteConversationByIdError) {
+  //     Toast.show({
+  //       type: 'error',
+  //       text1: deleteConversationByIdErrorMessage,
+  //       visibilityTime: 4000,
+  //     })
+  //     dispatch(resetDeleteConversationById())
+  //   }
+  // }, [isDeleteConversationByIdSuccess, isDeleteConversationByIdError, dispatch])
 
   return (
     <View className='bg-black flex-1 justify-start items-center relative'>
       <TouchableOpacity
         className='absolute top-12 left-4 flex-row items-center'
         onPress={() => {
-          dispatch(getAllConversationsOfUser())
+          // dispatch(getAllConversationsOfUser())
           navigation.navigate('UserInbox')
         }}
       >
