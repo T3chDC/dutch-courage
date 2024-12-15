@@ -175,6 +175,13 @@ const OtherUserProfileScreen = ({ route }) => {
         message: `You have a notification from ${userInfo.userName}`,
         createdAt: serverTimestamp(),
       })
+
+      Toast.show({
+        type: 'success',
+        text1: `Your wave was sent to ${userName}`,
+        visibilityTime: 3000,
+      })
+      
     } catch (error) {
       console.error('Error adding document: ', error)
       Toast.show({
