@@ -158,6 +158,37 @@ const OtherUserProfileScreen = ({ route }) => {
 
   // Function to create a conversation with a message in firestore
   const createConversationAndMessage = async () => {
+    // Check if there is an existing conversation in firestore
+    const conversationRef = await getDocs(
+      query(
+        collection(firestore, 'conversations'),
+        where('participants', 'array-contains', userInfo._id),
+        where('participants', 'array-contains', userId)
+      )
+    )
+
+    if (
+      conversationRef.docs.length > 0 &&
+      conversationRef.docs[0].acceptedBy.length === 2
+    ) {
+      Toast.show({
+        type: 'error',
+        text1: 'Conversation already exists',
+        visibilityTime: 3000,
+      })
+      return
+    } else if (
+      conversationRef.docs.length > 0 &&
+      conversationRef.docs[0].acceptedBy.length === 1
+    ) {
+      Toast.show({
+        type: 'error',
+        text1: 'The other user has not responded to your request yet',
+        visibilityTime: 3000,
+      })
+      return
+    }
+
     try {
       const conversationRef = await addDoc(
         collection(firestore, 'conversations'),
