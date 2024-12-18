@@ -300,9 +300,9 @@ const InboxScreen = () => {
       ) : (
         <>
           {conversations?.map((conversation) =>
-            conversation.deletedBy.includes(userInfo._id) ? null : (
+            conversation.deletedBy?.includes(userInfo._id) ? null : (
               <Conversation
-                key={conversation._id}
+                key={conversation.id}
                 conversation={conversation}
                 loggedInUser={userInfo}
                 selectedConversations={selectedConversations}

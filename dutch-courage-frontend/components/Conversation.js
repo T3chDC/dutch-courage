@@ -40,6 +40,8 @@ const Conversation = ({
   const formatDate = (datetime) => {
     const now = new Date()
 
+    console.log('datetime', datetime)
+
     const date = new Date(datetime)
 
     // Calculate the time difference in milliseconds
@@ -156,11 +158,11 @@ const Conversation = ({
                   ) &&
                   conversation.lastMessage.sender === loggedInUser._id
                     ? 'You sent a wave to this user'
-                    : conversation?.lastMessage?.messageType === 'text' 
-                      // !conversation.lastMessage.message.startsWith(
+                    : conversation?.lastMessage?.messageType === 'text'
+                    ? // !conversation.lastMessage.message.startsWith(
                       //   'You have a notification from'
                       // )
-                    ? conversation.lastMessage.message
+                      conversation.lastMessage.message
                     : conversation?.lastMessage?.messageType === 'image'
                     ? 'New Image'
                     : 'New Message'}

@@ -376,6 +376,16 @@ const ConversationScreen = () => {
 
       await addDoc(collection(firestore, 'messages'), messageData)
 
+      // Update the conversation last message
+      await updateDoc(doc(firestore, 'conversations', conversationId), {
+        lastMessage: {
+          sender: userInfo._id,
+          messageType: 'text',
+          message: messageText,
+          createdAt: serverTimestamp(),
+        },
+      })
+
       setMessageText('')
     } catch (error) {
       console.error('Error creating message:', error)
@@ -412,6 +422,16 @@ const ConversationScreen = () => {
       }
 
       await addDoc(collection(firestore, 'messages'), messageData)
+
+      // Update the conversation last message
+      await updateDoc(doc(firestore, 'conversations', conversationId), {
+        lastMessage: {
+          sender: userInfo._id,
+          messageType: 'image',
+          messageImageUrl,
+          createdAt: serverTimestamp(),
+        },
+      })
     } catch (error) {
       console.error('Error creating image message:', error)
     }
@@ -535,7 +555,7 @@ const ConversationScreen = () => {
             <Image
               className='w-[40] h-[40] rounded-full'
               source={{
-                uri: `${BACKEND_URL}/uploads/${sender?.imageUrl.slice(
+                uri: `${BACKEND_URL}/uploads/${sender?.imageUrl?.slice(
                   sender?.imageUrl.lastIndexOf('/') + 1
                 )}`,
               }}
@@ -636,7 +656,7 @@ const ConversationScreen = () => {
                       <Image
                         className='w-[200] h-[200] rounded-xl'
                         source={{
-                          uri: `${BACKEND_URL}/uploads/${message.messageImageUrl.slice(
+                          uri: `${BACKEND_URL}/uploads/${message.messageImageUrl?.slice(
                             message.messageImageUrl.lastIndexOf('/') + 1
                           )}`,
                         }}
