@@ -33,7 +33,15 @@ import BottomDrawer from '../components/BottomDrawer'
 import { rateUser, resetRateUser } from '../features/user/userSlice'
 import socket from '../utils/socketInit'
 
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  where,
+  serverTimestamp,
+  and,
+} from 'firebase/firestore'
 import { firestore } from '../firebaseConfig'
 
 const OtherUserProfileScreen = ({ route }) => {
@@ -163,14 +171,16 @@ const OtherUserProfileScreen = ({ route }) => {
       const existingConversationRef = await getDocs(
         query(
           collection(firestore, 'conversations'),
-          where('participants', 'array-contains', userInfo._id),
-          where('participants', 'array-contains', userId)
+          where('participants', 'array-contains-any', [userInfo._id, userId])
         )
       )
 
+      console.log('existingConversationRef', existingConversationRef.docs)
+
       if (
-        existingConversationRef.docs.length > 0 &&
-        existingConversationRef.docs[0].acceptedBy.length === 2
+        existingConversationRef !== null &&
+        existingConversationRef.docs?.length > 0 &&
+        existingConversationRef.docs[0]?.acceptedBy.length === 2
       ) {
         Toast.show({
           type: 'error',
@@ -179,8 +189,9 @@ const OtherUserProfileScreen = ({ route }) => {
         })
         return
       } else if (
-        existingConversationRef.docs.length > 0 &&
-        existingConversationRef.docs[0].acceptedBy.length === 1
+        existingConversationRef !== null &&
+        existingConversationRef.docs?.length > 0 &&
+        existingConversationRef.docs[0]?.acceptedBy.length === 1
       ) {
         Toast.show({
           type: 'error',
