@@ -214,6 +214,7 @@ const InboxScreen = () => {
               setIsDeleteMode(false)
               setSelectedConversations([])
             } catch (error) {
+              console.log(error)
               Toast.show({
                 type: 'error',
                 text1: 'Error deleting conversations. Please try again.',

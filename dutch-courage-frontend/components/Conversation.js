@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react'
 import { CheckIcon } from 'react-native-heroicons/solid'
 import { BACKEND_URL } from '../config'
 import { useNavigation } from '@react-navigation/native'
+import userService from '../features/user/userService'
+import { useSelector } from 'react-redux'
 
 const Conversation = ({
   conversation,
@@ -18,6 +20,9 @@ const Conversation = ({
   // sender is the other user
   const [sender, setSender] = useState({})
 
+  // Redux State variables
+  const { userInfo } = useSelector((state) => state.auth)
+
   //state variable to check if this conversation is selected
   const [isSelected, setIsSelected] = useState(false)
 
@@ -31,18 +36,20 @@ const Conversation = ({
   // Get the other user in the conversation
   useEffect(() => {
     const otherUser = conversation.participants.find(
-      (participant) => participant._id !== loggedInUser._id
+      (participant) => participant !== loggedInUser._id
     )
-    setSender(otherUser)
+    // Fetch the other user's data
+    userService.getOtherUser(userInfo.token, otherUser).then((data) => {
+      setSender(data)
+    })
   }, [conversation])
 
   //functin to format date and time
   const formatDate = (datetime) => {
     const now = new Date()
 
-    console.log('datetime', datetime)
-
-    const date = new Date(datetime)
+    // Convert Firestore timestamp to JavaScript Date
+    const date = new Date(datetime.seconds * 1000 + datetime.nanoseconds / 1e6)
 
     // Calculate the time difference in milliseconds
     const timeDiff = now - date
@@ -53,7 +60,10 @@ const Conversation = ({
     const yearsDiff = now.getFullYear() - date.getFullYear()
 
     if (hoursDiff < 24) {
-      return `${date.getHours()}:${date.getMinutes()}`
+      return `${date.getHours()}:${date
+        .getMinutes()
+        .toString()
+        .padStart(2, '0')}`
     } else if (daysDiff === 1) {
       return 'Yesterday'
     } else if (daysDiff < 7) {
@@ -68,9 +78,11 @@ const Conversation = ({
       ]
       return days[date.getDay()]
     } else if (now.getFullYear() === date.getFullYear()) {
-      const formattedDate = `${date.getDate()}/${
+      const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(
         date.getMonth() + 1
-      }/${date.getFullYear()}`
+      )
+        .toString()
+        .padStart(2, '0')}/${date.getFullYear()}`
       return formattedDate
     } else {
       return `${yearsDiff} years ago`
