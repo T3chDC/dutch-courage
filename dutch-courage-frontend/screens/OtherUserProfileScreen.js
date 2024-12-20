@@ -40,7 +40,8 @@ import {
   query,
   where,
   serverTimestamp,
-  and,
+  updateDoc,
+  doc,
 } from 'firebase/firestore'
 import { firestore } from '../firebaseConfig'
 
@@ -167,20 +168,24 @@ const OtherUserProfileScreen = ({ route }) => {
   // Function to create a conversation with a message in firestore
   const createConversationAndMessage = async () => {
     try {
-      // Check if there is an existing conversation in firestore
-      const existingConversationRef = await getDocs(
+      // Check if there is an existing conversation in firestore that contains both the participants
+      const querySnapshotWithUser = await getDocs(
         query(
           collection(firestore, 'conversations'),
-          where('participants', 'array-contains-any', [userInfo._id, userId])
+          where('participants', 'array-contains', userInfo._id)
         )
       )
 
-      console.log('existingConversationRef', existingConversationRef.docs)
+      // Filter the conversations that contain the other user
+      const existingConversationRef = querySnapshotWithUser.docs
+        .map((doc) => ({ id: doc.id, ...doc.data() }))
+        .filter((conversation) => conversation.participants.includes(userId))
+
+      console.log('existingConversationRef', existingConversationRef)
 
       if (
-        existingConversationRef !== null &&
-        existingConversationRef.docs?.length > 0 &&
-        existingConversationRef.docs[0]?.acceptedBy.length === 2
+        existingConversationRef?.length > 0 &&
+        existingConversationRef[0]?.acceptedBy.length === 2
       ) {
         Toast.show({
           type: 'error',
@@ -189,9 +194,8 @@ const OtherUserProfileScreen = ({ route }) => {
         })
         return
       } else if (
-        existingConversationRef !== null &&
-        existingConversationRef.docs?.length > 0 &&
-        existingConversationRef.docs[0]?.acceptedBy.length === 1
+        existingConversationRef?.length > 0 &&
+        existingConversationRef[0]?.acceptedBy.length === 1
       ) {
         Toast.show({
           type: 'error',
