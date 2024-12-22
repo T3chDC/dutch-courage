@@ -74,21 +74,21 @@ const ConversationScreen = () => {
   const [confirmSelectedFileModalVisible, setConfirmSelectedFileModalVisible] =
     useState(false)
 
-  const {
-    conversation,
-    isGetConversationByIdLoading,
-    isGetConversationByIdSuccess,
-    isGetConversationByIdError,
-    getConversationByIdErrorMessage,
-    isUpdateConversationByIdLoading,
-    isUpdateConversationByIdSuccess,
-    isUpdateConversationByIdError,
-    updateConversationByIdErrorMessage,
-    isDeleteConversationByIdLoading,
-    isDeleteConversationByIdSuccess,
-    isDeleteConversationByIdError,
-    deleteConversationByIdErrorMessage,
-  } = useSelector((state) => state.conversation)
+  // const {
+  //   // conversation,
+  //   isGetConversationByIdLoading,
+  //   isGetConversationByIdSuccess,
+  //   isGetConversationByIdError,
+  //   getConversationByIdErrorMessage,
+  //   isUpdateConversationByIdLoading,
+  //   isUpdateConversationByIdSuccess,
+  //   isUpdateConversationByIdError,
+  //   updateConversationByIdErrorMessage,
+  //   isDeleteConversationByIdLoading,
+  //   isDeleteConversationByIdSuccess,
+  //   isDeleteConversationByIdError,
+  //   deleteConversationByIdErrorMessage,
+  // } = useSelector((state) => state.conversation)
 
   const {
     message,
@@ -104,6 +104,9 @@ const ConversationScreen = () => {
   const [conversationMessages, setConversationMessages] = useState([])
   const [userMessageCount, setUserMessageCount] = useState(0)
   const [newArrivedMessage, setNewArrivedMessage] = useState(null)
+  const [conversation, setConversation] = useState(null)
+  const [isGetConversationByIdLoading, setIsGetConversationByIdLoading] =
+    useState(false)
 
   // Check if user is logged in
   useEffect(() => {
@@ -114,11 +117,13 @@ const ConversationScreen = () => {
 
   const fetchConversationById = async (conversationId) => {
     try {
+      setIsGetConversationByIdLoading(true)
       const conversationRef = doc(firestore, 'conversations', conversationId)
       const conversationSnap = await getDoc(conversationRef)
 
       if (conversationSnap.exists()) {
         const data = conversationSnap.data()
+        setConversation(data)
         const messagesQuery = query(
           collection(firestore, 'messages'),
           where('conversationId', '==', conversationId),
@@ -137,6 +142,8 @@ const ConversationScreen = () => {
     } catch (error) {
       console.error('Error fetching conversation:', error)
       throw error
+    } finally {
+      setIsGetConversationByIdLoading(false)
     }
   }
 
@@ -163,23 +170,23 @@ const ConversationScreen = () => {
   }
 
   // mark conversation as read
-  useEffect(() => {
-    if (
-      conversationId &&
-      isGetConversationByIdSuccess &&
-      conversation.unreadMessageCount > 0
-    ) {
-      markConversationAsRead()
-    }
-  }, [conversationId, conversation, isGetConversationByIdSuccess])
+  // useEffect(() => {
+  //   if (
+  //     conversationId &&
+  //     isGetConversationByIdSuccess &&
+  //     conversation.unreadMessageCount > 0
+  //   ) {
+  //     markConversationAsRead()
+  //   }
+  // }, [conversationId, conversation, isGetConversationByIdSuccess])
 
   // if conversation is updated successfully fetch the updated conversation again
-  useEffect(() => {
-    if (isUpdateConversationByIdSuccess) {
-      fetchConversationById(conversationId)
-      dispatch(resetUpdateConversationById())
-    }
-  }, [isUpdateConversationByIdSuccess, dispatch])
+  // useEffect(() => {
+  //   if (isUpdateConversationByIdSuccess) {
+  //     fetchConversationById(conversationId)
+  //     dispatch(resetUpdateConversationById())
+  //   }
+  // }, [isUpdateConversationByIdSuccess, dispatch])
 
   // Show error message if there is any or populate the conversation messages
   // useEffect(() => {
@@ -286,7 +293,8 @@ const ConversationScreen = () => {
   const formatDate = (datetime) => {
     const now = new Date()
 
-    const date = new Date(datetime)
+    // Convert Firestore timestamp to JavaScript Date
+    const date = new Date(datetime.seconds * 1000 + datetime.nanoseconds / 1e6)
 
     // Calculate the time difference in milliseconds
     const timeDiff = now - date
@@ -297,7 +305,10 @@ const ConversationScreen = () => {
     const yearsDiff = now.getFullYear() - date.getFullYear()
 
     if (hoursDiff < 24) {
-      return `${date.getHours()}:${date.getMinutes()}`
+      return `${date.getHours()}:${date
+        .getMinutes()
+        .toString()
+        .padStart(2, '0')}`
     } else if (daysDiff === 1) {
       return 'Yesterday'
     } else if (daysDiff < 7) {
@@ -312,9 +323,11 @@ const ConversationScreen = () => {
       ]
       return days[date.getDay()]
     } else if (now.getFullYear() === date.getFullYear()) {
-      const formattedDate = `${date.getDate()}/${
+      const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(
         date.getMonth() + 1
-      }/${date.getFullYear()}`
+      )
+        .toString()
+        .padStart(2, '0')}/${date.getFullYear()}`
       return formattedDate
     } else {
       return `${yearsDiff} years ago`
