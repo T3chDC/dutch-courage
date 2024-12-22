@@ -11,13 +11,8 @@ import { TrashIcon } from 'react-native-heroicons/outline'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  getAllConversationsOfUser,
   resetConversations,
   resetGetAllConversationsOfUser,
-  deleteConversationById,
-  resetDeleteConversationById,
-  deleteConversations,
-  resetDeleteConversations,
 } from '../features/conversation/conversationSlice'
 import Conversation from '../components/Conversation'
 import * as Progress from 'react-native-progress'
@@ -31,6 +26,7 @@ import {
   onSnapshot,
   doc,
   deleteDoc,
+  updateDoc,
 } from 'firebase/firestore'
 import { firestore } from '../firebaseConfig' // Adjust based on your Firebase config file path
 
@@ -46,17 +42,6 @@ const InboxScreen = () => {
   const {
     // conversations,
     isGetAllConversationsOfUserLoading,
-    isGetAllConversationsOfUserSuccess,
-    isGetAllConversationsOfUserError,
-    getAllConversationsOfUserErrorMessage,
-    isDeleteConversationByIdError,
-    isDeleteConversationByIdSuccess,
-    isDeleteConversationByIdLoading,
-    deleteConversationByIdErrorMessage,
-    isDeleteConversationsError,
-    isDeleteConversationsSuccess,
-    isDeleteConversationsLoading,
-    deleteConversationsErrorMessage,
   } = useSelector((state) => state.conversation)
 
   // local state variables
@@ -186,6 +171,31 @@ const InboxScreen = () => {
   //   )
   // }
 
+  // Handle deletion of conversation by id
+  const deleteConversation = async (conversationId) => {
+    // Get the conversation object first too check if the deletedBy field is present and it's length is 1
+    const conversation = conversations.find(
+      (conversation) => conversation.id === conversationId
+    )
+
+    if (conversation.deletedBy?.length === 1) {
+      // delete the conversation
+      deleteDoc(doc(firestore, 'conversations', conversationId))
+    } else {
+      // update the conversation object with the current user id
+      const updatedConversation = {
+        ...conversation,
+        deletedBy: conversation.deletedBy
+          ? [...conversation.deletedBy, userInfo._id]
+          : [userInfo._id],
+      }
+      // update the conversation object in firestore
+      const conversationRef = doc(firestore, 'conversations', conversationId)
+
+      await updateDoc(conversationRef, updatedConversation)
+    }
+  }
+
   // Function to delete selected conversations
   const deleteSelectedConversations = () => {
     Alert.alert(
@@ -203,7 +213,7 @@ const InboxScreen = () => {
             try {
               await Promise.all(
                 selectedConversations.map((conversationId) =>
-                  deleteDoc(doc(firestore, 'conversations', conversationId))
+                  deleteConversation(conversationId)
                 )
               )
               Toast.show({
@@ -226,6 +236,8 @@ const InboxScreen = () => {
       ]
     )
   }
+
+  console.log(selectedConversations)
 
   // Update conversation list when a new conversation message is received
   // useEffect(() => {

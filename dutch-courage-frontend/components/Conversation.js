@@ -93,10 +93,10 @@ const Conversation = ({
     if (isDeleteMode) {
       setIsSelected(!isSelected)
       if (!isSelected) {
-        setSelectedConversations((prev) => [...prev, conversation._id])
+        setSelectedConversations((prev) => [...prev, conversation.id])
       } else {
         setSelectedConversations((prev) =>
-          prev.filter((id) => id !== conversation._id)
+          prev.filter((id) => id !== conversation.id)
         )
         if (selectedConversations.length === 1) {
           setIsDeleteMode(false)
@@ -104,7 +104,7 @@ const Conversation = ({
       }
     } else {
       navigation.navigate('Conversation', {
-        conversationId: conversation._id,
+        conversationId: conversation.id,
         sender,
       })
     }
@@ -114,10 +114,10 @@ const Conversation = ({
     setIsDeleteMode(true)
     setIsSelected(!isSelected)
     if (!isSelected) {
-      setSelectedConversations((prev) => [...prev, conversation._id])
+      setSelectedConversations((prev) => [...prev, conversation.id])
     } else {
       setSelectedConversations((prev) =>
-        prev.filter((id) => id !== conversation._id)
+        prev.filter((id) => id !== conversation.id)
       )
       if (selectedConversations.length === 1) {
         setIsDeleteMode(false)
