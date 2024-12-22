@@ -195,6 +195,17 @@ const OtherUserProfileScreen = ({ route }) => {
         return
       } else if (
         existingConversationRef?.length > 0 &&
+        existingConversationRef[0]?.acceptedBy.length === 1 &&
+        existingConversationRef[0]?.deletedBy?.length === 1
+      ) {
+        Toast.show({
+          type: 'error',
+          text1: 'The other user has denied your request to chat',
+          visibilityTime: 3000,
+        })
+        return
+      } else if (
+        existingConversationRef?.length > 0 &&
         existingConversationRef[0]?.acceptedBy.length === 1
       ) {
         Toast.show({

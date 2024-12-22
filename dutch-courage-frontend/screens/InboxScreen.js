@@ -237,8 +237,6 @@ const InboxScreen = () => {
     )
   }
 
-  console.log(selectedConversations)
-
   // Update conversation list when a new conversation message is received
   // useEffect(() => {
   //   socket.on('getMessage', (data) => {
