@@ -124,7 +124,9 @@ const ConversationScreen = () => {
       if (conversationSnap.exists()) {
         const data = conversationSnap.data()
         setConversation(data)
-        markConversationAsRead()
+        if (data.unreadMessageCount > 0) {
+          markConversationAsRead()
+        }
       } else {
         throw new Error('Conversation not found')
       }
@@ -394,6 +396,7 @@ const ConversationScreen = () => {
           message: messageText,
           createdAt: serverTimestamp(),
         },
+        unreadMessageCount: conversation.unreadMessageCount + 1,
       })
 
       setMessageText('')

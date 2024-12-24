@@ -19,7 +19,14 @@ import * as Device from 'expo-device'
 import * as Notifications from 'expo-notifications'
 import Constants from 'expo-constants'
 import { Platform } from 'react-native'
-import { collection, query, where, onSnapshot } from 'firebase/firestore'
+import {
+  collection,
+  query,
+  where,
+  onSnapshot,
+  doc,
+  getDoc,
+} from 'firebase/firestore'
 import { firestore } from '../firebaseConfig' // Adjust the path as needed
 
 Notifications.setNotificationHandler({
@@ -90,13 +97,13 @@ const BottomDrawer = () => {
 
   const { userInfo } = useSelector((state) => state.auth)
 
-  const {
-    conversations,
-    isGetAllConversationsOfUserLoading,
-    isGetAllConversationsOfUserSuccess,
-    isGetAllConversationsOfUserError,
-    getAllConversationsOfUserErrorMessage,
-  } = useSelector((state) => state.conversation)
+  // const {
+  //   conversations,
+  //   isGetAllConversationsOfUserLoading,
+  //   isGetAllConversationsOfUserSuccess,
+  //   isGetAllConversationsOfUserError,
+  //   getAllConversationsOfUserErrorMessage,
+  // } = useSelector((state) => state.conversation)
 
   const [expoPushToken, setExpoPushToken] = useState('')
 
@@ -149,26 +156,45 @@ const BottomDrawer = () => {
 
   useEffect(() => {
     if (userInfo) {
-      const messagesQuery = query(
-        collection(firestore, 'messages'),
-        where('recipientId', '==', userInfo._id) // Adjust based on your Firestore schema
+      console.log('querying conversations')
+      const conversationsQuery = query(
+        collection(firestore, 'conversations'),
+        where('participants', 'array-contains', userInfo._id)
       )
 
-      const unsubscribe = onSnapshot(messagesQuery, (snapshot) => {
-        snapshot.docChanges().forEach((change) => {
-          if (change.type === 'added') {
-            const newMessage = change.doc.data()
+      const unsubscribe = onSnapshot(conversationsQuery, (snapshot) => {
+        const conversationsData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
 
+        console.log('conversationsData', conversationsData)
+
+        conversationsData.forEach((conversation) => {
+          if (
+            conversation?.unreadMessageCount > 0 &&
+            conversation?.lastMessage.sender !== userInfo._id
+          ) {
+            setUnreadMessageCount((prev) => prev + 1)
             // Play notification sound
-            // playSound();
+            playSound()
 
             // Send push notification
             sendPushNotification()
-
-            // Increment unread message count
-            setUnreadMessageCount((prev) => prev + 1)
           }
         })
+
+        // if (
+        //   conversation?.unreadMessageCount > 0 &&
+        //   conversation?.lastMessage.sender !== userInfo._id
+        // ) {
+        //   setUnreadMessageCount((prev) => prev + 1)
+        //   // Play notification sound
+        //   playSound()
+
+        //   // Send push notification
+        //   sendPushNotification()
+        // }
       })
 
       // Cleanup listener on unmount
@@ -187,8 +213,8 @@ const BottomDrawer = () => {
     const message = {
       to: expoPushToken,
       sound: 'default',
-      title: `New message from ${newMessage.senderName}`,
-      body: newMessage.text, // Adjust based on your message schema
+      title: `New message in Dutch Courage`,
+      body: 'Please check your inbox',
     }
 
     await fetch('https://exp.host/--/api/v2/push/send', {
@@ -237,24 +263,26 @@ const BottomDrawer = () => {
   // }, [dispatch, unreadMessageCount])
 
   // Get all conversations of user when component mounts
-  useEffect(() => {
-    if (userInfo) {
-      const conversationsQuery = query(
-        collection(firestore, 'conversations'),
-        where('participants', 'array-contains', userInfo._id)
-      )
+  // useEffect(() => {
+  //   if (userInfo) {
+  //     const conversationsQuery = query(
+  //       collection(firestore, 'conversations'),
+  //       where('participants', 'array-contains', userInfo._id)
+  //     )
 
-      const unsubscribe = onSnapshot(conversationsQuery, (snapshot) => {
-        const conversationsData = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }))
-        // Use conversationsData to update state if needed
-      })
+  //     const unsubscribe = onSnapshot(conversationsQuery, (snapshot) => {
+  //       const conversationsData = snapshot.docs.map((doc) => ({
+  //         id: doc.id,
+  //         ...doc.data(),
+  //       }))
+  //       // Use conversationsData to update state if needed
+  //     })
 
-      return () => unsubscribe()
-    }
-  }, [userInfo])
+  //     return () => unsubscribe()
+  //   }
+  // }, [userInfo])
+
+  console.log('unreadMessageCount', unreadMessageCount)
 
   return (
     <>
