@@ -46,6 +46,8 @@ const Conversation = ({
 
   //functin to format date and time
   const formatDate = (datetime) => {
+    if (!datetime) return ''
+
     const now = new Date()
 
     // Convert Firestore timestamp to JavaScript Date

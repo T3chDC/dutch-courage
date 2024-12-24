@@ -124,23 +124,17 @@ const ConversationScreen = () => {
       if (conversationSnap.exists()) {
         const data = conversationSnap.data()
         setConversation(data)
-        const messagesQuery = query(
-          collection(firestore, 'messages'),
-          where('conversationId', '==', conversationId),
-          orderBy('createdAt', 'asc')
-        )
-        const messagesSnap = await getDocs(messagesQuery)
-
-        const messages = messagesSnap.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }))
-        return { ...data, messages }
+        markConversationAsRead()
       } else {
         throw new Error('Conversation not found')
       }
     } catch (error) {
       console.error('Error fetching conversation:', error)
+      Toast.show({
+        type: 'error',
+        text1: 'There was an error fetching conversation details',
+        visibilityTime: 4000,
+      })
       throw error
     } finally {
       setIsGetConversationByIdLoading(false)
@@ -156,7 +150,7 @@ const ConversationScreen = () => {
 
   const markConversationAsRead = async () => {
     try {
-      if (conversationId && conversation.unreadMessageCount > 0) {
+      if (conversation) {
         const conversationRef = doc(firestore, 'conversations', conversationId)
 
         await updateDoc(conversationRef, {
@@ -271,21 +265,24 @@ const ConversationScreen = () => {
 
   useEffect(() => {
     if (conversationId) {
-      const messagesQuery = query(
-        collection(firestore, 'messages'),
-        where('conversationId', '==', conversationId),
-        orderBy('createdAt', 'asc')
-      )
+      try {
+        const messagesQuery = query(
+          collection(firestore, 'messages'),
+          where('conversationId', '==', conversationId),
+          orderBy('createdAt', 'asc')
+        )
 
-      const unsubscribe = onSnapshot(messagesQuery, (snapshot) => {
-        const newMessages = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }))
-        setConversationMessages(newMessages)
-      })
-
-      return () => unsubscribe()
+        const unsubscribe = onSnapshot(messagesQuery, (snapshot) => {
+          const newMessages = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }))
+          setConversationMessages(newMessages)
+        })
+        return () => unsubscribe()
+      } catch (error) {
+        console.error('Error fetching messages:', error)
+      }
     }
   }, [conversationId])
 
@@ -494,8 +491,15 @@ const ConversationScreen = () => {
       await updateDoc(conversationRef, {
         acceptedBy: [...conversation.acceptedBy, userInfo._id],
       })
+      // Refresh the conversation
+      fetchConversationById(conversationId)
     } catch (error) {
       console.error('Error accepting request:', error)
+      Toast.show({
+        type: 'error',
+        text1: 'There was an error accepting connection request',
+        visibilityTime: 4000,
+      })
     }
   }
 
@@ -645,7 +649,7 @@ const ConversationScreen = () => {
                   }
                 >
                   <Text className='text-[#AFD0AE] text-xs'>
-                    {formatDate(message.createdAt)}
+                    {message?.createdAt ? formatDate(message?.createdAt) : ''}
                   </Text>
                 </View>
 
