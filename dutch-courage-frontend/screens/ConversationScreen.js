@@ -124,6 +124,13 @@ const ConversationScreen = () => {
       if (conversationSnap.exists()) {
         const data = conversationSnap.data()
         setConversation(data)
+        
+        if (data.participantsMessageCount) {
+          setUserMessageCount(data.participantsMessageCount.get(userInfo._id))
+        } else { 
+          markConversationAsRead()
+        }
+
         if (data.unreadMessageCount > 0) {
           markConversationAsRead()
         }
