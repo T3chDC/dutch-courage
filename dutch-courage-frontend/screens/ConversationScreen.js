@@ -126,7 +126,7 @@ const ConversationScreen = () => {
         setConversation(data)
 
         if (data.participantsMessageCount) {
-          setUserMessageCount(data.participantsMessageCount.get(userInfo._id))
+          setUserMessageCount(data.participantsMessageCount[userInfo._id])
         } else {
           markConversationAsRead()
         }
@@ -404,6 +404,7 @@ const ConversationScreen = () => {
           createdAt: serverTimestamp(),
         },
         participantsMessageCount: {
+          ...conversation.participantsMessageCount,
           [userInfo._id]: userMessageCount + 1,
         },
         unreadMessageCount: conversation.unreadMessageCount + 1,
