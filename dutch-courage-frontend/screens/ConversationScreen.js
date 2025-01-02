@@ -124,10 +124,10 @@ const ConversationScreen = () => {
       if (conversationSnap.exists()) {
         const data = conversationSnap.data()
         setConversation(data)
-        
+
         if (data.participantsMessageCount) {
           setUserMessageCount(data.participantsMessageCount.get(userInfo._id))
-        } else { 
+        } else {
           markConversationAsRead()
         }
 
@@ -403,9 +403,12 @@ const ConversationScreen = () => {
           message: messageText,
           createdAt: serverTimestamp(),
         },
+        participantsMessageCount: {
+          [userInfo._id]: userMessageCount + 1,
+        },
         unreadMessageCount: conversation.unreadMessageCount + 1,
       })
-
+      setUserMessageCount(userMessageCount + 1)
       setMessageText('')
     } catch (error) {
       console.error('Error creating message:', error)
