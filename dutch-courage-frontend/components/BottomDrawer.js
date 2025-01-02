@@ -173,7 +173,8 @@ const BottomDrawer = () => {
         conversationsData.forEach((conversation) => {
           if (
             conversation?.unreadMessageCount > 0 &&
-            conversation?.lastMessage.sender !== userInfo._id
+            conversation?.lastMessage &&
+            conversation?.lastMessage?.sender !== userInfo._id
           ) {
             setUnreadMessageCount((prev) => prev + 1)
             // Play notification sound
