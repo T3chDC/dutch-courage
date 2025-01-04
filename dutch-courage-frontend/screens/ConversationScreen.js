@@ -413,6 +413,11 @@ const ConversationScreen = () => {
       setMessageText('')
     } catch (error) {
       console.error('Error creating message:', error)
+      Toast.show({
+        type: 'error',
+        text1: 'There was an error sending the message',
+        visibilityTime: 4000,
+      })
     }
   }
 
@@ -437,6 +442,7 @@ const ConversationScreen = () => {
 
     try {
       const messageImageUrl = await messageImageUploadHandler()
+      console.log('messageImageUrl:', messageImageUrl)
       const messageData = {
         conversationId,
         sender: userInfo._id,
@@ -455,9 +461,20 @@ const ConversationScreen = () => {
           messageImageUrl,
           createdAt: serverTimestamp(),
         },
+        participantsMessageCount: {
+          ...conversation.participantsMessageCount,
+          [userInfo._id]: userMessageCount + 1,
+        },
+        unreadMessageCount: conversation.unreadMessageCount + 1,
       })
+      setUserMessageCount(userMessageCount + 1)
     } catch (error) {
       console.error('Error creating image message:', error)
+      Toast.show({
+        type: 'error',
+        text1: 'There was an error sending the message',
+        visibilityTime: 4000,
+      })
     }
   }
 
