@@ -127,10 +127,7 @@ const ConversationScreen = () => {
 
         if (data.participantsMessageCount) {
           setUserMessageCount(data.participantsMessageCount[userInfo._id])
-        } else {
-          markConversationAsRead()
         }
-
         if (data.unreadMessageCount > 0) {
           markConversationAsRead()
         }
@@ -159,14 +156,11 @@ const ConversationScreen = () => {
 
   const markConversationAsRead = async () => {
     try {
-      if (conversation) {
-        const conversationRef = doc(firestore, 'conversations', conversationId)
+      const conversationRef = doc(firestore, 'conversations', conversationId)
 
-        await updateDoc(conversationRef, {
-          unreadMessageCount: 0,
-          [`participantsMessageCount.${userInfo._id}`]: 0, // Reset message count for this user
-        })
-      }
+      await updateDoc(conversationRef, {
+        unreadMessageCount: 0,
+      })
     } catch (error) {
       console.error('Error marking conversation as read:', error)
     }
@@ -287,6 +281,7 @@ const ConversationScreen = () => {
             ...doc.data(),
           }))
           setConversationMessages(newMessages)
+          markConversationAsRead()
         })
         return () => unsubscribe()
       } catch (error) {
@@ -501,6 +496,7 @@ const ConversationScreen = () => {
       dispatch(resetUpdateConversationById())
       dispatch(resetCreateMessage())
       dispatch(resetMessage())
+      markConversationAsRead()
     }
   }, [dispatch])
 

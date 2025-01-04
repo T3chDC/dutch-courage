@@ -289,7 +289,12 @@ const BottomDrawer = () => {
     <>
       <View className='absolute bottom-3 w-[100vw] flex-row justify-between items-center'>
         <View className='w-1/3 flex-row justify-center items-center'>
-          <TouchableOpacity onPress={() => navigation.navigate('UserInbox')}>
+          <TouchableOpacity
+            onPress={() => {
+              setUnreadMessageCount(0)
+              navigation.navigate('UserInbox')
+            }}
+          >
             <ChatBubbleLeftRightIcon size={40} color={'white'} />
             {unreadMessageCount > 0 && (
               <View className='absolute top-0 right-0 w-5 h-5 rounded-full bg-red-500'>
