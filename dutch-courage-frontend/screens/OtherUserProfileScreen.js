@@ -225,6 +225,10 @@ const OtherUserProfileScreen = ({ route }) => {
               [userInfo._id]: 0,
               [userId]: 0,
             },
+            participantsLastMessageTime: {
+              [userInfo._id]: serverTimestamp(),
+              [userId]: serverTimestamp(),
+            },
             unreadMessageCount: 1,
           }
         )

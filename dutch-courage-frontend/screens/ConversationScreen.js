@@ -402,6 +402,10 @@ const ConversationScreen = () => {
           ...conversation.participantsMessageCount,
           [userInfo._id]: userMessageCount + 1,
         },
+        participantsLastMessageTime: {
+          ...conversation.participantsLastMessageTime,
+          [userInfo._id]: serverTimestamp(),
+        },
         unreadMessageCount: conversation.unreadMessageCount + 1,
       })
       setUserMessageCount(userMessageCount + 1)
@@ -459,6 +463,10 @@ const ConversationScreen = () => {
         participantsMessageCount: {
           ...conversation.participantsMessageCount,
           [userInfo._id]: userMessageCount + 1,
+        },
+        participantsLastMessageTime: {
+          ...conversation.participantsLastMessageTime,
+          [userInfo._id]: serverTimestamp(),
         },
         unreadMessageCount: conversation.unreadMessageCount + 1,
       })
