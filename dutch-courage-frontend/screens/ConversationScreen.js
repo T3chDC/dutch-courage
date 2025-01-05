@@ -777,7 +777,7 @@ const ConversationScreen = () => {
           <View className="absolute bottom-10 flex flex-row justify-center items-center w-full">
             <View className="flex flex-row justify-center items-center relative w-[380]">
               {/* Show that the other user has not accepted the conversation request */}
-              <Text className="text-white text-base">
+              <Text className="text-gray-500 text-base">
                 Please wait for the other user to accept the request...
               </Text>
             </View>
