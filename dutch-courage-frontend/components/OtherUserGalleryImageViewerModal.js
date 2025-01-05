@@ -15,8 +15,11 @@ const OtherUserGalleryImageViewerModal = ({
 }) => {
   return (
     <Modal
-      animationIn={"slideInUp"}
-      animationOut={"slideOutDown"}
+      //   animationIn={"slideInUp"}
+      animationIn={"zoomIn"}
+      animationInTiming={600}
+      animationOut={"zoomOut"}
+      animationOutTiming={600}
       backdropOpacity={0.9}
       isVisible={isVisible}
       onBackdropPress={() => setIsVisible(false)}

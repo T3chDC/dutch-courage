@@ -104,8 +104,10 @@ const OtherUserProfileScreen = ({ route }) => {
   const [topInterests, setTopInterests] = useState([]);
   const [isSwitchOn, setIsSwitchOn] = useState(false);
 
-  const [OtherUserGalleryImageViewerModalVisible, setOtherUserGalleryImageViewerModalVisible] =
-    useState(false);
+  const [
+    OtherUserGalleryImageViewerModalVisible,
+    setOtherUserGalleryImageViewerModalVisible,
+  ] = useState(false);
 
   // Staste for rating of other users
   const [otherUserRatingValue, setOtherUserRatingValue] = useState(0);
@@ -459,31 +461,45 @@ const OtherUserProfileScreen = ({ route }) => {
               )}
 
               {galleryImage2Url !== "" && (
-                <View className="w-11 h-11 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center">
-                  <Image
-                    source={{
-                      uri: `${BACKEND_URL}/uploads/${galleryImage2Url.slice(
-                        galleryImage2Url.lastIndexOf("/") + 1
-                      )}`,
-                    }}
-                    className="w-10 h-10 rounded-full"
-                    resizeMode="cover"
-                  />
-                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    setOtherUserGalleryImageViewerModalVisible(true);
+                  }}
+                  className="mb-2"
+                >
+                  <View className="w-11 h-11 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center">
+                    <Image
+                      source={{
+                        uri: `${BACKEND_URL}/uploads/${galleryImage2Url.slice(
+                          galleryImage2Url.lastIndexOf("/") + 1
+                        )}`,
+                      }}
+                      className="w-10 h-10 rounded-full"
+                      resizeMode="cover"
+                    />
+                  </View>
+                </TouchableOpacity>
               )}
 
               {galleryImage3Url !== "" && (
-                <View className="w-11 h-11 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center">
-                  <Image
-                    source={{
-                      uri: `${BACKEND_URL}/uploads/${galleryImage3Url.slice(
-                        galleryImage3Url.lastIndexOf("/") + 1
-                      )}`,
-                    }}
-                    className="w-10 h-10 rounded-full"
-                    resizeMode="cover"
-                  />
-                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    setOtherUserGalleryImageViewerModalVisible(true);
+                  }}
+                  className="mb-2"
+                >
+                  <View className="w-11 h-11 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center">
+                    <Image
+                      source={{
+                        uri: `${BACKEND_URL}/uploads/${galleryImage3Url.slice(
+                          galleryImage3Url.lastIndexOf("/") + 1
+                        )}`,
+                      }}
+                      className="w-10 h-10 rounded-full"
+                      resizeMode="cover"
+                    />
+                  </View>
+                </TouchableOpacity>
               )}
             </View>
           )}
