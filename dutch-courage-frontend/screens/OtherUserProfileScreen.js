@@ -5,33 +5,38 @@ import {
   TouchableOpacity,
   Alert,
   BackHandler,
-} from 'react-native'
-import { UserIcon, ChatBubbleLeftRightIcon } from 'react-native-heroicons/solid'
-import { HandRaisedIcon } from 'react-native-heroicons/outline'
-import React, { useEffect, useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
-import { useDispatch, useSelector } from 'react-redux'
-import { getOtherUser, resetOtherUser } from '../features/user/userSlice'
+} from "react-native";
+import {
+  UserIcon,
+  ChatBubbleLeftRightIcon,
+} from "react-native-heroicons/solid";
+import { HandRaisedIcon } from "react-native-heroicons/outline";
+import React, { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { getOtherUser, resetOtherUser } from "../features/user/userSlice";
 import {
   createConversation,
   resetCreateConversation,
   resetConversation,
-} from '../features/conversation/conversationSlice'
+} from "../features/conversation/conversationSlice";
 import {
   createMessage,
   resetCreateMessage,
   resetMessage,
-} from '../features/message/messageSlice'
-import ToggleSwitch from '../components/ToggleSwitch'
-import TouchableRatingStars from '../components/TouchableRatingStars'
-import Toast from 'react-native-toast-message'
-import * as Progress from 'react-native-progress'
-import { logout } from '../features/auth/authSlice'
-import { BACKEND_URL } from '../config'
-import LowerRatingModal from '../components/LowerRatingModal'
-import BottomDrawer from '../components/BottomDrawer'
-import { rateUser, resetRateUser } from '../features/user/userSlice'
-import socket from '../utils/socketInit'
+} from "../features/message/messageSlice";
+import ToggleSwitch from "../components/ToggleSwitch";
+import TouchableRatingStars from "../components/TouchableRatingStars";
+import Toast from "react-native-toast-message";
+import * as Progress from "react-native-progress";
+import { logout } from "../features/auth/authSlice";
+import { BACKEND_URL } from "../config";
+import LowerRatingModal from "../components/LowerRatingModal";
+import BottomDrawer from "../components/BottomDrawer";
+import { rateUser, resetRateUser } from "../features/user/userSlice";
+import socket from "../utils/socketInit";
+// import GalleryImageViewerModal from "../components/GalleryImageViewerModal";
+import OtherUserGalleryImageViewerModal from "../components/OtherUserGalleryImageViewerModal";
 
 import {
   collection,
@@ -42,20 +47,20 @@ import {
   serverTimestamp,
   updateDoc,
   doc,
-} from 'firebase/firestore'
-import { firestore } from '../firebaseConfig'
+} from "firebase/firestore";
+import { firestore } from "../firebaseConfig";
 
 const OtherUserProfileScreen = ({ route }) => {
   // Navigation hook
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   // Redux Dispatch hook
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   // Route params
-  const { userId, locationDescription } = route.params
+  const { userId, locationDescription } = route.params;
 
   // Redux State variables
-  const { userInfo } = useSelector((state) => state.auth)
+  const { userInfo } = useSelector((state) => state.auth);
   const {
     otherUser,
     isOtherGetLoading,
@@ -67,7 +72,7 @@ const OtherUserProfileScreen = ({ route }) => {
     isRateUserSuccess,
     isRateUserError,
     rateUserErrorMessage,
-  } = useSelector((state) => state.user)
+  } = useSelector((state) => state.user);
 
   const {
     conversation,
@@ -75,7 +80,7 @@ const OtherUserProfileScreen = ({ route }) => {
     isCreateConversationSuccess,
     isCreateConversationError,
     createConversationErrorMessage,
-  } = useSelector((state) => state.conversation)
+  } = useSelector((state) => state.conversation);
 
   const {
     message,
@@ -83,87 +88,90 @@ const OtherUserProfileScreen = ({ route }) => {
     isCreateMessageSuccess,
     isCreateMessageError,
     createMessageErrorMessage,
-  } = useSelector((state) => state.message)
+  } = useSelector((state) => state.message);
 
   // Local State variables
-  const [rating, setRating] = useState(5)
-  const [imageUrl, setImageUrl] = useState('')
-  const [galleryImage1Url, setGalleryImage1Url] = useState('')
-  const [galleryImage2Url, setGalleryImage2Url] = useState('')
-  const [galleryImage3Url, setGalleryImage3Url] = useState('')
-  const [userName, setUserName] = useState('')
-  const [mantra, setMantra] = useState('')
-  const [ageRange, setAgeRange] = useState('')
-  const [gender, setGender] = useState('')
-  const [location, setLocation] = useState('')
-  const [topInterests, setTopInterests] = useState([])
-  const [isSwitchOn, setIsSwitchOn] = useState(false)
+  const [rating, setRating] = useState(5);
+  const [imageUrl, setImageUrl] = useState("");
+  const [galleryImage1Url, setGalleryImage1Url] = useState("");
+  const [galleryImage2Url, setGalleryImage2Url] = useState("");
+  const [galleryImage3Url, setGalleryImage3Url] = useState("");
+  const [userName, setUserName] = useState("");
+  const [mantra, setMantra] = useState("");
+  const [ageRange, setAgeRange] = useState("");
+  const [gender, setGender] = useState("");
+  const [location, setLocation] = useState("");
+  const [topInterests, setTopInterests] = useState([]);
+  const [isSwitchOn, setIsSwitchOn] = useState(false);
+
+  const [OtherUserGalleryImageViewerModalVisible, setOtherUserGalleryImageViewerModalVisible] =
+    useState(false);
 
   // Staste for rating of other users
-  const [otherUserRatingValue, setOtherUserRatingValue] = useState(0)
+  const [otherUserRatingValue, setOtherUserRatingValue] = useState(0);
 
   // const [report, setReport] = useState("");
   // const [reportCount, setReportCount] = useState(0);
 
-  const [showLowerRatingModal, setShowLowerRatingModal] = useState(false)
+  const [showLowerRatingModal, setShowLowerRatingModal] = useState(false);
 
   // Check if user is logged in
   useEffect(() => {
     if (!userInfo) {
-      navigation.navigate('Login')
+      navigation.navigate("Login");
     }
-  }, [userInfo, navigation])
+  }, [userInfo, navigation]);
 
   // Get user info
   useEffect(() => {
     if (isOtherGetError) {
       Toast.show({
-        type: 'error',
+        type: "error",
         text1: otherGetErrorMessage,
         visibilityTime: 3000,
-      })
+      });
     } else if (isOtherGetSuccess) {
-      setRating(otherUser.rating)
-      setImageUrl(otherUser.imageUrl)
-      setGalleryImage1Url(otherUser.galleryImage1Url)
-      setGalleryImage2Url(otherUser.galleryImage2Url)
-      setGalleryImage3Url(otherUser.galleryImage3Url)
-      setUserName(otherUser.userName)
-      setMantra(otherUser.mantra)
-      setAgeRange(otherUser.ageRange)
-      setGender(otherUser.gender)
-      setLocation(otherUser.location)
-      setTopInterests(otherUser.topInterests)
+      setRating(otherUser.rating);
+      setImageUrl(otherUser.imageUrl);
+      setGalleryImage1Url(otherUser.galleryImage1Url);
+      setGalleryImage2Url(otherUser.galleryImage2Url);
+      setGalleryImage3Url(otherUser.galleryImage3Url);
+      setUserName(otherUser.userName);
+      setMantra(otherUser.mantra);
+      setAgeRange(otherUser.ageRange);
+      setGender(otherUser.gender);
+      setLocation(otherUser.location);
+      setTopInterests(otherUser.topInterests);
     } else {
-      dispatch(getOtherUser(userId))
+      dispatch(getOtherUser(userId));
     }
-  }, [dispatch, isOtherGetError, isOtherGetSuccess, otherGetErrorMessage])
+  }, [dispatch, isOtherGetError, isOtherGetSuccess, otherGetErrorMessage]);
 
   // Reset user profile get status on unmount
   useEffect(() => {
     return () => {
-      dispatch(resetOtherUser())
-      dispatch(resetCreateConversation())
-      dispatch(resetConversation())
-      dispatch(resetCreateMessage())
-      dispatch(resetMessage())
-    }
-  }, [dispatch])
+      dispatch(resetOtherUser());
+      dispatch(resetCreateConversation());
+      dispatch(resetConversation());
+      dispatch(resetCreateMessage());
+      dispatch(resetMessage());
+    };
+  }, [dispatch]);
 
   // function to handle to go back
   useEffect(() => {
     const backAction = () => {
-      navigation.goBack()
-      return true
-    }
+      navigation.goBack();
+      return true;
+    };
 
     const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
+      "hardwareBackPress",
       backAction
-    )
+    );
 
-    return () => backHandler.remove()
-  }, [navigation])
+    return () => backHandler.remove();
+  }, [navigation]);
 
   // Function to create a conversation with a message in firestore
   const createConversationAndMessage = async () => {
@@ -171,52 +179,52 @@ const OtherUserProfileScreen = ({ route }) => {
       // Check if there is an existing conversation in firestore that contains both the participants
       const querySnapshotWithUser = await getDocs(
         query(
-          collection(firestore, 'conversations'),
-          where('participants', 'array-contains', userInfo._id)
+          collection(firestore, "conversations"),
+          where("participants", "array-contains", userInfo._id)
         )
-      )
+      );
 
       // Filter the conversations that contain the other user
       const existingConversationRef = querySnapshotWithUser.docs
         .map((doc) => ({ id: doc.id, ...doc.data() }))
-        .filter((conversation) => conversation.participants.includes(userId))
+        .filter((conversation) => conversation.participants.includes(userId));
 
-      console.log('existingConversationRef', existingConversationRef)
+      console.log("existingConversationRef", existingConversationRef);
 
       if (
         existingConversationRef?.length > 0 &&
         existingConversationRef[0]?.acceptedBy.length === 2
       ) {
         Toast.show({
-          type: 'error',
-          text1: 'Conversation already exists',
+          type: "error",
+          text1: "Conversation already exists",
           visibilityTime: 3000,
-        })
-        return
+        });
+        return;
       } else if (
         existingConversationRef?.length > 0 &&
         existingConversationRef[0]?.acceptedBy.length === 1 &&
         existingConversationRef[0]?.deletedBy?.length === 1
       ) {
         Toast.show({
-          type: 'error',
-          text1: 'The other user has denied your request to chat',
+          type: "error",
+          text1: "The other user has denied your request to chat",
           visibilityTime: 3000,
-        })
-        return
+        });
+        return;
       } else if (
         existingConversationRef?.length > 0 &&
         existingConversationRef[0]?.acceptedBy.length === 1
       ) {
         Toast.show({
-          type: 'error',
-          text1: 'The other user has not responded to your request yet',
+          type: "error",
+          text1: "The other user has not responded to your request yet",
           visibilityTime: 3000,
-        })
-        return
+        });
+        return;
       } else {
         const conversationRef = await addDoc(
-          collection(firestore, 'conversations'),
+          collection(firestore, "conversations"),
           {
             participants: [userInfo._id, userId],
             acceptedBy: [userInfo._id],
@@ -231,46 +239,46 @@ const OtherUserProfileScreen = ({ route }) => {
             },
             unreadMessageCount: 1,
           }
-        )
+        );
 
-        await addDoc(collection(firestore, 'messages'), {
+        await addDoc(collection(firestore, "messages"), {
           conversationId: conversationRef.id,
           sender: userInfo._id,
-          messageType: 'text',
+          messageType: "text",
           message: `You have a notification from ${userInfo.userName}`,
           createdAt: serverTimestamp(),
-        })
+        });
 
         // Update the conversation last message
-        await updateDoc(doc(firestore, 'conversations', conversationRef.id), {
+        await updateDoc(doc(firestore, "conversations", conversationRef.id), {
           lastMessage: {
             sender: userInfo._id,
-            messageType: 'text',
+            messageType: "text",
             message: `You have a notification from ${userInfo.userName}`,
             createdAt: serverTimestamp(),
           },
-        })
+        });
 
         Toast.show({
-          type: 'success',
+          type: "success",
           text1: `Your wave was sent to ${userName}`,
           visibilityTime: 3000,
-        })
+        });
       }
     } catch (error) {
-      console.error('Error adding document: ', error)
+      console.error("Error adding document: ", error);
       Toast.show({
-        type: 'error',
-        text1: 'Error creating conversation',
+        type: "error",
+        text1: "Error creating conversation",
         visibilityTime: 3000,
-      })
+      });
     }
-  }
+  };
 
   // function to create a conversation on swipe
   const handleSwipe = () => {
-    createConversationAndMessage()
-  }
+    createConversationAndMessage();
+  };
 
   // if the conversation is created successfully, create a message
   // useEffect(() => {
@@ -334,67 +342,67 @@ const OtherUserProfileScreen = ({ route }) => {
   useEffect(() => {
     if (isRateUserSuccess) {
       Toast.show({
-        type: 'success',
-        text1: 'Your rating was submitted successfully',
+        type: "success",
+        text1: "Your rating was submitted successfully",
         visibilityTime: 3000,
         autoHide: true,
-      })
-      dispatch(resetRateUser())
+      });
+      dispatch(resetRateUser());
     } else if (isRateUserError) {
       Toast.show({
-        type: 'error',
+        type: "error",
         text1: rateUserErrorMessage,
         visibilityTime: 3000,
         autoHide: true,
-      })
-      dispatch(resetRateUser())
+      });
+      dispatch(resetRateUser());
     }
-  }, [isRateUserSuccess, isRateUserError])
+  }, [isRateUserSuccess, isRateUserError]);
 
   // function to handle rate user
   const rateOtherUser = (userRated) => {
     if (userRated < 3) {
-      setShowLowerRatingModal(true)
+      setShowLowerRatingModal(true);
     } else {
       dispatch(
         rateUser({
           userId,
           rating: userRated,
         })
-      )
+      );
       // console.log('User rated ' + userRated)
     }
-  }
+  };
 
   return (
-    <View className='bg-black flex-1 justify-start items-center relative'>
+    <View className="bg-black flex-1 justify-start items-center relative">
       {/* background cutoff image*/}
       <Image
-        source={require('../assets/projectImages/profileBackgroundCutOff.png')}
-        className='w-[100vw] h-[40vh]'
+        source={require("../assets/projectImages/profileBackgroundCutOff.png")}
+        className="w-[100vw] h-[40vh]"
       />
 
       <TouchableOpacity
-        className='absolute top-10 left-4 flex-row items-center'
+        className="absolute top-10 left-4 flex-row items-center"
         onPress={() => {
-          navigation.goBack()
+          navigation.goBack();
         }}
       >
         {/* <ChevronLeftIcon size={20} color='white' /> */}
-        <Text className='text-white text-base top-[-1]'>{'< Back'}</Text>
+        <Text className="text-white text-base top-[-1]">{"< Back"}</Text>
       </TouchableOpacity>
 
       {isOtherGetLoading ? (
         <Progress.CircleSnail
-          color={['#22A6B3', '#22A6B3', '#22A6B3']}
+          color={["#22A6B3", "#22A6B3", "#22A6B3"]}
           size={100}
           thickness={5}
-          className='mt-[-240] w-[100vw] flex-row justify-center items-center'
+          className="mt-[-240] w-[100vw] flex-row justify-center items-center"
         />
       ) : (
         <>
           {/* rating stars based on rating values */}
-          <View className='mt-[-240] w-[100vw] flex-row justify-center items-center'>
+          <View className="mt-[-240] w-[100vw] flex-row justify-center items-center">
             <TouchableRatingStars
               rating={rating}
               rateUser={rateOtherUser}
@@ -404,129 +412,147 @@ const OtherUserProfileScreen = ({ route }) => {
 
           {/* profile image */}
           {imageUrl ? (
-            <View className='mt-4 w-68 h-68 rounded-full bg-[#FCFCFE] flex-row justify-center items-center border-2 border-white'>
+            <View className="mt-4 w-68 h-68 rounded-full bg-[#FCFCFE] flex-row justify-center items-center border-2 border-white">
               <Image
                 source={{
                   uri: `${BACKEND_URL}/uploads/${imageUrl.slice(
-                    imageUrl.lastIndexOf('/') + 1
+                    imageUrl.lastIndexOf("/") + 1
                   )}`,
                 }}
-                className='w-64 h-64 rounded-full'
-                resizeMode='cover'
+                className="w-64 h-64 rounded-full"
+                resizeMode="cover"
               />
             </View>
           ) : (
-            <View className='mt-4 w-68 h-68 rounded-full bg-[#FCFCFE] flex-row justify-center items-center border-2 border-white'>
+            <View className="mt-4 w-68 h-68 rounded-full bg-[#FCFCFE] flex-row justify-center items-center border-2 border-white">
               <UserIcon
-                name='user'
+                name="user"
                 size={64}
-                color='gray'
-                className='w-64 h-64 rounded-full'
+                color="gray"
+                className="w-64 h-64 rounded-full"
               />
             </View>
           )}
 
           {/* Images */}
           {(galleryImage1Url || galleryImage2Url || galleryImage3Url) && (
-            <View className='mt-4 w-[100vw] flex-row justify-center items-center'>
-              {galleryImage1Url !== '' && (
-                <View className='w-11 h-11 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center'>
-                  <Image
-                    source={{
-                      uri: `${BACKEND_URL}/uploads/${galleryImage1Url.slice(
-                        galleryImage1Url.lastIndexOf('/') + 1
-                      )}`,
-                    }}
-                    className='w-10 h-10 rounded-full'
-                    resizeMode='cover'
-                  />
-                </View>
+            <View className="mt-4 w-[100vw] flex-row justify-center items-center">
+              {galleryImage1Url !== "" && (
+                <TouchableOpacity
+                  onPress={() => {
+                    setOtherUserGalleryImageViewerModalVisible(true);
+                  }}
+                  className="mb-2"
+                >
+                  <View className="w-11 h-11 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center">
+                    <Image
+                      source={{
+                        uri: `${BACKEND_URL}/uploads/${galleryImage1Url.slice(
+                          galleryImage1Url.lastIndexOf("/") + 1
+                        )}`,
+                      }}
+                      className="w-10 h-10 rounded-full"
+                      resizeMode="cover"
+                    />
+                  </View>
+                </TouchableOpacity>
               )}
 
-              {galleryImage2Url !== '' && (
-                <View className='w-11 h-11 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center'>
+              {galleryImage2Url !== "" && (
+                <View className="w-11 h-11 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center">
                   <Image
                     source={{
                       uri: `${BACKEND_URL}/uploads/${galleryImage2Url.slice(
-                        galleryImage2Url.lastIndexOf('/') + 1
+                        galleryImage2Url.lastIndexOf("/") + 1
                       )}`,
                     }}
-                    className='w-10 h-10 rounded-full'
-                    resizeMode='cover'
+                    className="w-10 h-10 rounded-full"
+                    resizeMode="cover"
                   />
                 </View>
               )}
 
-              {galleryImage3Url !== '' && (
-                <View className='w-11 h-11 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center'>
+              {galleryImage3Url !== "" && (
+                <View className="w-11 h-11 rounded-full mx-5 bg-[#FCFCFE] flex-row justify-center items-center">
                   <Image
                     source={{
                       uri: `${BACKEND_URL}/uploads/${galleryImage3Url.slice(
-                        galleryImage3Url.lastIndexOf('/') + 1
+                        galleryImage3Url.lastIndexOf("/") + 1
                       )}`,
                     }}
-                    className='w-10 h-10 rounded-full'
-                    resizeMode='cover'
+                    className="w-10 h-10 rounded-full"
+                    resizeMode="cover"
                   />
                 </View>
               )}
             </View>
           )}
 
+          {/* Gallery Image Viewer Modal */}
+          <OtherUserGalleryImageViewerModal
+            isVisible={OtherUserGalleryImageViewerModalVisible}
+            setIsVisible={setOtherUserGalleryImageViewerModalVisible}
+            // selectedGalleryImage={selectedGalleryImage}
+            // setSelectedGalleryImage={setSelectedGalleryImage}
+            galleryImage1Url={galleryImage1Url}
+            galleryImage2Url={galleryImage2Url}
+            galleryImage3Url={galleryImage3Url}
+          />
+
           {/* User Name */}
-          <View className='mt-4 w-[100vw] flex-row justify-center items-center'>
-            <Text className='text-white text-3xl font-medium'>{userName}</Text>
+          <View className="mt-4 w-[100vw] flex-row justify-center items-center">
+            <Text className="text-white text-3xl font-medium">{userName}</Text>
           </View>
 
           {/* Mantra */}
-          <View className='mt-1 w-[100vw] flex-row justify-center items-center'>
-            <Text className='text-white text-xl font-medium'>{mantra}</Text>
+          <View className="mt-1 w-[100vw] flex-row justify-center items-center">
+            <Text className="text-white text-xl font-medium">{mantra}</Text>
           </View>
 
           {/* Age Range, gender and location */}
-          <View className='mt-1 w-[100vw] flex-row justify-center items-center'>
-            <Text className='text-white text-base font-normal'>
+          <View className="mt-1 w-[100vw] flex-row justify-center items-center">
+            <Text className="text-white text-base font-normal">
               {ageRange} {gender}, {location}
             </Text>
           </View>
 
           {/* Top Interests */}
-          <View className='mt-1 mb-2 w-[100vw] flex-row justify-center items-center'>
-            <Text className='text-white text-base font-normal'>
+          <View className="mt-1 mb-2 w-[100vw] flex-row justify-center items-center">
+            <Text className="text-white text-base font-normal">
               {topInterests.map((interest, idx) => (
-                <Text key={idx} className='text-white text-base font-normal'>
-                  {' '}
-                  {idx < 2 ? `${interest}, ` : idx === 2 ? `${interest}` : ''}
+                <Text key={idx} className="text-white text-base font-normal">
+                  {" "}
+                  {idx < 2 ? `${interest}, ` : idx === 2 ? `${interest}` : ""}
                 </Text>
               ))}
             </Text>
           </View>
 
           {/* Swipable Button */}
-          <View className='mt-5 w-[100vw] flex-row justify-center items-center'>
+          <View className="mt-5 w-[100vw] flex-row justify-center items-center">
             <ToggleSwitch
               text={{
                 on: locationDescription
                   ? `@${locationDescription}`
-                  : 'User is not live',
+                  : "User is not live",
                 off: locationDescription
                   ? `@${locationDescription}`
-                  : 'User is not live',
-                activeTextColor: 'white',
-                inactiveTextColor: '#655A5A',
+                  : "User is not live",
+                activeTextColor: "white",
+                inactiveTextColor: "#655A5A",
               }}
               textStyle={{
-                fontWeight: 'bold',
+                fontWeight: "bold",
                 fontSize: 18,
                 marginLeft: isSwitchOn ? 0 : -50,
                 marginRight: isSwitchOn ? -50 : 0,
               }}
               color={{
-                indicator: isSwitchOn ? '#FFFFFF' : '#655A5A',
-                active: '#22A6B3',
-                inactive: '#D9D9D9',
-                activeBorder: '#41B4A4',
-                inactiveBorder: '#E9E9E9',
+                indicator: isSwitchOn ? "#FFFFFF" : "#655A5A",
+                active: "#22A6B3",
+                inactive: "#D9D9D9",
+                activeBorder: "#41B4A4",
+                inactiveBorder: "#E9E9E9",
               }}
               active={isSwitchOn}
               disabled={false}
@@ -543,10 +569,10 @@ const OtherUserProfileScreen = ({ route }) => {
               // }}
               onToggle={(isOn) => {
                 if (isOn) {
-                  setIsSwitchOn(true)
-                  handleSwipe()
+                  setIsSwitchOn(true);
+                  handleSwipe();
                 } else {
-                  setIsSwitchOn(false)
+                  setIsSwitchOn(false);
                 }
               }}
             />
@@ -564,9 +590,9 @@ const OtherUserProfileScreen = ({ route }) => {
               railFillBorderColor='#22A6B3'
             /> */}
           </View>
-          <View className='flex-row justify-center items-center mt-2'>
-            <Text className='text-white text-xl'>Slide to wave </Text>
-            <HandRaisedIcon className='mt-5' color={'yellow'} />
+          <View className="flex-row justify-center items-center mt-2">
+            <Text className="text-white text-xl">Slide to wave </Text>
+            <HandRaisedIcon className="mt-5" color={"yellow"} />
           </View>
 
           {/* Modal Showing Button */}
@@ -596,7 +622,7 @@ const OtherUserProfileScreen = ({ route }) => {
         </>
       )}
     </View>
-  )
-}
+  );
+};
 
-export default OtherUserProfileScreen
+export default OtherUserProfileScreen;
