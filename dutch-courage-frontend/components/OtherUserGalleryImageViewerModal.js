@@ -33,7 +33,7 @@ const OtherUserGalleryImageViewerModal = ({
           style={{ height: 800 }}
           showsButtons={true}
           showsPagination={false}
-          loop={false}
+          // loop={false}
         >
           {galleryImage1Url && (
             <View className="flex-1 justify-center items-center">

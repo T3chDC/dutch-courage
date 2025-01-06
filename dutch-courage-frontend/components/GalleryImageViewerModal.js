@@ -33,8 +33,12 @@ const GalleryImageViewerModal = ({
 
   return (
     <Modal
-      animationIn={'slideInUp'}
-      animationOut={'slideOutDown'}
+      // animationIn={'slideInUp'}
+      // animationOut={'slideOutDown'}
+      animationIn={"zoomIn"}
+      animationInTiming={600}
+      animationOut={"zoomOut"}
+      animationOutTiming={600}
       backdropOpacity={0.9}
       isVisible={isGalleryImageModalVisible}
       onBackdropPress={() => setIsGalleryImageModalVisible(false)}
@@ -49,7 +53,8 @@ const GalleryImageViewerModal = ({
           style={{ height: 800 }}
           showsButtons={true}
           showsPagination={false}
-          loop={false}
+          // loop={false}
+          buttonWrapperStyle={{position: 'absolute', top: -90}}
         >
           {(galleryImage1Url || selectedGalleryImage1) && (
             <View className='flex-1 justify-center items-center'>
