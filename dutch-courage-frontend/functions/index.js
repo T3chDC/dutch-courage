@@ -47,11 +47,10 @@ exports.updateMessageCount = functions.pubsub
             const lastMessageTime = participantsLastMessageTime[participantId] ?
             participantsLastMessageTime[participantId].toDate() :
             null;
-            const messageCount = participantsMessageCount[participantId] || 0;
 
             if (lastMessageTime) {
               const timeDifference = (Date.now() - lastMessageTime) / 1000 / 60;
-              if (timeDifference >= 45 && messageCount >= 10) {
+              if (timeDifference >= 45) {
               // Reset the message count for this participant
                 participantsMessageCount[participantId] = 0;
               }
