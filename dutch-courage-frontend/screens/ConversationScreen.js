@@ -398,6 +398,7 @@ const ConversationScreen = () => {
           message: messageText,
           createdAt: serverTimestamp(),
         },
+        deletedBy: [],
         participantsMessageCount: {
           ...conversation.participantsMessageCount,
           [userInfo._id]: userMessageCount + 1,
@@ -460,6 +461,7 @@ const ConversationScreen = () => {
           messageImageUrl,
           createdAt: serverTimestamp(),
         },
+        deletedBy: [],
         participantsMessageCount: {
           ...conversation.participantsMessageCount,
           [userInfo._id]: userMessageCount + 1,
