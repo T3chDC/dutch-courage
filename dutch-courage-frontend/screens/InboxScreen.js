@@ -27,6 +27,7 @@ import {
   doc,
   deleteDoc,
   updateDoc,
+  orderBy,
 } from 'firebase/firestore'
 import { firestore } from '../firebaseConfig' // Adjust based on your Firebase config file path
 
@@ -74,7 +75,8 @@ const InboxScreen = () => {
     if (userInfo) {
       const conversationsQuery = query(
         collection(firestore, 'conversations'),
-        where('participants', 'array-contains', userInfo._id)
+        where('participants', 'array-contains', userInfo._id),
+        orderBy('updatedAt', 'desc')
       )
 
       const unsubscribe = onSnapshot(conversationsQuery, (snapshot) => {
