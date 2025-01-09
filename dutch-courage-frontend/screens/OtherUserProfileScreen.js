@@ -277,6 +277,7 @@ const OtherUserProfileScreen = ({ route }) => {
             participants: [userInfo._id, userId],
             acceptedBy: [userInfo._id],
             createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
             participantsMessageCount: {
               [userInfo._id]: 0,
               [userId]: 0,

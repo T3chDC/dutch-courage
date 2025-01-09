@@ -408,6 +408,7 @@ const ConversationScreen = () => {
           [userInfo._id]: serverTimestamp(),
         },
         unreadMessageCount: conversation.unreadMessageCount + 1,
+        updatedAt: serverTimestamp(),
       })
       setUserMessageCount(userMessageCount + 1)
       setMessageText('')
@@ -471,6 +472,7 @@ const ConversationScreen = () => {
           [userInfo._id]: serverTimestamp(),
         },
         unreadMessageCount: conversation.unreadMessageCount + 1,
+        updatedAt: serverTimestamp(),
       })
       setUserMessageCount(userMessageCount + 1)
     } catch (error) {
