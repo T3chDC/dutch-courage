@@ -238,7 +238,7 @@ const OtherUserProfileScreen = ({ route }) => {
           conversationId: existingConversationRef[0].id,
           sender: userInfo._id,
           messageType: 'text',
-          message: `You have a notification from ${userInfo.userName}`,
+          message: `${userInfo.userName} has sent you a wave!👋}`,
           createdAt: serverTimestamp(),
         })
 
@@ -249,7 +249,7 @@ const OtherUserProfileScreen = ({ route }) => {
             lastMessage: {
               sender: userInfo._id,
               messageType: 'text',
-              message: `You have a notification from ${userInfo.userName}`,
+              message: `${userInfo.userName} has sent you a wave!👋`,
               createdAt: serverTimestamp(),
             },
           }

@@ -746,7 +746,7 @@ const ConversationScreen = () => {
           <>
             <View className='absolute bottom-[90] flex flex-row justify-center items-center w-full'>
               <Text className='text-gray-500 text-base'>
-                Accpet the message request to continue the conversation...
+                Wave back to continue the conversation...
               </Text>
             </View>
 
@@ -759,7 +759,7 @@ const ConversationScreen = () => {
                   }}
                 >
                   <Text className='text-white text-base font-semibold'>
-                    Accept
+                    Wave Back👋
                   </Text>
                 </TouchableOpacity>
 
@@ -770,7 +770,7 @@ const ConversationScreen = () => {
                   }}
                 >
                   <Text className='text-[#22A6B3] text-base font-semibold'>
-                    Decline
+                    Decline<Text style={{color: 'red'}}>𓏴</Text>
                   </Text>
                 </TouchableOpacity>
               </View>
