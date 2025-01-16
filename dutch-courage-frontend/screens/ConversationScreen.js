@@ -535,7 +535,7 @@ const ConversationScreen = () => {
         message: `${userInfo.userName} has sent you wave back!}`,
         createdAt: serverTimestamp(),
       })
-      
+
       await updateDoc(conversationRef, {
         acceptedBy: [...conversation.acceptedBy, userInfo._id],
         updatedAt: serverTimestamp(),
@@ -743,8 +743,10 @@ const ConversationScreen = () => {
                       }
                     >
                       {message.sender === userInfo._id &&
-                      message.message.startsWith('You Received a Wave from')
+                      message.message.includes('has sent you a wave!👋')
                         ? 'You sent a wave to this user'
+                        : message.message.includes('has sent you wave back!')
+                        ? 'You sent a wave back to this user'
                         : message.message}
                     </Text>
                   )}
