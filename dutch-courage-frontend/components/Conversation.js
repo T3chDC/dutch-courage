@@ -171,13 +171,13 @@ const Conversation = ({
                       conversation?.lastMessage?.message.includes(
                         'has sent you a wave!👋'
                       )
-                      ? 'You sent a wave to this user'
+                      ? 'You sent a wave to this user.'
                       : conversation?.lastMessage?.sender ===
                           loggedInUser._id &&
                         conversation?.lastMessage?.message.includes(
                           'has sent you wave back!'
                         )
-                      ? 'You sent a wave back to this user'
+                      ? 'You sent a wave back to this user.'
                       : conversation?.lastMessage?.message
                     : conversation?.lastMessage?.messageType === 'image'
                     ? 'New Image'

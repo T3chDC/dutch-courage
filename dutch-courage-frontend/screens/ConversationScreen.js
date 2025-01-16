@@ -758,10 +758,10 @@ const ConversationScreen = () => {
                     >
                       {message.sender === userInfo._id &&
                       message.message.includes('has sent you a wave!👋')
-                        ? 'You sent a wave to this user'
+                        ? 'You sent a wave to this user.'
                         : message.sender === userInfo._id &&
                           message.message.includes('has sent you wave back!')
-                        ? 'You sent a wave back to this user'
+                        ? 'You sent a wave back to this user.'
                         : message.message}
                     </Text>
                   )}
