@@ -803,7 +803,8 @@ const ConversationScreen = () => {
                   }}
                 >
                   <Text className='text-[#22A6B3] text-base font-semibold'>
-                    Decline ❌
+                    {/* Decline ❌ */}
+                    Decline <Text style={{color: 'red'}}>𓏴</Text>
                   </Text>
                 </TouchableOpacity>
               </View>
