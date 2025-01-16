@@ -262,6 +262,54 @@ const OtherUserProfileScreen = ({ route }) => {
         })
       } else if (
         existingConversationRef?.length > 0 &&
+        existingConversationRef[0]?.acceptedBy.length === 2 &&
+        existingConversationRef[0]?.deletedBy?.length === 1 &&
+        existingConversationRef[0]?.deletedBy[0] === userInfo._id
+      ) {
+        await updateDoc(
+          doc(firestore, 'conversations', existingConversationRef[0].id),
+          {
+            deletedBy: [],
+            acceptedBy: [userInfo._id, userId],
+            participantsMessageCount: {
+              [userInfo._id]: 0,
+              [userId]: 0,
+            },
+            participantsLastMessageTime: {
+              [userInfo._id]: serverTimestamp(),
+              [userId]: serverTimestamp(),
+            },
+            unreadMessageCount: 1,
+          }
+        )
+        await addDoc(collection(firestore, 'messages'), {
+          conversationId: existingConversationRef[0].id,
+          sender: userInfo._id,
+          messageType: 'text',
+          message: `${userInfo.userName} has sent you a wave!👋}`,
+          createdAt: serverTimestamp(),
+        })
+
+        // Update the conversation last message
+        await updateDoc(
+          doc(firestore, 'conversations', existingConversationRef[0].id),
+          {
+            lastMessage: {
+              sender: userInfo._id,
+              messageType: 'text',
+              message: `${userInfo.userName} has sent you a wave!👋`,
+              createdAt: serverTimestamp(),
+            },
+          }
+        )
+
+        Toast.show({
+          type: 'success',
+          text1: `Your wave was sent to ${userName}`,
+          visibilityTime: 3000,
+        })
+      } else if (
+        existingConversationRef?.length > 0 &&
         existingConversationRef[0]?.acceptedBy.length === 1
       ) {
         Toast.show({
@@ -294,7 +342,7 @@ const OtherUserProfileScreen = ({ route }) => {
           conversationId: conversationRef.id,
           sender: userInfo._id,
           messageType: 'text',
-          message: `You have a notification from ${userInfo.userName}`,
+          message: `${userInfo.userName} has sent you a wave!👋}`,
           createdAt: serverTimestamp(),
         })
 
@@ -303,7 +351,7 @@ const OtherUserProfileScreen = ({ route }) => {
           lastMessage: {
             sender: userInfo._id,
             messageType: 'text',
-            message: `You have a notification from ${userInfo.userName}`,
+            message: `${userInfo.userName} has sent you a wave!👋}`,
             createdAt: serverTimestamp(),
           },
         })

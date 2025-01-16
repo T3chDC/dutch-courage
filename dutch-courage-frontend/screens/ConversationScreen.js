@@ -527,8 +527,24 @@ const ConversationScreen = () => {
   const acceptTextRequestHandler = async () => {
     try {
       const conversationRef = doc(firestore, 'conversations', conversationId)
+
+      await addDoc(collection(firestore, 'messages'), {
+        conversationId: conversationRef.id,
+        sender: userInfo._id,
+        messageType: 'text',
+        message: `${userInfo.userName} has sent you wave back!}`,
+        createdAt: serverTimestamp(),
+      })
+      
       await updateDoc(conversationRef, {
         acceptedBy: [...conversation.acceptedBy, userInfo._id],
+        updatedAt: serverTimestamp(),
+        lastMessage: {
+          sender: userInfo._id,
+          messageType: 'text',
+          message: `${userInfo.userName} has sent you wave back!}`,
+          createdAt: serverTimestamp(),
+        },
       })
       // Refresh the conversation
       fetchConversationById(conversationId)
@@ -759,7 +775,7 @@ const ConversationScreen = () => {
                   }}
                 >
                   <Text className='text-white text-base font-semibold'>
-                    Wave Back👋
+                    Wave Back 👋
                   </Text>
                 </TouchableOpacity>
 
@@ -770,7 +786,7 @@ const ConversationScreen = () => {
                   }}
                 >
                   <Text className='text-[#22A6B3] text-base font-semibold'>
-                    Decline<Text style={{color: 'red'}}>𓏴</Text>
+                    Decline ❌
                   </Text>
                 </TouchableOpacity>
               </View>
