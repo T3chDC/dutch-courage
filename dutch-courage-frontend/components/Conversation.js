@@ -166,17 +166,19 @@ const Conversation = ({
               </View>
               <View className='mt-1'>
                 <Text className='text-white text-xs'>
-                  {conversation?.lastMessage?.messageType === 'text' &&
-                  conversation.lastMessage.message.startsWith(
-                    'You have a notification from'
-                  ) &&
-                  conversation.lastMessage.sender === loggedInUser._id
-                    ? 'You sent a wave to this user'
-                    : conversation?.lastMessage?.messageType === 'text'
-                    ? // !conversation.lastMessage.message.startsWith(
-                      //   'You have a notification from'
-                      // )
-                      conversation.lastMessage.message
+                  {conversation?.lastMessage?.messageType === 'text'
+                    ? conversation?.lastMessage?.sender === loggedInUser._id &&
+                      conversation?.lastMessage?.message.includes(
+                        'has sent you a wave!👋'
+                      )
+                      ? 'You sent a wave to this user'
+                      : conversation?.lastMessage?.sender ===
+                          loggedInUser._id &&
+                        conversation?.lastMessage?.message.includes(
+                          'has sent you wave back!'
+                        )
+                      ? 'You sent a wave back to this user'
+                      : message.message
                     : conversation?.lastMessage?.messageType === 'image'
                     ? 'New Image'
                     : 'New Message'}

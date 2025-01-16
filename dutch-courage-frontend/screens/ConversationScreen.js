@@ -528,13 +528,22 @@ const ConversationScreen = () => {
     try {
       const conversationRef = doc(firestore, 'conversations', conversationId)
 
-      await addDoc(collection(firestore, 'messages'), {
+      // await addDoc(collection(firestore, 'messages'), {
+      //   conversationId: conversationRef.id,
+      //   sender: userInfo._id,
+      //   messageType: 'text',
+      //   message: `${userInfo.userName} has sent you wave back!}`,
+      //   createdAt: serverTimestamp(),
+      // })
+      const messageData = {
         conversationId: conversationRef.id,
         sender: userInfo._id,
         messageType: 'text',
-        message: `${userInfo.userName} has sent you wave back!}`,
+        message: messageText,
         createdAt: serverTimestamp(),
-      })
+      }
+
+      await addDoc(collection(firestore, 'messages'), messageData)
 
       await updateDoc(conversationRef, {
         acceptedBy: [...conversation.acceptedBy, userInfo._id],
@@ -542,9 +551,14 @@ const ConversationScreen = () => {
         lastMessage: {
           sender: userInfo._id,
           messageType: 'text',
-          message: `${userInfo.userName} has sent you wave back!}`,
+          message: `${userInfo.userName} has sent you wave back!`,
           createdAt: serverTimestamp(),
         },
+        participantsMessageCount: {
+          ...conversation.participantsMessageCount,
+          [userInfo._id]: userMessageCount + 1,
+        },
+        unreadMessageCount: conversation.unreadMessageCount + 1,
       })
       // Refresh the conversation
       fetchConversationById(conversationId)
