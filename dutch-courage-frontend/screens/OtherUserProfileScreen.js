@@ -192,7 +192,8 @@ const OtherUserProfileScreen = ({ route }) => {
 
       if (
         existingConversationRef?.length > 0 &&
-        existingConversationRef[0]?.acceptedBy.length === 2
+        existingConversationRef[0]?.acceptedBy.length === 2 &&
+        existingConversationRef[0]?.deletedBy?.length === 0
       ) {
         Toast.show({
           type: 'error',
