@@ -539,7 +539,7 @@ const ConversationScreen = () => {
         conversationId: conversationRef.id,
         sender: userInfo._id,
         messageType: 'text',
-        message: messageText,
+        message: `${userInfo.userName} has sent you wave back!`,
         createdAt: serverTimestamp(),
       }
 

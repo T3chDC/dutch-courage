@@ -178,7 +178,7 @@ const Conversation = ({
                           'has sent you wave back!'
                         )
                       ? 'You sent a wave back to this user'
-                      : message.message
+                      : conversation?.lastMessage?.message
                     : conversation?.lastMessage?.messageType === 'image'
                     ? 'New Image'
                     : 'New Message'}
