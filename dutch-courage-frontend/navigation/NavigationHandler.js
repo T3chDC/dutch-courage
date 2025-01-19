@@ -20,6 +20,7 @@ import InboxScreen from '../screens/InboxScreen'
 import LocationFinderScreen from '../screens/LocationFinderScreen'
 import ConversationScreen from '../screens/ConversationScreen'
 import OtherUserProfileScreen from '../screens/OtherUserProfileScreen'
+import OtherUserProfileView from '../screens/OtherUserProfileView'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { getInitialState } from '../features/auth/authSlice'
@@ -193,6 +194,15 @@ const NavigationHandler = () => {
           <Stack.Screen
             name='OtherUserProfile'
             component={OtherUserProfileScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+
+          {/* Other User Profile View */}
+          <Stack.Screen
+            name='OtherUserProfileView'
+            component={OtherUserProfileView}
             options={{
               headerShown: false,
             }}
