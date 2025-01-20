@@ -24,7 +24,11 @@ import OtherUserProfileView from '../screens/OtherUserProfileView'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { getInitialState } from '../features/auth/authSlice'
-import { addUser, getLocation } from '../features/location/locationSlice'
+import {
+  addUser,
+  getLocation,
+  removeUser,
+} from '../features/location/locationSlice'
 import socket from '../utils/socketInit'
 
 const Stack = createNativeStackNavigator()
@@ -45,6 +49,8 @@ const NavigationHandler = () => {
     isLocationError,
     locationErrorMessage,
   } = useSelector((state) => state.location)
+
+  let activityTimeout = null
 
   // If user is live, then send location to server every 30 seconds
   useEffect(() => {
@@ -76,6 +82,39 @@ const NavigationHandler = () => {
 
   useEffect(() => {
     dispatch(getInitialState())
+  }, [])
+
+  const resetInactivityTimer = () => {
+    if (activityTimeout) clearTimeout(activityTimeout)
+    activityTimeout = setTimeout(() => {
+      if (userInfo) {
+        dispatch(removeUser(userInfo._id))
+      }
+    }, 1 * 60 * 1000) // 1 minutes
+  }
+
+  const handleUserActivity = () => {
+    if (userInfo) {
+      dispatch(addUser(userInfo._id))
+    }
+    resetInactivityTimer()
+  }
+
+  useEffect(() => {
+    resetInactivityTimer() // Initialize the timer
+    const subscription = AppState.addEventListener('change', handleUserActivity)
+
+    return () => {
+      clearTimeout(activityTimeout)
+      subscription.remove()
+    }
+  }, [])
+
+  // Remove user from server on app close
+  useEffect(() => {
+    return () => {
+      userInfo && dispatch(removeUser(userInfo._id))
+    }
   }, [])
 
   // Send userId to socket server on connection every second
