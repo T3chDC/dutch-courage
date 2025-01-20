@@ -89,10 +89,8 @@ const NavigationHandler = () => {
       setAppState(nextAppState)
       if (nextAppState === 'background') {
         console.log('App is in the background')
-        // Wait 1 minute before removing user from server
-        setTimeout(() => {
-          userInfo && dispatch(removeUser(userInfo._id))
-        }, 60000)
+        // Remove user from server
+        userInfo && dispatch(removeUser(userInfo._id))
       } else if (nextAppState === 'active') {
         console.log('App is in the foreground')
         // Add user to server
