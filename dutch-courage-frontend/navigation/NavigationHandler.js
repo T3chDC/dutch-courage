@@ -96,7 +96,7 @@ const NavigationHandler = () => {
       } else if (nextAppState === 'active') {
         console.log('App is in the foreground')
         // Add user to server
-        userInfo && dispatch(addUser(userInfo._id))
+        // userInfo && dispatch(addUser(userInfo._id))
       }
     })
 
