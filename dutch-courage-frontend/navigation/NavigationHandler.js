@@ -29,7 +29,7 @@ import {
   getLocation,
   removeUser,
 } from '../features/location/locationSlice'
-import socket from '../utils/socketInit'
+import { useState } from 'react'
 
 const Stack = createNativeStackNavigator()
 
@@ -50,7 +50,7 @@ const NavigationHandler = () => {
     locationErrorMessage,
   } = useSelector((state) => state.location)
 
-  let activityTimeout = null
+  const [appState, setAppState] = useState(AppState.currentState)
 
   // If user is live, then send location to server every 30 seconds
   useEffect(() => {
@@ -84,36 +84,24 @@ const NavigationHandler = () => {
     dispatch(getInitialState())
   }, [])
 
-  const resetInactivityTimer = () => {
-    if (activityTimeout) clearTimeout(activityTimeout)
-    activityTimeout = setTimeout(() => {
-      if (userInfo) {
-        dispatch(removeUser(userInfo._id))
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (nextAppState) => {
+      setAppState(nextAppState)
+      if (nextAppState === 'background') {
+        console.log('App is in the background')
+        // Wait 1 minute before removing user from server
+        setTimeout(() => {
+          userInfo && dispatch(removeUser(userInfo._id))
+        }, 60000)
+      } else if (nextAppState === 'active') {
+        console.log('App is in the foreground')
+        // Add user to server
+        userInfo && dispatch(addUser(userInfo._id))
       }
-    }, 1 * 60 * 1000) // 1 minutes
-  }
-
-  const handleUserActivity = () => {
-    if (userInfo) {
-      dispatch(addUser(userInfo._id))
-    }
-    resetInactivityTimer()
-  }
-
-  useEffect(() => {
-    resetInactivityTimer() // Initialize the timer
-    const subscription = AppState.addEventListener('change', handleUserActivity)
+    })
 
     return () => {
-      clearTimeout(activityTimeout)
       subscription.remove()
-    }
-  }, [])
-
-  // Remove user from server on app close
-  useEffect(() => {
-    return () => {
-      userInfo && dispatch(removeUser(userInfo._id))
     }
   }, [])
 
