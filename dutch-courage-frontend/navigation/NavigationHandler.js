@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar'
-import { Platform } from 'react-native'
+import { Platform, AppState } from 'react-native'
 import Toast from 'react-native-toast-message'
 import ToastConfig from '../utils/toastConfig'
 import * as NavigationBar from 'expo-navigation-bar'
