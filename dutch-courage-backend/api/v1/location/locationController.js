@@ -6,6 +6,14 @@ import User from '../user/userModel.js'
 import axios from 'axios'
 
 let liveUsers = []
+// Save the last active time of the users in the liveUsers array
+setInterval(() => {
+  liveUsers.forEach((user) => {
+    if (Date.now() - user.lastActive > 60000) {
+      liveUsers = liveUsers.filter((u) => u.userId !== user.userId)
+    }
+  })
+}, 60000)
 
 // @ desc This function is responsible for adding the user id and location to the liveUsers array.
 // @ route POST /api/v1/location/addUser
@@ -30,6 +38,7 @@ export const addUser = async (req, res, next) => {
         location,
         locationDescription:
           locationDescription.data.results[0].formatted_address,
+        lastActive: Date.now(),
       })
     }
 

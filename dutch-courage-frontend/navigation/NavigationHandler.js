@@ -84,25 +84,6 @@ const NavigationHandler = () => {
     dispatch(getInitialState())
   }, [])
 
-  useEffect(() => {
-    const subscription = AppState.addEventListener('change', (nextAppState) => {
-      setAppState(nextAppState)
-      if (nextAppState === 'background') {
-        console.log('App is in the background')
-        // Remove user from server
-        userInfo && dispatch(removeUser(userInfo._id))
-      } else if (nextAppState === 'active') {
-        console.log('App is in the foreground')
-        // Add user to server
-        // userInfo && dispatch(addUser(userInfo._id))
-      }
-    })
-
-    return () => {
-      subscription.remove()
-    }
-  }, [])
-
   // Send userId to socket server on connection every second
   // useEffect(() => {
   //   if (userInfo) {
