@@ -68,33 +68,51 @@ const UsersNearbyScreen = () => {
 
   const [sortedNearbyUsers, setSortedNearbyUsers] = useState(nearbyUsers)
 
+  const [customCodeDisabled, setCustomCodeDisabled] = useState(false)
+
   // Sort the nearby users based on interests matching. If the user has at least one matching interest, show them
   useEffect(() => {
     if (isNearbyUsersSuccess) {
-      // If there is a user with no matching interests, do not show them
-      const sortedUsers = nearbyUsers.filter((user) => {
-        return (
-          user.topInterests.some((interest) =>
+      // If meUser has customCode set, filter out users with the same customCode
+      if (
+        meUser.customCode &&
+        meUser.customCode !== '' &&
+        !customCodeDisabled
+      ) {
+        const sortedNearbyUsers = nearbyUsers.filter((user) => {
+          return (
+            user.customCode === meUser.customCode && user._id !== meUser._id
+          )
+        })
+
+        setSortedNearbyUsers(sortedNearbyUsers)
+        return
+      } else {
+        // If there is a user with no matching interests, do not show them
+        const sortedUsers = nearbyUsers.filter((user) => {
+          return (
+            user.topInterests.some((interest) =>
+              topInterests.includes(interest)
+            ) && user._id !== meUser._id
+          )
+        })
+
+        // Sort the users based on the number of matching interests
+        sortedUsers.sort((a, b) => {
+          const aMatchingInterests = a.topInterests.filter((interest) =>
             topInterests.includes(interest)
-          ) && user._id !== meUser._id
-        )
-      })
+          ).length
+          const bMatchingInterests = b.topInterests.filter((interest) =>
+            topInterests.includes(interest)
+          ).length
 
-      // Sort the users based on the number of matching interests
-      sortedUsers.sort((a, b) => {
-        const aMatchingInterests = a.topInterests.filter((interest) =>
-          topInterests.includes(interest)
-        ).length
-        const bMatchingInterests = b.topInterests.filter((interest) =>
-          topInterests.includes(interest)
-        ).length
+          return bMatchingInterests - aMatchingInterests
+        })
 
-        return bMatchingInterests - aMatchingInterests
-      })
-
-      setSortedNearbyUsers(sortedUsers)
+        setSortedNearbyUsers(sortedUsers)
+      }
     }
-  }, [isNearbyUsersSuccess, nearbyUsers, topInterests])
+  }, [isNearbyUsersSuccess, nearbyUsers, topInterests, customCodeDisabled])
 
   // const [report, setReport] = useState('')
   // const [reportCount, setReportCount] = useState(0)
@@ -303,7 +321,26 @@ const UsersNearbyScreen = () => {
 
         <View className='flex flex-row justify-start mt-2'>
           <View className='flex flex-col w-[350]'>
-            <Text className='text-white text-xl left-0'>Around You</Text>
+            {meUser.customCode &&
+            meUser.customCode !== '' &&
+            !customCodeDisabled ? (
+              <Text className='text-white text-l left-0'>
+                Users around you with same custom code
+                {/* Add a disable button here to disable custom code filter */}
+                <TouchableOpacity
+                  onPress={() => {
+                    setCustomCodeDisabled(true)
+                  }}
+                  className='bg-[#22A6B3] w-80 h-10 flex-row justify-center items-center mt-5 rounded-md'
+                >
+                  <Text className='text-white text-l left-0'>{'Disable'}</Text>
+                </TouchableOpacity>
+              </Text>
+            ) : (
+              <Text className='text-white text-l left-0'>
+                Users around you with similar interests
+              </Text>
+            )}
           </View>
         </View>
 
