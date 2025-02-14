@@ -68,6 +68,9 @@ const UserProfileEditScreen = () => {
   const [gender, setGender] = useState(meUser?.gender)
   const [location, setLocation] = useState(meUser?.location)
   const [topInterests, setTopInterests] = useState(meUser?.topInterests)
+  const [customCode, setCustomCode] = useState(
+    meUser?.customCode === '' ? '' : meUser?.customCode
+  )
 
   // Image State variables
   const [selectedProfileImage, setSelectedProfileImage] = useState(null)
@@ -350,6 +353,7 @@ const UserProfileEditScreen = () => {
         gender,
         location,
         topInterests,
+        customCode,
         galleryImage1Url: galleryImageUrl1
           ? galleryImageUrl1
           : galleryImage1Url,
@@ -612,7 +616,7 @@ const UserProfileEditScreen = () => {
           </TouchableOpacity>
 
           {/* profile image and image picker */}
-          <View className='mt-[-230] mr-4 w-60 h-60 rounded-full bg-[#FCFCFE] flex-row justify-center items-center'>
+          <View className='mt-[-265] mr-4 w-60 h-60 rounded-full bg-[#FCFCFE] flex-row justify-center items-center'>
             <TouchableOpacity
               onPress={() => setIsProfileImageModalVisible(true)}
             >
@@ -871,6 +875,23 @@ const UserProfileEditScreen = () => {
             setIsLocationModalVisible={setIsLocationModalVisible}
             setLocation={setLocation}
           />
+
+          {/* Custom code label */}
+          <View className='flex-row mt-3 justify-center items-center mb-[-5] z-10'>
+            <Text className='text-[#898A8D] text-xs mr-[240]'>Custom Code</Text>
+          </View>
+
+          {/* Custom code */}
+          <View>
+            <TextInput
+              placeholder='Type to add custom code...'
+              placeholderTextColor='#898A8D'
+              keyboardType='default'
+              className='bg-black w-80 h-10 flex-row justify-start items-center border-b-2 border-[#22A6B3] text-white text-sm px-1'
+              value={customCode}
+              onChangeText={(text) => setCustomCode(text)}
+            />
+          </View>
 
           {/* Interests label */}
           <View className='flex-row mt-3 justify-center items-center mb-[-5] z-10'>
