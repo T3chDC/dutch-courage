@@ -180,6 +180,11 @@ const userSchema = new mongoose.Schema(
       default: [],
     },
 
+    customCode: {
+      type: String,
+      default: '',
+    },
+
     userType: {
       type: String,
       default: 'regularUser',
