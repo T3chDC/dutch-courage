@@ -324,11 +324,11 @@ const UsersNearbyScreen = () => {
             {meUser.customCode &&
             meUser.customCode !== '' &&
             !customCodeDisabled ? (
-              <Text className='text-white text-l font-bold left-0'>
+              <Text className='text-white text-xl font-bold left-0 text-center'>
                 Only showing users around you with same custom code
               </Text>
             ) : (
-              <Text className='text-white text-l font-bold left-0'>
+              <Text className='text-white text-xl font-bold left-0 text-center'>
                 Showing users around you with similar interests
               </Text>
             )}
