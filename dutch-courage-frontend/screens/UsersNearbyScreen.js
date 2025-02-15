@@ -319,29 +319,36 @@ const UsersNearbyScreen = () => {
           </MapView>
         </View>
 
-        <View className='flex flex-row justify-start mt-2'>
-          <View className='flex flex-col w-[350]'>
+        <View className='flex flex-col justify-center items-center mt-2'>
+          <View className='flex flex-col w-[380]'>
             {meUser.customCode &&
             meUser.customCode !== '' &&
             !customCodeDisabled ? (
-              <Text className='text-white text-l left-0'>
-                Users around you with same custom code
-                {/* Add a disable button here to disable custom code filter */}
-                <TouchableOpacity
-                  onPress={() => {
-                    setCustomCodeDisabled(true)
-                  }}
-                  className='bg-[#22A6B3] w-80 h-10 flex-row justify-center items-center mt-5 rounded-md'
-                >
-                  <Text className='text-white text-l left-0'>{'Disable'}</Text>
-                </TouchableOpacity>
+              <Text className='text-white text-l font-bold left-0'>
+                Only showing users around you with same custom code
               </Text>
             ) : (
-              <Text className='text-white text-l left-0'>
-                Users around you with similar interests
+              <Text className='text-white text-l font-bold left-0'>
+                Showing users around you with similar interests
               </Text>
             )}
           </View>
+          {meUser.customCode &&
+          meUser.customCode !== '' &&
+          !customCodeDisabled ? (
+            <TouchableOpacity
+              onPress={() => {
+                setCustomCodeDisabled(true)
+              }}
+              className='bg-[#22A6B3] w-40 h-5 flex-row justify-center items-center mt-5 rounded-md'
+            >
+              <Text className='text-white text-l left-0'>
+                Disable Custom Code
+              </Text>
+            </TouchableOpacity>
+          ) : (
+            <></>
+          )}
         </View>
 
         <ScrollView
