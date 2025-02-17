@@ -79,6 +79,7 @@ const UsersNearbyScreen = () => {
         meUser.customCode !== '' &&
         !customCodeDisabled
       ) {
+        console.log(nearbyUsers)
         const sortedNearbyUsersByCode = nearbyUsers.filter((user) => {
           return (
             user.customCode &&
@@ -114,7 +115,13 @@ const UsersNearbyScreen = () => {
         setSortedNearbyUsers(sortedUsers)
       }
     }
-  }, [isNearbyUsersSuccess, nearbyUsers, topInterests, customCodeDisabled])
+  }, [
+    isNearbyUsersSuccess,
+    nearbyUsers,
+    topInterests,
+    customCodeDisabled,
+    meUser,
+  ])
 
   // const [report, setReport] = useState('')
   // const [reportCount, setReportCount] = useState(0)

@@ -145,6 +145,7 @@ const getUserDetails = async (nearbyUsers) => {
       userName: userDetail.userName,
       imageUrl: userDetail.imageUrl,
       rating: userDetail.rating,
+      customCode: userDetail.customCode,
       topInterests: userDetail.topInterests.slice(0, 3),
       location: user.location,
       locationDescription: user.locationDescription,
