@@ -79,14 +79,16 @@ const UsersNearbyScreen = () => {
         meUser.customCode !== '' &&
         !customCodeDisabled
       ) {
-        const sortedNearbyUsers = nearbyUsers.filter((user) => {
+        const sortedNearbyUsersByCode = nearbyUsers.filter((user) => {
           return (
-            user.customCode === meUser.customCode && user._id !== meUser._id
+            user.customCode &&
+            user.customCode !== '' &&
+            user.customCode === meUser.customCode &&
+            user._id !== meUser._id
           )
         })
 
-        setSortedNearbyUsers(sortedNearbyUsers)
-        return
+        setSortedNearbyUsers(sortedNearbyUsersByCode)
       } else {
         // If there is a user with no matching interests, do not show them
         const sortedUsers = nearbyUsers.filter((user) => {
