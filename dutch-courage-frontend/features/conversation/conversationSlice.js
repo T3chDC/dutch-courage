@@ -42,6 +42,9 @@ export const getAllConversationsOfUser = createAsyncThunk(
   'conversation/getAllConversationsOfUser',
   async (_, thunkAPI) => {
     try {
+      if (!thunkAPI.getState().auth.userInfo) {
+        return
+      }
       const token = thunkAPI.getState().auth.userInfo.token
       if (!token) {
         return thunkAPI.rejectWithValue('Token not found')
@@ -62,6 +65,9 @@ export const createConversation = createAsyncThunk(
   'conversation/createConversation',
   async (data, thunkAPI) => {
     try {
+      if (!thunkAPI.getState().auth.userInfo) {
+        return
+      }
       const token = thunkAPI.getState().auth.userInfo.token
       if (!token) {
         return thunkAPI.rejectWithValue('Token not found')
@@ -82,6 +88,9 @@ export const getConversationById = createAsyncThunk(
   'conversation/getConversationById',
   async (conversationId, thunkAPI) => {
     try {
+      if (!thunkAPI.getState().auth.userInfo) {
+        return
+      }
       const token = thunkAPI.getState().auth.userInfo.token
       if (!token) {
         return thunkAPI.rejectWithValue('Token not found')
@@ -105,6 +114,9 @@ export const updateConversationById = createAsyncThunk(
   'conversation/updateConversationById',
   async ({ conversationId, data }, thunkAPI) => {
     try {
+      if (!thunkAPI.getState().auth.userInfo) {
+        return
+      }
       const token = thunkAPI.getState().auth.userInfo.token
       if (!token) {
         return thunkAPI.rejectWithValue('Token not found')
@@ -129,6 +141,9 @@ export const deleteConversationById = createAsyncThunk(
   'conversation/deleteConversationById',
   async (conversationId, thunkAPI) => {
     try {
+      if (!thunkAPI.getState().auth.userInfo) {
+        return
+      }
       const token = thunkAPI.getState().auth.userInfo.token
       if (!token) {
         return thunkAPI.rejectWithValue('Token not found')
@@ -152,6 +167,9 @@ export const deleteConversations = createAsyncThunk(
   'conversation/deleteConversations',
   async (data, thunkAPI) => {
     try {
+      if (!thunkAPI.getState().auth.userInfo) {
+        return
+      }
       const token = thunkAPI.getState().auth.userInfo.token
       if (!token) {
         return thunkAPI.rejectWithValue('Token not found')

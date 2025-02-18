@@ -130,18 +130,18 @@ const UserProfileScreen = () => {
         text1: meGetErrorMessage,
         visibilityTime: 3000,
       })
-    } else if (isMeGetSuccess) {
-      setRating(meUser.rating)
-      setImageUrl(meUser.imageUrl)
-      setGalleryImage1Url(meUser.galleryImage1Url)
-      setGalleryImage2Url(meUser.galleryImage2Url)
-      setGalleryImage3Url(meUser.galleryImage3Url)
-      setUserName(meUser.userName)
-      setMantra(meUser.mantra)
-      setAgeRange(meUser.ageRange)
-      setGender(meUser.gender)
-      setLocation(meUser.location)
-      setTopInterests(meUser.topInterests)
+    } else if (isMeGetSuccess && meUser !== null) {
+      setRating(meUser?.rating)
+      setImageUrl(meUser?.imageUrl)
+      setGalleryImage1Url(meUser?.galleryImage1Url)
+      setGalleryImage2Url(meUser?.galleryImage2Url)
+      setGalleryImage3Url(meUser?.galleryImage3Url)
+      setUserName(meUser?.userName)
+      setMantra(meUser?.mantra)
+      setAgeRange(meUser?.ageRange)
+      setGender(meUser?.gender)
+      setLocation(meUser?.location)
+      setTopInterests(meUser?.topInterests)
     } else {
       dispatch(getMeUser())
     }
@@ -356,7 +356,7 @@ const UserProfileScreen = () => {
           {/* Top Interests */}
           <View className='mt-1 w-[100vw] flex-row justify-center items-center'>
             <Text className='text-white text-base font-normal'>
-              {topInterests.map((interest, idx) => (
+              {topInterests?.map((interest, idx) => (
                 <Text key={idx} className='text-white text-base font-normal'>
                   {' '}
                   {idx < 2 ? `${interest}, ` : idx === 2 ? `${interest}` : ''}

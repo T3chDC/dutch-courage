@@ -33,6 +33,9 @@ export const getMeUser = createAsyncThunk(
   'user/getMeUser',
   async (_, thunkAPI) => {
     try {
+      if (!thunkAPI.getState().auth.userInfo) {
+        return
+      }
       const token = thunkAPI.getState().auth.userInfo.token
       if (!token) {
         return thunkAPI.rejectWithValue('Token not found')
@@ -53,6 +56,9 @@ export const getOtherUser = createAsyncThunk(
   'user/getOtherUser',
   async (id, thunkAPI) => {
     try {
+      if (!thunkAPI.getState().auth.userInfo) {
+        return
+      }
       const token = thunkAPI.getState().auth.userInfo.token
       if (!token) {
         return thunkAPI.rejectWithValue('Token not found')
@@ -73,6 +79,9 @@ export const updateMeUser = createAsyncThunk(
   'user/updateMeUser',
   async (userData, thunkAPI) => {
     try {
+      if (!thunkAPI.getState().auth.userInfo) {
+        return
+      }
       const token = thunkAPI.getState().auth.userInfo.token
       if (!token) {
         return thunkAPI.rejectWithValue('Token not found')
@@ -93,6 +102,9 @@ export const blockUser = createAsyncThunk(
   'user/blockUser',
   async (data, thunkAPI) => {
     try {
+      if (!thunkAPI.getState().auth.userInfo) {
+        return
+      }
       const token = thunkAPI.getState().auth.userInfo.token
       if (!token) {
         return thunkAPI.rejectWithValue('Token not found')
@@ -113,6 +125,9 @@ export const rateUser = createAsyncThunk(
   'user/rateUser',
   async (data, thunkAPI) => {
     try {
+      if (!thunkAPI.getState().auth.userInfo) {
+        return
+      }
       const token = thunkAPI.getState().auth.userInfo.token
       if (!token) {
         return thunkAPI.rejectWithValue('Token not found')

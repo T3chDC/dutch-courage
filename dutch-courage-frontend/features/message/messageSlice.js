@@ -22,6 +22,9 @@ export const createMessage = createAsyncThunk(
   'message/createMessage',
   async (data, thunkAPI) => {
     try {
+      if (!thunkAPI.getState().auth.userInfo) {
+        return
+      }
       const token = thunkAPI.getState().auth.userInfo.token
       if (!token) {
         return thunkAPI.rejectWithValue('Token not found')
@@ -42,6 +45,9 @@ export const deleteMessageById = createAsyncThunk(
   'message/deleteMessageById',
   async (id, thunkAPI) => {
     try {
+      if (!thunkAPI.getState().auth.userInfo) {
+        return
+      }
       const token = thunkAPI.getState().auth.userInfo.token
       if (!token) {
         return thunkAPI.rejectWithValue('Token not found')
