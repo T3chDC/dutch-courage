@@ -39,6 +39,7 @@ const Conversation = ({
       (participant) => participant !== loggedInUser._id
     )
     // Fetch the other user's data
+    if (!userInfo) return
     userService.getOtherUser(userInfo.token, otherUser).then((data) => {
       setSender(data)
     })

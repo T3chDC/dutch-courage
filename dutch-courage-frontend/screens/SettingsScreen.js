@@ -44,6 +44,7 @@ const SettingsScreen = () => {
   // Delete User Account
   const handleDeleteAccount = async () => {
     try {
+      if (!userInfo) return
       const response = await axios.delete(
         `${BACKEND_URL}/api/v1/users/${userInfo._id}`,
         {
