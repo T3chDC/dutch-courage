@@ -81,7 +81,7 @@ const InterestPickerModal = ({
                     ? handleInterestSelection(interest)
                     : Toast.show({
                         type: "error",
-                        text1: "Limit exceeded!! Select only 3..",
+                        text1: "Limit exceeded!! You can select only 3 ...",
                         visibilityTime: 3000,
                         autoHide: true,
                       })
