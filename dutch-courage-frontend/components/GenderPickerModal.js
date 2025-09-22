@@ -7,19 +7,24 @@ const GenderPickerModal = ({
   setIsGenderModalVisible,
   setGender,
 }) => {
+  // const genders = [
+  //   'Man',
+  //   'Woman',
+  //   'Agender',
+  //   'Bigender',
+  //   'Gender Fluid',
+  //   'Gender Nonconforming',
+  //   'Gender Queer',
+  //   'Intersex',
+  //   'Non Binary',
+  //   'Pangender',
+  //   'Trans',
+  //   'Other',
+  // ]
   const genders = [
-    'Man',
-    'Woman',
-    'Agender',
-    'Bigender',
-    'Gender Fluid',
-    'Gender Nonconforming',
-    'Gender Queer',
-    'Intersex',
-    'Non Binary',
-    'Pangender',
-    'Trans',
-    'Other',
+    'Male',
+    'Female',
+    'Prefer not to say',
   ]
 
   const [selectedGender, setSelectedGender] = useState('')
