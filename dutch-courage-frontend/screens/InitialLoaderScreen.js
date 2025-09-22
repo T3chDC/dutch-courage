@@ -1,52 +1,98 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native'
-import React, { useLayoutEffect, useEffect } from 'react'
-import { useNavigation } from '@react-navigation/native'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import * as Animatable from 'react-native-animatable'
-import { useDispatch, useSelector } from 'react-redux'
-import { logout } from '../features/auth/authSlice'
+import { View, Text, Image, TouchableOpacity } from "react-native";
+import React, { useLayoutEffect, useEffect, useRef } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import * as Animatable from "react-native-animatable";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../features/auth/authSlice";
+// import Video from "react-native-video";
+import { Video } from "expo-av";
 
 const InitialLoaderScreen = () => {
-  const navigation = useNavigation()
-  const dispatch = useDispatch()
+  const videoRef = useRef(null);
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
 
-  const { userInfo } = useSelector((state) => state.auth)
+  const { userInfo } = useSelector((state) => state.auth);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
-    })
-  }, [navigation])
+    });
+  }, [navigation]);
 
   const handleLogout = () => {
-    dispatch(logout())
-  }
+    dispatch(logout());
+  };
 
   useEffect(() => {
     setTimeout(() => {
       if (userInfo && userInfo.newUser) {
-        navigation.navigate('BlankProfile')
+        navigation.navigate("BlankProfile");
       } else if (userInfo && userInfo.newUser === false) {
-        navigation.navigate('UserProfile')
+        navigation.navigate("UserProfile");
       } else {
-        navigation.navigate('Login')
+        navigation.navigate("Login");
       }
-    }, 4000)
-  }, [userInfo, navigation])
+    }, 4000);
+  }, [userInfo, navigation]);
+
+  // Try autoplay the video on mount and log status for debugging
+  useEffect(() => {
+    let mounted = true;
+    const start = async () => {
+      try {
+        // If you want to trigger play programmatically:
+        if (videoRef.current && videoRef.current.playAsync) {
+          await videoRef.current.playAsync();
+        }
+      } catch (err) {
+        console.log("playAsync error:", err);
+      }
+    };
+    start();
+
+    return () => {
+      mounted = false;
+      // cleanup: unload to free memory
+      if (videoRef.current && videoRef.current.unloadAsync) {
+        videoRef.current.unloadAsync().catch(() => {});
+      }
+    };
+  }, []);
 
   return (
-    <SafeAreaView className='bg-black flex-1 justify-center items-center'>
-      <Animatable.Image
+    <SafeAreaView className="bg-black flex-1 justify-center items-center">
+      {/* <Animatable.Image
         source={require('../assets/projectImages/TempLogo1.png')}
         animation='fadeIn'
         iterationCount={1}
         className='h-96 w-[100vw] rounded-lg'
+      /> */}
+      <Video
+        ref={videoRef}
+        source={require('../assets/projectImages/LoaderVideo.mp4')}
+        // source={{ uri: "../assets/projectImages/Loader Video.mp4" }}
+        style={{ width: "100%", height: 400 }}
+        resizeMode="contain"
+        isLooping={false}
+        // isMuted={false}
+        shouldPlay={true}
+        repeat={true}
+        muted={false}
+        playInBackground={false}
+        playWhenInactive={false}
+        ignoreSilentSwitch={"ignore"}
+        useNativeControls={false}
+        // autoplay={false}
+        // onEnd={() => { navigation.navigate('Login') }}
       />
-      <Animatable.View
-        animation='slideInUp'
+
+      {/* <Animatable.View
+        animation="slideInUp"
         iterationCount={1}
-        className='flex-row justify-between w-80 mt-10'
-      >
+        className="flex-row justify-between w-80 mt-10"
+      > */}
         {/* {!userInfo && (
           <TouchableOpacity
             onPress={() => navigation.navigate('Login')}
@@ -91,9 +137,9 @@ const InitialLoaderScreen = () => {
             <Text className='text-black'>Filled Profile</Text>
           </TouchableOpacity>
         )} */}
-      </Animatable.View>
+      {/* </Animatable.View> */}
     </SafeAreaView>
-  )
-}
+  );
+};
 
-export default InitialLoaderScreen
+export default InitialLoaderScreen;
