@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet, useWindowDimensions } from "react-native";
 import React, { useLayoutEffect, useEffect, useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -7,13 +7,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../features/auth/authSlice";
 // import Video from "react-native-video";
 import { Video } from "expo-av";
+import { Overlay } from "@rneui/base";
 
 const InitialLoaderScreen = () => {
   const videoRef = useRef(null);
+
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
   const { userInfo } = useSelector((state) => state.auth);
+  const { width, height } = useWindowDimensions(); // Loader Video Dimensions
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -73,7 +76,8 @@ const InitialLoaderScreen = () => {
         ref={videoRef}
         source={require('../assets/projectImages/LoaderVideo.mp4')}
         // source={{ uri: "../assets/projectImages/Loader Video.mp4" }}
-        style={{ width: "100%", height: 400 }}
+        // style={{ width: "100%", height: 400 }}
+        style={[styles.video, {width, height}]}
         resizeMode="contain"
         isLooping={false}
         // isMuted={false}
@@ -141,5 +145,26 @@ const InitialLoaderScreen = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'black',
+  },
+  video: {
+    position: 'absolute',
+    // height: '120%',
+    // top: 0,
+    // left: 0,
+    // bottom: 0,
+    // right: 0,
+  },
+  overlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+});
 
 export default InitialLoaderScreen;
