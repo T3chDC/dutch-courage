@@ -153,11 +153,6 @@ const styles = StyleSheet.create({
   },
   video: {
     position: 'absolute',
-    // height: '120%',
-    // top: 0,
-    // left: 0,
-    // bottom: 0,
-    // right: 0,
   },
   overlay: {
     flex: 1,
