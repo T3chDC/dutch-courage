@@ -74,7 +74,7 @@ const InitialLoaderScreen = () => {
       /> */}
       <Video
         ref={videoRef}
-        source={require('../assets/projectImages/LoaderVideo.mp4')}
+        source={require('../assets/projectImages/LoaderAnimation_v2.mp4')}
         // source={{ uri: "../assets/projectImages/Loader Video.mp4" }}
         // style={{ width: "100%", height: 400 }}
         style={[styles.video, {width, height}]}
