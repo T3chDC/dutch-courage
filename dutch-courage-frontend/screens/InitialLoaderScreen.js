@@ -37,7 +37,7 @@ const InitialLoaderScreen = () => {
       } else {
         navigation.navigate("Login");
       }
-    }, 7000);
+    }, 8000);
   }, [userInfo, navigation]);
 
   // Try autoplay the video on mount and log status for debugging
