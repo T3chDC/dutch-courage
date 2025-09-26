@@ -222,7 +222,7 @@ const InitialLoaderScreen = () => {
     <SafeAreaView style={styles.container} edges={[]}>
       <Video
         ref={videoRef}
-        source={require("../assets/projectImages/LoaderVideo.mp4")}
+        source={require("../assets/projectImages/Loader.mp4")}
         style={StyleSheet.absoluteFill} // 👈 stretches video to all edges
         resizeMode="cover"              // 👈 no black bars
         shouldPlay
