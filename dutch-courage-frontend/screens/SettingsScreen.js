@@ -11,7 +11,7 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import ToggleSwitch from '../components/ToggleSwitch'
 import * as Progress from 'react-native-progress'
-import { logout } from '../features/auth/authSlice'
+import { logout, resetSignIn, resetSignUp } from '../features/auth/authSlice'
 import { resetMeUser } from '../features/user/userSlice'
 import { getAllConversationsOfUser } from '../features/conversation/conversationSlice'
 import { NoSymbolIcon } from 'react-native-heroicons/solid'
@@ -77,6 +77,8 @@ const SettingsScreen = () => {
   const handleLogout = () => {
     dispatch(logout())
     dispatch(resetMeUser())
+    dispatch(resetSignIn())
+    dispatch(resetSignUp())
     navigation.navigate('Login')
   }
 
