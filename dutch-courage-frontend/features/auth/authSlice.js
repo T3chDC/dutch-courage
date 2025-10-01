@@ -2,6 +2,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import * as SecureStore from 'expo-secure-store'
 import authService from './authService'
+import axios from 'axios'
 
 //initial state
 const initialState = {
@@ -113,18 +114,25 @@ export const signinFacebook = createAsyncThunk(
 )
 
 // get user from secure storage
+// export const getInitialState = createAsyncThunk(
+//   'auth/getInitialState',
+//   async (_, thunkAPI) => {
+//     try {
+//       return JSON.parse(await SecureStore.getItemAsync('DCUserInfo'))
+//     } catch (err) {
+//       const message =
+//         (err.response && err.response.data && err.response.data.message) ||
+//         err.message ||
+//         err.toString()
+//       return thunkAPI.rejectWithValue(message)
+//     }
+//   }
+// )
 export const getInitialState = createAsyncThunk(
   'auth/getInitialState',
-  async (_, thunkAPI) => {
-    try {
-      return JSON.parse(await SecureStore.getItemAsync('DCUserInfo'))
-    } catch (err) {
-      const message =
-        (err.response && err.response.data && err.response.data.message) ||
-        err.message ||
-        err.toString()
-      return thunkAPI.rejectWithValue(message)
-    }
+  async () => {
+    const raw = await SecureStore.getItemAsync('DCUserInfo')
+    return raw ? JSON.parse(raw) : null
   }
 )
 
@@ -343,6 +351,10 @@ const authSlice = createSlice({
         state.isSignUpLoading = false
         state.isSignUpSuccess = false
         state.signUpErrorMessage = ''
+        delete axios.defaults?.headers?.common?.Authorization
+      })
+      .addCase(getInitialState.rejected, (state) => {
+        state.userInfo = null
       })
   },
 })
