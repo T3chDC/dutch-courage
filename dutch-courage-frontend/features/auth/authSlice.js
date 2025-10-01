@@ -206,6 +206,7 @@ const authSlice = createSlice({
         state.isSignUpSuccess = false
         state.isSignUpError = false
         state.signUpErrorMessage = ''
+        state.userInfo = null
       })
       .addCase(signupLocal.fulfilled, (state, action) => {
         state.isSignUpLoading = false
@@ -317,6 +318,14 @@ const authSlice = createSlice({
       })
       .addCase(getInitialState.fulfilled, (state, action) => {
         state.userInfo = action.payload
+        state.isSignInError = false
+        state.isSignInLoading = false
+        state.isSignInSuccess = false
+        state.signInErrorMessage = ''
+        state.isSignUpError = false
+        state.isSignUpLoading = false
+        state.isSignUpSuccess = false
+        state.signUpErrorMessage = ''
       })
       .addCase(changeNewUser.fulfilled, (state, action) => {
         state.userInfo = {
@@ -326,6 +335,14 @@ const authSlice = createSlice({
       })
       .addCase(logout.fulfilled, (state) => {
         state.userInfo = null
+        state.isSignInError = false
+        state.isSignInLoading = false
+        state.isSignInSuccess = false
+        state.signInErrorMessage = ''
+        state.isSignUpError = false
+        state.isSignUpLoading = false
+        state.isSignUpSuccess = false
+        state.signUpErrorMessage = ''
       })
   },
 })
