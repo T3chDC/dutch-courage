@@ -53,7 +53,7 @@ const SettingsScreen = () => {
           },
         }
       )
-      handleLogout()
+      await handleLogout()
     } catch (error) {
       console.error('Error:', error)
     }
@@ -74,12 +74,13 @@ const SettingsScreen = () => {
     return () => backHandler.remove()
   }, [navigation])
 
-  const handleLogout = () => {
-    dispatch(logout())
+  const handleLogout = async () => {
+    await dispatch(logout())
     dispatch(resetMeUser())
     dispatch(resetSignIn())
     dispatch(resetSignUp())
-    navigation.navigate('Login')
+    // navigation.navigate('Login')
+    navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
   }
 
   return (
