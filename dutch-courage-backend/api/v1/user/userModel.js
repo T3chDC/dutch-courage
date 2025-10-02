@@ -130,22 +130,9 @@ const userSchema = new mongoose.Schema(
     gender: {
       type: String,
       enum: {
-        values: [
-          'Man',
-          'Woman',
-          'Agender',
-          'Bigender',
-          'Gender Fluid',
-          'Gender Nonconforming',
-          'Gender Queer',
-          'Intersex',
-          'Non Binary',
-          'Pangender',
-          'Trans',
-          'Other',
-        ],
+        values: ['Male', 'Female', 'Prefer not to say'],
         messages: [
-          'Gender must be one of the following options: Man, Woman, Agender, Bigender, Gender Fluid, Gender nonconforming, Gender Queer, Intersex, Non binary, Pangender, Trans, Other',
+          'Gender must be one of the following options: Male, Female, Prefer not to say',
         ],
       },
     },
