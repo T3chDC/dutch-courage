@@ -22,7 +22,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
-        "backgroundColor": "#FFFFFF"
+        "backgroundImage": "./assets/icon.png"
       },
       "package": "com.tanzeemrahat.dutchcouragefrontend",
       "config": {
