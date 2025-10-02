@@ -1,8 +1,8 @@
 {
   "expo": {
     "name": "CliQmates",
-    "slug": "cliQmates",
-    "scheme": "cliQmates",
+    "slug": "cliqmates",
+    "scheme": "cliqmates",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,7 +15,9 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -38,7 +40,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "94ad761d-8ec0-4f10-bb04-57aacaa8aba9"
+        "projectId": "b768cee6-971f-4c43-b4ca-11db5dcb9c96"
       }
     },
     "plugins": [
@@ -51,6 +53,7 @@
           }
         }
       ]
-    ]
+    ],
+    "owner": "tanzeemrahat"
   }
 }

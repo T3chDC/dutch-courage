@@ -44,7 +44,7 @@ if (getRNMinorVersion() >= 75) {
   }
 }
 
-rootProject.name = 'dutch-courage-frontend'
+rootProject.name = 'CliQmates'
 
 dependencyResolutionManagement {
   versionCatalogs {
