@@ -5,10 +5,10 @@
     "scheme": "cliqmates",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon4.png",
+    "icon": "./assets/icon-adaptive.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/icon4.png",
+      "image": "./assets/icon-adaptive.png",
       "resizeMode": "contain",
       "backgroundColor": "#06a9bb"
     },
@@ -21,7 +21,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon4.png",
+        "foregroundImage": "./assets/icon-adaptive.png",
         "backgroundColor": "#06a9bb"
       },
       "package": "com.tanzeemrahat.dutchcouragefrontend",
@@ -33,7 +33,7 @@
       "googleServicesFile": "./google-services.json"
     },
     "web": {
-      "favicon": "./assets/icon4.png",
+      "favicon": "./assets/icon-adaptive.png",
       "bundler": "metro"
     },
     "extra": {
