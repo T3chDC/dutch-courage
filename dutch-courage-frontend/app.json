@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/icon_nb.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#06a9bb"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
